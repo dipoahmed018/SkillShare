@@ -16,4 +16,22 @@ class Tuition extends Model
         'owner',
         'forum_id',
     ];
+    
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'owner','id');
+    }
+    public function forum()
+    {
+        return $this->hasOne(Forum::class,'forumable_id')->where('forumable_type','=','tuition');
+    }
+    public function students($expired)
+    {
+        if (!$expired) {
+            return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','user_id')->wherePivot('expired', '=', false);
+        }
+        return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','user_id')->wherePivot('expired', '=', true);
+
+    }
+    
 }
