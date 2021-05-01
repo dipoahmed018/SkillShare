@@ -18,4 +18,13 @@ class Post extends Model
         
     ];
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner');
+    }
+    public function forum()
+    {
+        return $this->belongsTo(Post::class, 'postable_id');
+    }
+
 }

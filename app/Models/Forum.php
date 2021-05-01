@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Forum extends Model
 {
     use HasFactory;
+    protected $table = 'forum';
     protected $fillable = [
         'name',
         'description',
@@ -27,6 +28,10 @@ class Forum extends Model
     }
     public function questions()
     {
-        return ;
+        return $this->hasMany(Post::class, 'postable_id')->where('post_type','=','question');
+    }
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'postable_id')->where('post_type','=','post');
     }
 }
