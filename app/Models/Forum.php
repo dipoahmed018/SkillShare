@@ -13,6 +13,8 @@ class Forum extends Model
         'name',
         'description',
         'owner',
+        'forumable_id',
+        'forumable_type',
     ];
     public function owner()
     {

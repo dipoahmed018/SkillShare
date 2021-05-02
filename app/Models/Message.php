@@ -14,4 +14,9 @@ class Message extends Model
         'receiver_id',
         'receiver_type',
     ];
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner');
+    }
 }

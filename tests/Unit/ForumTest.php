@@ -2,8 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Models\Course;
 use App\Models\Forum;
-use PHPUnit\Framework\TestCase;
+use App\Models\Post;
+use App\Models\Tuition;
+use Tests\TestCase;
+
 class ForumTest extends TestCase
 {
     /**
@@ -13,8 +17,11 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $forum = Forum::find(1);
-        // $forum->questions;
+        // $response = $this->getJson('/api/forum/1');
+        $response = Tuition::find(1)->forum()->with(['posts','questions'])->get();
+        // $response->forum_id = 2;
+        // $response->save();
+        $response->dump();
         $this->assertTrue(true);
     }
 }

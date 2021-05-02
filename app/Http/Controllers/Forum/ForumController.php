@@ -10,6 +10,6 @@ class ForumController extends Controller
 {
     public function index(Forum $forum)
     {
-        return $forum;
+        return response($forum->questions, 200);
     }
 }

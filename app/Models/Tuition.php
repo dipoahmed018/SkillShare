@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tuition extends Model
 {
     use HasFactory;
-
+    protected $table = 'tuition';
     protected $fillable = [
         'stripe_id',
         'title',
@@ -23,7 +23,7 @@ class Tuition extends Model
     }
     public function forum()
     {
-        return $this->hasOne(Forum::class,'forumable_id')->where('forumable_type','=','tuition');
+        return $this->hasOne(Forum::class, 'forumable_id')->where('forumable_type','=','tution');
     }
     public function students($expired)
     {

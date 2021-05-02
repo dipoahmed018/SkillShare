@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
+    protected $table = 'post';
     protected $fillable = [
         'title',
         'content',
@@ -26,5 +27,12 @@ class Post extends Model
     {
         return $this->belongsTo(Post::class, 'postable_id');
     }
-
+    public function comments()
+    {   
+        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type','=','parent');
+    }
+    public function answers()
+    {   
+        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type','=','answer');
+    }
 }

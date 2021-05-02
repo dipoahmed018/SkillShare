@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
+    protected $table = 'comment';
     protected $fillable = [
         'content',
         'owner',
@@ -16,4 +17,16 @@ class Comment extends Model
         'commentable_type',
         
     ];
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner');
+    }
+    public function reply()
+    {
+        return $this->hasMany(Comment::class,'commentable_id');
+    }
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'commentable_id');
+    }
 }

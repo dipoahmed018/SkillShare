@@ -13,4 +13,8 @@ class Notification extends Model
         'to',
     ];
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'to');
+    }
 }
