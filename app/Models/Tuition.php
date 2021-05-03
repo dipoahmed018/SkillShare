@@ -23,14 +23,24 @@ class Tuition extends Model
     }
     public function forum()
     {
-        return $this->hasOne(Forum::class, 'forumable_id')->where('forumable_type','=','tution');
+        return $this->morphOne(Forum::class,'forumable');
     }
-    public function students($expired)
+    public function students()
     {
-        if (!$expired) {
-            return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','user_id')->wherePivot('expired', '=', false);
-        }
-        return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','user_id')->wherePivot('expired', '=', true);
+        return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','user_id');
+
+    }
+    public function prices()
+    {
+        return $this->belongsToMany(Price::class, 'tuition_prices','tuition_id','price_id');
+    }
+    public function referrels()
+    {
+        return $this->morphMany(Referrel::class,'item','item_type','item_id');
+    }
+    public function catagory()
+    {
+        return $this->morphToMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
 
     }
     

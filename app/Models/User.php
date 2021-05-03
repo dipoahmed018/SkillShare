@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\UserRelationships\UserRelationships;
+use App\Traits\UserRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -54,5 +54,17 @@ class User extends Authenticatable
     public function titions()
     {
         return $this->belongsToMany(Tuition::class,'tuition_students','user_id','tuition_id');
+    }
+    public function Comments()
+    {
+        return $this->hasMany(Comment::class,'owner');
+    }
+    public function myMessage()
+    {
+        return $this->hasMany(Message::class,'owner');
+    }
+    public function hisMessage()
+    {
+        return $this->morphMany(Message::class, 'receiver','receiver_type','receiver_id');
     }
 }

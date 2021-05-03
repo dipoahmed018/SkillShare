@@ -24,7 +24,6 @@ class ForumFactory extends Factory
         return [
             'name' => $this->faker->firstName('male'),
             'description' => $this->faker->paragraph(2),
-            
         ];
     }
 }

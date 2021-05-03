@@ -25,10 +25,11 @@ class TutionFactory extends Factory
     public function definition()
     {
         return [
-            'stripe_id' => 'prod_'. $this->faker->regexify('[A-Za-z0-9]{10}'),
+            'stripe_id' => ,
             'title' => $this->faker->paragraph(1),
             'description' => $this->faker->paragraph(2),
             'owner' => User::all()->random(),
+            'forum_id' => ,
         ];
     }
 }

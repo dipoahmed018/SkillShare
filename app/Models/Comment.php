@@ -23,10 +23,10 @@ class Comment extends Model
     }
     public function reply()
     {
-        return $this->hasMany(Comment::class,'commentable_id');
+        return $this->hasMany(Comment::class,'commentable_id')->where('commentable_type','=','reply');
     }
     public function parent()
     {
-        return $this->belongsTo(Comment::class, 'commentable_id');
+        return $this->belongsTo(Comment::class, 'commentable_id')->where('commentable_type','=','parent');
     }
 }

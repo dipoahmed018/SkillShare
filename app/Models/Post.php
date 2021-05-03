@@ -35,4 +35,8 @@ class Post extends Model
     {   
         return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type','=','answer');
     }
+    public function catagory()
+    {
+        return $this->morphedByMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagoryable_type');
+    }
 }

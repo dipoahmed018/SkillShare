@@ -15,4 +15,8 @@ class Group extends Model
         'name',
         'owner',
     ];
+    public function messages()
+    {
+        return $this->morphMany(Message::class, 'receiver','receiver_type','receiver_id');
+    }
 }

@@ -2,10 +2,17 @@
 
 namespace Tests\Unit;
 
+use App\Models\Catagory;
 use App\Models\Course;
 use App\Models\Forum;
+use App\Models\Group;
+use App\Models\Message;
 use App\Models\Post;
+use App\Models\Price;
+use App\Models\Referrel;
+use App\Models\Review;
 use App\Models\Tuition;
+use App\Models\User;
 use Tests\TestCase;
 
 class ForumTest extends TestCase
@@ -16,11 +23,9 @@ class ForumTest extends TestCase
      * @return void
      */
     public function test_example()
-    {
-        // $response = $this->getJson('/api/forum/1');
-        $response = Tuition::find(1)->forum()->with(['posts','questions'])->get();
-        // $response->forum_id = 2;
-        // $response->save();
+    {   
+        // $response = $this->get('/api/forum');
+        $response = Price::find(1)->tuition();
         $response->dump();
         $this->assertTrue(true);
     }

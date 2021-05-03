@@ -27,7 +27,7 @@ class CourseFactory extends Factory
             'description' => $this->faker->paragraph(5),
             'price' => $this->faker->randomNumber(6),
             'owner' => User::all()->random(),
-            'forum_id' => 'hello',
+            'forum_id' => ,
         ];
     }
 }

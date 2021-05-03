@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Forum;
 
 use App\Http\Controllers\Controller;
 use App\Models\Forum;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class ForumController extends Controller
 {
-    public function index(Forum $forum)
+    public function index()
     {
-        return response($forum->questions, 200);
+        $response = Message::find(1)->user();
+        return response($response, 200);
     }
 }

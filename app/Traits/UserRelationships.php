@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits\UserRelationships;
+namespace App\Traits;
 
 use App\Models\Message;
 

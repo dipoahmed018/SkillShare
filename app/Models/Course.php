@@ -23,14 +23,19 @@ class Course extends Model
     }
     public function forum()
     {
-        return $this->hasOne(Forum::class,'forumable_id')->where('forumable_type','=','course');
+        return $this->morphOne(Forum::class,'forumable');
     }
-    public function students($expired)
+    public function students()
     {
-        if (!$expired) {
-            return $this->belongsToMany(User::class , 'course_students', 'course_id','student_id');
-        }
         return $this->belongsToMany(User::class , 'course_students', 'course_id','student_id');
+    }
+    public function referrels()
+    {
+        return $this->morphMany(Referrel::class,'item','item_type','item_id');
+    }
+    public function catagory()
+    {
+        return $this->morphToMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
     }
 
 }

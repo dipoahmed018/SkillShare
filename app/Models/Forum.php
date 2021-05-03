@@ -20,13 +20,9 @@ class Forum extends Model
     {
         return $this->belongsTo(User::class, 'owner','id');
     }
-    public function tuition()
+    public function forum_type()
     {
-        return $this->hasOne(Tuition::class, 'forumable_id','id')->where('forumable_type','=','tuition');
-    }
-    public function course()
-    {
-        return $this->hasOne(Course::class, 'forumable_id','id')->where('forumable_type','=','course');
+        return $this->morphTo('forumable');
     }
     public function questions()
     {
