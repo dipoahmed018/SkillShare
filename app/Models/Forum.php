@@ -32,4 +32,12 @@ class Forum extends Model
     {
         return $this->hasMany(Post::class, 'postable_id')->where('post_type','=','post');
     }
+    public function members()
+    {
+        if ($this->forumable_type == 'course') {
+            return $this->belongsToMany(User::class,'course_students','course_id','student_id','forumable_id');
+        } else {
+            return $this->belongsToMany(User::class,'tuition_students','tuition_id','student_id','forumable_id');
+        }
+    }
 }

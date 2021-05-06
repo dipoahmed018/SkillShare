@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Forum;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ForumController extends Controller
 {
     public function index()
     {
-        $response = Message::find(1)->user();
-        return response($response, 200);
+      
+        // return response($student, 200);
     }
 }

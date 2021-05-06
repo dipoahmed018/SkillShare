@@ -53,7 +53,7 @@ class User extends Authenticatable
     }
     public function titions()
     {
-        return $this->belongsToMany(Tuition::class,'tuition_students','user_id','tuition_id');
+        return $this->belongsToMany(Tuition::class,'tuition_students','student_id','tuition_id');
     }
     public function Comments()
     {

@@ -22,10 +22,12 @@ class CreatePostTable extends Migration
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('postable_id');
             $table->enum('post_type',['question','post']);
+            $table->unsignedBigInteger('answer')->nullable();
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');
             $table->foreign('postable_id')->references('id')->on('forum');
+            
         });
     }
 

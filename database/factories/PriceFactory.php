@@ -2,36 +2,29 @@
 
 namespace Database\Factories;
 
-use App\Models\Forum;
-use App\Models\Tuition;
+use App\Models\Price;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ForumFactory extends Factory
+class PriceFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Forum::class;
+    protected $model = Price::class;
 
     /**
      * Define the model's default state.
      *
      * @return array
      */
-
-    // public function configure(){
-        
-           // return $this->afterCreating();
-    // }
-
     public function definition()
     {
-        
         return [
-            'name' => $this->faker->firstName('male'),
-            'description' => $this->faker->paragraph(2),
+            'stripe_price' => 'price_'. $this->faker->regexify('[A-Za-z0-1]{10}'),
+            'stripe_product' => 'prod'. $this->faker->regexify('[A-Za-z0-1]{10}'),
+            'price' => $this->faker->randomNumber(1),
         ];
     }
 }

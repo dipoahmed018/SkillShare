@@ -15,7 +15,7 @@ class Catagory extends Model
 
     public function posts()
     {
-        return $this->morphToMany(Post::class,'catagoryable','catagoryable','catagoryable_id','catagoryable_type');
+        return $this->morphByMany(Post::class,'catagoryable','catagoryable','catagoryable_id','catagoryable_type');
     }
     public function tuitions()
     {

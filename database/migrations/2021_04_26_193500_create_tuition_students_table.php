@@ -17,12 +17,12 @@ class CreateTuitionStudentsTable extends Migration
         Schema::create('tuition_students', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tuition_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('student_id');
             $table->boolean('expired');
             $table->timestamp('expires_at');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('student_id')->references('id')->on('users');
             $table->foreign('tuition_id')->references('id')->on('tuition');
         });
     }

@@ -27,7 +27,7 @@ class Course extends Model
     }
     public function students()
     {
-        return $this->belongsToMany(User::class , 'course_students', 'course_id','student_id');
+        return $this->belongsToMany(User::class , 'course_students', 'course_id','student_id')->withPivot(['expired','expires_at'])->withTimestamps();
     }
     public function referrels()
     {

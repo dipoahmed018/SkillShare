@@ -23,10 +23,14 @@ class Comment extends Model
     }
     public function reply()
     {
-        return $this->hasMany(Comment::class,'commentable_id')->where('commentable_type','=','reply');
+        return $this->hasMany(Comment::class,'commentable_id')->where('commentable_type', '=','reply');
     }
     public function parent()
     {
-        return $this->belongsTo(Comment::class, 'commentable_id')->where('commentable_type','=','parent');
+        if ($this->commentable_type == 'reply') {
+            return $this->belongsTo(Comment::class, 'commentable_id');
+        } else {
+            return $this->belongsTo(Post::class,'commentable_id');
+        }
     }
 }

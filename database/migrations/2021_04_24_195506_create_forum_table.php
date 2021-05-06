@@ -12,6 +12,7 @@ class CreateForumTable extends Migration
      *
      * @return void
      */
+    
     public function up()
     {
         Schema::create('forum', function (Blueprint $table) {
@@ -20,7 +21,7 @@ class CreateForumTable extends Migration
             $table->string('description');
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('forumable_id');
-            $table->enum('forumable_type', ['tution', 'course']);
+            $table->enum('forumable_type', ['tuition', 'course']);
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');
