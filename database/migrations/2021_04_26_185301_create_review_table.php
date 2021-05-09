@@ -18,8 +18,8 @@ class CreateReviewTable extends Migration
             $table->string('content');
             $table->integer('stars');
             $table->unsignedBigInteger('owner');
-            $table->enum('reviewable_type',['reply','parent']);
             $table->unsignedbigInteger('reviewable_id');
+            $table->enum('reviewable_type',['tuition','course','review_reply']);
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');

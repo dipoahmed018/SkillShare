@@ -20,13 +20,23 @@ class UserFactory extends Factory
      *
      * @return array
      */
+    public function configure()
+    {
+        return $this->afterCreating(function (User $user) {
+            $user_count = User::all()->count() > 1;
+            if ($user_count) {
+               $friend = User::all()->except((int)$user->id)->random();
+               $user->friends()->syncWithoutDetaching([$friend->id => ['friend_type' => 'friend']]);
+            }
+        });
+    }
     public function definition()
     {
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'gender' => $this->faker->randomElement(['male','female']),
+            'gender' => $this->faker->randomElement(['male', 'female']),
             'birth_date' => $this->faker->dateTime(now()),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

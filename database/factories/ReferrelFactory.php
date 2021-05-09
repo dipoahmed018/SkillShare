@@ -2,7 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
 use App\Models\Referrel;
+use App\Models\Tuition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ReferrelFactory extends Factory
@@ -22,7 +24,30 @@ class ReferrelFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'referrel_token' => 'Rtoken'. $this->faker->regexify('[A-Za-z0-9]{15}'),
+            'cut_of' => rand(1,50),
+            'quantity' => rand(1,200),
+            'exipres_at' => now()->addMonth(),
         ];
+    }
+    public function tuition()
+    {
+        return $this->state(function (array $attributes){
+           $tuition = Tuition::all()->random();
+           return [
+               'item_id' => $tuition->id,
+               'item_type' => 'tuition'
+           ];
+        });
+    }
+    public function course()
+    {
+        return $this->state(function (array $attributes){
+           $course = Course::all()->random();
+           return [
+               'item_id' => $course->id,
+               'item_type' => 'course'
+           ];
+        });
     }
 }

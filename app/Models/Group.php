@@ -15,8 +15,16 @@ class Group extends Model
         'name',
         'owner',
     ];
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'owner');
+    }
     public function messages()
     {
         return $this->morphMany(Message::class, 'receiver','receiver_type','receiver_id');
+    }
+    public function members()
+    {
+        return $this->belongsToMany(User::class,'group_member','group_id','member_id')->withPivot('member_type')->withTimestamps();
     }
 }

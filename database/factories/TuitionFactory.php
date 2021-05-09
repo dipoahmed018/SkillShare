@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Forum;
 use App\Models\Model;
 use App\Models\Price;
+use App\Models\Review;
 use App\Models\Tuition;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,6 +31,10 @@ class TuitionFactory extends Factory
                 'forumable_id' => $tuition->id,
                 'forumable_type' => 'tuition',
                 'owner' => $tuition->owner,
+            ]);
+            $review = Review::factory()->create([
+                'reviewable_id' => $tuition->id,
+                'reviewable_type' => 'tuition',
             ]);
             $users = User::all()->random(8);
             $sync_user = [];

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NotificationFactory extends Factory
@@ -22,7 +23,9 @@ class NotificationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'content' => $this->faker->paragraph(1),
+            'to' => User::all()->random()->id,
+            'read' => rand(0,1),
         ];
     }
 }

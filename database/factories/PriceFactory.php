@@ -23,7 +23,7 @@ class PriceFactory extends Factory
     {
         return [
             'stripe_price' => 'price_'. $this->faker->regexify('[A-Za-z0-1]{10}'),
-            'stripe_product' => 'prod'. $this->faker->regexify('[A-Za-z0-1]{10}'),
+            'stripe_product' => 'prod_'. $this->faker->regexify('[A-Za-z0-1]{10}'),
             'price' => $this->faker->randomNumber(1),
         ];
     }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Comment;
 use App\Models\Forum;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 
@@ -52,25 +53,17 @@ class CommentFactory extends Factory
     }
     public function reply()
     {
-        return $this->state(function (array $attributes)
-        {
+        return $this->state(function (array $attributes) {
             $owner = $attributes['owner'];
-            $forum =collect( DB::table('forum')
-                ->join('tuition_students','tuition_id', '=','forum.forumable_id')
-                ->join('course_students','course_id','=','forum.forumable_id')
-                ->whereRaw('tuition_students.student_id = ? OR course_students.student_id = ?',[$owner,$owner])
-                ->get() )->random();
-            $comments = DB::table('comment')
-                ->joinSub('SELECT `post`.id WHERE `post.postable_id` = ' . $forum->id,'post_id',function($join){
-                    $join->on('comment.commentable_id','=','post_id.id')
-                })
-                ->whereIn('comment.commentable_type',['parent','answer']);
-
-
-           return [
-               'commentable_id' => ,
-               'commentable_type' => 'reply',
-           ] 
+            $user = User::find($owner);
+            $forums = collect($user->tuitionForum()->with('posts.comments','questions.answers')->get());
+            $comments = $forums->pluck('posts')->collapse()->pluck('comments')->collapse();
+            $answers = $forums->pluck('questions')->collapse()->pluck('answers')->collapse();
+            $comment = $comments->concat($answers)->random();
+            return [
+                'commentable_id' => $comment->id,
+                'commentable_type' => 'reply',
+            ];
         });
     }
 }

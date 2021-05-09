@@ -21,12 +21,12 @@ class Review extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
-    public function replys()
+    public function review_parent()
     {
-        return $this->hasMany(Review::class, 'reviewable_id')->where('reviewable_type','=','reply');
+        return $this->morphTo('reviewable');
     }
-    public function parent()
+    public function review_replys()
     {
-        return $this->belongsTo(Review::class, 'reviewable_id')->where('reviewable_type','=','parent');
+        return $this->morphMany(Review::class,'reviewable','reviewable_type','reviewable_id');
     }
 }

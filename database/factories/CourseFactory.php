@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Course;
 use App\Models\Forum;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,6 +29,10 @@ class CourseFactory extends Factory
                 'forumable_id' => $course->id,
                 'forumable_type' => 'course',
                 'owner' => $course->owner,
+            ]);
+            $review = Review::factory()->create([
+                'reviewable_id' => $course->id,
+                'reviewable_type' => 'course',
             ]);
             $users = User::all('id')->random(8);
             $course->students()->syncWithoutDetaching($users);

@@ -37,5 +37,9 @@ class Course extends Model
     {
         return $this->morphToMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
     }
+    public function review()
+    {
+        return $this->morphMany(Review::class, 'reviewable','reviewable_type','reviewable_id');
+    }
 
 }

@@ -19,7 +19,7 @@ class Referrel extends Model
         'quantity',
         'expires_at'
     ];
-    public function item()
+    public function parent()
     {
         return $this->morphTo('item','item_type','item_id');
     }

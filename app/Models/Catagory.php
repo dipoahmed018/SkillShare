@@ -15,14 +15,14 @@ class Catagory extends Model
 
     public function posts()
     {
-        return $this->morphByMany(Post::class,'catagoryable','catagoryable','catagoryable_id','catagoryable_type');
+        return $this->morphedByMany(Post::class,'catagoryable','catagoryable','catagory_id','catagoryable_id');
     }
     public function tuitions()
     {
-        return $this->morphedByMany(Tuition::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
+        return $this->morphedByMany(Tuition::class,'catagoryable','catagoryable','catagory_id','catagoryable_id');
     }
     public function courses()
     {
-        return $this->morphedByMany(Course::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
+        return $this->morphedByMany(Course::class,'catagoryable','catagoryable','catagory_id','catagoryable_id');
     }
 }

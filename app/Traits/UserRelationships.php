@@ -2,7 +2,14 @@
 
 namespace App\Traits;
 
+use App\Models\Comment;
+use App\Models\Course;
+use App\Models\Group;
 use App\Models\Message;
+use App\Models\Notification;
+use App\Models\Post;
+use App\Models\Review;
+use App\Models\Tuition;
 
 trait UserRelationships {
     

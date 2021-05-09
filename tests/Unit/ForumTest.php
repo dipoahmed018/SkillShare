@@ -25,18 +25,12 @@ class ForumTest extends TestCase
      * @return void
      */
     public function test_example()
-    {  
-        $forum =collect( DB::table('forum')
-        ->join('tuition_students','tuition_id', '=','forum.forumable_id')
-        ->join('course_students','course_id','=','forum.forumable_id')
-        ->whereRaw('tuition_students.student_id = ? OR course_students.student_id = ?',[1,1])
-        ->get() )->random();
-         $comments = DB::table('comment')
-        ->joinSub('SELECT `post`.id FROM post WHERE `post`.postable_id = ' . $forum->id,'post_id',function($join){
-            $join->on('comment.commentable_id','=','post_id.id');
-        })
-        ->whereIn('comment.commentable_type',['parent','answer'])->get();
-        dump($comments);
-       $this->assertTrue(true);
+    {
+        $owner = User::all()->random();
+        $type = rand(0, 1) ? $owner->cousers : $owner->tuitions;
+
+        // $review = collect($type->review)->random();
+        dump($owner);
+        $this->assertTrue(true);
     }
 }

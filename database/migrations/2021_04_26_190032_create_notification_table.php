@@ -18,6 +18,7 @@ class CreateNotificationTable extends Migration
             $table->id();
             $table->string('content');
             $table->unsignedbigInteger('to');
+            $table->boolean('read');
             $table->timestamps();
             
             

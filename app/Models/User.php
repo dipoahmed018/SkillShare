@@ -7,6 +7,7 @@ use App\Traits\UserRelationships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -17,7 +18,7 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var array
-     */# code...
+     */ # code...
     protected $fillable = [
         'name',
         'email',
@@ -49,22 +50,66 @@ class User extends Authenticatable
     ];
     public function courses()
     {
-        return $this->belongsToMany(Course::class,'course_students','student_id','course_id');
+        return $this->belongsToMany(Course::class, 'course_students', 'student_id', 'course_id');
     }
-    public function titions()
+    public function tuitions()
     {
-        return $this->belongsToMany(Tuition::class,'tuition_students','student_id','tuition_id');
+        return $this->belongsToMany(Tuition::class, 'tuition_students', 'student_id', 'tuition_id');
     }
     public function Comments()
     {
-        return $this->hasMany(Comment::class,'owner');
+        return $this->hasMany(Comment::class, 'owner');
     }
     public function myMessage()
     {
-        return $this->hasMany(Message::class,'owner');
+        return $this->hasMany(Message::class, 'owner');
     }
     public function hisMessage()
     {
-        return $this->morphMany(Message::class, 'receiver','receiver_type','receiver_id');
+        return $this->morphMany(Message::class, 'receiver', 'receiver_type', 'receiver_id');
+    }
+    public function tuitionForum()
+    {
+        return $this->belongsToMany(Forum::class, 'tuition_students', 'student_id', 'tuition_id');
+    }
+    public function courseForum()
+    {
+        return $this->belongsToMany(Forum::class, 'course_students', 'student_id', 'tuition_id');
+    }
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_member', 'member_id', 'group_id')->withPivot('member_type')->withTimestamps();
+    }
+    public function requestsFrom()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'my_id')->wherePivot('friend_type', '=', 'request');
+    }
+    public function requestTo()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', 'request');
+    }
+    public function blocks()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'blocked');
+    }
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'friend');
+    }
+    public function getAllBlocks()
+    {
+        $blocks1 = $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'blocked')->get();
+        $blocks2 = $this->belongsToMany(User::class, 'friends', 'friend_id', 'my_id')->wherePivot('friend_type', '=', 'blocked')->get();
+        collect($blocks1);
+        collect($blocks2);
+        return $blocks1->concat($blocks2);
+    }
+    public function getAllFriends()
+    {
+        $myfriends1 = $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'friend')->get();
+        $myfriends2 = $this->belongsToMany(User::class, 'friends', 'friend_id', 'my_id')->wherePivot('friend_type', '=', 'friend')->get();
+        collect($myfriends1);
+        collect($myfriends2);
+        return $myfriends1->concat($myfriends2);
     }
 }

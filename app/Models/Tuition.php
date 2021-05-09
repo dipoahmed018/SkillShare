@@ -28,7 +28,6 @@ class Tuition extends Model
     public function students()
     {
         return $this->belongsToMany(User::class , 'tuition_students', 'tuition_id','student_id')->withPivot(['expired','expires_at'])->withTimestamps();
-
     }
     public function prices()
     {
@@ -41,6 +40,10 @@ class Tuition extends Model
     public function catagory()
     {
         return $this->morphToMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
+    }
+    public function review()
+    {
+        return $this->morphMany(Review::class, 'reviewable', 'reviewable_type','reviewable_id');
     }
     
 }

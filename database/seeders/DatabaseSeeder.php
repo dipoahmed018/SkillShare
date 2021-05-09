@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         DB::table('tuition_students')->truncate();
         DB::table('catagoryable')->truncate();
         DB::table('group_member')->truncate();
+        DB::table('friends')->truncate();
         User::truncate();
         Tuition::truncate();
         Post::truncate();
@@ -46,10 +47,29 @@ class DatabaseSeeder extends Seeder
         Message::truncate();
         Course::truncate();
 
-        User::factory()->count(30)->create();
+        User::factory()->count(10)->create();
         Tuition::factory()->count(10)->create();
         Course::factory()->count(10)->create();
-        Post::factory()->count(50)->create();
-        Comment::factory()->count(200)->create();
+
+        Post::factory()->count(80)
+            ->has(
+                Comment::factory()
+                    ->count(8)
+                    ->state(function (array $attributes, Post $post) {
+                        return [
+                            'commentable_id' => $post->id,
+                        ];
+                    }),
+                'comments'
+            )->create();
+        Comment::factory()->count(8)->reply()->create();
+        Group::factory()->count(20)->create();
+        Message::factory()->count(50)->toFriends()->create();
+        Message::factory()->count(50)->toGroups()->create();
+        Notification::factory()->count(50)->create();
+        Review::factory()->count(30)->tuition()->create();
+        Review::factory()->count(30)->course()->create();
+        Review::factory()->count(30)->reply()->create();
+        Catagory::factory()->count(20)->create();
     }
 }

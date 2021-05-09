@@ -16,7 +16,7 @@ class CreateReferrelTable extends Migration
         Schema::create('referrel', function (Blueprint $table) {
             $table->id();
             $table->string('referrel_token');
-            $table->decimal('cut_of',8,2);
+            $table->integer('cut_of')->unsigned();
             $table->unsignedBigInteger('item_id');
             $table->enum('item_type',['tuition','course']);
             $table->integer('quantity');

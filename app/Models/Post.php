@@ -37,6 +37,6 @@ class Post extends Model
     }
     public function catagory()
     {
-        return $this->morphedByMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagoryable_type');
+        return $this->morphedByMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
     }
 }

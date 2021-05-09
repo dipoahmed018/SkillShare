@@ -30,18 +30,21 @@ class MessageFactory extends Factory
     public function toFriends()
     {
         return $this->state(function(array $attributes){
-            
+            $friend = collect( User::find($attributes['owner'])->getAllFriends() )->random();
+            return [
+                'receiver_id' => $friend->id,
+                'receiver_type' => 'user',
+            ];
         });
     }
-    public function toGroup()
+    public function toGroups()
     {
         return $this->state(function(array $attributes){
-            $groups = User::find(1)->groups;
-            $group = collect($groups)->random();
+            $group = collect(User::find($attributes['owner'])->groups)->random();
             return [
                 'receiver_id' => $group->id,
                 'receiver_type' => 'group',
-            ]
+            ];
         });
     }
 }
