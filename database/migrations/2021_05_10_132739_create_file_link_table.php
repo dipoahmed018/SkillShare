@@ -19,6 +19,7 @@ class CreateFileLinkTable extends Migration
             $table->string('file_link')->nullable();
             $table->enum('file_type',['tutorial','records','introduction','post','comment','message','profile_photo','profile_video']);
             $table->enum('security',['public','private']);
+            $table->unsignedBigInteger('fileable_id');
             $table->enum('fileable_type',['course','tuition','post','comment','message','profile']);
             $table->timestamps();
         });
