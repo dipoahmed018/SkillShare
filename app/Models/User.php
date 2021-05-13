@@ -12,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, UserRelationships;
+    use HasFactory, Notifiable,UserRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'gender',
-        'birth_date',
+        'birthdate',
         'customer_id',
         'last_four',
         'card_band',

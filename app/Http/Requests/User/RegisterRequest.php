@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,21 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|max:100',
+            'email' => 'required|unique:users|email:rfc',
+            'password' => 'required|min:8|max:50|confirmed',
+            'gender' => ['required', Rule::in(['male','female'])],
+            'birthdate' => 'required|date|before:'. now()->subYears(12),
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'please provide your name',
+            'birthdate.required' => 'please provide your birthdate',
+            'gender.required' => 'please provide your gender',
+            'birthdate.before' => 'you must be at least 12 years old',
         ];
     }
 }

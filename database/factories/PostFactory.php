@@ -26,7 +26,7 @@ class PostFactory extends Factory
         $forum = Forum::all()->random();
         $pivot_table = $forum->forumable_type === 'tuition' ? 'tuition_students' : 'course_students';
         $column_name = $forum->forumable_type === 'tuition' ? 'tuition_id' : 'course_id';
-        $response = DB::table('users')->join($pivot_table,'users.id','=',$pivot_table.'.student_id')->where($column_name,'=',$forum->forumable_id)->get();
+        $response = DB::table('users')->selectRaw('users.*')->join($pivot_table,'users.id','=',$pivot_table.'.student_id')->where($column_name,'=',$forum->forumable_id)->get();
         $student = $response->random();
         return [
             'title' => $this->faker->paragraph(1),

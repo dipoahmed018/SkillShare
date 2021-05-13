@@ -7,24 +7,56 @@ use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\LogoutRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateRequest;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function Register(RegisterRequest $inputs)
+    public function ShowRegisterForm()
     {
-        
+        return view('pages/RegisterForm');
     }
-    public function Login(LoginRequest $inputs)
+
+    public function Register(RegisterRequest $request)
     {
-        
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'gender' => $request->gender,
+            'birthdate' => $request->birthdate,
+        ]);
+        Auth::login($user,true);
+        return redirect('/',302);
     }
-    public function Logout(LogoutRequest $inputs)
+
+    public function ShowLoginForm()
     {
-        
+        return Auth::check() ? redirect('/', 302) : view('/pages/LoginForm');
     }
-    public function Update(UpdateRequest $inputs)
+    public function Login(LoginRequest $request)
+    {        
+        if (Auth::check()) {
+            return redirect('/',302);
+        } else {
+            if (Auth::attempt($request->only('email','password'),true)) {
+                $request->session()->regenerate();
+                return redirect('/dashboard','302');
+            } else {
+                return redirect('/show/login',302)->withErrors(['email' => 'please provide a valid email address']);
+            }
+        }
+
+    }
+
+    public function Logout(LogoutRequest $request)
     {
-        
+        Auth::logout();
+        redirect('/', 302);
+    }
+
+
+    public function Update(UpdateRequest $request)
+    {
     }
 }
