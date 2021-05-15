@@ -3,6 +3,8 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -13,7 +15,8 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // return Auth::check();
+        return true;
     }
 
     /**
@@ -24,7 +27,11 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            // 'profie_picture' => 'image|dimensions:max_width=600,max_height=600|max:1536',
+            // 'name' => 'max:100',
+            // 'gender' => Rule::in(['male','female']),
+            // 'birthdate' => 'required|date|before:'. now()->subYears(12) .'|after:' . now()->subYears(150)
+
         ];
     }
 }

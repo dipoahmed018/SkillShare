@@ -23,5 +23,8 @@ Route::view('/dashboard','pages/Dashboard');
 Route::get('/show/register',[UserController::class,'ShowRegisterForm']);
 Route::post('/register',[UserController::class,'Register'])->name('register');
 Route::get('/show/login',[UserController::class,'ShowLoginForm']);
-Route::post('/login',[UserController::class,'Login'])->name('login');
+Route::post('/login',[UserController::class,'Login'])->name('login')->middleware(['throttle:login']);
 Route::get('/logout',[UserController::class,'Logout'])->name('logout');
+Route::middleware(['auth:web'])->group(function(){
+    Route::put('/user/update',[UserController::class,'Update'])->name('user.update');
+});

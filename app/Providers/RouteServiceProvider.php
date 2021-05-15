@@ -59,5 +59,10 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip())->response(function ($request,$headers) {
+                return redirect('/show/login')->withErrors(['limit' => 'login is locked please wait '. gmdate('H:i:s',$headers['Retry-After'])]);
+            });
+        });
     }
 }

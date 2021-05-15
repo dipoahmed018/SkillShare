@@ -12,7 +12,7 @@
         @enderror
         <label for="password">password</label>
         <input type="password" name="password" id="password" placeholder="type your password" required><br>
-        @error('password')
+        @error('limit')
             <p>{{$message}}</p>
         @enderror
         <input type="submit" value="Login">

@@ -26,8 +26,8 @@ class UserController extends Controller
             'gender' => $request->gender,
             'birthdate' => $request->birthdate,
         ]);
-        Auth::login($user,true);
-        return redirect('/',302);
+        Auth::login($user, true);
+        return redirect('/', 302);
     }
 
     public function ShowLoginForm()
@@ -35,18 +35,17 @@ class UserController extends Controller
         return Auth::check() ? redirect('/', 302) : view('/pages/LoginForm');
     }
     public function Login(LoginRequest $request)
-    {        
+    {
         if (Auth::check()) {
-            return redirect('/',302);
+            return redirect('/', 302);
         } else {
-            if (Auth::attempt($request->only('email','password'),true)) {
+            if (Auth::attempt($request->only('email', 'password'), true)) {
                 $request->session()->regenerate();
-                return redirect('/dashboard','302');
+                return redirect('/dashboard', '302');
             } else {
-                return redirect('/show/login',302)->withErrors(['email' => 'please provide a valid email address']);
+                return redirect('/show/login', 302)->withErrors(['email' => 'please provide a valid email address']);
             }
         }
-
     }
 
     public function Logout(LogoutRequest $request)
@@ -58,5 +57,13 @@ class UserController extends Controller
 
     public function Update(UpdateRequest $request)
     {
+        $profile_picture = $request->profile_picture;
+        $name = $request->name;
+        $gender = $request->gender;
+        $birthdate = $request->birthdate;
+
+        if (!$profile_picture) {
+           $newfilename = str_replace(['.',' '],'',$request->user()->name);
+        }
     }
 }
