@@ -15,6 +15,8 @@ use App\Models\Review;
 use App\Models\Tuition;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ForumTest extends TestCase
@@ -26,11 +28,10 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $owner = User::all()->random();
-        $type = rand(0, 1) ? $owner->cousers : $owner->tuitions;
-
-        // $review = collect($type->review)->random();
-        dump($owner);
+        $path = storage_path('/app/public/profile/profile_photo/dipo.JPG');
+        $destination = storage_path('/app/public/profile/profile_video/');
+        $image = imagecreatefromjpeg($path);
+        imagejpeg($image,$destination,80); 
         $this->assertTrue(true);
     }
 }

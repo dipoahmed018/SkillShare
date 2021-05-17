@@ -9,6 +9,8 @@ use App\Http\Requests\User\RegisterRequest;
 use App\Http\Requests\User\UpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -54,16 +56,26 @@ class UserController extends Controller
         redirect('/', 302);
     }
 
+    public function ShowUserUpdateForm()
+    {
+        // $filename = str_replace(['.',' '],'',$request->user()->name) . '_profile.';
 
+        return !Auth::check() ? redirect('/', 302) : view('/pages/ProfileUpdateForm');
+        // $profile_picture = Storage::disk('public')->exists('/profile/profile_photo/default.JPG') ? storage_path('/app/public/profile/profile_picture/default.JPG') : 'null';
+        // return $profile_picture;
+    }
     public function Update(UpdateRequest $request)
     {
-        $profile_picture = $request->profile_picture;
+        $profile_picture = $request->file('profile_picture');
         $name = $request->name;
         $gender = $request->gender;
         $birthdate = $request->birthdate;
 
-        if (!$profile_picture) {
-           $newfilename = str_replace(['.',' '],'',$request->user()->name);
+        if ($profile_picture) {
+               $newfilename = str_replace(['.',' '],'',$request->user()->name) . '_profile.'. $profile_picture->getClientOriginalExtension();
+               Image::make($profile_picture->getRealPath())->save(storage_path('/app/public/profile/profile_photo/'.$newfilename,60));
+               return ['profile_picture' => 'updated'];
         }
+        return 'no file';
     }
 }

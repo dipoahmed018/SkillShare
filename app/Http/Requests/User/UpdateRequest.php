@@ -27,10 +27,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'profie_picture' => 'image|dimensions:max_width=600,max_height=600|max:1536',
-            // 'name' => 'max:100',
-            // 'gender' => Rule::in(['male','female']),
-            // 'birthdate' => 'required|date|before:'. now()->subYears(12) .'|after:' . now()->subYears(150)
+            // 'profie_picture' => 'image|dimensions:max_width=600,max_height=600',
+            'name' => 'max:100',
+            'gender' => Rule::in(['male','female']),
+            'birthdate' => 'date|before:'. now()->subYears(12) .'|after:' . now()->subYears(150)
 
         ];
     }
