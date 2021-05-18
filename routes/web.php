@@ -28,4 +28,7 @@ Route::get('/logout',[UserController::class,'Logout'])->name('logout');
 Route::middleware(['auth:web'])->group(function(){
     Route::get('/show/user/update',[UserController::class,'ShowUserUpdateForm']);
     Route::put('/user/update',[UserController::class,'Update'])->name('user.update');
+    Route::put('/user/update/password',[UserController::class,'changePassword'])->name('user.update.password');
+    Route::put('/user/update/email',[UserController::class,'changeEmail'])->name('user.update.email');
+    Route::put('/user/verify/email',[UserController::class,'verifyEmail'])->name('user.verify.email');
 });

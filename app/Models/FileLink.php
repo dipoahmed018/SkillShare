@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FileLink extends Model
 {
     protected $table = 'file_link';
-    protected $fileable = [
+    protected $fillable = [
         'file_name',
         'file_link',
         'file_type',

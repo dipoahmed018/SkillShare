@@ -100,6 +100,10 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'event' => [
+            'driver' => 'slack',
+            'path' => storage_path('logs/event.log'),
+        ]
     ],
 
 ];
