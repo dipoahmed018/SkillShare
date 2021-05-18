@@ -1,0 +1,25 @@
+// @import './node_modules/cropperjs/dist/cropper.css';
+@import '~cropperjs/dist/cropper.css';
+
+#check {
+
+    color: aquamarine;
+}
+
+.hide {
+    display: none !important;
+}
+
+.preview_box {
+    position: absolute;
+    width: 80vw;
+    height: 80vh;
+    left : 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#image_crop {
+    display: block;
+    max-width: 100%;
+}

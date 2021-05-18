@@ -96,6 +96,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'friend');
     }
+    public function profile_details()
+    {
+        return $this->morphOne(FileLink::class, 'fileable','fileable_type','fileable_id')->where('file_type','=','profile_photo');
+    }
+
     public function getAllBlocks()
     {
         $blocks1 = $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'blocked')->get();
@@ -104,6 +109,7 @@ class User extends Authenticatable
         collect($blocks2);
         return $blocks1->concat($blocks2);
     }
+
     public function getAllFriends()
     {
         $myfriends1 = $this->belongsToMany(User::class, 'friends', 'my_id', 'friend_id')->wherePivot('friend_type', '=', 'friend')->get();
@@ -112,4 +118,10 @@ class User extends Authenticatable
         collect($myfriends2);
         return $myfriends1->concat($myfriends2);
     }
+    public function getProfilePicture()
+    {
+        $profile_picture = DB::table('file_link')->whereRaw('file_type = ? AND fileable_id = ? AND fileable_type = ?',['profile_photo',$this->id,'profile'])->first();
+        return !$profile_picture ? asset('/storage/profile/profile_photo/default.JPG') : $profile_picture->file_link;
+    }
+    
 }

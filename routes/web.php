@@ -25,7 +25,7 @@ Route::post('/register',[UserController::class,'Register'])->name('register');
 Route::get('/show/login',[UserController::class,'ShowLoginForm']);
 Route::post('/login',[UserController::class,'Login'])->name('login')->middleware(['throttle:login']);
 Route::get('/logout',[UserController::class,'Logout'])->name('logout');
-Route::get('/show/user/update',[UserController::class,'ShowUserUpdateForm']);
-Route::put('/user/update',[UserController::class,'Update'])->name('user.update');
-// Route::middleware(['auth:web'])->group(function(){
-// });
+Route::middleware(['auth:web'])->group(function(){
+    Route::get('/show/user/update',[UserController::class,'ShowUserUpdateForm']);
+    Route::put('/user/update',[UserController::class,'Update'])->name('user.update');
+});
