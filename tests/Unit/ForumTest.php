@@ -14,6 +14,7 @@ use App\Models\Referrel;
 use App\Models\Review;
 use App\Models\Tuition;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -28,10 +29,10 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $path = storage_path('/app/public/profile/profile_photo/dipo.JPG');
-        $destination = storage_path('/app/public/profile/profile_video/');
-        $image = imagecreatefromjpeg($path);
-        imagejpeg($image,$destination,80); 
+        $user = User::find(11);
+        $response = $this->actingAs($user, 'web')
+            ->get('/user/update/email');
+        $response->dump();
         $this->assertTrue(true);
     }
 }

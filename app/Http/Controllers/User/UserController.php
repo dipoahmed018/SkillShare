@@ -7,20 +7,26 @@ use App\Http\Requests\User\ChangePassword;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\LogoutRequest;
 use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\SendVerificationMail;
 use App\Http\Requests\User\UpdateRequest;
+use App\Mail\ChangeEmailUrl;
 use App\Models\FileLink;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
+
 class UserController extends Controller
 {
     public function ShowRegisterForm()
     {
-        return Auth::check()? redirect('/') : view('pages/RegisterForm');
+        return Auth::check() ? redirect('/') : view('pages/RegisterForm');
     }
 
     public function Register(RegisterRequest $request)
@@ -32,6 +38,7 @@ class UserController extends Controller
             'gender' => $request->gender,
             'birthdate' => $request->birthdate,
         ]);
+        event(new Registered($user));
         Auth::login($user, true);
         return redirect('/', 302);
     }
@@ -67,6 +74,7 @@ class UserController extends Controller
     }
     public function Update(UpdateRequest $request)
     {
+
         $user = $request->user();
         $profile_picture = $request->file('profile_picture');
         $name = $request->name;
@@ -83,7 +91,7 @@ class UserController extends Controller
             }
             $image->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->save($file_path,80);
+            })->save($file_path, 80);
             $file = FileLink::create([
                 'file_name' => $newfilename,
                 'file_link' => asset('/storage/profile/profile_photo/' . $newfilename),
@@ -114,10 +122,6 @@ class UserController extends Controller
             ->with('name', $name);
     }
 
-    public function verifyEmail()
-    {
-        
-    }
     public function changePassword(ChangePassword $request)
     {
         $user = $request->user();
@@ -126,10 +130,71 @@ class UserController extends Controller
         ])->setRememberToken(Str::random(60));
         $user->save();
         $request->session()->regenerate();
-        return redirect('/')->with('pop_password_reset','success');
+        return redirect('/')->with('pop_password_reset', 'success');
     }
-    public function changeEmail()
+
+    public function sendEmailVerificationMail(SendVerificationMail $request)
+    {
+        $user = $request->user();
+        $user->sendEmailVerificationNotification();
+        return back()->with('sent', 'verification_mail');
+    }
+    public function verifyEmail(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        return redirect('/');
+    }
+    public function changeEmail(Request $request)
+    {
+        $rules = [
+            'email' => 'email:rfc|unique:users',
+        ];
+        $request->validate($rules, $request->all());
+        $redis = Redis::connection();
+        $user = $request->user();
+        $random_code = rand(1000, 9000);
+
+        $redis_code = $redis->get('verify:' . $user->email . ':code');
+        $code = $request->code;
+        if ($request->email && !$user->email_verified_at) {
+            $user->email = $request->email;
+            $user->remeber_token = Str::random(60);
+            $user->save();
+            //send notification
+            $user->sendEmailVerificationNotification();
+            $request->session()->regenerate();
+            return back()->with('sent', 'verification_mail')
+                ->with('status', 'success');
+        }
+        if (!$request->email && !$user->email_verified_at) {
+            return back()->with('invalid', 'please provide your new email');
+        }
+        if (!$request->email && (!$redis_code || !$code) && $user->email_verified_at) {
+            $redis->setex('verify:' . $user->email . ':code', 60 * 10, $random_code);
+            $url = route('user.update.email.form', [$random_code]);
+            Mail::to($user)->send(new ChangeEmailUrl($url));
+            return back()->with('sent', 'A link has been sent to your email');
+        }
+        if (!$request->email && $redis_code == $code && $user->email_verified_at) {
+            return redirect('/user/update/email/{' . $redis_code . '}')->with('email_invalid', 'please provide you new email address');
+        }
+        if ($request->email && $redis_code !== $code  && $user->email_verified_at) {
+            return redirect('/user/update/email/invalid')->with('expired', 'Your link Has expired');
+        }
+        if ($request->email && $redis_code == $code && $user->email_verified_at) {
+            $user->email = $request->email;
+            $user->email_verified_at = null;
+            $user->remeber_token = Str::random(60);
+            $user->save();
+            $user->sendEmailVerificationNotification();
+            return redirect('/dashboard')->with('sent', 'verification mail sent to your new email');
+        }
+    }
+    public function forgotPassword()
     {
         
+    }
+    public function passwordReset()
+    {
     }
 }

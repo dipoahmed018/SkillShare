@@ -101,8 +101,9 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
         'event' => [
-            'driver' => 'slack',
+            'driver' => 'single',
             'path' => storage_path('logs/event.log'),
+            'level' => 'debug',
         ]
     ],
 

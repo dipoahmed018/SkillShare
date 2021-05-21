@@ -3,11 +3,13 @@
 @section('title', 'Profile Update')
 
 @section('body')
-    {{-- <div class="preview_box" id="image_crop_preview">
-        <img id="image_crop" src="" alt="">
-        <button id="cancel_upload_image">cancel</button>
-        <button id="upload_image">upload</button>
-    </div> --}}
+
+    <div id="popup">
+        @if(session('sent'))
+        {{session('sent')}}
+        @endif
+    </div>
+
     <form id="user_update_form_image" action={{ route('user.update') }} method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="put">
         @csrf
@@ -98,7 +100,24 @@
             <input type="submit" value="change password">
         </fieldset>
     </form>
+    <fieldset>
+        <legend>change email</legend>
+        @if (Auth::user()->email_verified_at)
+            <form action={{ route('user.update.email') }} method="post">
+                <input type="hidden" name="_method" value="put">
+                @csrf
+                <input type="submit" value="change email">
+            </form>
+        @else
+        <form action={{ route('user.update.email') }} method="post">
+            <input type="hidden" name="_method" value="put">
+            @csrf
+            <input type="email" name="email" id="email">
+            <input type="submit" value="change email">
+        </form>
+        @endif
 
+    </fieldset>
 
 @endsection
 
