@@ -15,6 +15,7 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
+use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
 
 class CourseController extends Controller
@@ -47,6 +48,9 @@ class CourseController extends Controller
     {
         
         $user = $request->user();
+        if ($path = $course->thumblin) {
+            return assetToPath();
+        }
         if($user->cannot('update', $course)){
             return back()->withErrors(['auth'=>'you are not the owner of this course']);
         };
@@ -54,9 +58,6 @@ class CourseController extends Controller
         $file_name = (string) Str::uuid() . time() .'.'. $thumblin->getClientOriginalExtension();
         $image = Image::make($thumblin->getRealPath());
 
-        if ($getThumblin = $course->thumblin) {
-            return $getThumblin;
-        }
         $image->resize(600,null,function($constraint){
             $constraint->aspectRation();
         })->save(storage_path('/app/public/course/thumblin/'.$file_name));
