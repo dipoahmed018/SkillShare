@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Course;
+use App\Models\Tuition;
+use App\Policies\CoursePolicy;
+use App\Policies\TuitionPolicy;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Course::class => CoursePolicy::class,
+        Tuition::class => TuitionPolicy::class,
     ];
 
     /**

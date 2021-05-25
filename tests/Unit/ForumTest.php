@@ -30,9 +30,6 @@ class ForumTest extends TestCase
     public function test_example()
     {
         $user = User::find(11);
-        $response = $this->actingAs($user, 'web')
-            ->get('/user/update/email');
-        $response->dump();
         $this->assertTrue(true);
     }
 }

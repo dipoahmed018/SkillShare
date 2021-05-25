@@ -1,6 +1,4 @@
-// @import './node_modules/cropperjs/dist/cropper.css';
-@import '~cropperjs/dist/cropper.css';
-@import '~';
+@import '~bootstrap/scss/bootstrap.scss';
 
 #check {
 
@@ -20,7 +18,10 @@
     transform: translate(-50%, -50%);
 }
 
-#image_crop {
-    display: block;
-    max-width: 100%;
+.create-course{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 100%;
 }

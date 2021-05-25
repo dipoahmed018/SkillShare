@@ -5,8 +5,8 @@
 @section('body')
 
     <div id="popup">
-        @if(session('sent'))
-        {{session('sent')}}
+        @if (session('sent'))
+            {{ session('sent') }}
         @endif
     </div>
 
@@ -109,12 +109,12 @@
                 <input type="submit" value="change email">
             </form>
         @else
-        <form action={{ route('user.update.email') }} method="post">
-            <input type="hidden" name="_method" value="put">
-            @csrf
-            <input type="email" name="email" id="email">
-            <input type="submit" value="change email">
-        </form>
+            <form action={{ route('user.update.email') }} method="post">
+                <input type="hidden" name="_method" value="put">
+                @csrf
+                <input type="email" name="email" id="email">
+                <input type="submit" value="change email">
+            </form>
         @endif
 
     </fieldset>

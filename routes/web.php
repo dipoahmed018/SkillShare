@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\User\UserController;
+use App\Models\Course;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -59,8 +60,20 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::middleware('verified')->group(function(){
         //create course
-        Route::post('/create/course',[CourseController::class, 'createCourse']);
+        Route::post('/create/course',[CourseController::class, 'createCourse'])->name('create.course');
         Route::get('/create/course',fn() => view('pages/course/Create'));
 
+        //update course
+        Route::get('/update/course/{course}', [CourseController::class, 'Show_UpdateDetails']);
+        Route::post('/update/course/{course}',[CourseController::class,'updateDetails'])->name('update.course');
+        Route::post('/update/course/{course}/thumblin',[CourseController::class,'setThumblin'])->name('update.course.thumblin');
+        Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');
+
+        //course tutorial
+        Route::post('/course/{course}/add-video/',[CourseController::class,'addVideo'])->name('course.addVideo');
+        Route::put('/course/{course}/add-video/{video}',[CourseController::class,'setVideoName'])->name('course.setVideoName');
+        Route::delete('/course/{course}/delete/video/{video}',[CourseController::class,'deleteVideo'])->name('course.deleteVideo');
+
+        Route::delete('/course/{course}/delete',[CourseController::class, 'deleteCourse'])->name('course.delte');
     });
 });

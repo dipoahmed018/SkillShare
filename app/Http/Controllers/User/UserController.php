@@ -84,7 +84,7 @@ class UserController extends Controller
         $birthdate = $request->birthdate;
 
         if ($profile_picture) {
-            $newfilename = str_replace(['.', ' '], '', $user->name) . '_profile.' . $profile_picture->getClientOriginalExtension();
+            $newfilename = str_replace(['.', ' ','/'], '', $user->name).time(). '_profile.' . $profile_picture->getClientOriginalExtension();
             $file_path = storage_path('/app/public/profile/profile_photo/' . $newfilename);
             $image = Image::make($profile_picture->getRealPath());
             if ($user->getProfilePicture() !== 'https://skillshare.com/storage/profile/profile_photo/default.JPG') {
