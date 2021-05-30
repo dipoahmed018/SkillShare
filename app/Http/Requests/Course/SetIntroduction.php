@@ -15,9 +15,9 @@ class SetIntroduction extends FormRequest
      *
      * @return bool
      */
-    public function authorize(Request $request, Course $course)
+    public function authorize()
     {
-        return $request->user()->cannot('update', $course) ? false : true;
+        return Auth::check(); 
     }
 
     /**
@@ -28,11 +28,11 @@ class SetIntroduction extends FormRequest
     public function rules()
     {
         return [
-            // 'introduction_name' => 'required|string|max:400',
-            // 'introduction_type' => ['required', Rule::in('video/mp4')],
-            // 'chunk_file' => 'required|string|max:6000000',
-            // 'last_chunk' => ['required', Rule::in(true, false)],
-            // 'full_file_size' => 'required|integer|max:' . 1024  * 1024 * 500, 
+            'introduction_name' => 'required|string|max:400',
+            'introduction_type' => ['required', Rule::in('video/mp4')],
+            'chunk_file' => 'required|string|max:6000000',
+            'last_chunk' => ['required', Rule::in(true, false)],
+            'full_file_size' => 'required|integer|max:' . 1024  * 1024 * 500, 
         ];
     }
 }

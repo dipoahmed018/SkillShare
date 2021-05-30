@@ -43,7 +43,7 @@ if (!function_exists('chunkUpload')) {
             }
         }
 
-        $temp_name = 'temp' . (string)(count($files) + 1) . '.tmp';
+        $temp_name = 'temp' . (string)($files->count() + 1) . '.tmp';
         if ($last && $file_name) {
             if (!Storage::disk('temp')->exists($directory)) {
                 Storage::put($file_name, $data);

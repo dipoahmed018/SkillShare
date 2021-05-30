@@ -20,6 +20,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Exception\NotFoundException;
 use Intervention\Image\Facades\Image;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CourseController extends Controller
 {
@@ -76,22 +77,25 @@ class CourseController extends Controller
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
         $user = $request->user();
+        if ($user->cannot('update', $course)) {
+            return new HttpException(401,'You are not allowed to change this introduction video');
+        };
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
         $directory = '/introduction//' . $directory_name;
         $file_name = Str::uuid() . '.mp4';
-    
-        //delete if exists
+
+        // delete if exists
         if ($file = $course->introduction) {
             $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
             Storage::disk('public')->delete($file_path);
             $file->delete();
         }
 
-        //chunk upload
+        // chunk upload
         if ($request->last_chunk) {
-            //chunk upload
-            chunkUpload($directory, $data, true, 'public/course/introduction/' . $file_name);
+            // chunk upload
+            chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name);
 
             $file = FileLink::create([
                 'file_name' => $file_name,
@@ -102,7 +106,7 @@ class CourseController extends Controller
             ]);
             return $file;
         } else {
-            //chunk upload
+            // chunk upload
             chunkUpload($directory, $data, false, null);
 
             return 'complete';
@@ -110,10 +114,6 @@ class CourseController extends Controller
     }
     public function showDetails(Course $course)
     {
-
-        if (!$course) {
-            return new NotFoundException('course not found', '401');
-        }
         $course->thumblin;
         $course->introduction = $course->introduction ? $course->introduction->file_link : null;
         $course->owner = User::findOrFail((int) $course->owner);
@@ -125,6 +125,10 @@ class CourseController extends Controller
     }
     public function addVideo(AddVideo $request, Course $course)
     {
+        $user = $request->user();
+        if ($user->cannot('update', $course) ) {
+            return new HttpException(401, 'you are not allowed to upload tutorial for this course');
+        }
         $course_tutorials = collect($course->get_tutorials_details());
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;

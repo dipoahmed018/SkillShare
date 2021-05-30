@@ -3033,17 +3033,21 @@ var __webpack_exports__ = {};
   !*** ./resources/js/pagescript/course-show.js ***!
   \************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+
+ //tutorial upload
 
 var tutorial_input_element = document.getElementById("tutorial");
-var error_box = document.getElementById("error-box");
+var tutorial_error_box = document.getElementById("tutorial-error-box");
 
 if (tutorial_input_element) {
   tutorial_input_element.addEventListener("change", function (e) {
     var file = e.target.files[0];
 
     if (file.type !== "video/mp4") {
-      error_box.innerHTML = "<p> please provide a mp4 file</p>";
+      tutorial_error_box.innerHTML = "<p> please provide a mp4 file</p>";
       return;
     }
 
@@ -3051,7 +3055,31 @@ if (tutorial_input_element) {
       tutorial_name: (Date.now() + Math.random()).toString(36),
       tutorial_type: file.type
     };
-    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_0__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
+      console.log(res);
+    });
+  });
+} //introduction upload
+
+
+var introduction_input_lement = document.getElementById('introduction');
+var introduction_error_box = document.getElementById("introduction-error-box");
+
+if (introduction_input_lement) {
+  introduction_input_lement.addEventListener("change", function (e) {
+    var file = e.target.files[0];
+
+    if (file.type !== "video/mp4") {
+      introduction_error_box.innerHTML = "<p> please provide a mp4 file</p>";
+      return;
+    }
+
+    var url = "/update/course/".concat(course.id, "/introduction");
+    var data = {
+      introduction_name: (Date.now() + Math.random()).toString(36),
+      introduction_type: file.type
+    };
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, url, data).then(function (res) {
       console.log(res);
     });
   });
