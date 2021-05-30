@@ -29,7 +29,7 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $user = User::find(11);
+        $file = Storage::disk('public')->append('/course/introduction/nello.text','nello world');
         $this->assertTrue(true);
     }
 }

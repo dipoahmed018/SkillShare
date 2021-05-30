@@ -28,6 +28,8 @@ class createCourse extends FormRequest
             'title' => 'required|string|max:250|min:20',
             'description' => 'required|max:1500|min:20',
             'price' => 'required|integer|max:10000',
+            'forum_name' => 'required|string|max:250',
+            'forum_description' => 'required|max:1500|min:20',
         ];
     }
 }

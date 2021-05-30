@@ -5,6 +5,10 @@
     color: aquamarine;
 }
 
+#error-box {
+    color: rgb(235, 94, 94);
+}
+
 .hide {
     display: none !important;
 }
@@ -24,4 +28,21 @@
     top: 50%;
     transform: translate(-50%,-50%);
     width: 100%;
+}
+.tutorial {
+    background-color: aqua;
+    width: 80vw;
+    min-height: 400px;
+
+    .addbutton {
+        
+    }
+}
+.add-video {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }

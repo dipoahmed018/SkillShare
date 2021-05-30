@@ -19,6 +19,9 @@ class FileLink extends Model
         'updated_at',
 
     ];
+    protected $hidden = [
+        'security',
+    ];
 
     public function owner()
     {

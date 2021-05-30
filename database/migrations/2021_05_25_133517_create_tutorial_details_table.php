@@ -16,7 +16,6 @@ class CreateTutorialDetailsTable extends Migration
         Schema::create('tutorial_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tutorial_id');
-            $table->time('video_length');
             $table->string('title');
             $table->timestamps();
         });
@@ -29,6 +28,6 @@ class CreateTutorialDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_tutorial_details');
+        Schema::dropIfExists('tutorial_details');
     }
 }

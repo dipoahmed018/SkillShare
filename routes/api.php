@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Forum\ForumController;
+use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/forum', [ForumController::class, 'index']);
+ROute::get('/test/query',function()
+{
+    $course = Course::find(6);
+    $course->tutorial= $course->get_tutorials_details();
+    return $course;
+});
