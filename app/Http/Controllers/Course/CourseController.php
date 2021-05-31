@@ -95,7 +95,7 @@ class CourseController extends Controller
         // chunk upload
         if ($request->last_chunk) {
             // chunk upload
-            chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name);
+            chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name, $request->cancel ? $request->cancel : false);
 
             $file = FileLink::create([
                 'file_name' => $file_name,
@@ -137,8 +137,10 @@ class CourseController extends Controller
         $directory = '/tutorial//' . $directory_name;
         if ($request->last_chunk) {
             //chunk upload
-            chunkUpload($directory, $data, true, 'private/course/tutorial/' . $file_name);
-
+            $chunk = chunkUpload($directory, $data, true, 'private/course/tutorial/' . $file_name);
+            if ($chunk->status == false) {
+                return response($chunk->message,200);
+            }
             $file = FileLink::create([
                 'file_name' => $file_name,
                 'file_link' => 'app/private/course/tutorial/' . $file_name,
@@ -154,8 +156,10 @@ class CourseController extends Controller
             return $tutorial_details;
         } else {
             //chunk upload
-            chunkUpload($directory, $data, false, null);
-
+            $chunk = chunkUpload($directory, $data, false, false , $request->cancel ? $request->cancel : false);
+            if ($chunk->status == false) {
+                return response($chunk->message,200);
+            }
             return 'complete';
         }
     }

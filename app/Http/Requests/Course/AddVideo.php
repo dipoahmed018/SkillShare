@@ -31,6 +31,7 @@ class AddVideo extends FormRequest
             'chunk_file' => 'required|string|max:6000000',
             'last_chunk' => ['required', Rule::in(true, false)],
             'full_file_size' => 'required|integer|max:'. 1024 * 1024 * 500,
+            'cancel' => [Rule::in(true, false)],
         ];
     }
 }

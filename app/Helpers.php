@@ -29,9 +29,15 @@ if (!function_exists('blobConvert')) {
 }
 
 if (!function_exists('chunkUpload')) {
-    function chunkUpload($directory, $data, $last = false, $file_name = false)
+    function chunkUpload($directory, $data, $last = false, $file_name = false, $cancel = false)
     {
         $files = collect( Storage::disk('temp')->files($directory));
+        $response = (object) [ 'status' => false, 'message' => ''];
+        if ($cancel = true) {
+            Storage::disk('temp')->deleteDirectory($directory);
+            $response->status = false;
+            $response->message = 'File upload has been canceled';
+        }
         if ($files->count() > 1) {
             $size = 0;
             foreach ($files as $key => $filepath) {
@@ -39,6 +45,7 @@ if (!function_exists('chunkUpload')) {
                 $size += $file_size;
             }
             if ($size > 1024 * 1024 * 500) {
+                Storage::disk('temp')->deleteDirectory($directory); 
                 return abort(401,'your provided file is too large');
             }
         }
@@ -47,7 +54,8 @@ if (!function_exists('chunkUpload')) {
         if ($last && $file_name) {
             if (!Storage::disk('temp')->exists($directory)) {
                 Storage::put($file_name, $data);
-                return true;
+                $response->status = true;
+                $response->message = 'file upload complete';
             };
             foreach ($files as $key => $file_path) {
                 $content = Storage::disk('temp')->get($file_path);
@@ -56,14 +64,17 @@ if (!function_exists('chunkUpload')) {
             }
             Storage::append($file_name, $data, null);
             Storage::disk('temp')->deleteDirectory($directory); 
-            return true;
+            $response->status = true;
+            $response->message = 'file upload complete';
         } else {
             if (!Storage::disk('temp')->exists($directory)) {
                 Storage::disk('temp')->makeDirectory($directory);
             }
 
             Storage::put('/temp//' . $directory . '/' . $temp_name, $data);
-            return true;
+            $response->status = true;
+            $response->message = 'chunk upload complete';
         }
+        return $response;
     }
 }
