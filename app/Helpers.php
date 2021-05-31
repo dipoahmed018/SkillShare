@@ -33,10 +33,11 @@ if (!function_exists('chunkUpload')) {
     {
         $files = collect( Storage::disk('temp')->files($directory));
         $response = (object) [ 'status' => false, 'message' => ''];
-        if ($cancel = true) {
+        if ($cancel === true) {
             Storage::disk('temp')->deleteDirectory($directory);
             $response->status = false;
             $response->message = 'File upload has been canceled';
+            return $response;
         }
         if ($files->count() > 1) {
             $size = 0;

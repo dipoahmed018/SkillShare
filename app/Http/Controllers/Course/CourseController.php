@@ -77,11 +77,9 @@ class CourseController extends Controller
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
         $user = $request->user();
-        if ($user->cannot('update', $course)) {
-            return new HttpException(401,'You are not allowed to change this introduction video');
-        };
+
         $data = blobConvert($request->chunk_file);
-        $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
+        $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->introduction_name) . $course->id;
         $directory = '/introduction//' . $directory_name;
         $file_name = Str::uuid() . '.mp4';
 
@@ -95,8 +93,10 @@ class CourseController extends Controller
         // chunk upload
         if ($request->last_chunk) {
             // chunk upload
-            chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name, $request->cancel ? $request->cancel : false);
-
+            $chunk = chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name, $request->cancel ? $request->cancel : false);
+            if ($chunk->status === false) {
+                return response($chunk->message,200);
+            }
             $file = FileLink::create([
                 'file_name' => $file_name,
                 'file_link' => asset('/storage/course/introduction/' . $file_name),
@@ -107,8 +107,10 @@ class CourseController extends Controller
             return $file;
         } else {
             // chunk upload
-            chunkUpload($directory, $data, false, null);
-
+            $chunk = chunkUpload($directory, $data, false, null);
+            if ($chunk->status === false) {
+                return response($chunk->message,200);
+            }
             return 'complete';
         }
     }
@@ -126,9 +128,7 @@ class CourseController extends Controller
     public function addVideo(AddVideo $request, Course $course)
     {
         $user = $request->user();
-        if ($user->cannot('update', $course) ) {
-            return new HttpException(401, 'you are not allowed to upload tutorial for this course');
-        }
+   
         $course_tutorials = collect($course->get_tutorials_details());
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;

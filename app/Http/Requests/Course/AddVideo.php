@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Course;
 
+use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,7 @@ class AddVideo extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check();
+        return $this->user()->can('update', $this->course);
     }
 
     /**

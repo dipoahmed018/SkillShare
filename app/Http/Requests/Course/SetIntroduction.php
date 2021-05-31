@@ -6,6 +6,7 @@ use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class SetIntroduction extends FormRequest
@@ -17,7 +18,7 @@ class SetIntroduction extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check(); 
+        return $this->user()->can('update', $this->course);
     }
 
     /**

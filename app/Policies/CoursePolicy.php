@@ -20,7 +20,7 @@ class CoursePolicy
     public $course;
     public function __construct()
     {
-
+        
     }
     public function update(User $user, Course $course)
     {
