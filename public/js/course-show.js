@@ -1903,38 +1903,49 @@ var chunk_upload = /*#__PURE__*/function () {
             });
 
           case 4:
+            if (!(file.type !== 'video/mp4')) {
+              _context.next = 6;
+              break;
+            }
+
+            return _context.abrupt("return", {
+              status: 'failed',
+              error: 'please provide a mp4 file'
+            });
+
+          case 6:
             //return data 
             //chunking function
             uploaded = 0;
             filesize = file.size;
             initial_chunk_size = Math.min(chunksize, file.size);
 
-          case 7:
+          case 9:
             if (!(uploaded !== filesize)) {
-              _context.next = 26;
+              _context.next = 28;
               break;
             }
 
-            _context.next = 10;
+            _context.next = 12;
             return chunker(file, uploaded, Math.min(uploaded + initial_chunk_size, filesize));
 
-          case 10:
+          case 12:
             chunked_file = _context.sent;
-            _context.prev = 11;
+            _context.prev = 13;
             data = _objectSpread(_objectSpread({}, inputs), {}, {
               full_file_size: filesize,
               last_chunk: Math.min(uploaded + initial_chunk_size, filesize) === file.size,
               chunk_file: chunked_file
             });
-            _context.next = 15;
+            _context.next = 17;
             return uploader(url, data);
 
-          case 15:
+          case 17:
             response = _context.sent;
             uploaded = Math.min(uploaded + initial_chunk_size, filesize);
 
             if (!(uploaded == file.size)) {
-              _context.next = 19;
+              _context.next = 21;
               break;
             }
 
@@ -1944,29 +1955,29 @@ var chunk_upload = /*#__PURE__*/function () {
               error: null
             });
 
-          case 19:
-            _context.next = 24;
+          case 21:
+            _context.next = 26;
             break;
 
-          case 21:
-            _context.prev = 21;
-            _context.t0 = _context["catch"](11);
+          case 23:
+            _context.prev = 23;
+            _context.t0 = _context["catch"](13);
             return _context.abrupt("return", {
               status: _context.t0.status,
               error: _context.t0.data,
               data: null
             });
 
-          case 24:
-            _context.next = 7;
+          case 26:
+            _context.next = 9;
             break;
 
-          case 26:
+          case 28:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[11, 21]]);
+    }, _callee, null, [[13, 23]]);
   }));
 
   return function chunk_upload(_x, _x2) {
@@ -2023,16 +2034,83 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 var ErrorHandler = /*#__PURE__*/function () {
-  function ErrorHandler(error) {
+  function ErrorHandler() {
+    var popup = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
     _classCallCheck(this, ErrorHandler);
 
-    this.error = error;
+    this.popup = popup;
   }
 
   _createClass(ErrorHandler, [{
-    key: "input_error_parser",
-    value: function input_error_parser() {
-      var input_boxs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    key: "inputHanle",
+    value: function inputHanle(error) {
+      var error_box = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var pop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      if (this.popup && error.message && pop == true) {
+        this.popup.addPopup(error.message);
+      }
+
+      if (!error.errors) {
+        return;
+      }
+
+      if (!error_box || Object.keys(error_box).length < 1) {
+        var errors = error.errors;
+
+        for (var name in errors) {
+          var box = document.getElementById(name);
+
+          if (box) {
+            this.setInputMessageHtml(errors[name], box);
+          } else if (pop == true && this.popup) {
+            this.popup.addPopup(errors[name]);
+          }
+        }
+      }
+
+      if (error_box && Object.keys(error_box).length > 0) {
+        var _errors = error.errors;
+
+        for (var name in _errors) {
+          if (error_box[name]) {
+            var _box = document.getElementById(error_box[name]);
+
+            var res_box = document.getElementById(name);
+
+            if (_box) {
+              this.setInputMessageHtml(_errors[name], _box);
+            } else if (res_box) {
+              this.setInputMessageHtml(_errors[name], res_box);
+            } else if (pop == true && this.popup) {
+              this.popup.addPopup(_errors[name]);
+            }
+          }
+        }
+      }
+    }
+  }, {
+    key: "setInputMessageHtml",
+    value: function setInputMessageHtml(message, append_to) {
+      var _this = this;
+
+      var element_type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'p';
+      var message_element = document.createElement(element_type);
+      var close_element = document.createElement('i');
+      close_element.setAttribute('class', 'bi bi-x-lg');
+      message_element.innerText = message;
+      append_to.append(message_element);
+      append_to.append(close_element);
+      close_element.addEventListener('click', function () {
+        return _this.remove_element(message_element, close_element);
+      });
+    }
+  }, {
+    key: "remove_element",
+    value: function remove_element(sibling, self) {
+      sibling.remove();
+      self.remove();
     }
   }]);
 
@@ -3224,6 +3302,7 @@ __webpack_require__.r(__webpack_exports__);
  //tutorial upload
 
 var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__.default();
+var error = new _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__.default(popup);
 var tutorial_input_element = document.getElementById("tutorial");
 var tutorial_error_box = document.getElementById("tutorial-error-box");
 
@@ -3241,7 +3320,7 @@ if (tutorial_input_element) {
       tutorial_type: file.type
     };
     (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
-      console.log(res);
+      error.inputHanle(res.error);
     });
   });
 } //introduction upload
@@ -3266,7 +3345,7 @@ if (introduction_input_lement) {
     };
     (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, url, data).then(function (res) {
       if (res.status !== 'success') {
-        console.log(res);
+        error.inputHanle(res.error, null, true);
       }
     });
   });

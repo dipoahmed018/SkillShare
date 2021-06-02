@@ -3,6 +3,9 @@
 @section('title', 'course')
 
 @section('body')
+<div id="introduction_name">
+
+</div>
 <div id="popup_box">
     {{-- <div class="popup_message_box">
         <i class="bi bi-x-lg"></i>

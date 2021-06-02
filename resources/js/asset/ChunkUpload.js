@@ -12,6 +12,12 @@ const chunk_upload = async (
             error: "please provide a file and a url",
         };
     }
+    if (file.type !== 'video/mp4') {
+        return {
+            status: 'failed',
+            error: 'please provide a mp4 file'
+        }
+    }
     //return data 
     //chunking function
     let uploaded = 0;

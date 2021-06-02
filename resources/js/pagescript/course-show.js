@@ -5,6 +5,7 @@ import PopupHandler from "../asset/PopupHandler";
 
 //tutorial upload
 const popup = new PopupHandler();
+const error = new ErrorHandler(popup);
 const tutorial_input_element = document.getElementById("tutorial");
 const tutorial_error_box = document.getElementById("tutorial-error-box");
 if (tutorial_input_element) {
@@ -19,7 +20,7 @@ if (tutorial_input_element) {
       tutorial_type: file.type,
     };
     chunk_upload(file, `/course/${course.id}/addvideo`, data).then((res) => {
-      console.log(res)
+      error.inputHanle(res.error)
     });
   });
 }
@@ -44,7 +45,7 @@ if (introduction_input_lement) {
     };
     chunk_upload(file, url, data).then((res) => {
       if (res.status !== 'success') {
-        console.log(res)
+        error.inputHanle(res.error,null,true)
       }
     });
   });
