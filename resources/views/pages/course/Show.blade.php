@@ -3,9 +3,10 @@
 @section('title', 'course')
 
 @section('body')
-    @error('auth')
-        {{ $message }}
-    @enderror
+    <div id="popup_box">
+        
+    </div>
+
     @if (!$course)
         <h1>the course you are searching for is not available</h1>
     @endif

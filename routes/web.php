@@ -3,6 +3,7 @@
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\User\UserController;
 use App\Models\Course;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 

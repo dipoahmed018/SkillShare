@@ -11737,6 +11737,30 @@ fieldset:disabled .btn {
   display: none !important;
 }
 
+#popup_box {
+  background-color: cadetblue;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 40vw;
+  height: 200px;
+  right: 0px;
+}
+
+#popup_box .popup_message_box {
+  height: 4ex;
+  background-color: white;
+  margin-top: 10px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-left: 2px solid #7aba1a;
+}
+
+#popup_box .popup_message_box p {
+  color: hotpink;
+  margin-left: 20px;
+}
+
 .preview_box {
   position: absolute;
   width: 80vw;

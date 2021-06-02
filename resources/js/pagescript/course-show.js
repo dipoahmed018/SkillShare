@@ -1,7 +1,10 @@
 import axios from "axios";
+import ErrorHandler from '../asset/LaravelErrorParser'
 import chunk_upload from "../asset/ChunkUpload";
+import PopupHandler from "../asset/PopupHandler";
 
 //tutorial upload
+const popup = new PopupHandler();
 const tutorial_input_element = document.getElementById("tutorial");
 const tutorial_error_box = document.getElementById("tutorial-error-box");
 if (tutorial_input_element) {
@@ -36,11 +39,18 @@ if (introduction_input_lement) {
     }
     let url = `/update/course/${course.id}/introduction`;
     let data = {
-      introduction_name: (Date.now() + Math.random()).toString(36),
+      // introduction_name: (Date.now() + Math.random()).toString(36),
       introduction_type: file.type,
     };
-    chunk_upload(file, url , data).then((res) => {
-      console.log(res)
+    chunk_upload(file, url, data).then((res) => {
+      if (res.status !== 'success') {
+        popup.addPopup('hello world1')
+        popup.addPopup('hello world2')
+        popup.addPopup('hello world3')
+        popup.addPopup('hello world4')
+      } else {
+
+      }
     });
   });
 }

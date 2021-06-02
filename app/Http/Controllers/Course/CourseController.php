@@ -76,6 +76,7 @@ class CourseController extends Controller
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
+    
         $user = $request->user();
 
         $data = blobConvert($request->chunk_file);

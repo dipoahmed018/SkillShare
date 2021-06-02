@@ -27,6 +27,10 @@
         @endauth
     @endif
     <h1>Dashboard</h1>
+    <button id="send" class=" btn btn-primary"> send request </button>
+    <div class="error-box">
+
+    </div>
 @endsection
 
 @section('scripts')

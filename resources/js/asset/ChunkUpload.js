@@ -32,15 +32,15 @@ const chunk_upload = async (
             uploaded = Math.min(uploaded + initial_chunk_size, filesize)
             if (uploaded == file.size) {
                 return {
-                    status: 'complete',
-                    data: response,
+                    status: 'success',
+                    data: response.data,
                     error: null,
                 }
             }
         } catch (error) {
             return {
-                status: 'failed',
-                error: error,
+                status: error.status,
+                error: error.data,
                 data: null,
             }
         }

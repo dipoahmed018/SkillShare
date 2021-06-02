@@ -1939,8 +1939,8 @@ var chunk_upload = /*#__PURE__*/function () {
             }
 
             return _context.abrupt("return", {
-              status: 'complete',
-              data: response,
+              status: 'success',
+              data: response.data,
               error: null
             });
 
@@ -1952,8 +1952,8 @@ var chunk_upload = /*#__PURE__*/function () {
             _context.prev = 21;
             _context.t0 = _context["catch"](11);
             return _context.abrupt("return", {
-              status: 'failed',
-              error: _context.t0,
+              status: _context.t0.status,
+              error: _context.t0.data,
               data: null
             });
 
@@ -2002,6 +2002,186 @@ function uploader(url, data) {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (chunk_upload);
+
+/***/ }),
+
+/***/ "./resources/js/asset/LaravelErrorParser.js":
+/*!**************************************************!*\
+  !*** ./resources/js/asset/LaravelErrorParser.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ErrorHandler = /*#__PURE__*/function () {
+  function ErrorHandler(error) {
+    _classCallCheck(this, ErrorHandler);
+
+    this.error = error;
+  }
+
+  _createClass(ErrorHandler, [{
+    key: "input_error_parser",
+    value: function input_error_parser() {
+      var input_boxs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    }
+  }]);
+
+  return ErrorHandler;
+}();
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ErrorHandler);
+
+/***/ }),
+
+/***/ "./resources/js/asset/PopupHandler.js":
+/*!********************************************!*\
+  !*** ./resources/js/asset/PopupHandler.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PopupHandler)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var PopupHandler = /*#__PURE__*/function () {
+  function PopupHandler() {
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'popup_box';
+
+    _classCallCheck(this, PopupHandler);
+
+    _defineProperty(this, "_popups", []);
+
+    this.popup_box_id = id;
+  }
+
+  _createClass(PopupHandler, [{
+    key: "getPopups",
+    value: function getPopups() {
+      return this._popups;
+    }
+  }, {
+    key: "addPopup",
+    value: function addPopup(message) {
+      if (this._popups.length < 1) {
+        this._popups.push({
+          id: 1,
+          message: message,
+          running: false
+        });
+      } else {
+        var _this$_popups$reduce = this._popups.reduce(function (prev, cur) {
+          return prev.id < cur.id ? cur : prev;
+        }, {
+          id: 1
+        }),
+            id = _this$_popups$reduce.id;
+
+        this._popups.push({
+          id: id + 1,
+          message: message,
+          running: false
+        });
+      }
+
+      var i = 0;
+
+      this._popup_queue();
+    }
+  }, {
+    key: "_popup_queue",
+    value: function _popup_queue() {
+      var next_popup;
+
+      if (this._popups.length < 1) {
+        return;
+      } else {
+        next_popup = this._popups.reduce(function (prev, cur) {
+          if (prev.id < cur.id && prev.running == false) {
+            return prev;
+          }
+
+          return cur;
+        });
+      }
+
+      var running = [];
+
+      this._popups.forEach(function (value) {
+        if (value.running !== false) {
+          running.push(value);
+        }
+      });
+
+      if (running.length < 3 && next_popup.running == false) {
+        this._createPopup(next_popup);
+      }
+    }
+  }, {
+    key: "_createPopup",
+    value: function _createPopup(popup) {
+      var _this = this;
+
+      var popup_box = document.getElementById(this.popup_box_id) ? document.getElementById(this.popup_box_id) : document.createElement('div').setAttribute('id', this.popup_box_id);
+      var popup_message_box = document.createElement('div');
+      var close_popup = document.createElement('i');
+      var popup_message = document.createElement('p');
+      var unique_id = (Date.now() + Math.random()).toString(36);
+      close_popup.setAttribute('class', 'bi bi-x-lg');
+      close_popup.setAttribute('id', unique_id);
+      popup_message_box.setAttribute('class', 'popup_message_box');
+      popup_message.innerText = popup.message;
+      popup_message_box.append(close_popup);
+      popup_message_box.append(popup_message);
+      popup_box.appendChild(popup_message_box); // close popup call
+
+      this._popups.find(function (value) {
+        return value.id == popup.id;
+      }).running = setTimeout(function () {
+        return _this._closePopup(popup.id, close_popup.parentNode);
+      }, 1000 * 3);
+      close_popup.addEventListener('click', function () {
+        return _this._closePopup(popup.id, close_popup.parentNode, popup.running);
+      });
+    }
+  }, {
+    key: "_closePopup",
+    value: function _closePopup(id, close_popup) {
+      var timer = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      var newQueue = this._popups.filter(function (value) {
+        return value.id !== id;
+      });
+
+      this._popups = newQueue;
+      close_popup.remove();
+
+      this._popup_queue();
+    }
+  }]);
+
+  return PopupHandler;
+}();
+
+
 
 /***/ }),
 
@@ -3035,10 +3215,15 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+/* harmony import */ var _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/LaravelErrorParser */ "./resources/js/asset/LaravelErrorParser.js");
+/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
+
+
 
  //tutorial upload
 
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__.default();
 var tutorial_input_element = document.getElementById("tutorial");
 var tutorial_error_box = document.getElementById("tutorial-error-box");
 
@@ -3055,7 +3240,7 @@ if (tutorial_input_element) {
       tutorial_name: (Date.now() + Math.random()).toString(36),
       tutorial_type: file.type
     };
-    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
       console.log(res);
     });
   });
@@ -3076,11 +3261,16 @@ if (introduction_input_lement) {
 
     var url = "/update/course/".concat(course.id, "/introduction");
     var data = {
-      introduction_name: (Date.now() + Math.random()).toString(36),
+      // introduction_name: (Date.now() + Math.random()).toString(36),
       introduction_type: file.type
     };
-    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, url, data).then(function (res) {
-      console.log(res);
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, url, data).then(function (res) {
+      if (res.status !== 'success') {
+        popup.addPopup('hello world1');
+        popup.addPopup('hello world2');
+        popup.addPopup('hello world3');
+        popup.addPopup('hello world4');
+      } else {}
     });
   });
 }
