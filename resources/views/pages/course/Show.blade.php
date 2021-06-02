@@ -3,14 +3,17 @@
 @section('title', 'course')
 
 @section('body')
-    <div id="popup_box">
-        
-    </div>
+<div id="popup_box">
+    {{-- <div class="popup_message_box">
+        <i class="bi bi-x-lg"></i>
+        <p>hello world1</p>
+    </div> --}}
+</div>
 
-    @if (!$course)
-        <h1>the course you are searching for is not available</h1>
-    @endif
-    @if ($course)
+@if (!$course)
+<h1>the course you are searching for is not available</h1>
+@endif
+@if ($course)
         <div class="container-fluid">
             <div class="details row">
                 <div class="title col col-md-10">

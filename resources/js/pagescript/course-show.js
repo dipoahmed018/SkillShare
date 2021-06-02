@@ -44,12 +44,7 @@ if (introduction_input_lement) {
     };
     chunk_upload(file, url, data).then((res) => {
       if (res.status !== 'success') {
-        popup.addPopup('hello world1')
-        popup.addPopup('hello world2')
-        popup.addPopup('hello world3')
-        popup.addPopup('hello world4')
-      } else {
-
+        console.log(res)
       }
     });
   });

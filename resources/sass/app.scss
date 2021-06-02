@@ -1,4 +1,5 @@
 @import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 #check {
 
@@ -13,7 +14,7 @@
     display: none !important;
 }
 #popup_box {
-    background-color: cadetblue;
+
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -21,16 +22,34 @@
     height: 200px;
     right: 0px;
     .popup_message_box {
-        height: 4ex;
-        background-color: white;
+        position: relative;
+        height: 5ex;
+        background-color: rgb(141, 195, 242);
         margin-top: 10px;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
         border-left: 2px solid rgb(122, 186, 26);
-        p {
-            color: hotpink;
-            margin-left: 20px;
 
+        //centering 
+        .bi-x-lg, p {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .bi-x-lg {
+            display: inline-block;
+            font-size: 1rem;
+            color: rgb(227, 52, 52); 
+            margin-left: 5px;  
+        }
+        .bi-x-lg:hover {
+            cursor: pointer;
+        }
+        p {
+            display: inline-block;
+            color: rgb(101, 101, 101);
+            font-size: 1rem;
+            margin-left: 30px;
         }
     }
 }

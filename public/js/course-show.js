@@ -2157,7 +2157,7 @@ var PopupHandler = /*#__PURE__*/function () {
         return value.id == popup.id;
       }).running = setTimeout(function () {
         return _this._closePopup(popup.id, close_popup.parentNode);
-      }, 1000 * 3);
+      }, 1000 * 30);
       close_popup.addEventListener('click', function () {
         return _this._closePopup(popup.id, close_popup.parentNode, popup.running);
       });
@@ -3266,11 +3266,8 @@ if (introduction_input_lement) {
     };
     (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, url, data).then(function (res) {
       if (res.status !== 'success') {
-        popup.addPopup('hello world1');
-        popup.addPopup('hello world2');
-        popup.addPopup('hello world3');
-        popup.addPopup('hello world4');
-      } else {}
+        console.log(res);
+      }
     });
   });
 }

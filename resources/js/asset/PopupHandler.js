@@ -58,7 +58,7 @@ export default class PopupHandler {
 
         // close popup call
     
-        this._popups.find(value => value.id == popup.id).running = setTimeout( () => this._closePopup(popup.id, close_popup.parentNode), 1000 * 3)
+        this._popups.find(value => value.id == popup.id).running = setTimeout( () => this._closePopup(popup.id, close_popup.parentNode), 1000 * 30)
         close_popup.addEventListener('click', () => this._closePopup(popup.id, close_popup.parentNode, popup.running))
     }
     _closePopup(id, close_popup, timer = null) {
