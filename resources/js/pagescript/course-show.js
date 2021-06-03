@@ -1,4 +1,3 @@
-import axios from "axios";
 import ErrorHandler from '../asset/LaravelErrorParser'
 import chunk_upload from "../asset/ChunkUpload";
 import PopupHandler from "../asset/PopupHandler";
@@ -20,7 +19,18 @@ if (tutorial_input_element) {
       tutorial_type: file.type,
     };
     chunk_upload(file, `/course/${course.id}/addvideo`, data).then((res) => {
-      error.inputHanle(res.error)
+      if (res.status == 'failed') {
+        error.simpleError(res.error, 'tutorial-error')
+        return;
+      }
+      if (res.status == 422) {
+        error.inputHandle(res.error, null, true)
+        return;
+      }
+      if (res.status !== 'success') {
+        error.simpleError(res.error.message, null, true)
+        return;
+      }
     });
   });
 }
@@ -34,19 +44,28 @@ const introduction_error_box = document.getElementById("introduction-error-box")
 if (introduction_input_lement) {
   introduction_input_lement.addEventListener("change", (e) => {
     let file = e.target.files[0];
-    if (file.type !== "video/mp4") {
-      introduction_error_box.innerHTML = "<p> please provide a mp4 file</p>";
-      return;
-    }
     let url = `/update/course/${course.id}/introduction`;
     let data = {
       // introduction_name: (Date.now() + Math.random()).toString(36),
       introduction_type: file.type,
     };
     chunk_upload(file, url, data).then((res) => {
-      if (res.status !== 'success') {
-        error.inputHanle(res.error,null,true)
+      if (res.status == 'failed') {
+        error.simpleError(res.error, 'introduction-error')
+        return;
       }
+      if (res.status == 422) {
+        error.inputHandle(res.error, null, true)
+        return;
+      }
+      if (res.status !== 'success') {
+        error.simpleError(res.error.message, null, true)
+        return;
+      }
+      if (res.status == 'success') {
+        console.log(res);
+      }
+
     });
   });
 }

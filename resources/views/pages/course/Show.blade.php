@@ -3,14 +3,7 @@
 @section('title', 'course')
 
 @section('body')
-<div id="introduction_name">
-
-</div>
 <div id="popup_box">
-    {{-- <div class="popup_message_box">
-        <i class="bi bi-x-lg"></i>
-        <p>hello world1</p>
-    </div> --}}
 </div>
 
 @if (!$course)
@@ -39,11 +32,11 @@
                 <div class="d-lock"></div>
                 <div class="customize-box col col-md-4">
                     @if ($course->owner->id == Auth::user()->id)
-                        <input required accept=".mp4" class="add-introduction one-click-upload" type="file"
+                        <input accept=".mp4" required class="add-introduction one-click-upload" type="file"
                             name="introduction" id="introduction">
                         <label for="introduction"
                             class="add-button btn btn-primary mb-4">{{ $course->introduction ? 'Change Introduction' : 'Add Introduction' }}</label>
-                        <div id="introduction-error-box" class="error-box" id="error-tutorial">
+                        <div id="introduction-error" class="error-box">
 
                         </div>
                     @endif
@@ -56,7 +49,7 @@
                         <input required accept=".mp4" type="file" name="tutorial" class="add-vide one-click-upload"
                             id="tutorial">
                         <label class="add-button btn btn-primary" for="tutorial">Add Tutorial</label>
-                        <div id="tutorial-error-box" class="error-box" id="error-tutorial">
+                        <div id="tutorial-error" class="error-box">
 
                         </div>
                     </div>

@@ -4,7 +4,26 @@ class ErrorHandler {
     constructor(popup = null) {
         this.popup = popup
     }
-    inputHanle(error, error_box = null, pop = false) {
+    simpleError(message, box = null, pop = false) {
+        if (box == null && pop == false) {
+            return;
+        }
+        if (box == null && pop == true && this.popup) {
+            this.popup.addPopup(message)
+            return;
+        }
+        const input_box = document.getElementById(box)
+        if (!input_box) {
+            console.log(new DOMException(`${box} not found`))
+            return;
+        }
+        if (input_box && message) {
+            this.setInputMessageHtml(message, input_box);
+            return;
+        }
+    }
+
+    inputHandle(error, error_box = null, pop = false) {
         if (this.popup && error.message && pop == true) {
             this.popup.addPopup(error.message)
         }
@@ -22,6 +41,7 @@ class ErrorHandler {
                     this.popup.addPopup(errors[name])
                 }
             }
+            return;
         }
 
         if (error_box && Object.keys(error_box).length > 0) {
@@ -41,6 +61,7 @@ class ErrorHandler {
 
                 }
             }
+            return;
         }
 
     }

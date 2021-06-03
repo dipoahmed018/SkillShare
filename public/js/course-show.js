@@ -2043,8 +2043,35 @@ var ErrorHandler = /*#__PURE__*/function () {
   }
 
   _createClass(ErrorHandler, [{
-    key: "inputHanle",
-    value: function inputHanle(error) {
+    key: "simpleError",
+    value: function simpleError(message) {
+      var box = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var pop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      if (box == null && pop == false) {
+        return;
+      }
+
+      if (box == null && pop == true && this.popup) {
+        this.popup.addPopup(message);
+        return;
+      }
+
+      var input_box = document.getElementById(box);
+
+      if (!input_box) {
+        console.log(new DOMException("".concat(box, " not found")));
+        return;
+      }
+
+      if (input_box && message) {
+        this.setInputMessageHtml(message, input_box);
+        return;
+      }
+    }
+  }, {
+    key: "inputHandle",
+    value: function inputHandle(error) {
       var error_box = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var pop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
@@ -2068,6 +2095,8 @@ var ErrorHandler = /*#__PURE__*/function () {
             this.popup.addPopup(errors[name]);
           }
         }
+
+        return;
       }
 
       if (error_box && Object.keys(error_box).length > 0) {
@@ -2088,6 +2117,8 @@ var ErrorHandler = /*#__PURE__*/function () {
             }
           }
         }
+
+        return;
       }
     }
   }, {
@@ -3291,18 +3322,15 @@ var __webpack_exports__ = {};
   !*** ./resources/js/pagescript/course-show.js ***!
   \************************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/LaravelErrorParser */ "./resources/js/asset/LaravelErrorParser.js");
-/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
-/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
-
+/* harmony import */ var _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../asset/LaravelErrorParser */ "./resources/js/asset/LaravelErrorParser.js");
+/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
 
 
  //tutorial upload
 
-var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__.default();
-var error = new _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__.default(popup);
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__.default();
+var error = new _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_0__.default(popup);
 var tutorial_input_element = document.getElementById("tutorial");
 var tutorial_error_box = document.getElementById("tutorial-error-box");
 
@@ -3319,8 +3347,21 @@ if (tutorial_input_element) {
       tutorial_name: (Date.now() + Math.random()).toString(36),
       tutorial_type: file.type
     };
-    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
-      error.inputHanle(res.error);
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, "/course/".concat(course.id, "/addvideo"), data).then(function (res) {
+      if (res.status == 'failed') {
+        error.simpleError(res.error, 'tutorial-error');
+        return;
+      }
+
+      if (res.status == 422) {
+        error.inputHandle(res.error, null, true);
+        return;
+      }
+
+      if (res.status !== 'success') {
+        error.simpleError(res.error.message, null, true);
+        return;
+      }
     });
   });
 } //introduction upload
@@ -3332,20 +3373,29 @@ var introduction_error_box = document.getElementById("introduction-error-box");
 if (introduction_input_lement) {
   introduction_input_lement.addEventListener("change", function (e) {
     var file = e.target.files[0];
-
-    if (file.type !== "video/mp4") {
-      introduction_error_box.innerHTML = "<p> please provide a mp4 file</p>";
-      return;
-    }
-
     var url = "/update/course/".concat(course.id, "/introduction");
     var data = {
       // introduction_name: (Date.now() + Math.random()).toString(36),
       introduction_type: file.type
     };
-    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default)(file, url, data).then(function (res) {
+    (0,_asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default)(file, url, data).then(function (res) {
+      if (res.status == 'failed') {
+        error.simpleError(res.error, 'introduction-error');
+        return;
+      }
+
+      if (res.status == 422) {
+        error.inputHandle(res.error, null, true);
+        return;
+      }
+
       if (res.status !== 'success') {
-        error.inputHanle(res.error, null, true);
+        error.simpleError(res.error.message, null, true);
+        return;
+      }
+
+      if (res.status == 'success') {
+        console.log(res);
       }
     });
   });
