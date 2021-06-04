@@ -1,11 +1,6 @@
 import axios from "axios";
 
-const chunk_upload = async (
-    file,
-    url,
-    inputs = {},
-    chunksize = 1024 * 1024 * 3
-) => {
+    let res;
     if (!file || !url) {
         return {
             status: 'failed',
@@ -15,68 +10,32 @@ const chunk_upload = async (
     if (file.type !== 'video/mp4') {
         return {
             status: 'failed',
-            error: 'please provide a mp4 file'
-        }
-    }
-    //return data 
-    //chunking function
-    let uploaded = 0;
-    let filesize = file.size;
-    let initial_chunk_size = Math.min(chunksize, file.size);
-
-    while (uploaded !== filesize) {
-        const chunked_file = await chunker(file, uploaded, Math.min(uploaded + initial_chunk_size, filesize))
-        try {
-            let data = {
-                ...inputs,
-                full_file_size: filesize,
-                last_chunk: Math.min(uploaded + initial_chunk_size, filesize) === file.size,
-                chunk_file: chunked_file,
-            }
-            
-            const response = await uploader(url, data)
-            uploaded = Math.min(uploaded + initial_chunk_size, filesize)
-            if (uploaded == file.size) {
-                return {
-                    status: 'success',
-                    data: response.data,
-                    error: null,
-                }
-            }
-        } catch (error) {
-            return {
-                status: error.status,
-                error: error.data,
-                data: null,
-            }
+            error: { message: 'please provide a mp4 file' }
         }
     }
 
-}
+// const config = {
+//     cancelToekn: cancel_token.token,
+//     onUploadProgress: (progressEvent) => progressBar(progressEvent)
+// }
+// let data = {
+//     ...inputs,
+//     full_file_size: filesize,
+//     last_chunk: Math.min(uploaded + initial_chunk_size, filesize) === file.size,
+//     chunk_file: chunked_file,
+// }
 
+// function progressBar(e) {
+//     let extra_data = (e.total - next_chunk_size)
 
-function chunker(file, start, end) {
-    let reader = new FileReader();
-    let blob = file.slice(start, end);
-    reader.readAsDataURL(blob);
-    return new Promise((resolve, reject) => {
-        reader.onerror = () => {
-            reader.abort()
-            reject(new DOMException('file proccess filed'))
-        }
-        reader.onload = () => {
-            resolve(reader.result)
-        }
-    })
-}
-function uploader(url, data, config = {}) {
-    return new Promise((resolve, reject) => {
-        axios.post(url, data, config)
-            .then(
-                (res) => resolve(res.data),
-                (err) => reject(err.response)
-            )
-    })
-}
+//     if (uploaded == 0) {
+//         uploading = Math.floor((e.loaded / (filesize + (extra_data * Math.ceil(initial_chunk_size / filesize)))) * 100);
 
-export default chunk_upload
+//     } else {
+//         uploading = Math.floor(((e.loaded + uploaded + extra_data) / (filesize + (extra_data * Math.ceil(initial_chunk_size / filesize)))) * 100);
+//     }
+//     if (progressReport instanceof Function) {
+//         progressReport(uploading)
+//     }
+// }
+// export default chunk_upload

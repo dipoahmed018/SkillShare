@@ -67,12 +67,15 @@ class ErrorHandler {
     }
 
     setInputMessageHtml(message, append_to, element_type = 'p') {
+        const error_box = document.createElement('div')
+        error_box.setAttribute('class','error-box')
         const message_element = document.createElement(element_type)
         const close_element = document.createElement('i')
         close_element.setAttribute('class', 'bi bi-x-lg')
         message_element.innerText = message
-        append_to.append(message_element)
-        append_to.append(close_element)
+        error_box.append(close_element)
+        error_box.append(message_element)
+        append_to.append(error_box)
         close_element.addEventListener('click', () => this.remove_element(message_element, close_element))
     }
     remove_element(sibling, self) {

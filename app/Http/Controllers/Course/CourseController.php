@@ -76,9 +76,9 @@ class CourseController extends Controller
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
-    
-        $user = $request->user();
 
+        $user = $request->user();
+        return $request->cancel;
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->introduction_name) . $course->id;
         $directory = '/introduction//' . $directory_name;
@@ -94,9 +94,9 @@ class CourseController extends Controller
         // chunk upload
         if ($request->last_chunk) {
             // chunk upload
-            $chunk = chunkUpload($directory, $data, true, 'public/course/introduction/'.$file_name, $request->cancel ? $request->cancel : false);
+            $chunk = chunkUpload($directory, $data, true, 'public/course/introduction/' . $file_name, $request->cancel ? $request->cancel : false);
             if ($chunk->status === false) {
-                return response($chunk->message,200);
+                return response($chunk->message, 200);
             }
             $file = FileLink::create([
                 'file_name' => $file_name,
@@ -110,7 +110,7 @@ class CourseController extends Controller
             // chunk upload
             $chunk = chunkUpload($directory, $data, false, null);
             if ($chunk->status === false) {
-                return response($chunk->message,200);
+                return response($chunk->message, 200);
             }
             return 'complete';
         }
@@ -129,7 +129,7 @@ class CourseController extends Controller
     public function addVideo(AddVideo $request, Course $course)
     {
         $user = $request->user();
-   
+
         $course_tutorials = collect($course->get_tutorials_details());
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
@@ -138,9 +138,9 @@ class CourseController extends Controller
         $directory = '/tutorial//' . $directory_name;
         if ($request->last_chunk) {
             //chunk upload
-            $chunk = chunkUpload($directory, $data, true, 'private/course/tutorial/' . $file_name);
+            $chunk = chunkUpload($directory, $data, true, 'private/course/tutorial/' . $file_name, $request->cancel);
             if ($chunk->status == false) {
-                return response($chunk->message,200);
+                return response($chunk->message, 200);
             }
             $file = FileLink::create([
                 'file_name' => $file_name,
@@ -157,9 +157,9 @@ class CourseController extends Controller
             return $tutorial_details;
         } else {
             //chunk upload
-            $chunk = chunkUpload($directory, $data, false, false , $request->cancel ? $request->cancel : false);
+            $chunk = chunkUpload($directory, $data, false, false, $request->cancel ? $request->cancel : false);
             if ($chunk->status == false) {
-                return response($chunk->message,200);
+                return response($chunk->message, 200);
             }
             return 'complete';
         }

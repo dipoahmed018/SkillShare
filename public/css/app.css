@@ -13128,6 +13128,33 @@ fieldset:disabled .btn {
   display: none !important;
 }
 
+.error-box {
+  position: relative;
+  display: flex;
+  width: 250px;
+  height: 4ex;
+  background-color: #784747;
+}
+
+.error-box p {
+  display: inline-flex;
+  order: 2;
+  align-self: center;
+  text-align: center;
+  padding: 0px;
+  margin: 0px;
+  color: #d5d5d5;
+  margin-left: 15px;
+}
+
+.error-box i {
+  align-self: center;
+  margin-left: 5px;
+  order: 1;
+  display: inline-block;
+  color: #e33434;
+}
+
 #popup_box {
   position: absolute;
   display: flex;
@@ -13189,12 +13216,6 @@ fieldset:disabled .btn {
   width: 100%;
 }
 
-.tutorial {
-  background-color: aqua;
-  width: 80vw;
-  min-height: 400px;
-}
-
 .one-click-upload {
   width: 0.1px;
   height: 0.1px;
@@ -13202,6 +13223,23 @@ fieldset:disabled .btn {
   overflow: hidden;
   position: absolute;
   z-index: -1;
+}
+
+.progress_box {
+  justify-content: center;
+  position: relative;
+  height: 8vh;
+}
+
+.progress_box .progress {
+  margin-top: 5px;
+}
+
+.progress_box button {
+  margin-top: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 
