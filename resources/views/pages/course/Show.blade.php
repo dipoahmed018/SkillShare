@@ -39,12 +39,13 @@
                         <div id="introduction-error"></div>
                     @endif
                 </div>
-                <div id="introduction_progress_box" class="hide col col-md-5">
+                <div id="introduction-progress-box" class="hide col col-md-5">
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0"
                             aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <button id="introduction_up_cancel" class="btn btn-danger">cancel</button>
+                    <button id="introduction-up-cancel" class="btn btn-danger">cancel</button>
+                    <button id="introduction-up-pause" class="btn btn-primary">pause</button>
                 </div>
             </div>
             <div class="tutorial-upload row justify-content-center">
@@ -56,12 +57,13 @@
                         <label class="add-button btn btn-primary" for="tutorial">Add Tutorial</label>
                         <div id="tutorial-error"></div>
                     </div>
-                    <div id="tutorial_progress_box" class="hide col col-md-5">
+                    <div id="tutorial-progress-box" class="hide col col-md-5">
                         <div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0"
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <button id="tutorial_up_cancel" class="btn btn-danger">cancel</button>
+                        <button id="tutorial-up-cancel" class="btn btn-danger">cancel</button>
+                        <button id="tutorial-up-pause" class="btn btn-danger">pause</button>
                     </div>
             </div>
     @endif

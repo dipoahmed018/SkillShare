@@ -71,7 +71,6 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/update/course/{course}', [CourseController::class, 'Show_UpdateDetails']);
         Route::post('/update/course/{course}',[CourseController::class,'updateDetails'])->name('update.course');
         Route::post('/update/course/{course}/thumblin',[CourseController::class,'setThumblin'])->name('update.course.thumblin');
-        Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');
         
         //course tutorial
         Route::post('/course/{course}/addvideo',[CourseController::class,'addVideo'])->name('course.addVideo');
@@ -81,3 +80,4 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/course/{course}/delete',[CourseController::class, 'deleteCourse'])->name('course.delte');
     });
 });
+Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');

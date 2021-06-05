@@ -38,7 +38,7 @@ class TraitCreator extends Command
     public function handle()
     {
         $name = $this->argument('name');
-        $basefile = __DIR__ . '/BaseFiles/BaseTrait.php';
+        $basefile = __DIR__ . '/BaseFiles/TraitBase.php';
         $destfile = __DIR__ . '/../../Traits/'.$name.'.php';
 
         $alreadyexits = file_exists($destfile);
@@ -48,7 +48,7 @@ class TraitCreator extends Command
 
         copy($basefile, $destfile);
         $basecontent = file_get_contents($basefile);
-        $changedcontent = str_replace(['base_namespace','base_name'], ['App\Traits\\'. $name, $name],$basecontent);
+        $changedcontent = str_replace('TraitBase',$name,$basecontent);
         file_put_contents($destfile, $changedcontent);
 
         return $this->info('trait created');

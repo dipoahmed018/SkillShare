@@ -76,43 +76,45 @@ class CourseController extends Controller
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
-
-        $user = $request->user();
-        return $request->cancel;
+        return abort(400,'hello world');
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->introduction_name) . $course->id;
         $directory = '/introduction//' . $directory_name;
-        $file_name = Str::uuid() . '.mp4';
 
-        // delete if exists
-        if ($file = $course->introduction) {
-            $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
-            Storage::disk('public')->delete($file_path);
-            $file->delete();
+        if ($request->header('x-cancel') == true) {
+            $chunk = chunkUpload($directory, 'no data');
+            return $chunk->status == 200 ?  $chunk->message : 'something went wrong';
+        }
+        if ($request->header('x-resumeable') == true) {
+            $chunk = chunkUpload($directory, 'no data');
+            return $chunk->status == 200 ? $chunk->file_name : $chunk->message;
         }
 
-        // chunk upload
-        if ($request->last_chunk) {
-            // chunk upload
-            $chunk = chunkUpload($directory, $data, true, 'public/course/introduction/' . $file_name, $request->cancel ? $request->cancel : false);
-            if ($chunk->status === false) {
-                return response($chunk->message, 200);
+        //upload 
+        if ($request->header('x-last') == true) {
+            $chunk = chunkUpload($directory, $data, 'public/course/introduction/');
+            if ($chunk->status !== 200) {
+                return abort($chunk->status, $chunk->message);
             }
+            if ($file = $course->introduction) {
+                $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
+                Storage::disk('public')->delete($file_path);
+                $file->delete();
+            }
+
             $file = FileLink::create([
-                'file_name' => $file_name,
-                'file_link' => asset('/storage/course/introduction/' . $file_name),
+                'file_name' => $chunk->file_name,
+                'file_link' => asset('/storage/course/introduction/' . $chunk->file_name),
                 'file_type' => 'introduction',
                 'fileable_id' => $course->id,
                 'fileable_type' => 'course',
             ]);
             return $file;
-        } else {
-            // chunk upload
-            $chunk = chunkUpload($directory, $data, false, null);
-            if ($chunk->status === false) {
-                return response($chunk->message, 200);
-            }
-            return 'complete';
+        }
+
+        $chunk = chunkUpload($directory, $data);
+        if ($chunk->status == 200) {
+            return $chunk->file_name;
         }
     }
     public function showDetails(Course $course)
@@ -128,23 +130,34 @@ class CourseController extends Controller
     }
     public function addVideo(AddVideo $request, Course $course)
     {
-        $user = $request->user();
 
         $course_tutorials = collect($course->get_tutorials_details());
         $data = blobConvert($request->chunk_file);
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
-        $file_name = Str::uuid() . '.mp4';
         $title = $course_tutorials->count() + 1 . '-please provide your tutorial title';
         $directory = '/tutorial//' . $directory_name;
-        if ($request->last_chunk) {
+
+        if ($request->header('x-cancel') == true) {
+            $chunk = chunkUpload($directory, 'no data');
+            return $chunk->status == 200 ?  $chunk->message : 'something went wrong';
+        }
+        if ($request->header('x-resumeable') == true) {
+            $chunk = chunkUpload($directory, 'no data');
+            return $chunk->status == 200 ? $chunk->file_name : $chunk->message;
+        }
+
+
+        if ($request->header('x-last') == true) {
             //chunk upload
-            $chunk = chunkUpload($directory, $data, true, 'private/course/tutorial/' . $file_name, $request->cancel);
-            if ($chunk->status == false) {
-                return response($chunk->message, 200);
+            $chunk = chunkUpload($directory, $data, 'private/course/tutorial/');
+            if ($chunk->status == 422) {
+                return abort(422, $chunk->message);
             }
+
+
             $file = FileLink::create([
-                'file_name' => $file_name,
-                'file_link' => 'app/private/course/tutorial/' . $file_name,
+                'file_name' => $chunk->file_name,
+                'file_link' => 'app/private/course/tutorial/' . $chunk->file_name,
                 'file_type' => 'tutorial',
                 'security' => 'private',
                 'fileable_type' => 'course',
@@ -155,14 +168,12 @@ class CourseController extends Controller
                 'title' => $title,
             ]);
             return $tutorial_details;
-        } else {
-            //chunk upload
-            $chunk = chunkUpload($directory, $data, false, false, $request->cancel ? $request->cancel : false);
-            if ($chunk->status == false) {
-                return response($chunk->message, 200);
-            }
-            return 'complete';
         }
+
+        $chunk = chunkUpload($directory, $data);
+
+        return $chunk->status == 200 ? response($chunk->file_name, 200) : abort(422, $chunk->message);
+        
     }
     public function setVideoName()
     {

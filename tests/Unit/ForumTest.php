@@ -2,23 +2,24 @@
 
 namespace Tests\Unit;
 
-use App\Models\Catagory;
-use App\Models\Comment;
-use App\Models\Course;
+use Tests\TestCase;
+use App\Models\Post;
+use App\Models\User;
 use App\Models\Forum;
 use App\Models\Group;
-use App\Models\Message;
-use App\Models\Post;
 use App\Models\Price;
-use App\Models\Referrel;
+use App\Models\Course;
 use App\Models\Review;
+use App\Models\Comment;
+use App\Models\Message;
 use App\Models\Tuition;
-use App\Models\User;
-use Illuminate\Contracts\Auth\Authenticatable;
+use App\Models\Catagory;
+use App\Models\Referrel;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class ForumTest extends TestCase
 {
@@ -29,7 +30,8 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $file = Storage::disk('public')->append('/course/introduction/nello.text','nello world');
+        // $file = Storage::disk('public')->append('/course/introduction/nello.text','nello world');
+        dd(Str::random(20));
         $this->assertTrue(true);
     }
 }

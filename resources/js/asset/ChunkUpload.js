@@ -1,41 +1,86 @@
 import axios from "axios";
 
-    let res;
-    if (!file || !url) {
-        return {
-            status: 'failed',
-            error: "please provide a file and a url",
-        };
+class ChunkUpload {
+
+    constructor(file, chunksize = 1024 * 1024 * 3, popup = null) {
+        this.chunksize = chunksize
+        this.file = file
+        this.filesize = file.size
+        this.filetype = file.type
+        this.chunks = Math.ceil(this.filesize / Math.min(chunksize, this.filesize))
+        this.chunkData = {}
+        this.popup = popup
     }
-    if (file.type !== 'video/mp4') {
-        return {
-            status: 'failed',
-            error: { message: 'please provide a mp4 file' }
+
+
+    async startUpload(url, inputs, csrf = null, bearer = null) {
+        await this._chunkFile()
+        let lastChunk = Object.keys(this.chunkData).length
+        for (const chunkN in this.chunkData) {
+            let form = new FormData
+            form.append('chunk_file', this.chunkData[chunkN].data)
+            Object.entries(inputs).forEach(([key, value]) => {
+                form.append(key, value)
+            })
+            try {
+                let res = await this._uploadFile(url, form, csrf)
+                this.chunkData[chunkN].status = 'complete'
+
+            } catch (error) {
+                return {
+                    status: error.status,
+                    error: error.data,
+                }
+            }
+
         }
     }
+    resumeUpload() {
 
-// const config = {
-//     cancelToekn: cancel_token.token,
-//     onUploadProgress: (progressEvent) => progressBar(progressEvent)
-// }
-// let data = {
-//     ...inputs,
-//     full_file_size: filesize,
-//     last_chunk: Math.min(uploaded + initial_chunk_size, filesize) === file.size,
-//     chunk_file: chunked_file,
-// }
+    }
+    cancelUpload() {
+        this.cancel.cancel()
+    }
+    pauseUpload() {
+    }
 
-// function progressBar(e) {
-//     let extra_data = (e.total - next_chunk_size)
 
-//     if (uploaded == 0) {
-//         uploading = Math.floor((e.loaded / (filesize + (extra_data * Math.ceil(initial_chunk_size / filesize)))) * 100);
+    async _chunkFile() {
+        let completed = 0;
+        const chunk = (blob) => (new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(blob)
+            reader.onload = () => {
+                resolve(reader.result)
+            }
+        }))
+        for (let i = 0; i <= this.chunks; i++) {
+            let blob = this.file.slice(completed, Math.min(this.chunksize + completed, this.filesize))
+            let data = await chunk(blob)
+            let name = 'chunk-' + (Object.keys(this.chunkData).length + 1)
+            this.chunkData[name] = {
+                data: data,
+                status: 'ready',
+            }
+            completed = Math.min(this.chunksize + completed, this.filesize)
+        }
 
-//     } else {
-//         uploading = Math.floor(((e.loaded + uploaded + extra_data) / (filesize + (extra_data * Math.ceil(initial_chunk_size / filesize)))) * 100);
-//     }
-//     if (progressReport instanceof Function) {
-//         progressReport(uploading)
-//     }
-// }
-// export default chunk_upload
+    }
+    _uploadFile(url, data, csrf) {
+
+        return new Promise((resolve, reject) => {
+            this.cancel = axios.CancelToken.source()
+            axios.post(url, data, {
+                onUploadProgress: this.progress(),
+                onabort: reject({ status: 'abort' }),
+                cancelToken: this.cancel.token,
+            }).then(res => resolve(res.response), err => reject(err.response))
+        })
+    }
+    progress
+}
+
+
+
+
+export default ChunkUpload

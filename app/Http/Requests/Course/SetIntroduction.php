@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Course;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class SetIntroduction extends FormRequest
 {
@@ -24,13 +23,22 @@ class SetIntroduction extends FormRequest
      */
     public function rules()
     {
+        $chunk_get_resume = $this->header(('x-resumeable'));
+        $cancel = $this->header(('x-cancel'));
+
+        if($chunk_get_resume == true){
+            return [
+            'introduction_name' => 'required|string|max:400',
+            ];
+        }
+        if($cancel == true){
+            return [
+                'introduction_name' => 'required|string|max:400',
+            ];
+        }
         return [
             'introduction_name' => 'required|string|max:400',
-            'introduction_type' => ['required', Rule::in('video/mp4')],
             'chunk_file' => 'required|string|max:6000000',
-            'last_chunk' => ['required', Rule::in(true, false)],
-            'full_file_size' => 'required|integer|max:' . 1024  * 1024 * 500, 
-            'cancel' => [Rule::in(true, false)]
         ];
     }
 }
