@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Course;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteVideo extends FormRequest
@@ -13,7 +14,7 @@ class DeleteVideo extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->can('delete', $this->course);
     }
 
     /**

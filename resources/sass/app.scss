@@ -117,3 +117,16 @@
         transform: translateX(-50%);
     }
 }
+
+.tutorial-videos {
+    // overflow: hidden;
+    .tutorial-card {
+        border-bottom: 2px solid white;
+        margin-bottom: 2px;
+        background-color: darkgray;
+    }
+    .tutorial-card:hover {
+        
+        cursor: move;
+    }
+}

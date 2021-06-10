@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Course;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Log;
 
 class CoursePolicy
@@ -24,6 +23,14 @@ class CoursePolicy
     }
     public function update(User $user, Course $course)
     {
-        return $user->id === $course->owner ? true : false;
+        // Log::channel('event')->info('form update',[$course->owner_details]);
+        // Log::channel('event')->info('form update',[$user->id]);
+        return $user->id === $course->owner_details->id ? true : false;
+    }
+    public function delete(User $user, Course $course)
+    {
+        // Log::channel('event')->info('from delete',[$course->owner_details]);
+        // Log::channel('event')->info('from delete',[$user]);
+        return ($course->students->count() < 1 && $course->owner_details->id == $user->id)? true : false;
     }
 }

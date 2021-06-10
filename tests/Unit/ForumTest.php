@@ -30,8 +30,7 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        // $file = Storage::disk('public')->append('/course/introduction/nello.text','nello world');
-        dd(Str::random(20));
-        $this->assertTrue(true);
+        // $course = Course::find(11);
+        // $tutorias = $course->get_tutorials_details();
     }
 }

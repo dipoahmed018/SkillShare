@@ -13,4 +13,9 @@ class TutorialDetails extends Model
         'tutorial_id',
         'title',
     ];
+
+    public function tutorial_video()
+    {
+        return $this->belongsTo(FileLink::class, 'tutorial_id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Course extends Model
 {
@@ -18,7 +19,7 @@ class Course extends Model
         'forum_id',
     ];
 
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner');
     }
@@ -28,7 +29,7 @@ class Course extends Model
     }
     public function students()
     {
-        return $this->belongsToMany(User::class, 'course_students', 'course_id', 'student_id')->withPivot(['expired', 'expires_at'])->withTimestamps();
+        return $this->belongsToMany(User::class, 'course_students', 'course_id', 'student_id');
     }
     public function referrels()
     {
@@ -55,7 +56,8 @@ class Course extends Model
         $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type','=','course');
         $tutorial_details = DB::table('tutorial_details')
             ->joinSub($tutorial,'tutorial','tutorial_details.tutorial_id','=','tutorial.id')
-            ->select('tutorial.id as tutorial_id', 'tutorial_details.title')
+            ->select('tutorial_details.id', 'tutorial_details.title')
+            ->orderBy('tutorial_details.title','asc')
             ->get();
         return $tutorial_details;
     }

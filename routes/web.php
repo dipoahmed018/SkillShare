@@ -71,13 +71,16 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/update/course/{course}', [CourseController::class, 'Show_UpdateDetails']);
         Route::post('/update/course/{course}',[CourseController::class,'updateDetails'])->name('update.course');
         Route::post('/update/course/{course}/thumblin',[CourseController::class,'setThumblin'])->name('update.course.thumblin');
-        
+        Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');
+            
         //course tutorial
-        Route::post('/course/{course}/addvideo',[CourseController::class,'addVideo'])->name('course.addVideo');
-        Route::put('/course/{course}/add-video/{video}',[CourseController::class,'setVideoName'])->name('course.setVideoName');
-        Route::delete('/course/{course}/delete/video/{video}',[CourseController::class,'deleteVideo'])->name('course.deleteVideo');
-        
-        Route::delete('/course/{course}/delete',[CourseController::class, 'deleteCourse'])->name('course.delte');
+        Route::post('/course/{course}/tutorial',[CourseController::class,'addTutorial'])->name('course.tutorial.add');
+        Route::get('/course/{course}/tutorial/{tutorial}',[CourseController::class, 'showTutorialEdit']);
+        Route::put('/course/{course}/tutorial/{tutorial}',[CourseController::class,'setTutorialDetails'])->name('tutorial.title.edit');
+
+        //delete course
+        Route::delete('/delete/course/{course}/tutorial/{tutorial}',[CourseController::class,'deleteVideo'])->name('delete.course.tutorial');
+        Route::delete('/delete/course/{course}',[CourseController::class, 'deleteCourse'])->name('delete.course');
+    
     });
 });
-Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');

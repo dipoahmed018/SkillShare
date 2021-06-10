@@ -35,14 +35,15 @@ if (!function_exists('chunkUpload')) {
         $files = collect(Storage::disk('temp')->files($directory));
         $response = (object) ['status' => false, 'message' => '', 'file_name' => ''];
         $size = 0;
-        if (request()->header('x-cancel') === true) {
+        if (request()->header('x-cancel')) {
+            Log::channel('event')->info($directory);
             Storage::disk('temp')->deleteDirectory($directory);
             $response->status = 200;
             $response->message = 'File upload has been canceled';
             return $response;
         }
 
-        if ($files->count() > 1) {
+        if ($files->count() > 0) {
             foreach ($files as $key => $filepath) {
                 $file_size = (int)File::size(storage_path('app/temp/' . $filepath));
                 $size += $file_size;
@@ -51,22 +52,21 @@ if (!function_exists('chunkUpload')) {
                 Storage::disk('temp')->deleteDirectory($directory);
                 $response->status = 422;
                 $response->message = 'too large';
+                return $response;
             }
-            return $response;
         }
-        if (request('x-resumeable') == true) {
-            if ($size !== 0) {
+        if (request()->header('x-resumeable')) {
+                if ($size !== 0) {
                 $response->status = 200;
-                $response->file_name = 'chunk-'. ($files->count() + 0);
+                $response->file_name = 'chunk-'. ($files->count() + 1);
                 $response->message = 'file upload can be resumed';
                 return $response;
             } else {
                 $response->status = 404;
                 $response->message = 'file not found';
+                return $response;
             }
         }
-
-
 
         //chunk and file upload
         $temp_name = 'chunk-' . (string)($files->count() + 1) . '.tmp';
@@ -81,7 +81,7 @@ if (!function_exists('chunkUpload')) {
             };
             foreach ($files as $key => $file_path) {
                 $content = Storage::disk('temp')->get($file_path);
-
+                
                 Storage::append($file_directory. $file_name, $content, null);
             }
             Storage::append($file_directory . $file_name, $data, null);

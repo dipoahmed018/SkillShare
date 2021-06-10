@@ -1860,6 +1860,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -1873,8 +1877,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -1897,7 +1899,9 @@ var ChunkUpload = /*#__PURE__*/function () {
 
     _classCallCheck(this, ChunkUpload);
 
-    _defineProperty(this, "progress", void 0);
+    _defineProperty(this, "showProgress", void 0);
+
+    _defineProperty(this, "showResponse", void 0);
 
     this.chunksize = chunksize;
     this.file = file;
@@ -1906,6 +1910,8 @@ var ChunkUpload = /*#__PURE__*/function () {
     this.chunks = Math.ceil(this.filesize / Math.min(chunksize, this.filesize));
     this.chunkData = {};
     this.popup = popup;
+    this.full_file_size = 0;
+    this._uploaded = 0;
   }
 
   _createClass(ChunkUpload, [{
@@ -1916,6 +1922,8 @@ var ChunkUpload = /*#__PURE__*/function () {
 
         var csrf,
             bearer,
+            input_length,
+            blob_length,
             lastChunk,
             _loop,
             chunkN,
@@ -1928,79 +1936,130 @@ var ChunkUpload = /*#__PURE__*/function () {
               case 0:
                 csrf = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : null;
                 bearer = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : null;
-                _context2.next = 4;
+                //calculate total
+                this._url = url;
+                this._inputs = inputs;
+
+                if (!(Object.keys(this.chunkData).length < 1)) {
+                  _context2.next = 8;
+                  break;
+                }
+
+                console.log('chunking');
+                _context2.next = 8;
                 return this._chunkFile();
 
-              case 4:
-                lastChunk = Object.keys(this.chunkData).length;
+              case 8:
+                input_length = new TextEncoder().encode(JSON.stringify(inputs)).length;
+                blob_length = 0;
+                this._totalUpload = input_length * this.chunks + this.full_file_size;
+                lastChunk = Object.keys(this.chunkData).pop();
                 _loop = /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _loop(chunkN) {
-                  var form, res;
+                  var form, header, res;
                   return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _loop$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          form = new FormData();
-                          form.append('chunk_file', _this.chunkData[chunkN].data);
+                          if (!(_this.chunkData[chunkN].status == 'complete')) {
+                            _context.next = 2;
+                            break;
+                          }
+
+                          return _context.abrupt("return", "continue");
+
+                        case 2:
+                          form = {};
+                          blob_length = _this.chunkData[chunkN].data.length;
+                          form['chunk_file'] = _this.chunkData[chunkN].data;
                           Object.entries(inputs).forEach(function (_ref) {
                             var _ref2 = _slicedToArray(_ref, 2),
                                 key = _ref2[0],
                                 value = _ref2[1];
 
-                            form.append(key, value);
+                            form[key] = value;
                           });
-                          _context.prev = 3;
-                          _context.next = 6;
-                          return _this._uploadFile(url, form, csrf);
-
-                        case 6:
-                          res = _context.sent;
-                          _this.chunkData[chunkN].status = 'complete';
-                          _context.next = 13;
-                          break;
+                          header = lastChunk == chunkN ? {
+                            'x-last': true
+                          } : {};
+                          _context.prev = 7;
+                          _context.next = 10;
+                          return _this._uploadFile(url, form, header);
 
                         case 10:
-                          _context.prev = 10;
-                          _context.t0 = _context["catch"](3);
-                          return _context.abrupt("return", {
-                            v: {
-                              status: _context.t0.status,
-                              error: _context.t0.data
-                            }
-                          });
+                          res = _context.sent;
+                          _this.chunkData[chunkN].status = 'complete';
+                          _this._uploaded += blob_length + input_length;
 
-                        case 13:
+                          if (!(chunkN == lastChunk)) {
+                            _context.next = 16;
+                            break;
+                          }
+
+                          _this.showResponse(res, null);
+
+                          return _context.abrupt("return", "break");
+
+                        case 16:
+                          _context.next = 26;
+                          break;
+
+                        case 18:
+                          _context.prev = 18;
+                          _context.t0 = _context["catch"](7);
+
+                          if (!(_context.t0.message == 'paused' || _context.t0.message == 'canceled')) {
+                            _context.next = 24;
+                            break;
+                          }
+
+                          return _context.abrupt("return", "break");
+
+                        case 24:
+                          _this.showResponse(null, _context.t0.response);
+
+                          return _context.abrupt("return", "break");
+
+                        case 26:
                         case "end":
                           return _context.stop();
                       }
                     }
-                  }, _loop, null, [[3, 10]]);
+                  }, _loop, null, [[7, 18]]);
                 });
                 _context2.t0 = _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().keys(this.chunkData);
 
-              case 7:
+              case 14:
                 if ((_context2.t1 = _context2.t0()).done) {
-                  _context2.next = 15;
+                  _context2.next = 24;
                   break;
                 }
 
                 chunkN = _context2.t1.value;
-                return _context2.delegateYield(_loop(chunkN), "t2", 10);
+                return _context2.delegateYield(_loop(chunkN), "t2", 17);
 
-              case 10:
+              case 17:
                 _ret = _context2.t2;
 
-                if (!(_typeof(_ret) === "object")) {
-                  _context2.next = 13;
+                if (!(_ret === "continue")) {
+                  _context2.next = 20;
                   break;
                 }
 
-                return _context2.abrupt("return", _ret.v);
+                return _context2.abrupt("continue", 14);
 
-              case 13:
-                _context2.next = 7;
+              case 20:
+                if (!(_ret === "break")) {
+                  _context2.next = 22;
+                  break;
+                }
+
+                return _context2.abrupt("break", 24);
+
+              case 22:
+                _context2.next = 14;
                 break;
 
-              case 15:
+              case 24:
               case "end":
                 return _context2.stop();
             }
@@ -2016,23 +2075,100 @@ var ChunkUpload = /*#__PURE__*/function () {
     }()
   }, {
     key: "resumeUpload",
-    value: function resumeUpload() {}
-  }, {
-    key: "cancelUpload",
-    value: function cancelUpload() {
-      this.cancel.cancel();
-    }
-  }, {
-    key: "pauseUpload",
-    value: function pauseUpload() {}
-  }, {
-    key: "_chunkFile",
     value: function () {
-      var _chunkFile2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var completed, chunk, i, blob, data, name;
+      var _resumeUpload = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                _context3.next = 3;
+                return this._uploadFile(this._url, this._inputs, {
+                  'x-resumeable': true
+                });
+
+              case 3:
+                res = _context3.sent;
+
+                if (res) {
+                  this.startUpload(this._url, this._inputs);
+                }
+
+                _context3.next = 10;
+                break;
+
+              case 7:
+                _context3.prev = 7;
+                _context3.t0 = _context3["catch"](0);
+                this.startUpload(this._url, this._inputs);
+
+              case 10:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee2, this, [[0, 7]]);
+      }));
+
+      function resumeUpload() {
+        return _resumeUpload.apply(this, arguments);
+      }
+
+      return resumeUpload;
+    }()
+  }, {
+    key: "pauseUpload",
+    value: function pauseUpload() {
+      this.cancel.cancel('paused');
+    }
+  }, {
+    key: "cancelUpload",
+    value: function () {
+      var _cancelUpload = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                this.cancel.cancel('canceled');
+                _context4.prev = 1;
+                _context4.next = 4;
+                return this._uploadFile(this._url, this._inputs, {
+                  'x-cancel': true
+                });
+
+              case 4:
+                res = _context4.sent;
+                return _context4.abrupt("return", res);
+
+              case 8:
+                _context4.prev = 8;
+                _context4.t0 = _context4["catch"](1);
+                return _context4.abrupt("return", _context4.t0.response);
+
+              case 11:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee3, this, [[1, 8]]);
+      }));
+
+      function cancelUpload() {
+        return _cancelUpload.apply(this, arguments);
+      }
+
+      return cancelUpload;
+    }()
+  }, {
+    key: "_chunkFile",
+    value: function () {
+      var _chunkFile2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var completed, chunk, i, blob, data, name;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 completed = 0;
 
@@ -2047,20 +2183,21 @@ var ChunkUpload = /*#__PURE__*/function () {
                   });
                 };
 
-                i = 0;
+                i = 1;
 
               case 3:
                 if (!(i <= this.chunks)) {
-                  _context3.next = 14;
+                  _context5.next = 15;
                   break;
                 }
 
                 blob = this.file.slice(completed, Math.min(this.chunksize + completed, this.filesize));
-                _context3.next = 7;
+                _context5.next = 7;
                 return chunk(blob);
 
               case 7:
-                data = _context3.sent;
+                data = _context5.sent;
+                this.full_file_size += data.length;
                 name = 'chunk-' + (Object.keys(this.chunkData).length + 1);
                 this.chunkData[name] = {
                   data: data,
@@ -2068,17 +2205,17 @@ var ChunkUpload = /*#__PURE__*/function () {
                 };
                 completed = Math.min(this.chunksize + completed, this.filesize);
 
-              case 11:
+              case 12:
                 i++;
-                _context3.next = 3;
+                _context5.next = 3;
                 break;
 
-              case 14:
+              case 15:
               case "end":
-                return _context3.stop();
+                return _context5.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee4, this);
       }));
 
       function _chunkFile() {
@@ -2089,23 +2226,32 @@ var ChunkUpload = /*#__PURE__*/function () {
     }()
   }, {
     key: "_uploadFile",
-    value: function _uploadFile(url, data, csrf) {
+    value: function _uploadFile(url, data) {
       var _this2 = this;
 
+      var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       return new Promise(function (resolve, reject) {
         _this2.cancel = axios__WEBPACK_IMPORTED_MODULE_1___default().CancelToken.source();
         axios__WEBPACK_IMPORTED_MODULE_1___default().post(url, data, {
-          onUploadProgress: _this2.progress(),
-          onabort: reject({
-            status: 'abort'
-          }),
-          cancelToken: _this2.cancel.token
+          onUploadProgress: function onUploadProgress(e) {
+            return _this2._fix_progress(e);
+          },
+          onabort: function onabort() {
+            return reject();
+          },
+          cancelToken: _this2.cancel.token,
+          headers: _objectSpread({}, header)
         }).then(function (res) {
-          return resolve(res.response);
+          return resolve(res);
         }, function (err) {
-          return reject(err.response);
+          return reject(err);
         });
       });
+    }
+  }, {
+    key: "_fix_progress",
+    value: function _fix_progress(e) {
+      this.showProgress(Math.round((e.loaded + this._uploaded) / this._totalUpload * 100));
     }
   }]);
 
@@ -3437,13 +3583,14 @@ var error = new _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_0__.default(p
 var tutorial_input_element = document.getElementById("tutorial");
 var tutorial_upload_box = document.getElementById('tutorial-upload-box');
 var tutorial_progress_box = document.getElementById('tutorial-progress-box');
+var tutorial_progress_bar = document.getElementById('tutorial-progress-bar');
 var tutorial_progress_cancel = document.getElementById('tutorial-up-cancel');
 var tutorial_progress_pause = document.getElementById('tutorial-up-pause');
 
 if (tutorial_input_element) {
   tutorial_input_element.addEventListener("change", function (e) {
     var file = e.target.files[0];
-    var url = "/course/".concat(course.id, "/addvideo");
+    var url = "/course/".concat(course.id, "/tutorial");
 
     if (file.typ == 'video/mp4') {
       popup.addPopup('file must be a mp4 type');
@@ -3457,13 +3604,70 @@ if (tutorial_input_element) {
 
     var data = {
       tutorial_name: (Date.now() + Math.random()).toString(36),
-      tutorial_type: file.type,
-      full_file_size: file.size
+      tutorial_type: file.type
     };
     var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file);
-    uploader.startUpload(url, file);
+    uploader.startUpload(url, data);
     tutorial_upload_box.classList.add('hide');
-    tutorial_progress_box.classList.remove('hide');
+    tutorial_progress_box.classList.remove('hide'); //canceler and pauser
+
+    var pause_or_resume = function pause_or_resume() {
+      if (tutorial_progress_pause.classList.contains('pause')) {
+        tutorial_progress_pause.innerText = 'resume';
+        tutorial_progress_pause.classList.remove('pause');
+        tutorial_progress_pause.classList.add('resume');
+        uploader.pauseUpload();
+      } else {
+        tutorial_progress_pause.innerText = 'pause';
+        tutorial_progress_pause.classList.remove('resume');
+        tutorial_progress_pause.classList.add('pause');
+        uploader.resumeUpload();
+      }
+    };
+
+    tutorial_progress_cancel.addEventListener('click', function (e) {
+      e.preventDefault();
+      clearBox();
+      uploader.cancelUpload();
+    }, {
+      once: true
+    });
+    tutorial_progress_pause.addEventListener('click', pause_or_resume); //show progrews
+
+    uploader.showProgress = function (progress) {
+      progress = progress > 100 ? 100 : progress;
+      tutorial_progress_bar.innerHTML = "".concat(progress, " %");
+      tutorial_progress_bar.setAttribute('aria-valuenow', progress);
+      tutorial_progress_bar.setAttribute('style', "width:".concat(progress, "%"));
+    };
+
+    function clearBox() {
+      tutorial_progress_pause.removeEventListener('click', pause_or_resume);
+      tutorial_input_element.value = null;
+      tutorial_progress_pause.classList.add('pause');
+      tutorial_progress_pause.classList.remove('resume');
+      tutorial_progress_pause.innerText = 'pause';
+      tutorial_upload_box.classList.remove('hide');
+      tutorial_progress_box.classList.add('hide');
+    }
+
+    uploader.showResponse = function (res, err) {
+      if (err !== null) {
+        clearBox();
+
+        if (err.status == 422) {
+          error.inputHandle(err.data, null, true);
+        } else {
+          error.simpleError(err.data.message);
+        }
+      }
+
+      if (res !== null) {
+        clearBox();
+        popup.addPopup('tutorial upload complete');
+        location.reload();
+      }
+    };
   });
 } //introduction upload
 
@@ -3471,11 +3675,14 @@ if (tutorial_input_element) {
 var introduction_input_lement = document.getElementById('introduction');
 var introduction_upload_box = document.getElementById('introduction-upload-box');
 var introduction_progress_box = document.getElementById('introduction-progress-box');
+var introduction_progress_bar = document.getElementById('introduction-progress-bar');
 var introduction_progress_cancel = document.getElementById('introduction-up-cancel');
 var introduction_progress_pause = document.getElementById('introduction-up-pause');
+var video_box = document.getElementById('introduction-video');
 
 if (introduction_input_lement) {
   introduction_input_lement.addEventListener("change", function (e) {
+    e.preventDefault();
     var file = e.target.files[0];
     var url = "/update/course/".concat(course.id, "/introduction");
 
@@ -3492,59 +3699,77 @@ if (introduction_input_lement) {
     var input_data = {
       introduction_name: (Date.now() + Math.random()).toString(36),
       introduction_type: file.type
-    };
-    var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file);
-    uploader.startUpload(url, input_data, csrf);
-    introduction_progress_box.classList.remove('hide');
-    introduction_upload_box.classList.add('hide'); //canceler 
+    }; //upload file
 
-    introduction_progress_cancel.addEventListener('click', function () {
+    var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file);
+    uploader.startUpload(url, input_data, csrf); //show uploader
+
+    introduction_progress_box.classList.remove('hide');
+    introduction_upload_box.classList.add('hide'); //canceler and pauser
+
+    var pause_or_resume = function pause_or_resume() {
+      if (introduction_progress_pause.classList.contains('pause')) {
+        introduction_progress_pause.innerText = 'resume';
+        introduction_progress_pause.classList.remove('pause');
+        introduction_progress_pause.classList.add('resume');
+        uploader.pauseUpload();
+      } else {
+        introduction_progress_pause.innerText = 'pause';
+        introduction_progress_pause.classList.remove('resume');
+        introduction_progress_pause.classList.add('pause');
+        uploader.resumeUpload();
+      }
+    };
+
+    introduction_progress_cancel.addEventListener('click', function (e) {
+      e.preventDefault();
+      clearBox();
+      uploader.cancelUpload();
+    }, {
+      once: true
+    });
+    introduction_progress_pause.addEventListener('click', pause_or_resume); //show progrews
+
+    uploader.showProgress = function (progress) {
+      progress = progress > 100 ? 100 : progress;
+      introduction_progress_bar.innerHTML = "".concat(progress, " %");
+      introduction_progress_bar.setAttribute('aria-valuenow', progress);
+      introduction_progress_bar.setAttribute('style', "width:".concat(progress, "%"));
+    }; //clear box 
+
+
+    function clearBox() {
+      introduction_progress_pause.removeEventListener('click', pause_or_resume);
+      introduction_input_lement.value = null;
+      introduction_progress_pause.classList.remove('resume');
+      introduction_progress_pause.classList.add('pause');
+      introduction_progress_pause.innerText = 'pause';
       introduction_upload_box.classList.remove('hide');
       introduction_progress_box.classList.add('hide');
-      uploader.cancelUpload();
-    }); //progress
+    }
 
-    uploader.progress = function (_byte) {
-      console.log(_byte); //count progress
-      // show_progress(byte, 'introduction-progress-box')
+    uploader.showResponse = function (res, err) {
+      if (err !== null) {
+        console.log(err);
+        clearBox();
+
+        if (err.status == 422) {
+          error.inputHandle(err.data, null, true);
+        } else {
+          error.simpleError(err.data.message);
+        }
+      }
+
+      if (res !== null) {
+        clearBox();
+        popup.addPopup('introduction upload complete');
+        video_box ? video_box.src = res.data.file_link : location.reload();
+      }
     };
   });
-} //chunk upload progress bar 
+}
 
-
-var progress_fix = 0;
-
-var show_progress = function show_progress(total, element) {
-  var parent_element = document.getElementById(element);
-  var progress_element;
-  parent_element.childNodes.forEach(function (node) {
-    if (node.className == 'progress') {
-      progress_element = node.childNodes.item(1);
-    }
-  });
-
-  if (parent_element) {
-    if (total >= 100) {
-      if (parent_element) {
-        parent_element.classList.add('hide');
-      }
-
-      return;
-    }
-
-    if (total > progress_fix) {
-      progress_fix = total;
-
-      if (parent_element) {
-        parent_element.classList.remove('hide');
-      }
-
-      progress_element.innerHTML = "".concat(progress_fix, " %");
-      progress_element.setAttribute('aria-valuenow', progress_fix);
-      progress_element.setAttribute('style', "width:".concat(progress_fix, "%"));
-    }
-  }
-};
+var num = 250;
 })();
 
 /******/ })()

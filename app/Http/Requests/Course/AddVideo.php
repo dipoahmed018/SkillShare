@@ -5,6 +5,7 @@ namespace App\Http\Requests\Course;
 use App\Models\Course;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class AddVideo extends FormRequest
@@ -16,6 +17,7 @@ class AddVideo extends FormRequest
      */
     public function authorize()
     {
+        Log::channel('event')->info($this->course);
         return $this->user()->can('update', $this->course);
     }
 

@@ -10,40 +10,81 @@ class ChunkUpload {
         this.chunks = Math.ceil(this.filesize / Math.min(chunksize, this.filesize))
         this.chunkData = {}
         this.popup = popup
+        this.full_file_size = 0
+        this._uploaded = 0
     }
 
 
     async startUpload(url, inputs, csrf = null, bearer = null) {
-        await this._chunkFile()
-        let lastChunk = Object.keys(this.chunkData).length
-        for (const chunkN in this.chunkData) {
-            let form = new FormData
-            form.append('chunk_file', this.chunkData[chunkN].data)
-            Object.entries(inputs).forEach(([key, value]) => {
-                form.append(key, value)
-            })
-            try {
-                let res = await this._uploadFile(url, form, csrf)
-                this.chunkData[chunkN].status = 'complete'
+        //calculate total
 
+        this._url = url;
+        this._inputs = inputs;
+
+
+        if (Object.keys(this.chunkData).length < 1) {
+            console.log('chunking')
+            await this._chunkFile()
+        }
+        let input_length = new TextEncoder().encode(JSON.stringify(inputs)).length
+        let blob_length = 0;
+        this._totalUpload = (input_length * this.chunks) + this.full_file_size
+        let lastChunk = Object.keys(this.chunkData).pop()
+        for (const chunkN in this.chunkData) {
+            if (this.chunkData[chunkN].status == 'complete') {
+                continue;
+            }
+            let form = {}
+            blob_length = this.chunkData[chunkN].data.length
+            form['chunk_file'] = this.chunkData[chunkN].data
+            Object.entries(inputs).forEach(([key, value]) => {
+                form[key] = value
+            })
+            let header = lastChunk == chunkN ? { 'x-last': true } : {}
+            try {
+                let res = await this._uploadFile(url, form, header)
+                this.chunkData[chunkN].status = 'complete'
+                this._uploaded += (blob_length + input_length)
+                if (chunkN == lastChunk) {
+                    this.showResponse(res, null)
+                    break
+                }
             } catch (error) {
-                return {
-                    status: error.status,
-                    error: error.data,
+                if (error.message == 'paused' || error.message == 'canceled') {
+                    break;
+                } else {
+                    this.showResponse(null, error.response)
+                    break
                 }
             }
 
         }
     }
-    resumeUpload() {
+    async resumeUpload() {
+        try {
+            const res = await this._uploadFile(this._url, this._inputs, { 'x-resumeable': true })
+            if (res) {
+                this.startUpload(this._url, this._inputs)
+            }
 
-    }
-    cancelUpload() {
-        this.cancel.cancel()
+        } catch (error) {
+            this.startUpload(this._url, this._inputs)
+        }
     }
     pauseUpload() {
+        this.cancel.cancel('paused')
     }
-
+    async cancelUpload() {
+        this.cancel.cancel('canceled')
+        try {
+            const res = await this._uploadFile(this._url, this._inputs, {
+                'x-cancel': true,
+            })
+            return res
+        } catch (error) {
+            return error.response
+        }
+    }
 
     async _chunkFile() {
         let completed = 0;
@@ -54,30 +95,42 @@ class ChunkUpload {
                 resolve(reader.result)
             }
         }))
-        for (let i = 0; i <= this.chunks; i++) {
+        for (let i = 1; i <= this.chunks; i++) {
             let blob = this.file.slice(completed, Math.min(this.chunksize + completed, this.filesize))
             let data = await chunk(blob)
+            this.full_file_size += data.length
             let name = 'chunk-' + (Object.keys(this.chunkData).length + 1)
             this.chunkData[name] = {
                 data: data,
                 status: 'ready',
             }
+
             completed = Math.min(this.chunksize + completed, this.filesize)
         }
 
     }
-    _uploadFile(url, data, csrf) {
+    _uploadFile(url, data, header = {}) {
 
         return new Promise((resolve, reject) => {
             this.cancel = axios.CancelToken.source()
             axios.post(url, data, {
-                onUploadProgress: this.progress(),
-                onabort: reject({ status: 'abort' }),
+                onUploadProgress: (e) => this._fix_progress(e),
+                onabort: () => reject(),
                 cancelToken: this.cancel.token,
-            }).then(res => resolve(res.response), err => reject(err.response))
+                headers: {
+                    ...header
+                }
+            }).then(res => resolve(res), err => reject(err))
         })
     }
-    progress
+
+    _fix_progress(e) {
+        this.showProgress(Math.round(((e.loaded + this._uploaded) / this._totalUpload) * 100))
+    }
+    showProgress
+
+    showResponse
+
 }
 
 
