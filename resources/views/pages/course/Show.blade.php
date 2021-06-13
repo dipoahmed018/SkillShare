@@ -4,14 +4,13 @@
 
 @section('body')
 
-    <div class="modal fade" id="tutorial-video" tabindex="-1"
-        aria-hidden="true">
+    <div class="modal fade" id="tutorial-video" tabindex="-1" aria-hidden="true">
 
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">watch tutorial</h5>
-                    <button id="close-modal" type="button" class="btn-close" ></button>
+                    <button id="close-modal" type="button" class="btn-close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
@@ -143,6 +142,13 @@
                     </div>
                 @endforeach
             </div>
+
+            <x-review :reviews="$course->review()->with('owner_details')->get()">
+                <x-slot name='name'>
+                    <h3>Course Reviews</h3>
+                </x-slot>
+            </x-review>
+
         </div>
     @endif
 @endsection

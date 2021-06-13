@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class ReviewBox extends Component
+class Review extends Component
 {
     /**
      * Create a new component instance.
@@ -25,6 +25,6 @@ class ReviewBox extends Component
      */
     public function render()
     {
-        return view('Components.review-box');
+        return view('Components.review');
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Str;
 use App\Traits\UserRelationships;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -125,5 +126,8 @@ class User extends Authenticatable implements MustVerifyEmail
         $profile_picture = DB::table('file_link')->whereRaw('file_type = ? AND fileable_id = ? AND fileable_type = ?',['profile_photo',$this->id,'user'])->first();
         return !$profile_picture ? asset('/storage/profile/profile_photo/default.JPG') : $profile_picture->file_link;
     }
-    
+    public function getProfileLocation()
+    {
+        return Str::slug($this->name . $this->id);
+    }
 }

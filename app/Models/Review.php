@@ -17,7 +17,7 @@ class Review extends Model
         'reviewable_id',
     ];
 
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner');
     }
