@@ -21,9 +21,8 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
-use Illuminate\Validation\UnauthorizedException;
-use Intervention\Image\Exception\NotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Services\VideoStream;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
@@ -49,7 +48,7 @@ class CourseController extends Controller
         ]);
         $course->forum_id = $forum->id;
         $course->save();
-        return back()->with('status', 'created')->with('course', $course);
+        return redirect('/show/course/' . $course->id);
     }
     public function setThumblin(SetThumblin $request, Course $course)
     {
@@ -125,8 +124,23 @@ class CourseController extends Controller
         $course->tutorials = $course->get_tutorials_details();
         return view('pages/course/Show', ['course' => $course]);
     }
-    public function updateDetails(UpdateDetails $request)
+
+    public function updateDetails(UpdateDetails $request, Course $course)
     {
+        Log::channel('event')->info('update-detais', [$request->all()]);
+        if ($request->title) {
+            $course->title = $request->title;
+            $course->save();
+        }
+        if ($request->description) {
+            $course->description = $request->description;
+            $course->save();
+        }
+        if ($request->price) {
+            $course->price = $request->price;
+            $course->save();
+        }
+        return redirect('/show/course/' . $course->id);
     }
     public function addTutorial(AddVideo $request, Course $course)
     {
@@ -134,7 +148,7 @@ class CourseController extends Controller
         $course_tutorials = collect($course->get_tutorials_details());
         $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
-        $title ='please provide your tutorial title';
+        $title = 'please provide your tutorial title';
         $directory = '/tutorial//' . $directory_name;
 
         if ($request->header('x-cancel')) {
@@ -166,6 +180,7 @@ class CourseController extends Controller
             $tutorial_details = TutorialDetails::create([
                 'tutorial_id' => $file->id,
                 'title' => $title,
+                'order' => $course_tutorials->count() + 1,
             ]);
             return $tutorial_details;
         }
@@ -174,9 +189,58 @@ class CourseController extends Controller
 
         return $chunk->status == 200 ? response($chunk->file_name, 200) : abort(422, $chunk->message);
     }
-    public function setTutorialDetails()
+
+    public function attachCatagory(Request $request, Course $course)
     {
-        return 'hello world';
+        $rules = [
+            'catagory' => 'required|integer'
+        ];
+        $request->validate($rules, $request->all());
+        if ($request->user()->cannot('update', $course)) {
+            return abort(401, 'you are not authorized');
+        };
+        return $course->catagory()->syncWithoutDetaching($request->catagory);
+
+    }
+    public function detachCatagory(Request $request, Course $course)
+    {
+        $rules = [
+            'catagory' => 'required|integer'
+        ];
+        $request->validate($rules, $request->all());
+        if ($request->user()->cannot('update', $course)) {
+            return abort(401, 'you are not authorized');
+        };
+        return $course->catagory()->detach($request->catagory);
+    }
+    public function setTutorialDetails(UpdateDetails $request, Course $course, TutorialDetails $tutorial)
+    {
+        if (!$request->title && ($request->position == $tutorial->order || !$request->position)) {
+            return back()->withErrors(['invalid' => 'Provided data is invalid']);
+        }
+        // save title
+        $tutorial->title = $request->title;
+        $tutorial->save();
+        //positioning
+        //going up
+        if ($request->position < $tutorial->order) {
+            $all_tutorials = $course->get_tutorials_details()->whereBetween('order', [$request->position, $tutorial->order - 1])->pluck('id');
+            TutorialDetails::query()->whereIn('id', $all_tutorials)->increment('order', 1);
+            $tutorial->order = $request->position;
+            $tutorial->save();
+            return redirect('/show/course/' . $course->id);
+        }
+        //going down
+        if ($request->position > $tutorial->order) {
+            $all_tutorials = $course->get_tutorials_details();
+            $last_order = $all_tutorials->max('order');
+            $in_between = $all_tutorials->whereBetween('order', [$tutorial->order + 1, $request->position])->pluck('id');
+            TutorialDetails::query()->whereIn('id', $in_between)->decrement('order', 1);
+            $tutorial->order = $request->position > $last_order ? $last_order : $request->position;
+            $tutorial->save();
+            return redirect('/show/course/' . $course->id);
+        }
+        return redirect('/show/course/' . $course->id);
     }
     public function showTutorialEdit(Request $request, Course $course, TutorialDetails $tutorial)
     {
@@ -184,12 +248,19 @@ class CourseController extends Controller
             return abort(401, 'you are not authorized to edit this tutorial');
         }
         $course->tutorials = collect($course->get_tutorials_details());
+        $course->catagory;
         return view('pages/course/EditTutorial', ['tutorial' => $tutorial, 'course' => $course]);
     }
     public function deleteVideo(DeleteVideo $request, Course $course, TutorialDetails $tutorial)
     {
         try {
             $file = $tutorial->tutorial_video;
+            $all_tutorials = $course->get_tutorials_details()->where('order', '>', $tutorial->order)->pluck('id');
+            Log::channel('event')->info('outside conut', [$all_tutorials]);
+            if ($all_tutorials->count() > 0) {
+                Log::channel('event')->info('inside conut', [$all_tutorials]);
+                TutorialDetails::query()->whereIn('id', $all_tutorials)->decrement('order', 1);
+            }
             Storage::delete($file->file_link);
             $file->delete();
             $tutorial->delete();
@@ -198,7 +269,33 @@ class CourseController extends Controller
             return $th;
         }
     }
-    public function deleteCourse(DeleteCourse $request)
+    public function deleteCourse(DeleteCourse $request, Course $course)
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        $course->forum ? $course->forum->delete() : null;
+        $course->introduction ? $course->introduction->delete() : null;
+        $course->thumblin ? $course->introduction->delete() : null;
+        $course->referrels ? $course->referrels()->delete() : null;
+        //tutorials delete
+        $tutorials = $course->tutorial_files;
+        if ($tutorials) {
+            $tutorial_ids = $course->get_tutorials_details()->pluck('id');
+            foreach ($tutorials as $key => $value) {
+                Storage::delete($value->file_link);
+            }
+            TutorialDetails::query()->whereIn('id', $tutorial_ids)->delete();
+            $course->tutorial_files()->delete();
+        }
+        $course->delete();
+        return redirect('/');
+    }
+    public function streamTutorial(Request $request,TutorialDetails $tutorial, Course $course)
+    {
+        if ($request->user()->cannot('tutorial', $course) && $request->user()->cannot('update', $course)) {
+            return abort(401,'you are not autorized to access this course tutorial');
+        }
+        $file_details = FileLink::findOrFail($tutorial->tutorial_id);
+        $stream = new VideoStream(storage_path('/app//' . $file_details->file_link));
+        $stream->start();
     }
 }

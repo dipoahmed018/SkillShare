@@ -3,6 +3,32 @@
 @section('title', 'course')
 
 @section('body')
+
+    <div class="modal fade" id="tutorial-video" tabindex="-1"
+        aria-hidden="true">
+
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">watch tutorial</h5>
+                    <button id="close-modal" type="button" class="btn-close" ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row video-control-box">
+                            <div class="col video-box col-12">
+                                <video controls id="video-frame" width="100%"></video>
+                            </div>
+                            <div class="col control-box">
+                                <button class="btn btn-primary"><i class="bi bi-arrow-left"></i></button>
+                                <button class="btn btn-primary"><i class="bi bi-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="popup_box">
 
     </div>
@@ -13,7 +39,7 @@
     @if ($course)
         <div class="container-fluid">
             <div class="details row">
-                <div class="title col col-md-10">
+                <div class="title col col-10">
                     <h3>{{ $course->title }}</h3>
                 </div>
                 <div class="description col col-md-10">
@@ -21,8 +47,8 @@
                 </div>
             </div>
             <div class="owner-details row ">
-
-                <p><b>Published By: </b> {{ $course->owner_details->name }}</p>
+                <p class="col col-4"><b>Published By: </b> {{ $course->owner_details->name }}</p>
+                <p class="col col-2"><b>Price</b> {{ $course->price }}</p>
             </div>
             <div class="introduction row justify-content-center">
                 <div class="introduction-video col col-12 col-md-6 ">
@@ -31,6 +57,20 @@
                     @endif
                 </div>
                 <div class="d-block"></div>
+                @can('update', $course)
+                    <div class="edit col col-2">
+                        <a class="btn btn-warning" href='/update/course/{{ $course->id }}'>Edit</a>
+                    </div>
+                @endcan
+                @can('delete', $course)
+                    <div class="edit col col-2">
+                        <form action="{{ route('delete.course', ['course' => $course->id]) }}" method="post">
+                            @method('delete')
+                            @csrf
+                            <input class="btn btn-danger" type="submit" value="Delete">
+                        </form>
+                    </div>
+                @endcan
                 <div id="introduction-upload-box" class="col col-md-6">
                     @can('update', $course)
                         <input accept=".mp4" required class="add-introduction one-click-upload" type="file" name="introduction"
@@ -73,9 +113,9 @@
                     <h1> course does not have any tutorial</h1>
                 @endif
                 @foreach ($course->tutorials as $tutorial)
-                    <div id="{{ $tutorial->id }}" draggable="true" class="tutorial-card row">
+                    <div draggable="true" class="tutorial-card row">
                         <div class="details col-sm-10">
-                            <h3 id="title" class="title">{{ $tutorial->title }}</h3>
+                            <h3 id="title">{{ $tutorial->title }}</h3>
                             <span>created_at</span>
                         </div>
 
@@ -90,8 +130,15 @@
                                 </form>
                             @endcan
                             @can('update', $course)
-                                <a class="btn btn-warning" href="/course/{{ $course->id }}/tutorial/{{ $tutorial->id }}">Edit</a>
+                                <a class="btn btn-warning"
+                                    href="/course/{{ $course->id }}/tutorial/{{ $tutorial->id }}">Edit</a>
                             @endcan
+                            @canany(['update', 'tutorial'], $course)
+                                <div class="watch">
+                                    <button tutorial={{ $tutorial->id }} class="btn btn-primary watch-tutorial"
+                                        id='open-tutorial'>Watch</button>
+                                </div>
+                            @endcanany
                         </div>
                     </div>
                 @endforeach
@@ -99,17 +146,16 @@
         </div>
     @endif
 @endsection
-
 @section('scripts')
 
     {{-- variable injection --}}
     @if ($course)
         <script>
-            var csrf = document.head.querySelector("meta[name='_token']").content;
-            var course = @json($course)
+            let csrf = document.head.querySelector("meta[name='_token']").content;
+            let user = @json(Auth::user());
+            let course = @json($course);
 
         </script>
     @endif
-
     <script src={{ asset('js/course-show.js') }}></script>
 @endsection

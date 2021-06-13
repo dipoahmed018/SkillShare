@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Course;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class UpdateDetails extends FormRequest
 {
@@ -13,7 +14,7 @@ class UpdateDetails extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->can('update', $this->course);
     }
 
     /**
@@ -23,8 +24,12 @@ class UpdateDetails extends FormRequest
      */
     public function rules()
     {
+        Log::channel('event')->info('update-request',[$this->title]);
         return [
-            //
+            'title' => 'string|min:10|max:200',
+            'position' => 'integer|min:1|max:999',
+            'description' => 'string|min:10|max:500',
+            'price' => 'numeric|max:99999.00|min:1|regex:/^\d+(\.\d{1,2})?$/',
         ];
     }
 }

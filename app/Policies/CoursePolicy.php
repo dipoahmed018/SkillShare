@@ -19,7 +19,6 @@ class CoursePolicy
     public $course;
     public function __construct()
     {
-        
     }
     public function update(User $user, Course $course)
     {
@@ -31,6 +30,10 @@ class CoursePolicy
     {
         // Log::channel('event')->info('from delete',[$course->owner_details]);
         // Log::channel('event')->info('from delete',[$user]);
-        return ($course->students->count() < 1 && $course->owner_details->id == $user->id)? true : false;
+        return ($course->students->count() < 1 && $course->owner_details->id == $user->id) ? true : false;
+    }
+    public function tutorial(User $user, Course $course)
+    {
+        return $course->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0 ? true : false;
     }
 }

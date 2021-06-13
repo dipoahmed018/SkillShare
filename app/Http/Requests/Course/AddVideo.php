@@ -17,7 +17,6 @@ class AddVideo extends FormRequest
      */
     public function authorize()
     {
-        Log::channel('event')->info($this->course);
         return $this->user()->can('update', $this->course);
     }
 

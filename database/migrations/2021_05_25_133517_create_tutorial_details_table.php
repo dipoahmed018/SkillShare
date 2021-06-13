@@ -16,6 +16,7 @@ class CreateTutorialDetailsTable extends Migration
         Schema::create('tutorial_details', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tutorial_id');
+            $table->integer('order');
             $table->string('title');
             $table->timestamps();
         });

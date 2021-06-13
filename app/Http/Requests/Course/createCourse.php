@@ -27,7 +27,7 @@ class createCourse extends FormRequest
         return [
             'title' => 'required|string|max:250|min:20',
             'description' => 'required|max:1500|min:20',
-            'price' => 'required|integer|max:10000',
+            'price' => 'numeric|max:99999.00|min:1|regex:/^\d+(\.\d{1,2})?$/',
             'forum_name' => 'required|string|max:250',
             'forum_description' => 'required|max:1500|min:20',
         ];

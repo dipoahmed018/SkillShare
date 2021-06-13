@@ -11,6 +11,7 @@ class TutorialDetails extends Model
     protected $table = 'tutorial_details';
     protected $fillable = [
         'tutorial_id',
+        'order',
         'title',
     ];
 

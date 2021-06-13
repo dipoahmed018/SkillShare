@@ -1,11 +1,10 @@
 import ErrorHandler from '../asset/LaravelErrorParser'
 import Chunker from "../asset/ChunkUpload";
 import PopupHandler from "../asset/PopupHandler";
+import { Modal } from 'bootstrap';
 //tutorial upload
 const popup = new PopupHandler();
 const error = new ErrorHandler(popup);
-
-
 
 const tutorial_input_element = document.getElementById("tutorial");
 const tutorial_upload_box = document.getElementById('tutorial-upload-box')
@@ -193,4 +192,35 @@ if (introduction_input_lement) {
 
 }
 
-let num = 250
+//tutorial streaming
+
+const tutorial_links = document.querySelectorAll('.watch-tutorial')
+let video_modal = new Modal(document.getElementById('tutorial-video'), { backdrop: 'static', keyboard: false });
+
+if (tutorial_links.length > 0) {
+  tutorial_links.forEach(node => {
+    node.addEventListener('click', (e) => showTutorial(e))
+  });
+}
+
+const showTutorial = async (e) => {
+  const id = e.target.getAttribute('tutorial')
+  const video_frame = document.getElementById('video-frame')
+  const close_modal = document.getElementById('close-modal')
+  try {
+    // const res = await fetch(`/show/tutorial/${id}/${course.id}`, {
+    //   method: 'get',
+    // })
+    // res.blob().then(blob => {
+    //   const src = URL.createObjectURL(blob)
+    // })
+    video_modal.show();
+    video_frame.src = `https://skillshare.com/show/tutorial/${id}/${course.id}`;
+    close_modal.addEventListener('click', () => {
+      video_frame.src = '';
+      video_modal.hide()
+    }, { once: true });
+  } catch (error) {
+    console.log('err', error)
+  }
+}

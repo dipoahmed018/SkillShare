@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\Course\CourseController;
-use App\Http\Controllers\User\UserController;
 use App\Models\Course;
+use App\Models\Catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Course\CourseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,13 +28,13 @@ Route::view('/dashboard', 'pages/Dashboard');
 Route::middleware('guest')->group(function () {
     Route::post('/register', [UserController::class, 'Register'])->name('register');
     Route::get('/register', [UserController::class, 'ShowRegisterForm'])->name('ShowRegisterForm');
-    
+
     Route::get('/login', [UserController::class, 'ShowLoginForm'])->name('login');
     Route::post('/login', [UserController::class, 'Login'])->name('login')->middleware(['throttle:login']);
 
-    
+
     //password fogot
-    
+
     Route::get('/forgot-password', fn () => view('Components/ForgotPassword'))->name('forgot.password.form');
     Route::post('/forgot-password', [UserController::class, 'forgot_password'])->name('forgot.password')->middleware('throttle:2,1');
     Route::get('/reset-password/{email}/{token}', fn ($email, $token) => view('/Components/PasswordReset', ['token' => $token, 'email' => $email]))->name('password.reset');
@@ -49,38 +50,44 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/update/email/{code}', fn ($code) => view('Components/ChangeEmail')->with('code', $code))->name('user.update.email.form');
         Route::get('/logout', [UserController::class, 'Logout'])->name('logout');
     });
-    
+
     Route::prefix('sendmail')->group(function () {
         Route::get('/verify', [UserController::class, 'sendEmailVerificationMail'])->name('sendmail.verify');
     });
-    
+
     Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])->name('verification.verify');
 
-    
+
     //only for verified user
-    
-    Route::middleware('verified')->group(function(){
+
+    Route::middleware('verified')->group(function () {
         //show course
-        Route::get('/show/course/{course}',[CourseController::class, 'showDetails'])->name('show.course.details');
-        
+        Route::get('/show/tutorial/{tutorial}/{course}', [CourseController::class, 'streamTutorial'])->name('show.tutorial');
+
         //create course
-        Route::post('/create/course',[CourseController::class, 'createCourse'])->name('create.course');
-        Route::get('/create/course',fn() => view('pages/course/Create'));
-        
+        Route::post('/create/course', [CourseController::class, 'createCourse'])->name('create.course');
+        Route::get('/create/course', fn () => view('pages/course/Create'));
+
         //update course
-        Route::get('/update/course/{course}', [CourseController::class, 'Show_UpdateDetails']);
-        Route::post('/update/course/{course}',[CourseController::class,'updateDetails'])->name('update.course');
-        Route::post('/update/course/{course}/thumblin',[CourseController::class,'setThumblin'])->name('update.course.thumblin');
-        Route::post('/update/course/{course}/introduction',[CourseController::class,'setIntroduction'])->name('update.course.introduction');
-            
+        Route::get('/update/course/{course}', fn (Course $course) => view('pages/course/EditCourse', ['course' => $course, 'catagories' => Catagory::all()]));
+        Route::put('/update/course/{course}', [CourseController::class, 'updateDetails'])->name('update.course');
+        Route::post('/update/course/{course}/thumblin', [CourseController::class, 'setThumblin'])->name('update.course.thumblin');
+        Route::post('/update/course/{course}/introduction', [CourseController::class, 'setIntroduction'])->name('update.course.introduction');
+
+        //catagory
+        Route::put('/update/course/{course}/catagory', [CourseController::class, 'attachCatagory'])->name('update.course.catagory');
+        Route::delete('/delete/course/{course}/catagory', [CourseController::class, 'detachCatagory'])->name('delete.course.catagory');
+
         //course tutorial
-        Route::post('/course/{course}/tutorial',[CourseController::class,'addTutorial'])->name('course.tutorial.add');
-        Route::get('/course/{course}/tutorial/{tutorial}',[CourseController::class, 'showTutorialEdit']);
-        Route::put('/course/{course}/tutorial/{tutorial}',[CourseController::class,'setTutorialDetails'])->name('tutorial.title.edit');
+        Route::post('/course/{course}/tutorial', [CourseController::class, 'addTutorial'])->name('course.tutorial.add');
+        Route::get('/course/{course}/tutorial/{tutorial}', [CourseController::class, 'showTutorialEdit']);
+        Route::put('/course/{course}/tutorial/{tutorial}', [CourseController::class, 'setTutorialDetails'])->name('tutorial.title.edit');
 
         //delete course
-        Route::delete('/delete/course/{course}/tutorial/{tutorial}',[CourseController::class,'deleteVideo'])->name('delete.course.tutorial');
-        Route::delete('/delete/course/{course}',[CourseController::class, 'deleteCourse'])->name('delete.course');
-    
+        Route::delete('/delete/course/{course}/tutorial/{tutorial}', [CourseController::class, 'deleteVideo'])->name('delete.course.tutorial');
+        Route::delete('/delete/course/{course}', [CourseController::class, 'deleteCourse'])->name('delete.course');
     });
 });
+
+//get course
+Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');

@@ -15,6 +15,7 @@ use App\Models\Message;
 use App\Models\Tuition;
 use App\Models\Catagory;
 use App\Models\Referrel;
+use App\Models\TutorialDetails;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -30,7 +31,9 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        // $course = Course::find(11);
-        // $tutorias = $course->get_tutorials_details();
+        // $course = Course::find(1);
+        // $student = $course->students()->where('student_id','=',20)->get();
+        // dump($student->count());
+        // $this->assertTrue(true);
     }
 }
