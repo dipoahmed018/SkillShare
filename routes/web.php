@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Review\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,14 @@ Route::middleware(['auth:web'])->group(function () {
         //delete course
         Route::delete('/delete/course/{course}/tutorial/{tutorial}', [CourseController::class, 'deleteVideo'])->name('delete.course.tutorial');
         Route::delete('/delete/course/{course}', [CourseController::class, 'deleteCourse'])->name('delete.course');
+
+        //review course
+        Route::post('/create/{name}/review/{id}',[ReviewController::class, 'createReview'])->name('create.review');
+        Route::delete('/delete/{review}',[ReviewController::class, 'deleteReview'])->name('delete.review');
+        Route::put('/update/{review}',[ReviewController::class, 'editReview'])->name('update.review');
+
+
+        //start 
     });
 });
 
