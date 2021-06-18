@@ -16,7 +16,7 @@ class Forum extends Model
         'forumable_id',
         'forumable_type',
     ];
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner','id');
     }

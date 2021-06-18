@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Review extends Model
 {
@@ -27,6 +28,13 @@ class Review extends Model
     }
     public function review_replys()
     {
-        return $this->morphMany(Review::class,'reviewable','reviewable_type','reviewable_id');
+        return $this->morphMany(Review::class, 'reviewable', 'reviewable_type', 'reviewable_id');
+    }
+
+    public function base_parent()
+    {
+        $base_parent = $this->review_parent;
+
+        return $base_parent->reviewable_type ? $base_parent->review_parent : $base_parent;
     }
 }

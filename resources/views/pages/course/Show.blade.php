@@ -5,7 +5,6 @@
 @section('body')
 
     <div class="modal fade" id="tutorial-video" tabindex="-1" aria-hidden="true">
-
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -143,11 +142,39 @@
                 @endforeach
             </div>
 
-            <x-review :reviews="$course->review()->with('owner_details')->get()">
-                <x-slot name='name'>
-                    <h3>Course Reviews</h3>
-                </x-slot>
-            </x-review>
+            <div class="reviews-box">
+                @can('review', $course)
+                    <form class="form-group row justify-content-center mb-3"
+                        action="{{ route('create.review', ['name' => $course->getTable(), 'id' => $course->id]) }}"
+                        method="post">
+                        @csrf
+                        <div class="col col-8">
+                            <label class="form-label" for="content">review</label><br>
+                            <input required class="form-control" type="text" name="content" id="review">
+                            @error('content')
+                                <div class="error-box">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                            <label class="form-label" for="stars">stars</label><br>
+                            <input required class="from-control" type="number" name="stars" id="stars" min="1" max="10">
+                            @error('stars')
+                                <div class="error-box">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="d-block mb-3"></div>
+                        <div class="col col-8">
+                            <input class="form-control" class="btn btn-success" type="submit" value="review">
+                        </div>
+
+                    </form>
+                @endcan
+                @foreach ($course->review as $item)
+                    <x-review :review="$item" :reviewable="$course"></x-review>
+                @endforeach
+            </div>
 
         </div>
     @endif
@@ -160,7 +187,6 @@
             let csrf = document.head.querySelector("meta[name='_token']").content;
             let user = @json(Auth::user());
             let course = @json($course);
-
         </script>
     @endif
     <script src={{ asset('js/course-show.js') }}></script>

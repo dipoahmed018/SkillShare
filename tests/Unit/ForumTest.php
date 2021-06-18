@@ -31,9 +31,9 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        // $course = Course::find(1);
-        // $student = $course->students()->where('student_id','=',20)->get();
-        // dump($student->count());
-        // $this->assertTrue(true);
+        $review = Review::find(105);
+        $parent = $review->base_parent();
+        dump($parent);
+        $this->assertTrue(true);
     }
 }

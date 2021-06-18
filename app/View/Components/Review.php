@@ -11,11 +11,12 @@ class Review extends Component
      *
      * @return void
      */
-    public $reviews;
-
-    public function __construct($reviews)
+    public $review;
+    public $reviewable;
+    public function __construct($review, $reviewable)
     {
-        $this->reviews = $reviews;
+        $this->review = $review;
+        $this->reviewable = $reviewable;
     }
 
     /**

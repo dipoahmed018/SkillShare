@@ -17,7 +17,7 @@ class Tuition extends Model
         'forum_id',
     ];
     
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class,'owner','id');
     }

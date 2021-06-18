@@ -17,4 +17,12 @@ class ForumController extends Controller
         $review = Review::factory()->reply()->make();
         return response($review, 200);
     }
+    public function getForumDetials(Request $request, Forum $forum)
+    {
+        $request->user()->cannot('access', $forum);
+    }
+    public function updateForum()
+    {
+        
+    }
 }

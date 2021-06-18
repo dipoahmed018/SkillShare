@@ -1,6 +1,7 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
-$primary : #0d6efd;
+$primary: #0d6efd;
+$stars :rgb(244, 232, 107);
 #check {
   color: aquamarine;
 }
@@ -14,6 +15,11 @@ $primary : #0d6efd;
 }
 .disabled {
   cursor: not-allowed;
+}
+.stars {
+  i {
+    color: $stars;
+  }
 }
 .error-box {
   position: relative;
@@ -92,7 +98,16 @@ $primary : #0d6efd;
   top: 50%;
   transform: translate(-50%, -50%);
 }
-
+.reply-review-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 2;
+  background-color: yellowgreen;
+  padding: 10px;
+  width: 60vw;
+}
 .create-course {
   position: absolute;
   left: 50%;
