@@ -74,7 +74,7 @@ class CourseController extends Controller
             'file_type' => 'thumblin',
             'fileable_id' => $course->id,
         ]);
-        return back()->with('status', 'success')->with('thumblin', $file->file_link);
+        return back()->with('status', 'success')->with('course',  $course);
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {

@@ -23,10 +23,11 @@ class ForumPolicy
     public function access(User $user, Forum $forum)
     {
         $parent = $forum->forum_type;
-        $students = $parent->students->pluck('id');
-        Log::channel('event')->info('forum access', [$students]);
+        $students = $parent->students->where('id','=',$user->id)->pluck('id');
+        Log::channel('event')->info('forum access', ['i was here']);
+        return $students->count() > 0;
     }
-    public function edit(User $user, Forum $forum)
+    public function update(User $user, Forum $forum)
     {
         return $forum->owner_details->id == $user->id;
     }

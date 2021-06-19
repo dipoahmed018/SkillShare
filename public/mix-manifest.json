@@ -3,5 +3,6 @@
     "/js/profile_update.js": "/js/profile_update.js",
     "/js/dashboard.js": "/js/dashboard.js",
     "/js/course-show.js": "/js/course-show.js",
+    "/js/forum-show.js": "/js/forum-show.js",
     "/css/app.css": "/css/app.css"
 }

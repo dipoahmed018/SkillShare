@@ -33,6 +33,24 @@
             </fieldset>
         </form>
 
+        <div class="row border border-2 border-success thumblin-box m-4 p-4" >
+            @if ($course->thumblin)
+            <div class="col col-4">
+                <img src={{ $course->thumblin ? $course->thumblin : asset('default/default.jpeg') }} alt="Course thumblin">
+            </div>
+            @endif
+            <div class="col col-10">
+                <form action="{{ route('update.course.thumblin', ['course' => $course->id]) }}" method="post">
+                    <div class="thumblin-input-box">
+                        <input class="one-click-upload" accept="image/*" type="file" name="thumblin" id="thumblin">
+                        <label class="btn btn-primary" for="thumblin">Select Image</label>
+                        <input class="btn btn-success" type="submit"
+                            value="{{ $course->thumblin ? 'Change Thumblin' : 'Add Thumblin' }}">
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="catagory-edit-box row">
 
             <div class="add-wrapper col col-6">
@@ -62,7 +80,6 @@
 
     </div>
 @endsection
-
 @section('scripts')
     <script>
         const course = @json($course);

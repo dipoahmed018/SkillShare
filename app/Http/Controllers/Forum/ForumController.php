@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Forum;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Forum\ForumUpdate;
 use App\Models\Forum;
 use App\Models\Message;
 use App\Models\Review;
@@ -17,12 +18,14 @@ class ForumController extends Controller
         $review = Review::factory()->reply()->make();
         return response($review, 200);
     }
-    public function getForumDetials(Request $request, Forum $forum)
+    public function getForumDetails(Request $request, Forum $forum)
     {
-        $request->user()->cannot('access', $forum);
+        if(strstr($request->header('accept'), 'application/json')){
+            return response($forum, 200);
+        };
+        return view('pages.forum.Show',['forum'=> $forum]);
     }
-    public function updateForum()
+    public function updateForum(ForumUpdate $request)
     {
-        
     }
 }

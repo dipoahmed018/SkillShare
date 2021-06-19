@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Review\ReviewController;
 
 /*
@@ -94,9 +95,12 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/update/{review}',[ReviewController::class, 'editReview'])->name('update.review');
 
 
-        //start 
+        //forum 
+        Route::get('/show/forum/{forum}',[ForumController::class, 'getForumDetails'])->middleware('can:access,forum')->name('show.forum');
+
     });
 });
 
 //get course
 Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
+
