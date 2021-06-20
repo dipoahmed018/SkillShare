@@ -58,8 +58,9 @@ class CourseController extends Controller
             return back()->withErrors(['auth' => 'you are not the owner of this course']);
         };
         if ($file = $course->thumblin) {
-            $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
-            Storage::disk('public')->delete($file_path);
+            // $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
+            // Storage::disk('public')->delete($file_path);
+            $course->thumblin->delete();
         }
         $thumblin = $request->file('thumblin');
         $file_name = (string) Str::uuid() . time() . '.' . $thumblin->getClientOriginalExtension();
@@ -67,7 +68,7 @@ class CourseController extends Controller
 
         $image->resize(600, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save(storage_path('/app/public/course/thumblin/' . $file_name));
+        })->save(storage_path('app/public/course/thumblin/' . $file_name));
         $file = FileLink::create([
             'file_name' => $file_name,
             'file_link' => asset('/storage/course/thumblin/' . $file_name),

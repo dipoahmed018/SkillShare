@@ -32,25 +32,31 @@
                 <input class="form-control" class="btn btn-primary" type="submit" value="save">
             </fieldset>
         </form>
-
-        <div class="row border border-2 border-success thumblin-box m-4 p-4" >
-            @if ($course->thumblin)
-            <div class="col col-4">
-                <img src={{ $course->thumblin ? $course->thumblin : asset('default/default.jpeg') }} alt="Course thumblin">
+        <div class="row g-0 align-items-center justify-content-between thumblin-box m-4">
+            <div class="col col-md-4 col-sm-12 order-md-0">
+                <img style="max-width: 100%" class="border border-2 border-gray"
+                    src={{ $course->thumblin ? $course->thumblin->file_link : asset('default/Default.jpeg') }} alt="Course thumblin">
             </div>
-            @endif
-            <div class="col col-10">
-                <form action="{{ route('update.course.thumblin', ['course' => $course->id]) }}" method="post">
-                    <div class="thumblin-input-box">
-                        <input class="one-click-upload" accept="image/*" type="file" name="thumblin" id="thumblin">
-                        <label class="btn btn-primary" for="thumblin">Select Image</label>
-                        <input class="btn btn-success" type="submit"
-                            value="{{ $course->thumblin ? 'Change Thumblin' : 'Add Thumblin' }}">
+            <div class="preview-image col-sm-12 col-md-4 order-md-2 ">
+                <img class="border border-2 boder-gray" id="thumblin-preview" style="max-width: 100%"
+                    src="{{ asset('default/Default.jpeg') }}">
+            </div>
+
+            <form class="form-group col-sm-4 col-md-2 order-md-1" action="{{ route('update.course.thumblin', ['course' => $course->id]) }}"
+                method="post" enctype="multipart/form-data">
+                @csrf
+                @error('thumblin')
+                    <div class="error-box">
+                        {{$message}}
                     </div>
-                </form>
-            </div>
-        </div>
+                @enderror
+                <input class="one-click-upload" accept="image/*" type="file" name="thumblin" id="thumblin">
+                <label style="max-width: 100%; min-width: 50%" class="btn btn-primary form-control" for="thumblin">Select Image</label><br>
+                <input style="max-width: 100%; min-width: 50%" class="btn btn-success form-control" type="submit"
+                    value="{{ $course->thumblin ? 'Change Thumblin' : 'Add Thumblin' }}">
+            </form>
 
+        </div>
         <div class="catagory-edit-box row">
 
             <div class="add-wrapper col col-6">
@@ -136,7 +142,6 @@
             if (exists == true) {
                 return false;
             }
-            console.log('still running')
             //add catagory
             try {
 
@@ -163,6 +168,23 @@
             } catch (error) {
                 console.log('error', error)
             }
+        }
+        window.onload = () => {
+            const thumblin_input = document.getElementById('thumblin');
+            const thumblin_preview = document.getElementById('thumblin-preview');
+            thumblin_input.addEventListener('change', (e) => {
+                const supported = ["image/jpeg", "image/jpg", "image/png"]
+                const [file] = e.target.files
+                if (!supported.includes(file.type)) {
+                    e.target.value = ""
+                    alert('file type must be jpeg, jpg or png')
+                    return false;
+                } else {
+                    let image = URL.createObjectURL(file)
+                    thumblin_preview.src = image
+                    thumblin_preview.onload = () => URL.revokeObjectURL(image);
+                }
+            })
         }
 
     </script>

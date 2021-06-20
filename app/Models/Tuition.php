@@ -45,5 +45,9 @@ class Tuition extends Model
     {
         return $this->morphMany(Review::class, 'reviewable', 'reviewable_type','reviewable_id');
     }
+    public function thumblin()
+    {
+        return $this->morphOne(FileLink::class, 'fileable')->where('file_type','=', 'thumblin');
+    }
     
 }

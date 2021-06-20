@@ -9,6 +9,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Review\ReviewController;
+use App\Models\Forum;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,7 +97,9 @@ Route::middleware(['auth:web'])->group(function () {
 
 
         //forum 
-        Route::get('/show/forum/{forum}',[ForumController::class, 'getForumDetails'])->middleware('can:access,forum')->name('show.forum');
+        Route::get('/show/forum/{forum}',[ForumController::class, 'getForumDetails'])->name('show.forum');
+        Route::get('/edit/forum/{forum}',fn(Forum $forum) => view('pages/forum/Edit',['forum' => $forum]))->name('edit.forum');
+        Route::put('/edit/forum/{forum}',[ForumController::class, 'updateForumDetails'])->name('update.forum');
 
     });
 });
