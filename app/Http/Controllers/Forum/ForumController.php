@@ -8,6 +8,8 @@ use App\Models\Forum;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
+use function PHPSTORM_META\type;
+
 class ForumController extends Controller
 {
 
@@ -18,15 +20,32 @@ class ForumController extends Controller
     }
     public function getForumDetails(Request $request, Forum $forum)
     {
-        if (!$request->user()->canany(['access','update'],$forum)) {
-            return abort(403,'You are not authorized to access this forum');
+        if (!$request->user()->canany(['access', 'update'], $forum)) {
+            return abort(403, 'You are not authorized to access this forum');
         }
-        if(strstr($request->header('accept'), 'application/json')){
+        if (strstr($request->header('accept'), 'application/json')) {
             return response($forum, 200);
         };
-        return view('pages.forum.Show',['forum'=> $forum]);
+        $forum->description = json_decode($forum->description, true);
+        return view('pages.forum.Show', ['forum' => $forum]);
     }
-    public function updateForumDetails(ForumUpdate $request)
+    public function updateForumDetails(ForumUpdate $request, Forum $forum)
     {
+        if ($request->name) {
+            $forum->name = $request->name;
+        }
+        if ($request->description) {
+            $forum->description = $request->description;
+        }
+        $forum->save();
+        return $forum;
+    }
+    public function questionCreate(Forum $forum)
+    {
+        return $forum;
+    }
+    public function postCreate(Forum $forum)
+    {
+        return $forum;
     }
 }

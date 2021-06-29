@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href={{ asset('favicon.ico') }} type="image/x-icon">
     <link rel="stylesheet" href={{ asset('css/app.css') }}>
     <title>@yield('title')</title>
+    @yield('headers')
 </head>
 <body>
     @yield('body')

@@ -13,7 +13,7 @@ class ForumUpdate extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return $this->user()->can('update', $this->forum);
     }
 
     /**
@@ -24,8 +24,8 @@ class ForumUpdate extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:20|max:200',
-            'description' => 'required|string|min:20|max:500'
+            'name' => 'string|min:5|max:200',
+            'description' => 'string|min:10|max:500'
         ];
     }
 }

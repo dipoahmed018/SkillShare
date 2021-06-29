@@ -4,5 +4,6 @@
     "/js/dashboard.js": "/js/dashboard.js",
     "/js/course-show.js": "/js/course-show.js",
     "/js/forum-show.js": "/js/forum-show.js",
+    "/js/forum_edit.js": "/js/forum_edit.js",
     "/css/app.css": "/css/app.css"
 }
