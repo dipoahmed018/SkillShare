@@ -40,9 +40,9 @@ class ForumController extends Controller
         $forum->save();
         return $forum;
     }
-    public function questionCreate(Forum $forum)
+    public function questionCreate(Request $request, Forum $forum)
     {
-        return $forum;
+        return $request->all();
     }
     public function postCreate(Forum $forum)
     {

@@ -12,9 +12,8 @@
                 <div class="modal-body">
                     <form action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post-question" method="post">
                         @csrf
-                        <div id="edit-box">
-
-                        </div>
+                        <input type="hidden" name="contents">
+                        <div class="textarea"></div>
                         <input type="submit" value="create">
                     </form>
                 </div>
@@ -60,6 +59,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{asset('js/ckeditor5/build/ckeditor.js')}}"></script>
     <script>
         const forum = @json($forum);
     </script>
