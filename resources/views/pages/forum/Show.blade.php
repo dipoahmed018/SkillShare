@@ -2,6 +2,9 @@
 
 @section('title', 'forum')
 @section('body')
+    <div id="popup_box">
+
+    </div>
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -10,10 +13,15 @@
                     <button id="close-modal" type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post-question" method="post">
+                    <form class="hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post"
+                        method="post">
                         @csrf
-                        <input type="hidden" name="contents">
-                        <div class="textarea"></div>
+                        <input type="submit" value="create">
+                    </form>
+                    <form class="hide" action="{{ route('forum.question.create', ['forum' => $forum->id]) }}"
+                        id="create-question" method="post">
+                        @csrf
+                        <textarea name="content" id="content" cols="30" rows="10"></textarea>
                         <input type="submit" value="create">
                     </form>
                 </div>
@@ -47,8 +55,8 @@
             <div class="d-block"></div>
             <div class="col posts">
                 <div class="post-control d-flex justify-content-center gap-4">
-                    <button id="create-post" class="btn btn-primary">create post</button>
-                    <button id="create-question" class="btn btn-primary">create question</button>
+                    <button id="create-post-button" class="btn btn-primary">create post</button>
+                    <button id="create-question-button" class="btn btn-primary">create question</button>
                 </div>
                 <div class="col posts">
 
@@ -59,7 +67,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{asset('js/ckeditor5/build/ckeditor.js')}}"></script>
+    <script src="{{ asset('js/ckeditor5/build/ckeditor.js') }}"></script>
     <script>
         const forum = @json($forum);
     </script>

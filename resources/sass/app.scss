@@ -46,6 +46,7 @@ $stars :rgb(244, 232, 107);
   }
 }
 #popup_box {
+  z-index: 99999;
   position: absolute;
   display: flex;
   flex-direction: column;

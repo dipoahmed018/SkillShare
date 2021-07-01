@@ -3048,6 +3048,147 @@ function within(min, value, max) {
 
 /***/ }),
 
+/***/ "./resources/js/asset/PopupHandler.js":
+/*!********************************************!*\
+  !*** ./resources/js/asset/PopupHandler.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ PopupHandler)
+/* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var PopupHandler = /*#__PURE__*/function () {
+  function PopupHandler() {
+    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'popup_box';
+
+    _classCallCheck(this, PopupHandler);
+
+    _defineProperty(this, "_popups", []);
+
+    this.popup_box_id = id;
+  }
+
+  _createClass(PopupHandler, [{
+    key: "getPopups",
+    value: function getPopups() {
+      return this._popups;
+    }
+  }, {
+    key: "addPopup",
+    value: function addPopup(message) {
+      if (this._popups.length < 1) {
+        this._popups.push({
+          id: 1,
+          message: message,
+          running: false
+        });
+      } else {
+        var _this$_popups$reduce = this._popups.reduce(function (prev, cur) {
+          return prev.id < cur.id ? cur : prev;
+        }, {
+          id: 1
+        }),
+            id = _this$_popups$reduce.id;
+
+        this._popups.push({
+          id: id + 1,
+          message: message,
+          running: false
+        });
+      }
+
+      this._popup_queue();
+    }
+  }, {
+    key: "_popup_queue",
+    value: function _popup_queue() {
+      var next_popup;
+
+      if (this._popups.length < 1) {
+        document.getElementById(this.popup_box_id).classList.add('hide');
+        return;
+      } else {
+        next_popup = this._popups.reduce(function (prev, cur) {
+          if (prev.id < cur.id && prev.running == false) {
+            return prev;
+          }
+
+          return cur;
+        });
+      }
+
+      var running = [];
+
+      this._popups.forEach(function (value) {
+        if (value.running !== false) {
+          running.push(value);
+        }
+      });
+
+      if (running.length < 3 && next_popup.running == false) {
+        this._createPopup(next_popup);
+      }
+    }
+  }, {
+    key: "_createPopup",
+    value: function _createPopup(popup) {
+      var _this = this;
+
+      var popup_box = document.getElementById(this.popup_box_id) ? document.getElementById(this.popup_box_id) : document.createElement('div').setAttribute('id', this.popup_box_id);
+      popup_box.classList.remove('hide');
+      var popup_message_box = document.createElement('div');
+      var close_popup = document.createElement('i');
+      var popup_message = document.createElement('p');
+      var unique_id = (Date.now() + Math.random()).toString(36);
+      close_popup.setAttribute('class', 'bi bi-x-lg');
+      close_popup.setAttribute('id', unique_id);
+      popup_message_box.setAttribute('class', 'popup_message_box');
+      popup_message.innerText = popup.message;
+      popup_message_box.append(close_popup);
+      popup_message_box.append(popup_message);
+      popup_box.appendChild(popup_message_box); // close popup call
+
+      this._popups.find(function (value) {
+        return value.id == popup.id;
+      }).running = setTimeout(function () {
+        return _this._closePopup(popup.id, close_popup.parentNode);
+      }, 1000 * 30);
+      close_popup.addEventListener('click', function () {
+        return _this._closePopup(popup.id, close_popup.parentNode, popup.running);
+      });
+    }
+  }, {
+    key: "_closePopup",
+    value: function _closePopup(id, close_popup) {
+      var timer = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+      var newQueue = this._popups.filter(function (value) {
+        return value.id !== id;
+      });
+
+      this._popups = newQueue;
+      close_popup.remove();
+
+      this._popup_queue();
+    }
+  }]);
+
+  return PopupHandler;
+}();
+
+
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.esm.js":
 /*!*********************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.esm.js ***!
@@ -8085,53 +8226,78 @@ var __webpack_exports__ = {};
   \***********************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
+
 
 var modal_element = document.getElementById('create');
-var form = document.getElementById('create-post-question');
 var close_modal = document.getElementById('close-modal');
-var create_post_button = document.getElementById('create-post');
-var create_question_button = document.getElementById('create-question');
+var create_post_button = document.getElementById('create-post-button');
+var create_question_button = document.getElementById('create-question-button');
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_1__.default();
 var modal = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(modal_element);
 var editor;
 create_post_button.addEventListener('click', function () {
-  form.action = "/".concat(forum.id, "/post/create");
   modal.show();
-});
-ClassicEditor.builtinPlugins.map(function (plugin) {
-  return console.log(plugin.pluginName);
+  document.getElementById('create-post').classList.remove('hide');
 });
 create_question_button.addEventListener('click', function (e) {
-  form.action = "/".concat(forum.id, "/question/create");
-  var edit_box = document.createElement('textarea');
-  edit_box.id = 'q_editor';
-  document.querySelector('.textarea').appendChild(edit_box);
-  ClassicEditor.create(edit_box, {
-    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
-    // Image : {},
-    simpleUpload: {
-      uploadUrl: "http://skillshare.com/forum/post/image",
-      withCredentials: true,
-      headers: {
-        'X-CSRF-TOKEN': window.csrf
+  var edit_box = document.getElementById('content');
+  document.getElementById('create-question').classList.remove('hide');
+
+  if (!editor) {
+    ClassicEditor.create(edit_box, {
+      toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
+      // Image : {},
+      simpleUpload: {
+        uploadUrl: "http://skillshare.com/".concat(forum.id, "/save/image"),
+        withCredentials: true,
+        headers: {
+          'X-CSRF-TOKEN': window.csrf
+        }
       }
-    }
-  }).then(function (ckeditor) {
-    return editor = ckeditor;
-  })["catch"](function (error) {
-    return console.log(error);
-  });
+    }).then(function (ckeditor) {
+      editor = ckeditor;
+    })["catch"](function (error) {
+      return console.log(error);
+    });
+  }
+
   modal.show();
 });
 close_modal.addEventListener('click', function () {
   //clear up
-  var edit_box = document.getElementById('q_editor');
-  edit_box ? edit_box.remove() : null;
-  editor ? editor.destroy() : null;
+  document.getElementById('create-question').classList.add('hide');
+  document.getElementById('create-post').classList.add('hide');
   modal.hide();
 });
-form.addEventListener('submit', function (e) {
-  if (editor !== null) {
-    document.querySelector('[name="contents"]').value = editor.getData();
+document.getElementById('create-question').addEventListener('submit', function (e) {
+  var parser = new DOMParser().parseFromString(editor.getData(), 'text/html');
+  var images = parser.querySelectorAll('img');
+
+  if (images.length > 3) {
+    e.preventDefault();
+    popup.addPopup('You can not upload more then 3 image');
+    return false;
+  }
+
+  if (editor.getData().length > 1500) {
+    e.preventDefault();
+    popup.addPopup('Question must be completed under 1000 charecters ');
+    return false;
+  }
+
+  if (images.length > 0) {
+    var srclist = document.createElement('input');
+    var sources = {};
+    srclist.type = 'hidden';
+    srclist.name = 'images';
+    images.forEach(function (element) {
+      var src = element.src;
+      sources[Object.keys(sources).length + 1] = src;
+    });
+    sources = JSON.stringify(sources);
+    srclist.value = sources;
+    e.target.prepend(srclist);
   }
 });
 })();

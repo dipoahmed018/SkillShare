@@ -13164,6 +13164,7 @@ fieldset:disabled .btn {
 }
 
 #popup_box {
+  z-index: 99999;
   position: absolute;
   display: flex;
   flex-direction: column;

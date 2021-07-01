@@ -14,13 +14,13 @@ export default class PopupHandler {
             let { id } = this._popups.reduce((prev, cur) => prev.id < cur.id ? cur : prev, { id: 1 })
             this._popups.push({ id: id + 1, message, running: false })
         }
-        let i = 0
         this._popup_queue()
     }
 
     _popup_queue() {
         let next_popup;
         if (this._popups.length < 1) {
+            document.getElementById(this.popup_box_id).classList.add('hide')
             return;
         } else {
             next_popup = this._popups.reduce((prev, cur) => {
@@ -39,10 +39,11 @@ export default class PopupHandler {
         if (running.length < 3 && next_popup.running == false) {
             this._createPopup(next_popup)
         }
-
     }
     _createPopup(popup) {
         let popup_box = document.getElementById(this.popup_box_id) ? document.getElementById(this.popup_box_id) : document.createElement('div').setAttribute('id', this.popup_box_id);
+        popup_box.classList.remove('hide')
+        
         let popup_message_box = document.createElement('div')
         let close_popup = document.createElement('i')
         let popup_message = document.createElement('p')
@@ -57,7 +58,7 @@ export default class PopupHandler {
         popup_box.appendChild(popup_message_box)
 
         // close popup call
-    
+
         this._popups.find(value => value.id == popup.id).running = setTimeout( () => this._closePopup(popup.id, close_popup.parentNode), 1000 * 30)
         close_popup.addEventListener('click', () => this._closePopup(popup.id, close_popup.parentNode, popup.running))
     }

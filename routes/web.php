@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\Forum\ForumController;
+use App\Http\Controllers\Forum\PostQuestionController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Models\Forum;
 
@@ -102,10 +103,10 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/edit/forum/{forum}',[ForumController::class, 'updateForumDetails'])->name('update.forum');
 
         //post
-        Route::post('/{forum}/post/create',[ForumController::class, 'postCreate'])->name('forum.post.create');
-        Route::post('/{forum}/question/create',[ForumController::class, 'questionCreate'])->name('forum.question.create');
-        
-
+        Route::post('/{forum}/post/create',[PostQuestionController::class, 'postCreate'])->name('forum.post.create');
+        Route::post('/{forum}/question/create',[PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
+        Route::post('/{forum}/save/image',[PostQuestionController::class, 'saveImage'])->name('forum.save.image');
+        Route::get('/{forum}/image/{names}',[PostQuestionController::class, 'getImage'])->name('forum.get.image');
     });
 });
 

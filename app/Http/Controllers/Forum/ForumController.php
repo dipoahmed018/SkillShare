@@ -40,12 +40,4 @@ class ForumController extends Controller
         $forum->save();
         return $forum;
     }
-    public function questionCreate(Request $request, Forum $forum)
-    {
-        return $request->all();
-    }
-    public function postCreate(Forum $forum)
-    {
-        return $forum;
-    }
 }

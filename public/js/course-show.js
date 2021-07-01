@@ -5564,8 +5564,6 @@ var PopupHandler = /*#__PURE__*/function () {
         });
       }
 
-      var i = 0;
-
       this._popup_queue();
     }
   }, {
@@ -5574,6 +5572,7 @@ var PopupHandler = /*#__PURE__*/function () {
       var next_popup;
 
       if (this._popups.length < 1) {
+        document.getElementById(this.popup_box_id).classList.add('hide');
         return;
       } else {
         next_popup = this._popups.reduce(function (prev, cur) {
@@ -5603,6 +5602,7 @@ var PopupHandler = /*#__PURE__*/function () {
       var _this = this;
 
       var popup_box = document.getElementById(this.popup_box_id) ? document.getElementById(this.popup_box_id) : document.createElement('div').setAttribute('id', this.popup_box_id);
+      popup_box.classList.remove('hide');
       var popup_message_box = document.createElement('div');
       var close_popup = document.createElement('i');
       var popup_message = document.createElement('p');
