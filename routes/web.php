@@ -107,6 +107,9 @@ Route::middleware(['auth:web'])->group(function () {
         Route::post('/{forum}/question/create',[PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
         Route::post('/{forum}/save/image',[PostQuestionController::class, 'saveImage'])->name('forum.save.image');
         Route::get('/{forum}/image/{names}',[PostQuestionController::class, 'getImage'])->name('forum.get.image');
+
+        Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
+        Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
     });
 });
 

@@ -2,7 +2,7 @@
 
 @section('title', 'forum')
 @section('body')
-    <div id="popup_box">
+    <div id="popup_box" class="hide">
 
     </div>
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -18,9 +18,12 @@
                         @csrf
                         <input type="submit" value="create">
                     </form>
-                    <form class="hide" action="{{ route('forum.question.create', ['forum' => $forum->id]) }}"
-                        id="create-question" method="post">
+                    <form class="form-group" class="hide"
+                        action="{{ route('forum.question.create', ['forum' => $forum->id]) }}" id="create-question"
+                        method="post">
                         @csrf
+                        <label for="title">Title</label>
+                        <input class="form-control" type="text" name="title" id="title" required min="10"><br>
                         <textarea name="content" id="content" cols="30" rows="10"></textarea>
                         <input type="submit" value="create">
                     </form>
@@ -39,11 +42,7 @@
                 <div class="details">
                     <h3 class="name">{{ $forum->name }}</h3>
                     <div>
-                        @foreach ($forum->description['blocks'] as $block)
-                            @if ($block['type'] == 'paragraph')
-                                <p>{!! $block['data']['text'] !!}</p>
-                            @endif
-                        @endforeach
+                        {!!$forum->description!!}
                     </div>
                 </div>
                 @can('update', $forum)
@@ -59,7 +58,28 @@
                     <button id="create-question-button" class="btn btn-primary">create question</button>
                 </div>
                 <div class="col posts">
+                    @foreach ($forum->posts as $post)
 
+                    @endforeach
+                </div>
+                <div class="col questions">
+                    @foreach ($forum->questions as $question)
+                        <div class="wrapper row">
+                            <div class="col align-self-center col-1 control">
+                                <i>up</i>
+                                <p>{{$question->vode}}</p>
+                                <i>down</i>
+                            </div>
+                            <div class="col col-11 title">
+                                <h3><a href="/show/question/{{$question->id}}">{{$question->title}}</a></h3>
+                            </div>
+                            <div class="d-block"></div>
+                            <div class="col d-flex justify-content-end">
+                                <button class="btn m-2 btn-warning">Edit</button>
+                                <button class="btn m-2 btn-danger">delete</button>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

@@ -13315,5 +13315,14 @@ fieldset:disabled .btn {
   flex-basis: 20%;
 }
 
+.question {
+  background-color: lightgray;
+  overflow: hidden;
+}
+
+.question image {
+  width: 80%;
+}
+
 
 

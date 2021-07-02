@@ -16,7 +16,7 @@ class Post extends Model
         'owner',
         'postable_id',
         'post_type',
-        
+        'answer'
     ];
 
     public function owner()

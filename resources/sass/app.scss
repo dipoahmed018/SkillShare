@@ -181,3 +181,12 @@ $stars :rgb(244, 232, 107);
     flex-basis: 20%;
   }
 }
+
+
+.question {
+  background-color: rgb(211, 211, 211);
+  overflow: hidden;
+  image {
+    width: 80%;
+  }
+}

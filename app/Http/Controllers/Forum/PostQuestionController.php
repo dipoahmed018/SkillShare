@@ -5,17 +5,40 @@ namespace App\Http\Controllers\Forum;
 use App\Models\Forum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PostQuestionController extends Controller
 {
     public function questionCreate(Request $request, Forum $forum)
     {
-        $request->validate(['content' => 'string|required|max:2000|min:10']);
-        if ($request->images) {
-            return json_decode($request->images,true);
+        $images = null;
+        $request->validate(['content' => 'string|required|max:2000|min:10', 'title' => 'required|string|max:250|min:5']);
+        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
+            return abort(401, 'you are Unautorized');
         }
+        if ($request->images) {
+            $images = (json_decode($request->images, true));
+        }
+        if (count($images) > 3) {
+            return abort(422, 'You can not upload more than 4 image');
+        }
+        foreach ($images as $key => $url) {
+            $name = preg_replace('#.*image/#', '', $url, 1);
+            Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
+        };
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'owner' => $request->user()->id,
+            'vote' => 0,
+            'postable_id' => $forum->id,
+            'post_type' => 'question',
+            'answer' => 0,
+        ]);
+        return $post;
     }
     public function postCreate(Forum $forum)
     {
@@ -49,5 +72,14 @@ class PostQuestionController extends Controller
         } else {
             return response()->file(storage_path('app/private/post/default.JPG'), ['content-type' => 'image/*']);
         }
+    }
+
+    public function getQuestion(Request $request, Post $question)
+    {
+        return view('pages/forum/Question',['question' => $question, 'answer' => $question->answers]);
+    }
+    public function getPost(Request $request, Post $post)
+    {
+        # code...
     }
 }
