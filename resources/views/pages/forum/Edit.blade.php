@@ -11,24 +11,23 @@
                 @method('put')
                 @csrf
                 <label class="form-label" for="name">Forum Name</label>
-                <input class="form-control" type="text" name="name" value="{{$forum->name}}" id="name">
+                <input class="form-control" type="text" name="name" value="{{ $forum->name }}" id="name">
                 @error('name')
                     <div class="error-box">
                         {{ $message }}
                     </div>
                 @enderror
-                <input type="hidden" name="description" value="">
-                <div class="col description edit-box">
-                    <p>description</p>
-                    <div id="editorjs">
-
-                    </div>
+                <br>
+                @if ($forum->description)
+                    <label class="forum-control" for="description">Description</label>
+                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
                     @error('description')
                         <div class="error-box">
                             {{ $message }}
                         </div>
                     @enderror
-                </div>
+                @endif
+                <br>
                 <input type="submit" value="save">
             </form>
         </div>
@@ -42,6 +41,7 @@
     @endcannot
 @endsection
 @section('scripts')
+    <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
     <script>
         let forum_details = @json($forum);
     </script>

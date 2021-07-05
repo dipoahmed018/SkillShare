@@ -26,7 +26,6 @@ class ForumController extends Controller
         if (strstr($request->header('accept'), 'application/json')) {
             return response($forum, 200);
         };
-        $forum->description = json_decode($forum->description, true);
         return view('pages.forum.Show', ['forum' => $forum]);
     }
     public function updateForumDetails(ForumUpdate $request, Forum $forum)
@@ -36,6 +35,8 @@ class ForumController extends Controller
         }
         if ($request->description) {
             $forum->description = $request->description;
+        } else {
+            $forum->description = null;
         }
         $forum->save();
         return $forum;

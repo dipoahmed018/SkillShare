@@ -16,6 +16,9 @@
                     <form class="hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post"
                         method="post">
                         @csrf
+                        <input type="text" name="caption" id="caption">
+                        <label for="image">Upload image</label>
+                        <input accept=".png, .jpeg, .jpg*" type="file" name="image" id="image" multiple>
                         <input type="submit" value="create">
                     </form>
                     <form class="form-group" class="hide"
@@ -42,7 +45,7 @@
                 <div class="details">
                     <h3 class="name">{{ $forum->name }}</h3>
                     <div>
-                        {!!$forum->description!!}
+                        {!!$forum->description ? $forum->description : ''!!}
                     </div>
                 </div>
                 @can('update', $forum)
