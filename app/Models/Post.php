@@ -19,13 +19,13 @@ class Post extends Model
         'answer'
     ];
 
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner');
     }
     public function forum()
     {
-        return $this->belongsTo(Post::class, 'postable_id');
+        return $this->belongsTo(Forum::class, 'postable_id');
     }
     public function comments()
     {   

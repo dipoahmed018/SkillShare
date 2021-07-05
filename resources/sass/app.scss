@@ -183,10 +183,13 @@ $stars :rgb(244, 232, 107);
 }
 
 
-.question {
-  background-color: rgb(211, 211, 211);
+.question-wrapper {
   overflow: hidden;
-  image {
-    width: 80%;
+  .question {
+    background-color: rgb(181, 181, 181);
+    img {
+      max-width: 80%;
+      min-width: 50%;
+    }
   }
 }

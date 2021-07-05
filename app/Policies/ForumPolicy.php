@@ -24,11 +24,12 @@ class ForumPolicy
     {
         $parent = $forum->forum_type;
         $students = $parent->students->where('id','=',$user->id)->pluck('id');
-        // Log::channel('event')->info($user, ['i was here']);
+        // Log::channel('event')->info($user->count, ['i was here']);
         return $students->count() > 0;
     }
     public function update(User $user, Forum $forum)
     {
+        // Log::channel('event')->info($user->id == $forum->owner_details->id, ['i was here']);
         return $forum->owner_details->id == $user->id;
     }
 }

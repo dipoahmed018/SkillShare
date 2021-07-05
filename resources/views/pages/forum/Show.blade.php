@@ -45,7 +45,7 @@
                 <div class="details">
                     <h3 class="name">{{ $forum->name }}</h3>
                     <div>
-                        {!!$forum->description ? $forum->description : ''!!}
+                        {!! $forum->description !!}
                     </div>
                 </div>
                 @can('update', $forum)
@@ -67,14 +67,14 @@
                 </div>
                 <div class="col questions">
                     @foreach ($forum->questions as $question)
-                        <div class="wrapper row">
-                            <div class="col align-self-center col-1 control">
-                                <i>up</i>
-                                <p>{{$question->vode}}</p>
-                                <i>down</i>
-                            </div>
+                        <div class="question-wrapper row">
+                            {{-- <div class="col align-self-center col-1 control" style="font-size: 20px">
+                                <i class="bi bi-arrow-up-square"></i><br>
+                                {{$question->vote}}<br>
+                                <i class="bi bi-arrow-down-square"></i>
+                            </div> --}}
                             <div class="col col-11 title">
-                                <h3><a href="/show/question/{{$question->id}}">{{$question->title}}</a></h3>
+                                <h3><a href="/show/question/{{ $question->id }}">{{ $question->title }}</a></h3>
                             </div>
                             <div class="d-block"></div>
                             <div class="col d-flex justify-content-end">

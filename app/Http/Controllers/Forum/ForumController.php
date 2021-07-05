@@ -35,8 +35,6 @@ class ForumController extends Controller
         }
         if ($request->description) {
             $forum->description = $request->description;
-        } else {
-            $forum->description = null;
         }
         $forum->save();
         return $forum;

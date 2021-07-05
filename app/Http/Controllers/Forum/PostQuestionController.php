@@ -76,7 +76,13 @@ class PostQuestionController extends Controller
 
     public function getQuestion(Request $request, Post $question)
     {
-        return view('pages/forum/Question',['question' => $question, 'answer' => $question->answers]);
+        if (!$request->user()->canany(['access','update'], $question->forum)) {
+            return abort(401,'You are unauthorized');
+        }
+        if ($question->post_type == 'post') {
+            return abort(422,'question not available');
+        }
+        return view('pages/forum/Question',['question' => $question, 'answers' => $question->answers]);
     }
     public function getPost(Request $request, Post $post)
     {

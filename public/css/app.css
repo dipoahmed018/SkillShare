@@ -13315,13 +13315,17 @@ fieldset:disabled .btn {
   flex-basis: 20%;
 }
 
-.question {
-  background-color: lightgray;
+.question-wrapper {
   overflow: hidden;
 }
 
-.question image {
-  width: 80%;
+.question-wrapper .question {
+  background-color: #b5b5b5;
+}
+
+.question-wrapper .question img {
+  max-width: 80%;
+  min-width: 50%;
 }
 
 
