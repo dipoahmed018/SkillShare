@@ -17,7 +17,7 @@ class Comment extends Model
         'commentable_type',
         
     ];
-    public function owner()
+    public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner');
     }

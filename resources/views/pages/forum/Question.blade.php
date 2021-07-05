@@ -7,7 +7,7 @@
         </div>
         <div class="col col-12 answers-box">
             @foreach ($answers as $answer)
-                <x-answer-show :answer="$answer"></x-answer-show>
+                <x-answer-show :question="$question" :answer="$answer"></x-answer-show>
             @endforeach
         </div>
     </div>

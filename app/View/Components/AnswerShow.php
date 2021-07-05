@@ -12,9 +12,12 @@ class AnswerShow extends Component
      * @return void
      */
     public $answer;
-    public function __construct($answer)
+    public $question;
+
+    public function __construct($answer, $question)
     {
         $this->answer = $answer;
+        $this->question = $question;
     }
 
     /**

@@ -1,7 +1,7 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 $primary: #0d6efd;
-$stars :rgb(244, 232, 107);
+$stars: rgb(244, 232, 107);
 #check {
   color: aquamarine;
 }
@@ -103,7 +103,7 @@ $stars :rgb(244, 232, 107);
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   z-index: 2;
   background-color: yellowgreen;
   padding: 10px;
@@ -182,14 +182,10 @@ $stars :rgb(244, 232, 107);
   }
 }
 
-
-.question-wrapper {
-  overflow: hidden;
-  .question {
-    background-color: rgb(181, 181, 181);
-    img {
-      max-width: 80%;
-      min-width: 50%;
-    }
+.content-box {
+  background-color: rgb(181, 181, 181);
+  img {
+    max-width: 80%;
+    min-width: 50%;
   }
 }

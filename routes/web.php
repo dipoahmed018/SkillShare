@@ -2,8 +2,6 @@
 
 use App\Models\Course;
 use App\Models\Catagory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
@@ -92,21 +90,20 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/delete/course/{course}', [CourseController::class, 'deleteCourse'])->name('delete.course');
 
         //review course
-        Route::post('/create/{name}/review/{id}',[ReviewController::class, 'createReview'])->name('create.review');
-        Route::delete('/delete/{review}',[ReviewController::class, 'deleteReview'])->name('delete.review');
-        Route::put('/update/{review}',[ReviewController::class, 'editReview'])->name('update.review');
-
+        Route::post('/create/{name}/review/{id}', [ReviewController::class, 'createReview'])->name('create.review');
+        Route::delete('/delete/{review}', [ReviewController::class, 'deleteReview'])->name('delete.review');
+        Route::put('/update/{review}', [ReviewController::class, 'editReview'])->name('update.review');
 
         //forum 
-        Route::get('/show/forum/{forum}',[ForumController::class, 'getForumDetails'])->name('show.forum');
-        Route::get('/edit/forum/{forum}',fn(Forum $forum) => view('pages/forum/Edit',['forum' => $forum]))->name('edit.forum');
-        Route::put('/edit/forum/{forum}',[ForumController::class, 'updateForumDetails'])->name('update.forum');
+        Route::get('/show/forum/{forum}', [ForumController::class, 'getForumDetails'])->name('show.forum');
+        Route::get('/edit/forum/{forum}', fn (Forum $forum) => view('pages/forum/Edit', ['forum' => $forum]))->name('edit.forum');
+        Route::put('/edit/forum/{forum}', [ForumController::class, 'updateForumDetails'])->name('update.forum');
 
         //post
-        Route::post('/{forum}/post/create',[PostQuestionController::class, 'postCreate'])->name('forum.post.create');
-        Route::post('/{forum}/question/create',[PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
-        Route::post('/{forum}/save/image',[PostQuestionController::class, 'saveImage'])->name('forum.save.image');
-        Route::get('/{forum}/image/{names}',[PostQuestionController::class, 'getImage'])->name('forum.get.image');
+        Route::post('/{forum}/post/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
+        Route::post('/{forum}/question/create', [PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
+        Route::post('/{forum}/save/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
+        Route::get('/{forum}/image/{names}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
@@ -115,4 +112,3 @@ Route::middleware(['auth:web'])->group(function () {
 
 //get course
 Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
-

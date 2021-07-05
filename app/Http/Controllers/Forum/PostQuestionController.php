@@ -38,11 +38,35 @@ class PostQuestionController extends Controller
             'post_type' => 'question',
             'answer' => 0,
         ]);
-        return $post;
+        return redirect('/show/forum/'.$forum->id);
     }
-    public function postCreate(Forum $forum)
+    public function postCreate(Request $request, Forum $forum)
     {
-        return $forum;
+        $images = null;
+        $request->validate([ 'title' => 'required|string|max:250|min:5']);
+        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
+            return abort(401, 'you are Unautorized');
+        }
+        if ($request->images) {
+            $images = (json_decode($request->images, true));
+            if (count($images) > 3) {
+                return abort(422, 'You can not upload more than 4 image');
+            }
+            foreach ($images as $key => $url) {
+                $name = preg_replace('#.*image/#', '', $url, 1);
+                Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
+            };
+        }
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->images ? $request->images : '',
+            'owner' => $request->user()->id,
+            'vote' => 0,
+            'postable_id' => $forum->id,
+            'post_type' => 'post',
+            'answer' => 0,
+        ]);
+        return redirect('/show/forum/'.$forum->id);
     }
     public function saveImage(Request $request, Forum $forum)
     {
@@ -82,10 +106,11 @@ class PostQuestionController extends Controller
         if ($question->post_type == 'post') {
             return abort(422,'question not available');
         }
+        $question->owner_details;
         return view('pages/forum/Question',['question' => $question, 'answers' => $question->answers]);
     }
     public function getPost(Request $request, Post $post)
     {
-        # code...
+        
     }
 }

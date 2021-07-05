@@ -13,15 +13,21 @@
                     <button id="close-modal" type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post"
+                    <form class="forum-group hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post"
                         method="post">
                         @csrf
-                        <input type="text" name="caption" id="caption">
-                        <label for="image">Upload image</label>
-                        <input accept=".png, .jpeg, .jpg*" type="file" name="image" id="image" multiple>
-                        <input type="submit" value="create">
+                        <label class="form-label" for="title">caption</label>
+                        <input class="form-control" type="text" name="title" id="title" required min="5">
+                        <div class="hide image-u-progress">
+                            <p>image uploading plase wait</p>
+                        </div>
+                        <div class="image-u-box">
+                            <label class="btn btn-primary" for="post-image">Upload image</label>
+                            <input accept=".png, .jpeg, .jpg" type="file" class="one-click-upload" name="post-image" id="post-image" multiple>
+                        </div>
+                        <input class="btn btn-success" type="submit" value="create">
                     </form>
-                    <form class="form-group" class="hide"
+                    <form class="form-group hide"
                         action="{{ route('forum.question.create', ['forum' => $forum->id]) }}" id="create-question"
                         method="post">
                         @csrf
@@ -68,18 +74,11 @@
                 <div class="col questions">
                     @foreach ($forum->questions as $question)
                         <div class="question-wrapper row">
-                            {{-- <div class="col align-self-center col-1 control" style="font-size: 20px">
-                                <i class="bi bi-arrow-up-square"></i><br>
+                            <div class="col align-self-center col-1 control" style="font-size: 20px">
                                 {{$question->vote}}<br>
-                                <i class="bi bi-arrow-down-square"></i>
-                            </div> --}}
+                            </div>
                             <div class="col col-11 title">
                                 <h3><a href="/show/question/{{ $question->id }}">{{ $question->title }}</a></h3>
-                            </div>
-                            <div class="d-block"></div>
-                            <div class="col d-flex justify-content-end">
-                                <button class="btn m-2 btn-warning">Edit</button>
-                                <button class="btn m-2 btn-danger">delete</button>
                             </div>
                         </div>
                     @endforeach
