@@ -13,8 +13,8 @@
                     <button id="close-modal" type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="forum-group hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}" id="create-post"
-                        method="post">
+                    <form class="forum-group hide" action="{{ route('forum.post.create', ['forum' => $forum->id]) }}"
+                        id="create-post" method="post">
                         @csrf
                         <label class="form-label" for="title">caption</label>
                         <input class="form-control" type="text" name="title" id="title" required min="5">
@@ -23,13 +23,13 @@
                         </div>
                         <div class="image-u-box">
                             <label class="btn btn-primary" for="post-image">Upload image</label>
-                            <input accept=".png, .jpeg, .jpg" type="file" class="one-click-upload" name="post-image" id="post-image" multiple>
+                            <input accept=".png, .jpeg, .jpg" type="file" class="one-click-upload" name="post-image"
+                                id="post-image" multiple>
                         </div>
                         <input class="btn btn-success" type="submit" value="create">
                     </form>
-                    <form class="form-group hide"
-                        action="{{ route('forum.question.create', ['forum' => $forum->id]) }}" id="create-question"
-                        method="post">
+                    <form class="form-group hide" action="{{ route('forum.question.create', ['forum' => $forum->id]) }}"
+                        id="create-question" method="post">
                         @csrf
                         <label for="title">Title</label>
                         <input class="form-control" type="text" name="title" id="title" required min="10"><br>
@@ -71,16 +71,25 @@
 
                     @endforeach
                 </div>
-                <div class="col questions">
+                <div class="controller">
+                    <button id="show-posts" class="btn btn-primary">Posts</button>
+                    <button id="show-questions" class="btn btn-primary">Questions</button>
+                </div>
+                <div class="col questions-box">
                     @foreach ($forum->questions as $question)
                         <div class="question-wrapper row">
                             <div class="col align-self-center col-1 control" style="font-size: 20px">
-                                {{$question->vote}}<br>
+                                {{ $question->vote }}<br>
                             </div>
                             <div class="col col-11 title">
                                 <h3><a href="/show/question/{{ $question->id }}">{{ $question->title }}</a></h3>
                             </div>
                         </div>
+                    @endforeach
+                </div>
+                <div class="col-11 posts-box hide">
+                    @foreach ($forum->posts as $post)
+                        <x-post :post="$post"></x-post>
                     @endforeach
                 </div>
             </div>
