@@ -115,8 +115,15 @@ class PostQuestionController extends Controller
     }
     public function updateVote(Request $request, Post $post)
     {
+        if ($request->user()->can('access', $post)) {
+            return 'hello';
+        }
         $request->validate(['method' => 'required|in:increment,decrement']);
-        
-
+        if ($post->postable_type == ('post'|| 'comment')) {
+            
+        }
+        if ($post->postable_type == ('question' || 'answer')) {
+           
+        }
     }
 }

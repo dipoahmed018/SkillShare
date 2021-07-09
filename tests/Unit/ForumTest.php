@@ -33,9 +33,13 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $post = Post::find(82);
-        $students = $post->forum()->with('students')->get();
-        dump($students);
+        $post = Post::find(80);
+        $students = $post->forum()->with(['members' => function ($query) {
+            $query->where('student_id', 3);
+        }, 'owner_details' => function ($query) {
+            $query->where('id', 2);
+        }])->get();
+        dump($students->pluck('members')->first());
         assertTrue(true);
     }
 }

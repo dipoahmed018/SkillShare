@@ -39,4 +39,8 @@ class Post extends Model
     {
         return $this->morphedByMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
     }
+    public function vote()
+    {
+        
+    }
 }
