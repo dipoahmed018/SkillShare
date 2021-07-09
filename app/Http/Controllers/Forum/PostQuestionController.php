@@ -113,4 +113,10 @@ class PostQuestionController extends Controller
     {
         
     }
+    public function updateVote(Request $request, Post $post)
+    {
+        $request->validate(['method' => 'required|in:increment,decrement']);
+        
+
+    }
 }

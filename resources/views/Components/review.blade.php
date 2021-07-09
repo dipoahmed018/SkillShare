@@ -22,13 +22,13 @@
                         </div>
                     @enderror
                     @if ($review->reviewable_type !== 'review_reply')
-                    <label class="form-label" for="stars">stars</label><br>
-                    <input required class="from-control" type="number" name="stars" id="stars" min="1" max="10">
-                    @error('stars')
-                        <div class="error-box">
-                            {{ $message }}
-                        </div>
-                    @enderror
+                        <label class="form-label" for="stars">stars</label><br>
+                        <input required class="from-control" type="number" name="stars" id="stars" min="1" max="10">
+                        @error('stars')
+                            <div class="error-box">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     @endif
                 </div>
                 <div class="d-block mb-3"></div>
@@ -131,7 +131,7 @@
             document.getElementById('reply-create-' + @json($review->id)).classList.add('hide')
         })
     }
-    window.onload = () => {
+    window.addEventListener('load', () => {
         document.querySelectorAll('.edit-reply').forEach(element => {
             if (element) {
                 element.addEventListener('click', (e) => {
@@ -141,10 +141,10 @@
             }
             document.getElementById('close-edit-' + element.getAttribute('review')).addEventListener(
                 'click', (e) => {
-                    document.getElementById('review-edit-' + element.getAttribute('review')).classList
+                    document.getElementById('review-edit-' + element.getAttribute('review'))
+                        .classList
                         .add('hide')
                 })
         })
-    }
-
+    })
 </script>

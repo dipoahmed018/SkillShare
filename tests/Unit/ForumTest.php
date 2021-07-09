@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Auth\Authenticatable;
 
+use function PHPUnit\Framework\assertTrue;
+
 class ForumTest extends TestCase
 {
     /**
@@ -31,9 +33,9 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $review = Review::find(105);
-        $parent = $review->base_parent();
-        dump($parent);
-        $this->assertTrue(true);
+        $post = Post::find(82);
+        $students = $post->forum()->with('students')->get();
+        dump($students);
+        assertTrue(true);
     }
 }

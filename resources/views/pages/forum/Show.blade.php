@@ -66,11 +66,6 @@
                     <button id="create-post-button" class="btn btn-primary">create post</button>
                     <button id="create-question-button" class="btn btn-primary">create question</button>
                 </div>
-                <div class="col posts">
-                    @foreach ($forum->posts as $post)
-
-                    @endforeach
-                </div>
                 <div class="controller">
                     <button id="show-posts" class="btn btn-primary">Posts</button>
                     <button id="show-questions" class="btn btn-primary">Questions</button>
