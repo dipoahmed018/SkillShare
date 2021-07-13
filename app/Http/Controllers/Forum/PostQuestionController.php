@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Support\Facades\File;
+use App\Models\Vote;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,12 +39,12 @@ class PostQuestionController extends Controller
             'post_type' => 'question',
             'answer' => 0,
         ]);
-        return redirect('/show/forum/'.$forum->id);
+        return redirect('/show/forum/' . $forum->id);
     }
     public function postCreate(Request $request, Forum $forum)
     {
         $images = null;
-        $request->validate([ 'title' => 'required|string|max:250|min:5']);
+        $request->validate(['title' => 'required|string|max:250|min:5']);
         if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
             return abort(401, 'you are Unautorized');
         }
@@ -66,7 +67,7 @@ class PostQuestionController extends Controller
             'post_type' => 'post',
             'answer' => 0,
         ]);
-        return redirect('/show/forum/'.$forum->id);
+        return redirect('/show/forum/' . $forum->id);
     }
     public function saveImage(Request $request, Forum $forum)
     {
@@ -100,30 +101,51 @@ class PostQuestionController extends Controller
 
     public function getQuestion(Request $request, Post $question)
     {
-        if (!$request->user()->canany(['access','update'], $question->forum)) {
-            return abort(401,'You are unauthorized');
+        if (!$request->user()->canany(['access', 'update'], $question->forum)) {
+            return abort(401, 'You are unauthorized');
         }
         if ($question->post_type == 'post') {
-            return abort(422,'question not available');
+            return abort(422, 'question not available');
         }
         $question->owner_details;
-        return view('pages/forum/Question',['question' => $question, 'answers' => $question->answers]);
+        return view('pages/forum/Question', ['question' => $question, 'answers' => $question->answers]);
     }
     public function getPost(Request $request, Post $post)
     {
-        
     }
     public function updateVote(Request $request, Post $post)
     {
-        if ($request->user()->can('access', $post)) {
-            return 'hello';
+        if ($request->user()->cannot('access', $post)) {
+            return abort(401, 'unautorized');
         }
         $request->validate(['method' => 'required|in:increment,decrement']);
-        if ($post->postable_type == ('post'|| 'comment')) {
-            
+        if ($post->post_type == 'post') {
+            if ($vote = $post->voted($request->user()->id)) {
+                return $request->method == 'decrement' ? $vote->delete() : $vote;
+            } else {
+                return $request->method == 'decrement' ? abort(404, 'vote not found') : $post->allvote()->save(new Vote([
+                    'vote_type' => 'increment',
+                    'voter_id' => $request->user()->id
+                ]));
+            };
         }
-        if ($post->postable_type == ('question' || 'answer')) {
-           
+        if ($post->post_type == 'question') {
+            if ($vote = $post->voted($request->user()->id)) {
+                return $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+            } else {
+                if ($request->method == 'decrement') {
+                    $post->allvote()->save(new Vote([
+                        'vote_type' => 'decrement',
+                        'voter_id' => $request->user()->id
+                    ]));
+                } else {
+                    $post->allvote()->save(new Vote([
+                        'vote_type' => 'increment',
+                        'voter_id' => $request->user()->id
+                    ]));
+                }
+            };
         }
+        return response('something went wrong', 500);
     }
 }

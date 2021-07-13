@@ -15,7 +15,7 @@ class Comment extends Model
         'vote',
         'commentable_id',
         'commentable_type',
-        
+
     ];
     public function owner_details()
     {
@@ -23,14 +23,22 @@ class Comment extends Model
     }
     public function reply()
     {
-        return $this->hasMany(Comment::class,'commentable_id')->where('commentable_type', '=','reply');
+        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'reply');
     }
     public function parent()
     {
         if ($this->commentable_type == 'reply') {
             return $this->belongsTo(Comment::class, 'commentable_id');
         } else {
-            return $this->belongsTo(Post::class,'commentable_id');
+            return $this->belongsTo(Post::class, 'commentable_id');
         }
+    }
+    public function allvote()
+    {
+        return $this->morphMany(Vote::class, 'voteable');
+    }
+    public function voted($id)
+    {
+        return $this->allvote()->where('voter_id', '=', $id)->first();
     }
 }

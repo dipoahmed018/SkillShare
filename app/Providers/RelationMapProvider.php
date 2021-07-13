@@ -31,6 +31,7 @@ class RelationMapProvider extends ServiceProvider
             'tuition' => 'App\Models\Tuition',
             'course' => 'App\Models\Course',
             'review_reply' => 'App\Models\Review',
+            'comment' => 'App\Models\Comment',
         ]);
     }
 }

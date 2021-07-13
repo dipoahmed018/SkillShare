@@ -16,6 +16,7 @@ use App\Models\Tuition;
 use App\Models\Catagory;
 use App\Models\Referrel;
 use App\Models\TutorialDetails;
+use App\Models\Vote;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -33,13 +34,9 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $post = Post::find(80);
-        $students = $post->forum()->with(['members' => function ($query) {
-            $query->where('student_id', 3);
-        }, 'owner_details' => function ($query) {
-            $query->where('id', 2);
-        }])->get();
-        dump($students->pluck('members')->first());
+        $post = Post::find(82);
+        dump($post->voted(2));
+
         assertTrue(true);
     }
 }

@@ -5,6 +5,7 @@ use App\Models\Catagory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Forum\CommentAnswerController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
 use App\Http\Controllers\Review\ReviewController;
@@ -108,7 +109,11 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
 
-        Route::post('/{post}/update/vote',[PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+        Route::post('/{post}/post/update/vote',[PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+
+        //comment
+        Route::post('/{comment}/comment/update/vote',[CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
+
     });
 });
 

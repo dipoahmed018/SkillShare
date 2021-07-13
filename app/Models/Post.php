@@ -28,19 +28,23 @@ class Post extends Model
         return $this->belongsTo(Forum::class, 'postable_id');
     }
     public function comments()
-    {   
-        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type','=','parent');
+    {
+        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'parent');
     }
     public function answers()
-    {   
-        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type','=','answer');
+    {
+        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'answer');
     }
     public function catagory()
     {
-        return $this->morphedByMany(Catagory::class,'catagoryable','catagoryable','catagoryable_id','catagory_id');
+        return $this->morphedByMany(Catagory::class, 'catagoryable', 'catagoryable', 'catagoryable_id', 'catagory_id');
     }
-    public function vote()
+    public function allvote()
     {
-        
+        return $this->morphMany(Vote::class, 'voteable');
+    }
+    public function voted($id)
+    {
+        return $this->allvote()->where('voter_id', '=', $id)->first();
     }
 }
