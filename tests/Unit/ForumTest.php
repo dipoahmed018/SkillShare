@@ -34,8 +34,10 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $post = Post::find(82);
-        dump($post->voted(2));
+        // $post = Comment::with('parent.forum')->where('id',63)->get()->pluck('parent')->pluck('forum')->first();
+        // // dump($post->members);
+        // $comment = Comment::find(63);
+        // dump($comment->getForum()->members()->wherePivot('student_id',1)->first());
 
         assertTrue(true);
     }

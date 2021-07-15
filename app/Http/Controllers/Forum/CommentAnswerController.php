@@ -11,7 +11,7 @@ class CommentAnswerController extends Controller
 {
     public function updateVote(Request $request, Comment $comment)
     {
-        if ($request->user()->cannot('access', $comment)) {
+        if ($request->user()->cannot('update', $comment)) {
             return abort(401, 'unautorized');
         }
         $request->validate(['method' => 'required|in:increment,decrement']);

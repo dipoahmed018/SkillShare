@@ -41,4 +41,20 @@ class Comment extends Model
     {
         return $this->allvote()->where('voter_id', '=', $id)->first();
     }
+    public function getPost()
+    {
+        if ($this->commentable_type == 'reply') {
+            return Comment::with('parent')->where('id',$this->commentable_id)->get()->pluck('parent')->first();
+        } else {
+            return Post::find($this->commentable_id);
+        }
+    }
+    public function getForum()
+    {
+        if ($this->commentable_type == 'reply') {
+            return Comment::with('parent.forum')->id('id',$this->commentable_id)->get()->pluck('parent')->pluck('forum')->fist();
+        } else {
+            return Post::with('forum')->where('id',$this->commentable_id)->get()->pluck('forum')->first();
+        }
+    }
 }
