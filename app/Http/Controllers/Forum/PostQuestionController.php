@@ -13,60 +13,62 @@ use Illuminate\Support\Facades\Storage;
 
 class PostQuestionController extends Controller
 {
-    public function questionCreate(Request $request, Forum $forum)
+    // public function questionCreate(Request $request, Forum $forum)
+    // {
+    //     $request->validate(['content' => 'string|required|max:2000|min:10', 'title' => 'required|string|max:250|min:5']);
+    //     if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
+    //         return abort(401, 'you are Unautorized');
+    //     }
+    //     $question = Post::create([
+    //         'title' => $request->title,
+    //         'content' => $request->content,
+    //         'owner' => $request->user()->id,
+    //         'vote' => 0,
+    //         'postable_id' => $forum->id,
+    //         'post_type' => 'question',
+    //         'answer' => 0,
+    //     ]);
+    //     if ($request->images) {
+    //         $images = (json_decode($request->images, true));
+    //     }
+    //     if (count($images) > 3) {
+    //         return abort(422, 'You can not upload more than 4 image');
+    //     }
+    //     foreach ($images as $key => $url) {
+    //         $name = preg_replace('#.*image/#', '', $url, 1);
+    //         Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
+    //     };
+    //     return redirect('/show/forum/' . $forum->id);
+    // }
+    public function postCreate(Request $request, Forum $forum, $type)
     {
-        $images = null;
-        $request->validate(['content' => 'string|required|max:2000|min:10', 'title' => 'required|string|max:250|min:5']);
-        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
-            return abort(401, 'you are Unautorized');
-        }
-        if ($request->images) {
-            $images = (json_decode($request->images, true));
-        }
-        if (count($images) > 3) {
-            return abort(422, 'You can not upload more than 4 image');
-        }
-        foreach ($images as $key => $url) {
-            $name = preg_replace('#.*image/#', '', $url, 1);
-            Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
-        };
-        $post = Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'owner' => $request->user()->id,
-            'vote' => 0,
-            'postable_id' => $forum->id,
-            'post_type' => 'question',
-            'answer' => 0,
-        ]);
-        return redirect('/show/forum/' . $forum->id);
-    }
-    public function postCreate(Request $request, Forum $forum)
-    {
-        $images = null;
         $request->validate(['title' => 'required|string|max:250|min:5']);
         if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
             return abort(401, 'you are Unautorized');
         }
+        if ($type !== "post" || "question") {
+            return abort(422, 'post type not supported must be post or question');
+        }
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content ? $request->content : '',
+            'owner' => $request->user()->id,
+            'vote' => 0,
+            'postable_id' => $forum->id,
+            'post_type' => $type,
+            'answer' => 0,
+        ]);
         if ($request->images) {
             $images = (json_decode($request->images, true));
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
+            Storage::makeDirectory('/private/post/' . $post->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
+                Storage::move('/private/post/temp/' . $name, '/private/post/' . $post->id . '/' . $name);
             };
         }
-        $post = Post::create([
-            'title' => $request->title,
-            'content' => $request->images ? $request->images : '',
-            'owner' => $request->user()->id,
-            'vote' => 0,
-            'postable_id' => $forum->id,
-            'post_type' => 'post',
-            'answer' => 0,
-        ]);
         return redirect('/show/forum/' . $forum->id);
     }
     public function saveImage(Request $request, Forum $forum)

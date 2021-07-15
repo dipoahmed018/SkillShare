@@ -101,8 +101,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/edit/forum/{forum}', [ForumController::class, 'updateForumDetails'])->name('update.forum');
 
         //post
-        Route::post('/{forum}/post/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
-        Route::post('/{forum}/question/create', [PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
+        Route::post('/{forum}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
+        // Route::post('/{forum}/question/create', [PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
         Route::post('/{forum}/save/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
         Route::get('/{forum}/image/{names}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 

@@ -9,6 +9,19 @@ use Illuminate\Http\Request;
 
 class CommentAnswerController extends Controller
 {
+    public function parentCreate()
+    {
+        
+    }
+    public function replyCreate()
+    {
+        # code...
+    }
+    public function answerCreate()
+    {
+        # code...
+    }
+
     public function updateVote(Request $request, Comment $comment)
     {
         if ($request->user()->cannot('update', $comment)) {
