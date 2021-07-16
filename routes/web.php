@@ -102,18 +102,17 @@ Route::middleware(['auth:web'])->group(function () {
 
         //post
         Route::post('/{forum}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
-        // Route::post('/{forum}/question/create', [PostQuestionController::class, 'questionCreate'])->name('forum.question.create');
         Route::post('/{forum}/save/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
         Route::get('/{forum}/image/{names}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
 
-        Route::post('/{post}/post/update/vote',[PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+        Route::post('/{post}/post/update/vote', [PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+        Route::delete('/{post}/post/delete', [PostQuestionController::class, 'deletePost'])->name('post.delete');
 
         //comment
-        Route::post('/{comment}/comment/update/vote',[CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
-
+        Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
     });
 });
 

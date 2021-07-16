@@ -27,7 +27,7 @@ create_question_button.addEventListener('click', (e) => {
         ClassicEditor.create(edit_box, {
             toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
             simpleUpload: {
-                uploadUrl: `http://skillshare.com/${forum.id}/save/image`,
+                uploadUrl: `https://skillshare.com/${forum.id}/save/image`,
                 withCredentials: true,
                 headers: {
                     'X-CSRF-TOKEN': window.csrf,
@@ -81,6 +81,7 @@ close_modal.addEventListener('click', () => {
     modal.hide()
 })
 document.getElementById('create-question').addEventListener('submit', (e) => {
+    // e.preventDefault()
     const parser = new DOMParser().parseFromString(editor.getData(), 'text/html')
     const images = parser.querySelectorAll('img')
     if (images.length > 3) {
@@ -106,9 +107,11 @@ document.getElementById('create-question').addEventListener('submit', (e) => {
         srclist.value = sources
         e.target.prepend(srclist)
     }
+    console.log(images)
 })
 
 document.getElementById('create-post').addEventListener('submit', () => {
+    // e.preventDefault()
     if (Object.keys(images).length > 0) {
         let srclist = document.createElement('input')
         srclist.type = 'hidden'
@@ -116,6 +119,7 @@ document.getElementById('create-post').addEventListener('submit', () => {
         srclist.value = JSON.stringify(images)
         document.getElementById('create-post').append(srclist)
     }
+    console.log(images)
 })
 
 //show 

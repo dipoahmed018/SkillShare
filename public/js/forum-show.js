@@ -10369,7 +10369,7 @@ create_question_button.addEventListener('click', function (e) {
     ClassicEditor.create(edit_box, {
       toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
       simpleUpload: {
-        uploadUrl: "http://skillshare.com/".concat(forum.id, "/save/image"),
+        uploadUrl: "https://skillshare.com/".concat(forum.id, "/save/image"),
         withCredentials: true,
         headers: {
           'X-CSRF-TOKEN': window.csrf
@@ -10423,6 +10423,7 @@ close_modal.addEventListener('click', function () {
   modal.hide();
 });
 document.getElementById('create-question').addEventListener('submit', function (e) {
+  // e.preventDefault()
   var parser = new DOMParser().parseFromString(editor.getData(), 'text/html');
   var images = parser.querySelectorAll('img');
 
@@ -10451,8 +10452,11 @@ document.getElementById('create-question').addEventListener('submit', function (
     srclist.value = sources;
     e.target.prepend(srclist);
   }
+
+  console.log(images);
 });
 document.getElementById('create-post').addEventListener('submit', function () {
+  // e.preventDefault()
   if (Object.keys(images).length > 0) {
     var srclist = document.createElement('input');
     srclist.type = 'hidden';
@@ -10460,6 +10464,8 @@ document.getElementById('create-post').addEventListener('submit', function () {
     srclist.value = JSON.stringify(images);
     document.getElementById('create-post').append(srclist);
   }
+
+  console.log(images);
 }); //show 
 
 show_posts.addEventListener('click', function (e) {

@@ -46,7 +46,8 @@ class PostQuestionController extends Controller
         if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
             return abort(401, 'you are Unautorized');
         }
-        if ($type !== "post" || "question") {
+        // return $type;
+        if ($type !== "post" && $type !== "question") {
             return abort(422, 'post type not supported must be post or question');
         }
         $post = Post::create([
@@ -149,5 +150,13 @@ class PostQuestionController extends Controller
             };
         }
         return response('something went wrong', 500);
+    }
+
+    public function deletePost(Request $request, Post $post)
+    {
+        if ($request->user()->cannot('update', $post)) {
+            return abort(401, 'unauthorized');
+        }
+        return $post->delete();
     }
 }

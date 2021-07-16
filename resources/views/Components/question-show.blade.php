@@ -1,8 +1,12 @@
 <div class="question-wrapper row justify-content-center">
     @if ($question->owner_details->id == Auth::user()->id)
-    <div class="col col-1 d-flex flex-column align-content-center">
-        <button class="btn m-2 btn-warning">Edit</button>
-        <button class="btn m-2 btn-danger">delete</button>
+    <div class="col col-2">
+        <form action="{{route('post.delete', ['post' => $question->id])}}" method="post">
+            @method('delete')
+            @csrf
+            <input style="width: 100px" type="submit" value="delete" class="m-2 btn btn-danger">
+        </form>
+        <button style="width: 100px" id="edit-question" class="btn m-2 btn-warning">Edit</button>
     </div>
     @else
     <div class="col align-self-center col-1 control" style="font-size: 20px">
