@@ -1,6 +1,8 @@
 <div class="post">
+    @dump($post)
     <h3 class="caption">{{ $post->title }}</h3>
     <div class="gallery row">
+        {{$post->id}}
         {{ $post->content }}
     </div>
     <div class="interect d-flex">

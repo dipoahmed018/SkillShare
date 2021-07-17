@@ -26,9 +26,13 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
+    public function getUser(Request $request, User $user)
+    {
+        return view('/user/show', ['user' => $user]);
+    }
     public function ShowRegisterForm()
     {
-        return Auth::check() ? redirect('/') : view('pages/RegisterForm');
+        return Auth::check() ? redirect('/') : view('/user/pages/RegisterForm');
     }
 
     public function Register(RegisterRequest $request)
@@ -47,7 +51,7 @@ class UserController extends Controller
 
     public function ShowLoginForm()
     {
-        return Auth::check() ? redirect('/', 302) : view('/pages/LoginForm');
+        return Auth::check() ? redirect('/', 302) : view('/pages/user/LoginForm');
     }
     public function Login(LoginRequest $request)
     {
@@ -72,7 +76,7 @@ class UserController extends Controller
     public function ShowUserUpdateForm(Request $request)
     {
         $user = $request->user();
-        return !Auth::check() ? redirect('/', 302) : view('/pages/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->getProfilePicture()]);
+        return !Auth::check() ? redirect('/', 302) : view('/user/pages/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->getProfilePicture()]);
     }
     public function Update(UpdateRequest $request)
     {

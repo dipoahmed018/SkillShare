@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class Postobserver
@@ -63,6 +64,7 @@ class Postobserver
     }
     public function deleting(Post $post)
     {
+        Log::channel('event')->info($post, ['post deleting']);
         foreach ($post->comments as $key => $comment) {
             $comment->delete();
         }

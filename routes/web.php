@@ -46,6 +46,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->group(function () {
+        Route::get('/{user}/profile', [UserController::class, 'getUser'])->name('show.user');
         Route::get('/show/update', [UserController::class, 'ShowUserUpdateForm']);
         Route::put('/update', [UserController::class, 'Update'])->name('user.update');
         Route::put('/update/password', [UserController::class, 'changePassword'])->name('user.update.password');

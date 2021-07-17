@@ -13,33 +13,6 @@ use Illuminate\Support\Facades\Storage;
 
 class PostQuestionController extends Controller
 {
-    // public function questionCreate(Request $request, Forum $forum)
-    // {
-    //     $request->validate(['content' => 'string|required|max:2000|min:10', 'title' => 'required|string|max:250|min:5']);
-    //     if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
-    //         return abort(401, 'you are Unautorized');
-    //     }
-    //     $question = Post::create([
-    //         'title' => $request->title,
-    //         'content' => $request->content,
-    //         'owner' => $request->user()->id,
-    //         'vote' => 0,
-    //         'postable_id' => $forum->id,
-    //         'post_type' => 'question',
-    //         'answer' => 0,
-    //     ]);
-    //     if ($request->images) {
-    //         $images = (json_decode($request->images, true));
-    //     }
-    //     if (count($images) > 3) {
-    //         return abort(422, 'You can not upload more than 4 image');
-    //     }
-    //     foreach ($images as $key => $url) {
-    //         $name = preg_replace('#.*image/#', '', $url, 1);
-    //         Storage::move('/private/post/temp/' . $name, '/private/post/' . $name);
-    //     };
-    //     return redirect('/show/forum/' . $forum->id);
-    // }
     public function postCreate(Request $request, Forum $forum, $type)
     {
         $request->validate(['title' => 'required|string|max:250|min:5']);
@@ -52,7 +25,7 @@ class PostQuestionController extends Controller
         }
         $post = Post::create([
             'title' => $request->title,
-            'content' => $request->content ? $request->content : '',
+            'content' => $request->content ? $request->content : ($request->images ?? ''),
             'owner' => $request->user()->id,
             'vote' => 0,
             'postable_id' => $forum->id,
