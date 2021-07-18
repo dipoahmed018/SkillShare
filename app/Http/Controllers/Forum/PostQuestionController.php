@@ -40,7 +40,7 @@ class PostQuestionController extends Controller
             Storage::makeDirectory('/private/post/' . $post->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                Storage::move('/private/post/temp/' . $name, '/private/post/' . $post->id . '/' . $name);
+                Storage::move('temp/' . $name, '/private/post/' . $post->id . '/' . $name);
             };
         }
         return redirect('/show/forum/' . $forum->id);
@@ -58,7 +58,7 @@ class PostQuestionController extends Controller
         }
         $extension = $request->file('upload')->getClientOriginalExtension();
         $random_name = uniqid() . '.' . $extension;
-        $request->file('upload')->storeAs('private/post/temp/', $random_name);
+        $request->file('upload')->storeAs('temp/', $random_name);
         return response()->json(['url' => 'https://skillshare.com/' . $forum->id . '/image/' . $random_name]);
     }
     public function getImage(Request $request, Forum $forum, $name)
@@ -68,8 +68,8 @@ class PostQuestionController extends Controller
         }
         if (File::exists(storage_path('app/private/post/' . $name))) {
             return response()->file(storage_path('app/private/post/' . $name), ['content-type' => 'image/*']);
-        } else if (File::exists(storage_path('app/private/post/temp/' . $name))) {
-            return response()->file(storage_path('app/private/post/temp/' . $name), ['content-type' => 'image/*']);
+        } else if (File::exists(storage_path('app/temp/' . $name))) {
+            return response()->file(storage_path('app/temp/' . $name), ['content-type' => 'image/*']);
         } else {
             return response()->file(storage_path('app/private/post/default.JPG'), ['content-type' => 'image/*']);
         }

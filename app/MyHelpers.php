@@ -1,10 +1,10 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 if (!function_exists('assetToPath')) {
     function assetToPath(string $link, string $from)
@@ -56,9 +56,9 @@ if (!function_exists('chunkUpload')) {
             }
         }
         if (request()->header('x-resumeable')) {
-                if ($size !== 0) {
+            if ($size !== 0) {
                 $response->status = 200;
-                $response->file_name = 'chunk-'. ($files->count() + 1);
+                $response->file_name = 'chunk-' . ($files->count() + 1);
                 $response->message = 'file upload can be resumed';
                 return $response;
             } else {
@@ -81,8 +81,8 @@ if (!function_exists('chunkUpload')) {
             };
             foreach ($files as $key => $file_path) {
                 $content = Storage::disk('temp')->get($file_path);
-                
-                Storage::append($file_directory. $file_name, $content, null);
+
+                Storage::append($file_directory . $file_name, $content, null);
             }
             Storage::append($file_directory . $file_name, $data, null);
             Storage::disk('temp')->deleteDirectory($directory);

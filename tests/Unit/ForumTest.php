@@ -34,5 +34,6 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
+        $str = 'jpg|jpeg|jpg';
     }
 }

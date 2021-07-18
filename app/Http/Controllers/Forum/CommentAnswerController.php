@@ -7,7 +7,6 @@ use App\Models\Vote;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Comment\CreateCommentRequest;
@@ -48,7 +47,7 @@ class CommentAnswerController extends Controller
         if ($request->user()->cannot('access', $post)) {
             return abort(401, 'unauthorized');
         }
-        $request->content = '<a href="'.$refer->id . '">'. $refer->name .'</a>';
+        $request->content = '<a href="https://skillshare.com/user/' . $refer->id . '/profile">@' . $refer->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
         $comment = Comment::create([
             'content' => $request->content,
             'owner' => $request->user()->id,
@@ -115,7 +114,22 @@ class CommentAnswerController extends Controller
         $comment->content = $request->content;
         $comment->save();
         if ($post->post_type == 'question' && $comment->commentable_type == 'reply') {
-            return $$comment;
+            return $comment;
+        }
+        if ($request->images) {
+            $images = json_decode($request->images, true);
+            if (count($images) > 3) {
+                return abort(422, 'You can not upload more than 4 image');
+            }
+            Storage::makeDirectory('/private/comment/' . $comment->id);
+            foreach ($images as $key => $url) {
+                $name = preg_replace('#.*image/#', '', $url, 1);
+                $image = Image::make('/private/comment/temp/' . $name);
+                $image->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save('/private/comment/' . $comment->id . '/' . $name, 80);
+                Storage::delete('/private/comment/temp/' . $name);
+            };
         }
     }
     public function deleteComment(Request $request, Comment $comment)

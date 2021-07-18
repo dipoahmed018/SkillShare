@@ -28,7 +28,7 @@ class UserController extends Controller
 {
     public function getUser(Request $request, User $user)
     {
-        return view('/user/show', ['user' => $user]);
+        return view('pages/user/show', ['user' => $user]);
     }
     public function ShowRegisterForm()
     {
