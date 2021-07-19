@@ -104,7 +104,7 @@ Route::middleware(['auth:web'])->group(function () {
         //post
         Route::post('/{forum}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
         Route::post('/{forum}/save/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
-        Route::get('/{forum}/image/{names}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
+        Route::get('/{forum}/image/{name}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
@@ -118,8 +118,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/{comment}/update', [CommentAnswerController::class, 'updateComment'])->name('comment.update');
         Route::delete('/{comment}/delete', [CommentAnswerController::class, 'deleteComment'])->name('comment.delete');
         Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
-        Route::post('/comment/image/save', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
-        Route::get('/comment/image/{name}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
+        Route::post('/save/comment/image', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
+        Route::get('/get/comment/image/{name}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
     });
 });
 

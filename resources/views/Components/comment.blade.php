@@ -12,7 +12,7 @@
                 <i class="bi bi-hand-thumbs-up"></i>
                 <span>{{ $comment->allVote->count() }}</span>
             </div>
-            <button data-commentable-id="{{$comment->id}}" data-comment-type="reply">reply</button>
+            <button data-bs-toggle='modal' data-bs-target='#create-comment-modal' data-commentable-id="{{$comment->id}}" data-comment-type="reply">reply</button>
             <button class="show-replies">show replies</button>
         </div>
     </div>
