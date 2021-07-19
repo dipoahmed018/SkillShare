@@ -10,20 +10,23 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Comment\CreateCommentRequest;
-use App\Models\User;
 
 class CommentAnswerController extends Controller
 {
-    public function parentCreate(CreateCommentRequest $request, Post $post)
+    public function parentCreate(CreateCommentRequest $request, Post $post, $type)
     {
         if ($request->user()->cannot('access', $post)) {
             return abort(401, 'unauthorized');
+        }
+        if ($type !== 'parent' && $type !== 'answer') {
+            return abort(422, 'type must be parent or answer');
         }
         $comment = Comment::create([
             'content' => $request->content,
             'owner' => $request->user()->id,
             'vote' => 0,
-            'commentable_type' => $request->commentable_type == 'parent' ?? 'answer',
+            'commentable_id' => $post->id,
+            'commentable_type' => $type,
         ]);
         if ($comment->commentable_id !== 'reply' && $request->images) {
             $images = json_decode($request->images, true);
@@ -41,18 +44,20 @@ class CommentAnswerController extends Controller
             };
         }
     }
-    public function replyCreate(CreateCommentRequest $request, Comment $commentable, User $refer)
+    public function replyCreate(CreateCommentRequest $request, Comment $commentable)
     {
         $post = $commentable->getPost();
+
         if ($request->user()->cannot('access', $post)) {
             return abort(401, 'unauthorized');
         }
-        $request->content = '<a href="https://skillshare.com/user/' . $refer->id . '/profile">@' . $refer->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
+        $request->content = '<a href="https://skillshare.com/user/' . $commentable->owner . '/profile">@' . $commentable->owner_details->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
         $comment = Comment::create([
             'content' => $request->content,
             'owner' => $request->user()->id,
             'vote' => 0,
             'commentable_type' => 'reply',
+            'commentable_id' => $commentable->commentable_type == 'reply' ? $commentable->parent->id : $commentable->id,
         ]);
         //send notification to refference
 
@@ -138,5 +143,18 @@ class CommentAnswerController extends Controller
             abort(401, 'unautorized');
         }
         return $comment->delete();
+    }
+
+    public function saveCommentImage(Request $request)
+    {
+        saveImage($request->file('upload'), 'https://skillshare.com/comment/image/');
+    }
+    public function getCommentImage(Request $request, $name)
+    {
+        if (Storage::exists('private/comment/'. $name)) {
+            response()->file(storage_path('app/private/comment/'. $name), ['content-type' => 'image/*']);
+        } else {
+            return response()->file(storage_path('app/temp/'.$name), ['content-type'=> 'image/*']);
+        }
     }
 }

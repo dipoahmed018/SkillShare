@@ -5,6 +5,7 @@
     <div id="popup_box" class="hide">
 
     </div>
+    @include('Components.CommentCreate')
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">

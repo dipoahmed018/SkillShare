@@ -12,7 +12,8 @@
                 <i class="bi bi-hand-thumbs-up"></i>
                 <span>{{ $comment->allVote->count() }}</span>
             </div>
-            <button>reply</button>
+            <button data-commentable-id="{{$comment->id}}" data-comment-type="reply">reply</button>
+            <button class="show-replies">show replies</button>
         </div>
     </div>
 </div>

@@ -47,4 +47,11 @@ class Post extends Model
     {
         return $this->allvote()->where('voter_id', '=', $id)->first();
     }
+    public function voteCount()
+    {
+        $votes = $this->allvote;
+        $increment = $votes->where('vote_type', '=', 'increment')->count();
+        $decrement = $votes->where('vote_type', '=', 'decrement')->count();
+        return $increment - $decrement;
+    }
 }

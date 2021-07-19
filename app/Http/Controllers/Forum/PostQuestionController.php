@@ -97,9 +97,9 @@ class PostQuestionController extends Controller
         $request->validate(['method' => 'required|in:increment,decrement']);
         if ($post->post_type == 'post') {
             if ($vote = $post->voted($request->user()->id)) {
-                return $request->method == 'decrement' ? $vote->delete() : $vote;
+                $request->method == 'decrement' ? $vote->delete() : $vote;
             } else {
-                return $request->method == 'decrement' ? abort(404, 'vote not found') : $post->allvote()->save(new Vote([
+                $request->method == 'decrement' ? abort(404, 'vote not found') : $post->allvote()->save(new Vote([
                     'vote_type' => 'increment',
                     'voter_id' => $request->user()->id
                 ]));
@@ -107,7 +107,7 @@ class PostQuestionController extends Controller
         }
         if ($post->post_type == 'question') {
             if ($vote = $post->voted($request->user()->id)) {
-                return $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+                $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
             } else {
                 if ($request->method == 'decrement') {
                     $post->allvote()->save(new Vote([
@@ -122,7 +122,8 @@ class PostQuestionController extends Controller
                 }
             };
         }
-        return response('something went wrong', 500);
+
+        return response($post->voteCount(), 200);
     }
 
     public function deletePost(Request $request, Post $post)

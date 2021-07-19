@@ -103,3 +103,19 @@ if (!function_exists('chunkUpload')) {
         return $response;
     }
 }
+
+if (!function_exists('saveImage')) {
+    function saveImage($file, $url)
+    {
+        if ($file->getSize() / 1000 > 2000) {
+            return response()->json(['error' => ['message' => 'The image uploaded was too big. Image Must be under 2000kb']], 422);
+        }
+        if (!preg_match('#image/(png|jpg|jpeg)$#', $file->getMimeType())) {
+            return response()->json(['error' => ['message' => 'The provided file must be an image of jpg, jpeg or png type']], 422);
+        }
+        $extension = $file->getClientOriginalExtension();
+        $random_name = uniqid() . '.' . $extension;
+        $file->storeAs('temp/', $random_name);
+        return response()->json(['url' => $url . $random_name ?? 'https://skillshare.com/temp/' . $random_name]);
+    }
+}

@@ -113,7 +113,13 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/{post}/post/delete', [PostQuestionController::class, 'deletePost'])->name('post.delete');
 
         //comment
+        Route::post('/{post}/{type}/create', [CommentAnswerController::class, 'parentCreate'])->name('comment.create');
+        Route::post('/{comment}/reply/create', [CommentAnswerController::class, 'replyCreate'])->name('comment.update');
+        Route::put('/{comment}/update', [CommentAnswerController::class, 'updateComment'])->name('comment.update');
+        Route::delete('/{comment}/delete', [CommentAnswerController::class, 'deleteComment'])->name('comment.delete');
         Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
+        Route::post('/comment/image/save', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
+        Route::get('/comment/image/{name}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
     });
 });
 

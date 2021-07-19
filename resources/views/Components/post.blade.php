@@ -1,29 +1,21 @@
 <div class="post">
-    @dump($post)
     <h3 class="caption">{{ $post->title }}</h3>
     <div class="gallery row">
         {{$post->id}}
         {{ $post->content }}
     </div>
-    <div class="interect d-flex">
+    <div class="interect d-flex ">
         <div id="like-{{ $post->id }}"
             data-method={{ $post->voted(Auth::user()->id) ? 'decrement' : 'increment' }}>
             <i class="bi bi-hand-thumbs-up"></i>
             <span>{{ $post->allVote->count() }}</span>
         </div>
-        <i>comments</i>
+        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#create-comment-modal" data-comment-type="parent" data-commentable-id={{$post->id}}>comment</button>
     </div>
     <div class="comment-box">
         @foreach ($post->comments as $comment)
             <x-comment :comment="$comment"></x-comment>
         @endforeach
-        <div class="comment_create">
-            <form action="" method="post">
-                @csrf
-                <input type="text" name="content" id="comment_content">
-                <input type="button" value="comment">
-            </form>
-        </div>
     </div>
 </div>
 
@@ -39,15 +31,16 @@
             }
         }).then(
             (res) => {
+                console.log(res)
                 if (type == 'increment') {
-                    target.lastElementChild.innerText = parseInt(target.lastElementChild.innerText) + 1
                     target.setAttribute('data-method', 'decrement')
+                    target.lastElementChild.innerText = res.data
                     target.firstElementChild.classList.remove('bi-hand-thumbs-up')
                     target.firstElementChild.classList.add('bi-hand-thumbs-up-fill')
                 }
                 if (type == 'decrement') {
-                    target.lastElementChild.innerText = parseInt(target.lastElementChild.innerText) - 1
                     target.setAttribute('data-method', 'increment')
+                    target.lastElementChild.innerText = res.data
                     target.firstElementChild.classList.remove('bi-hand-thumbs-up-fill')
                     target.firstElementChild.classList.add('bi-hand-thumbs-up')
                 }

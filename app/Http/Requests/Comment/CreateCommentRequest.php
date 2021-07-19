@@ -27,7 +27,6 @@ class CreateCommentRequest extends FormRequest
     {
         return [
             'content' => 'required|min:1|max:200',
-            'commentable_type' => ['required', Rule::in(['reply', 'parent', 'answer'])]
         ];
     }
 }

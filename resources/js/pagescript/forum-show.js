@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Modal } from "bootstrap";
 import Popup from '../asset/PopupHandler'
+
 const csrf = document.head.querySelector("meta[name='_token']").content;
 const modal_element = document.getElementById('create')
 const close_modal = document.getElementById('close-modal')
