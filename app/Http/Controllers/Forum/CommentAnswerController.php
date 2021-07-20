@@ -35,14 +35,13 @@ class CommentAnswerController extends Controller
         ]);
         if ($request->images) {
             if ($type == 'reply' && $commentable->commentable_type == 'answer') {
-                return $comment;
+                return redirect()->back();
             }
             $images = json_decode($request->images, true);
             if (count($images) > 3) {
                 $comment->delete();
                 return abort(422, 'You can not upload more than 4 image');
             }
-            Log::channel('event')->info($images);
             Storage::makeDirectory('/private/comment/' . $comment->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
@@ -53,9 +52,32 @@ class CommentAnswerController extends Controller
                 Storage::delete('temp/' . $name);
             };
         }
-        return $comment;
+        return redirect()->back();
     }
 
+    public function updateComment(CreateCommentRequest $request, Comment $comment)
+    {
+        $post = $comment->getPost();
+        $comment->content = $request->content;
+        $comment->save();
+        if ($post->post_type == 'question' && $comment->commentable_type == 'reply') {
+            return $comment;
+        }
+        if ($request->images) {
+            $images = json_decode($request->images, true);
+            if (count($images) > 3) {
+                return abort(422, 'You can not upload more than 4 image');
+            }
+        }
+        return redirect()->back();
+    }
+    public function deleteComment(Request $request, Comment $comment)
+    {
+        if ($request->user()->cannot('update', $comment)) {
+            abort(401, 'unautorized');
+        }
+        return $comment->delete();
+    }
     public function updateVote(Request $request, Comment $comment)
     {
         if ($request->user()->cannot('update', $comment)) {
@@ -90,38 +112,6 @@ class CommentAnswerController extends Controller
             };
         }
         return response('something went wrong', 500);
-    }
-    public function updateComment(CreateCommentRequest $request, Comment $comment)
-    {
-        $post = $comment->getPost();
-        $comment->content = $request->content;
-        $comment->save();
-        if ($post->post_type == 'question' && $comment->commentable_type == 'reply') {
-            return $comment;
-        }
-        if ($request->images) {
-            $images = json_decode($request->images, true);
-            if (count($images) > 3) {
-                return abort(422, 'You can not upload more than 4 image');
-            }
-            Storage::makeDirectory('/private/comment/' . $comment->id);
-            foreach ($images as $key => $url) {
-                $name = preg_replace('#.*image/#', '', $url, 1);
-                $image = Image::make('/private/comment/temp/' . $name);
-                $image->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save('/private/comment/' . $comment->id . '/' . $name, 80);
-                Storage::delete('/private/comment/temp/' . $name);
-            };
-        }
-        return $comment;
-    }
-    public function deleteComment(Request $request, Comment $comment)
-    {
-        if ($request->user()->cannot('update', $comment)) {
-            abort(401, 'unautorized');
-        }
-        return $comment->delete();
     }
 
     public function saveCommentImage(Request $request)
