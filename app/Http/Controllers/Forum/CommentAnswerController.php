@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Comment\CreateCommentRequest;
+use Illuminate\Support\Facades\Log;
 
 class CommentAnswerController extends Controller
 {
@@ -21,6 +22,7 @@ class CommentAnswerController extends Controller
         if ($type !== 'parent' && $type !== 'answer') {
             return abort(422, 'type must be parent or answer');
         }
+        Log::channel('event')->info('here');
         $comment = Comment::create([
             'content' => $request->content,
             'owner' => $request->user()->id,
@@ -28,7 +30,9 @@ class CommentAnswerController extends Controller
             'commentable_id' => $post->id,
             'commentable_type' => $type,
         ]);
-        if ($comment->commentable_id !== 'reply' && $request->images) {
+        Log::channel('event')->info($comment);
+
+        if ($request->images) {
             $images = json_decode($request->images, true);
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
@@ -36,13 +40,14 @@ class CommentAnswerController extends Controller
             Storage::makeDirectory('/private/comment/' . $comment->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                $image = Image::make('/private/comment/temp/' . $name);
+                $image = Image::make('/temp/' . $name);
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save('/private/comment/' . $comment->id . '/' . $name, 80);
-                Storage::delete('/private/comment/temp/' . $name);
+                Storage::delete('/temp/' . $name);
             };
         }
+        return $comment;
     }
     public function replyCreate(CreateCommentRequest $request, Comment $commentable)
     {
@@ -76,6 +81,7 @@ class CommentAnswerController extends Controller
                 Storage::delete('/private/comment/temp/' . $name);
             };
         }
+        return $comment;
     }
 
     public function updateVote(Request $request, Comment $comment)
@@ -136,6 +142,7 @@ class CommentAnswerController extends Controller
                 Storage::delete('/private/comment/temp/' . $name);
             };
         }
+        return $comment;
     }
     public function deleteComment(Request $request, Comment $comment)
     {
@@ -147,14 +154,14 @@ class CommentAnswerController extends Controller
 
     public function saveCommentImage(Request $request)
     {
-        saveImage($request->file('upload'), 'https://skillshare.com/comment/image/');
+        return saveImage($request->file('upload'), 'https://skillshare.com/get/comment/image/');
     }
     public function getCommentImage(Request $request, $name)
     {
-        if (Storage::exists('private/comment/'. $name)) {
-            response()->file(storage_path('app/private/comment/'. $name), ['content-type' => 'image/*']);
+        if (Storage::exists('private/comment/' . $name)) {
+            return response()->file(storage_path('app/private/comment/' . $name), ['content-type' => 'image/*']);
         } else {
-            return response()->file(storage_path('app/temp/'.$name), ['content-type'=> 'image/*']);
+            return response()->file(storage_path('app/temp/' . $name), ['content-type' => 'image/*']);
         }
     }
 }

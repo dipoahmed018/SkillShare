@@ -7,7 +7,7 @@
                 <button data-bs-dismiss="modal" type="button" class="btn-close" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="forum-group" action="post/create/comment" id="create-comment-form" method="post">
+                <form class="forum-group" action="/post/comment/create" id="create-comment-form" method="post">
                     @csrf
                     <textarea name="content" id="comment-content"></textarea>
                     <div class="comment-error error-box">
@@ -29,11 +29,12 @@
     //button to open the modal button need some data attribute about the post or comment can be opened form any component
     const comment_modal = document.getElementById('create-comment-modal')
     comment_modal.addEventListener('show.bs.modal', (e) => {
-       let commentable_id = e.relatedTarget.getAttribute('data-commentable-id')
-       let comment_type = e.relatedTarget.getAttribute('data-comment-type')
-       comment_form.action = window.location.hostname + `/${commentable_id}/${comment_type}/create`
+        let commentable_id = e.relatedTarget.getAttribute('data-commentable-id')
+        let comment_type = e.relatedTarget.getAttribute('data-comment-type')
+        comment_form.action =`${window.location.protocol}//${window.location.hostname}/
     })
     comment_form.addEventListener('submit', (e) => {
+        return;
         if (comment_editor) {
             const data = comment_editor.getData()
             if (data.length < 1) {
