@@ -14,71 +14,43 @@ use Illuminate\Support\Facades\Log;
 
 class CommentAnswerController extends Controller
 {
-    public function parentCreate(CreateCommentRequest $request, Post $post, $type)
+    public function commentCreate(CreateCommentRequest $request)
     {
-        if ($request->user()->cannot('access', $post)) {
+        $type = $request->query('type');
+        $content = $request->content;
+        $commentable = ($type == 'parent' || $type == 'answer') ? Post::findOrFail($request->query('commentable')) : Comment::findOrFail($request->query('commentable'));
+        if ($request->user()->cannot('access', $commentable)) {
             return abort(401, 'unauthorized');
         }
-        if ($type !== 'parent' && $type !== 'answer') {
-            return abort(422, 'type must be parent or answer');
+        if ($type == 'reply') {
+            $content = '<a href="https://skillshare.com/user/' . $commentable->owner . '/profile">@' . $commentable->owner_details->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
+            $commentable = $commentable->commentable_type == 'reply' ? $commentable->parent : $commentable;
         }
-        Log::channel('event')->info('here');
         $comment = Comment::create([
-            'content' => $request->content,
+            'content' => $content,
             'owner' => $request->user()->id,
             'vote' => 0,
-            'commentable_id' => $post->id,
+            'commentable_id' => $commentable->id,
             'commentable_type' => $type,
         ]);
-        Log::channel('event')->info($comment);
-
         if ($request->images) {
+            if ($type == 'reply' && $commentable->commentable_type == 'answer') {
+                return $comment;
+            }
             $images = json_decode($request->images, true);
             if (count($images) > 3) {
+                $comment->delete();
                 return abort(422, 'You can not upload more than 4 image');
             }
+            Log::channel('event')->info($images);
             Storage::makeDirectory('/private/comment/' . $comment->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                $image = Image::make('/temp/' . $name);
+                $image = Image::make(storage_path('app/temp/' . $name));
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save('/private/comment/' . $comment->id . '/' . $name, 80);
-                Storage::delete('/temp/' . $name);
-            };
-        }
-        return $comment;
-    }
-    public function replyCreate(CreateCommentRequest $request, Comment $commentable)
-    {
-        $post = $commentable->getPost();
-
-        if ($request->user()->cannot('access', $post)) {
-            return abort(401, 'unauthorized');
-        }
-        $request->content = '<a href="https://skillshare.com/user/' . $commentable->owner . '/profile">@' . $commentable->owner_details->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
-        $comment = Comment::create([
-            'content' => $request->content,
-            'owner' => $request->user()->id,
-            'vote' => 0,
-            'commentable_type' => 'reply',
-            'commentable_id' => $commentable->commentable_type == 'reply' ? $commentable->parent->id : $commentable->id,
-        ]);
-        //send notification to refference
-
-        if ($commentable->commentable_type == 'parent') {
-            $images = json_decode($request->images, true);
-            if (count($images) > 3) {
-                return abort(422, 'You can not upload more than 4 image');
-            }
-            Storage::makeDirectory('/private/comment/' . $comment->id);
-            foreach ($images as $key => $url) {
-                $name = preg_replace('#.*image/#', '', $url, 1);
-                $image = Image::make('/private/comment/temp/' . $name);
-                $image->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save('/private/comment/' . $comment->id . '/' . $name, 80);
-                Storage::delete('/private/comment/temp/' . $name);
+                })->save(storage_path('app/private/comment/' . $comment->id . '/' . $name), 80);
+                Storage::delete('temp/' . $name);
             };
         }
         return $comment;

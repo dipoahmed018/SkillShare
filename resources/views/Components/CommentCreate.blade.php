@@ -19,7 +19,6 @@
         </div>
     </div>
 </div>
-
 <script>
     const comment_edit_box = document.getElementById('comment-content')
     const content = document.getElementById('comment-content');
@@ -31,10 +30,9 @@
     comment_modal.addEventListener('show.bs.modal', (e) => {
         let commentable_id = e.relatedTarget.getAttribute('data-commentable-id')
         let comment_type = e.relatedTarget.getAttribute('data-comment-type')
-        comment_form.action =`${window.location.protocol}//${window.location.hostname}/
+        comment_form.action = `https://skillshare.com/comment/create?type=${comment_type}&commentable=${commentable_id}`
     })
     comment_form.addEventListener('submit', (e) => {
-        return;
         if (comment_editor) {
             const data = comment_editor.getData()
             if (data.length < 1) {
@@ -48,7 +46,7 @@
                 e.preventDefault()
                 error.innerHTML = 'you can not use more then 3 image'
             }
-            if (editor.getData().length > 1000) {
+            if (comment_editor.getData().length > 1000) {
                 e.preventDefault()
                 error.innerHTML = 'too much content'
                 return false;
@@ -66,12 +64,12 @@
                 })
                 sources = JSON.stringify(sources)
                 srclist.value = sources
-                e.target.prepend(srclist)
+                console.log(srclist)
+                e.target.append(srclist)
             }
         }
     })
     document.addEventListener('DOMContentLoaded', () => {
-
         ClassicEditor.create(comment_edit_box, {
                 toolbar: ['undo', 'redo', '|', 'bold', 'italic',
                     'blockQuote', '|', 'ImageUpload'
