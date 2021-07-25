@@ -10,9 +10,9 @@
             <i class="bi bi-hand-thumbs-up"></i>
             <span>{{ $post->allVote->count() }}</span>
         </div>
-        <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#create-comment-modal" data-comment-type="parent" data-commentable-id={{$post->id}}>comment</button>
+        <button class="btn btn-success create-comment" type="button" data-bs-action='create' data-comment-type="parent" data-commentable-id={{$post->id}}>comment</button>
     </div>
-    <div class="comment-box">
+    <div id="{{$post->id}}-comment-box" class="comment-box">
         @foreach ($post->comments as $comment)
             <x-comment :comment="$comment"></x-comment>
         @endforeach

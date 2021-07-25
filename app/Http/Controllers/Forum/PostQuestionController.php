@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Forum;
 
+use App\Models\Post;
+use App\Models\Vote;
 use App\Models\Forum;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Post;
-use Illuminate\Support\Facades\File;
-use App\Models\Vote;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class PostQuestionController extends Controller
@@ -25,7 +26,7 @@ class PostQuestionController extends Controller
         }
         $post = Post::create([
             'title' => $request->title,
-            'content' => $request->content ? $request->content : ($request->images ?? ''),
+            'content' => $request->content ?? ($request->images ?? ($type == 'question' ? abort(422, 'please provide some content') : '')),
             'owner' => $request->user()->id,
             'vote' => 0,
             'postable_id' => $forum->id,
@@ -40,16 +41,54 @@ class PostQuestionController extends Controller
             Storage::makeDirectory('/private/post/' . $post->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                Storage::move('temp/' . $name, '/private/post/' . $post->id . '/' . $name);
+                $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
+                $image = Image::make(storage_path('app/temp/' . $name));
+                $image->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
+                Storage::delete('temp/' . $name);
             };
+            $post->save();
         }
         return redirect('/show/forum/' . $forum->id);
     }
-    public function saveImage(Request $request, Forum $forum)
+    public function postUpdate(Request $request, Post $post)
     {
-        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
+        if ($request->user()->cannot('update', $post)) {
             return abort(401, 'you are Unautorized');
         }
+        $request->validate(['title' => 'string|max:250|min:5']);
+        $post->title = $request->title ?? $post->title;
+        $post->post_type == 'post' ? ($post->content = $request->images ?? $post->content) : ($post->content = $request->content ?? $post->content);
+        if ($request->images) {
+            $images = json_decode($request->images, true);
+            if (count($images) > 3) {
+                return abort(422, 'You can not upload more than 4 image');
+            }
+            $names = collect();
+            if (count($images) > 3) {
+                return abort(422, 'You can not upload more than 4 image');
+            }
+            foreach ($images as $key => $url) {
+                $name = preg_replace('#.*image/#', '', $url, 1);
+                $names->push($name);
+                $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
+                if (!Storage::exists('/private/post/' . $name)) {
+                    $image = Image::make(storage_path('app/temp/' . $name));
+                    $image->resize(800, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
+                    Storage::delete('temp/' . $name);
+                }
+            };
+            $post->save();
+            deleteFileBut('private/post', $names);
+        }
+        $post->save();
+        return response($post, 200);
+    }
+    public function saveImage(Request $request, Forum $forum)
+    {
         if ($request->file('upload')->getSize() / 1000 > 2000) {
             return response()->json(['error' => ['message' => 'The image uploaded was too big. Image Must be under 2000kb']], 422);
         }
@@ -59,20 +98,16 @@ class PostQuestionController extends Controller
         $extension = $request->file('upload')->getClientOriginalExtension();
         $random_name = uniqid() . '.' . $extension;
         $request->file('upload')->storeAs('temp/', $random_name);
-        return response()->json(['url' => 'https://skillshare.com/' . $forum->id . '/image/' . $random_name]);
+        return response()->json(['url' => 'https://skillshare.com/get/post/image/' . $random_name]);
     }
-    public function getImage(Request $request, Forum $forum, $name)
+    public function getImage($name, $post = null)
     {
-        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
-            return abort(401, 'you are Unautorized');
-        }
-        if (File::exists(storage_path('app/private/post/' . $name))) {
-            return response()->file(storage_path('app/private/post/' . $name), ['content-type' => 'image/*']);
+        if ($post && File::exists(storage_path('app/private/post/' . $post . '/' . $name))) {
+            return response()->file(storage_path('app/private/post/' . $post . '/' . $name), ['content-type' => 'image/*']);
         } else if (File::exists(storage_path('app/temp/' . $name))) {
             return response()->file(storage_path('app/temp/' . $name), ['content-type' => 'image/*']);
-        } else {
-            return response()->file(storage_path('app/private/post/default.JPG'), ['content-type' => 'image/*']);
         }
+        return response()->file(storage_path('app/private/post/default.JPG'), ['content-type' => 'image/*']);
     }
 
     public function getQuestion(Request $request, Post $question)

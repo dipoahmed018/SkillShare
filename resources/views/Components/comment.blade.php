@@ -1,20 +1,27 @@
-<div>
-    <div class="comment row">
-        <div class="col col-1">
-            owner
+<div id="{{ $comment->id }}-comment-wrapper" class="row">
+    <div class="col col-1 comment-owner">
+        owner
+    </div>
+    <div class="content col col-11">
+        {!! $comment->content !!}
+    </div>
+    <div class="control d-flex col-12 ">
+        <div id="like-{{ $comment->id }}"
+            data-method={{ $comment->voted(Auth::user()->id) ? 'decrement' : 'increment' }}>
+            <i class="bi bi-hand-thumbs-up"></i>
+            <span>{{ $comment->allVote->count() }}</span>
         </div>
-        <div class="content col col-11">
-            {{ $comment->content }}
-        </div>
-        <div class="control d-flex col-12 ">
-            <div id="like-{{ $comment->id }}"
-                data-method={{ $comment->voted(Auth::user()->id) ? 'decrement' : 'increment' }}>
-                <i class="bi bi-hand-thumbs-up"></i>
-                <span>{{ $comment->allVote->count() }}</span>
-            </div>
-            <button data-bs-toggle='modal' data-bs-target='#create-comment-modal' data-commentable-id="{{$comment->id}}" data-comment-type="reply">reply</button>
-            <button class="show-replies">show replies</button>
-        </div>
+        <button class="create-comment" data-bs-action="create" data-commentable-id="{{ $comment->id }}" data-comment-type="reply">reply</button>
+        <button class="show-replies">show replies</button>
+        @can('update', $comment)
+            <button class="btn btn-warning edit-comment" data-bs-action="update" data-comment-id={{ $comment->id }}>edit</button>
+            <button class="btn btn-danger delete-comment" data-comment-id={{ $comment->id }}>delete</button>
+        @endcan
+    </div>
+    <div id="{{ $comment->id }}-comment-box" class="reply-box m-5">
+        @foreach ($comment->reply as $reply)
+            <x-comment :comment="$reply"></x-comment>
+        @endforeach
     </div>
 </div>
 

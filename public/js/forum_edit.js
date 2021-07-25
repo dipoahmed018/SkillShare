@@ -14,8 +14,7 @@ if (edit_box) {
     editor.setData(forum_details.description);
   })["catch"](function (error) {
     return console.log(error);
-  });
-  var forum_submit = document.getElementById('forum');
+  }); // const forum_submit = document.getElementById('forum')
 }
 /******/ })()
 ;

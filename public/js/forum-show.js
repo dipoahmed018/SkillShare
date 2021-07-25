@@ -4938,6 +4938,207 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/asset/CommentCreate.js":
+/*!*********************************************!*\
+  !*** ./resources/js/asset/CommentCreate.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+
+var modal_box = document.getElementById('create-comment-modal');
+var comment_edit_box = document.getElementById('comment-content');
+var error = document.querySelector('.comment-error');
+var comment_form = document.getElementById('create-comment-form');
+var edit_buttons = document.querySelectorAll('.edit-comment');
+console.log(edit_buttons);
+var create_comment = document.querySelectorAll('.create-comment');
+var close_modal = document.querySelectorAll('.close-comment-modal'); //unique identifier 
+
+var comment_editor;
+var url;
+var commentable_id;
+var comment_type;
+var action;
+var comment_id; //button to open the modal button need some data attribute about the post or comment can be opened form any component
+
+var comment_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_0__.Modal(modal_box);
+edit_buttons.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    return modal_opener(e);
+  });
+});
+create_comment.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    return modal_opener(e);
+  });
+});
+close_modal.forEach(function (element) {
+  element.addEventListener('click', function () {
+    return comment_modal.hide();
+  });
+});
+
+var modal_opener = function modal_opener(e) {
+  commentable_id = e.target.getAttribute('data-commentable-id');
+  comment_id = e.target.getAttribute('data-comment-id');
+  comment_type = e.target.getAttribute('data-comment-type');
+  action = e.target.getAttribute('data-bs-action');
+
+  if (action == 'create') {
+    comment_editor.setData('');
+    url = "https://skillshare.com/comment/create";
+  } else {
+    url = "https://skillshare.com/".concat(comment_id, "/comment/update");
+    content = document.getElementById("".concat(comment_id, "-comment-wrapper")).querySelector('.content').innerHTML;
+    comment_editor.setData(content);
+  }
+
+  comment_modal.show();
+};
+
+comment_form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  console.log(url);
+  var sources = {};
+
+  if (comment_editor) {
+    var data = comment_editor.getData();
+
+    if (data.length < 1) {
+      error.innerHTML = 'content must not be empty';
+      return;
+    }
+
+    var parser = new DOMParser().parseFromString(data, 'text/html');
+    var images = parser.querySelectorAll('img');
+
+    if (images.length > 3) {
+      e.preventDefault();
+      error.innerHTML = 'you can not use more then 3 image';
+    }
+
+    if (comment_editor.getData().length > 1000) {
+      e.preventDefault();
+      error.innerHTML = 'too much content';
+      return false;
+    }
+
+    if (images.length > 0) {
+      images.forEach(function (element) {
+        var src = element.src;
+        sources[Object.keys(sources).length + 1] = src;
+      });
+      sources = JSON.stringify(sources);
+    } else {
+      sources = null;
+    }
+  }
+
+  var form_data = {};
+
+  if (action == 'create') {
+    form_data['type'] = comment_type;
+    sources ? form_data['images'] = sources : null;
+    form_data['commentable'] = commentable_id;
+    form_data['content'] = comment_editor.getData();
+  } else {
+    sources ? form_data['images'] = sources : null;
+    form_data['content'] = comment_editor.getData();
+  }
+
+  form_data = JSON.stringify(form_data);
+  fetch(url, {
+    method: action == 'create' ? 'POST' : 'PUT',
+    body: form_data,
+    headers: {
+      'X-CSRF-TOKEN': window.csrf,
+      'content-type': 'application/json'
+    }
+  }).then(function (res) {
+    return res.json();
+  }).then(function (comment) {
+    action == 'create' ? attach(comment) : update_comment(comment);
+  })["catch"](function (err) {
+    return console.log(err);
+  });
+  comment_modal.hide();
+});
+
+var update_comment = function update_comment(comment) {
+  var box = document.getElementById("".concat(comment.id, "-comment-wrapper"));
+  box.querySelector('.content').innerHTML = comment.content;
+};
+
+var attach = function attach(comment) {
+  var box = document.getElementById("".concat(comment.commentable_type == 'reply' ? comment.commentable_id : commentable_id, "-comment-box"));
+  var wrapper = document.querySelector('.tamplate-comment').cloneNode(true);
+  var content = wrapper.querySelector('.content');
+  var owner = wrapper.querySelector('.comment-owner');
+  var like = wrapper.querySelector('.like-comment');
+  var create_button = wrapper.querySelector('.show-comment-creator');
+  var reply_box = wrapper.querySelector('.reply-box');
+  var delete_comment = wrapper.querySelector('.delete-comment');
+  var edit_comment = wrapper.querySelector('.edit-comment');
+  wrapper.classList.remove('hide');
+  wrapper.id = "".concat(comment.id, "-comment-wrapper");
+  owner.innerHTML = comment.owner;
+  content.innerHTML = comment.content;
+  create_button.setAttribute('data-commentable-id', comment.id);
+  like.setAttribute('data-commentable-id', comment.id);
+  delete_comment.setAttribute('data-comment-id', comment.id);
+  edit_comment.setAttribute('data-comment-id', comment.id);
+  reply_box.id = "".concat(comment.id, "-comment-box");
+  box.append(wrapper); //listener 
+
+  delete_comment.addEventListener('click', function (e) {
+    return comment_deleter(e);
+  });
+  edit_comment.addEventListener('click', function (e) {
+    return modal_opener(e);
+  });
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  ClassicEditor.create(comment_edit_box, {
+    toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'blockQuote', '|', 'ImageUpload'],
+    simpleUpload: {
+      uploadUrl: "https://skillshare.com/save/comment/image",
+      withCredentials: true,
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }
+  }).then(function (ckeditor) {
+    comment_editor = ckeditor;
+  })["catch"](function (error) {
+    return console.log(error);
+  });
+});
+document.querySelectorAll('.delete-comment').forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    return comment_deleter(e);
+  });
+});
+
+var comment_deleter = function comment_deleter(e) {
+  var id = e.target.getAttribute('data-comment-id');
+  fetch("/".concat(id, "/comment/delete"), {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return document.getElementById("".concat(id, "-comment-wrapper")).remove();
+  })["catch"](function (err) {
+    console.log(err);
+  });
+};
+
+/***/ }),
+
 /***/ "./resources/js/asset/PopupHandler.js":
 /*!********************************************!*\
   !*** ./resources/js/asset/PopupHandler.js ***!
@@ -10343,6 +10544,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
+
+__webpack_require__(/*! ../asset/CommentCreate */ "./resources/js/asset/CommentCreate.js");
+
 var csrf = document.head.querySelector("meta[name='_token']").content;
 var modal_element = document.getElementById('create');
 var close_modal = document.getElementById('close-modal');
@@ -10402,7 +10606,7 @@ post_image.addEventListener('change', function (e) {
     var form_data = new FormData();
     form_data.append('upload', image);
     axios__WEBPACK_IMPORTED_MODULE_0___default()({
-      url: "/".concat(forum.id, "/save/image"),
+      url: "/save/post/image",
       method: 'post',
       data: form_data
     }).then(function (res) {

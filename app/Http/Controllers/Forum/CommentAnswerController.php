@@ -16,9 +16,9 @@ class CommentAnswerController extends Controller
 {
     public function commentCreate(CreateCommentRequest $request)
     {
-        $type = $request->query('type');
+        $type = $request->type;
         $content = $request->content;
-        $commentable = ($type == 'parent' || $type == 'answer') ? Post::findOrFail($request->query('commentable')) : Comment::findOrFail($request->query('commentable'));
+        $commentable = ($type == 'parent' || $type == 'answer') ? Post::findOrFail($request->commentable) : Comment::findOrFail($request->commentable);
         if ($request->user()->cannot('access', $commentable)) {
             return abort(401, 'unauthorized');
         }
@@ -34,8 +34,10 @@ class CommentAnswerController extends Controller
             'commentable_type' => $type,
         ]);
         if ($request->images) {
-            if ($type == 'reply' && $commentable->commentable_type == 'answer') {
-                return redirect()->back();
+            if ($type == 'reply') {
+                if ($commentable->commentable_type == 'answer') {
+                    return $comment;
+                }
             }
             $images = json_decode($request->images, true);
             if (count($images) > 3) {
@@ -45,19 +47,24 @@ class CommentAnswerController extends Controller
             Storage::makeDirectory('/private/comment/' . $comment->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
+                $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
                 $image = Image::make(storage_path('app/temp/' . $name));
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save(storage_path('app/private/comment/' . $comment->id . '/' . $name), 80);
                 Storage::delete('temp/' . $name);
             };
+            $comment->save();
         }
-        return redirect()->back();
+        return $comment;
     }
 
-    public function updateComment(CreateCommentRequest $request, Comment $comment)
+    public function updateComment(Request $request, Comment $comment)
     {
         $post = $comment->getPost();
+        $request->validate([
+            'content' => 'required|string|min:5',
+        ]);
         $comment->content = $request->content;
         $comment->save();
         if ($post->post_type == 'question' && $comment->commentable_type == 'reply') {
@@ -65,11 +72,26 @@ class CommentAnswerController extends Controller
         }
         if ($request->images) {
             $images = json_decode($request->images, true);
+            $names = collect();
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
+            foreach ($images as $key => $url) {
+                $name = preg_replace('#.*image/#', '', $url, 1);
+                $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
+                $names->push($name);
+                if (!Storage::exists('/private/comment/' . $name)) {
+                    $image = Image::make(storage_path('app/temp/' . $name));
+                    $image->resize(800, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save(storage_path('app/private/comment/' . $comment->id . '/' . $name), 80);
+                    Storage::delete('temp/' . $name);
+                }
+            };
+            $comment->save();
+            deleteFileBut('private/comment', $names);
         }
-        return redirect()->back();
+        return $comment;
     }
     public function deleteComment(Request $request, Comment $comment)
     {
@@ -118,12 +140,13 @@ class CommentAnswerController extends Controller
     {
         return saveImage($request->file('upload'), 'https://skillshare.com/get/comment/image/');
     }
-    public function getCommentImage(Request $request, $name)
+    public function getCommentImage($name, $comment = null)
     {
-        if (Storage::exists('private/comment/' . $name)) {
-            return response()->file(storage_path('app/private/comment/' . $name), ['content-type' => 'image/*']);
+        if ($comment) {
+            return response()->file(storage_path('app/private/comment/' . $comment . '/' . $name), ['content-type' => 'image/*']);
         } else {
             return response()->file(storage_path('app/temp/' . $name), ['content-type' => 'image/*']);
         }
+        return response()->file(public_path('default/Default.jpeg'));
     }
 }

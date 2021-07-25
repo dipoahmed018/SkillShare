@@ -28,7 +28,8 @@ class CommentPolicy
     }
     public function access(User $user, Comment $comment)
     {
-        $student = $comment->getForum()->members()->wherePivot("student_id",$user->id)->first();
-        return $student ? true : false;
+        $forum = $comment->getForum();
+        $student = $forum->members()->wherePivot("student_id",$user->id)->first();
+        return $student || $forum->owner == $user->id ? true : false;
     }
 }

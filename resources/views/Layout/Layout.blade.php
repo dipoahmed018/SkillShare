@@ -11,6 +11,7 @@
     @yield('headers')
 </head>
 <body>
+    @yield('tamplates')
     @yield('body')
 
     <script src={{ asset('js/app.js') }}></script>

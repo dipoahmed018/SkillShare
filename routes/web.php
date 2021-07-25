@@ -103,8 +103,8 @@ Route::middleware(['auth:web'])->group(function () {
 
         //post
         Route::post('/{forum}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
-        Route::post('/{forum}/save/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
-        Route::get('/{forum}/image/{name}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
+        Route::post('/save/post/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
+        Route::get('/get/post/image/{name}/{post?}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
@@ -114,11 +114,11 @@ Route::middleware(['auth:web'])->group(function () {
 
         //comment
         Route::post('/comment/create', [CommentAnswerController::class, 'commentCreate'])->name('comment.create');
-        Route::put('/{comment}/update', [CommentAnswerController::class, 'updateComment'])->name('comment.update');
-        Route::delete('/{comment}/delete', [CommentAnswerController::class, 'deleteComment'])->name('comment.delete');
+        Route::put('/{comment}/comment/update', [CommentAnswerController::class, 'updateComment'])->name('comment.update');
+        Route::delete('/{comment}/comment/delete', [CommentAnswerController::class, 'deleteComment'])->name('comment.delete');
         Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
         Route::post('/save/comment/image', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
-        Route::get('/get/comment/image/{name}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
+        Route::get('/get/comment/image/{name}/{comment?}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
     });
 });
 

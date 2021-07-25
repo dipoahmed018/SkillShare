@@ -1,10 +1,14 @@
 @extends('../Layout/Layout')
 
 @section('title', 'forum')
+@section('tamplates')
+    @include('Layout.Tamplate.comment-tamplate')
+@endsection
 @section('body')
     <div id="popup_box" class="hide">
 
     </div>
+
     @include('Components.CommentCreate')
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -14,7 +18,8 @@
                     <button id="close-modal" type="button" class="btn-close" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="forum-group hide" action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'post']) }}"
+                    <form class="forum-group hide"
+                        action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'post']) }}"
                         id="create-post" method="post">
                         @csrf
                         <label class="form-label" for="title">caption</label>
@@ -29,7 +34,8 @@
                         </div>
                         <input class="btn btn-success" type="submit" value="create">
                     </form>
-                    <form class="form-group hide" action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'question']) }}"
+                    <form class="form-group hide"
+                        action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'question']) }}"
                         id="create-question" method="post">
                         @csrf
                         <label for="title">Title</label>

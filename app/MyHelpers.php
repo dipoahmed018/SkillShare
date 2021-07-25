@@ -119,3 +119,25 @@ if (!function_exists('saveImage')) {
         return response()->json(['url' => $url . $random_name ?? 'https://skillshare.com/temp/' . $random_name]);
     }
 }
+
+if (!function_exists('deleteFilesBut')) {
+    function deleteFileBut($directory, $files)
+    {
+        Log::channel('event')->info('i was here');
+        $destination = collect(Storage::files($directory));
+        foreach ($destination as $key => $exist_path) {
+            $exists = false;
+            foreach ($files as $key => $name) {
+                if ($exist_path == $directory . '/' . $name) {
+                    $exists = true;
+                    break;
+                } else {
+                    $exists = false;
+                }
+            }
+            if (!$exists) {
+                Storage::delete($exist_path);
+            }
+        }
+    }
+}

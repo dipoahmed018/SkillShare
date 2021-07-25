@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Modal } from "bootstrap";
 import Popup from '../asset/PopupHandler'
+require('../asset/CommentCreate')
 
 const csrf = document.head.querySelector("meta[name='_token']").content;
 const modal_element = document.getElementById('create')
@@ -56,7 +57,7 @@ post_image.addEventListener('change', (e) => {
         let form_data = new FormData()
         form_data.append('upload', image)
         axios({
-            url: `/${forum.id}/save/image`,
+            url: `/save/post/image`,
             method: 'post',
             data: form_data,
         })

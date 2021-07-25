@@ -52,7 +52,7 @@ class Comment extends Model
     public function getForum()
     {
         if ($this->commentable_type == 'reply') {
-            return Comment::with('parent.forum')->id('id',$this->commentable_id)->get()->pluck('parent')->pluck('forum')->fist();
+            return Comment::with('parent.forum')->where('id',$this->commentable_id)->get()->pluck('parent')->pluck('forum')->first();
         } else {
             return Post::with('forum')->where('id',$this->commentable_id)->get()->pluck('forum')->first();
         }
