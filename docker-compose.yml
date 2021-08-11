@@ -1,2 +1,47 @@
-version: 3
+version: 3.8
+
+services:
+  skillshare:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/skillshare
+    volumes: 
+      - .:/var/www/skillshare
+    networks:
+      - skillshare_network
+    
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    ports: 127.0.0.2:8080:80
+    volumes: 
+      - .:/var/www/skillshare
+    networks:
+      - skillshare_network
+  
+  db:
+    image: mysql
+    restart: unless-stopped
+    environment: 
+      MYSQL_DATABASE: skillshare
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_USER: dipoahmed
+    networks: 
+      - skillshare_network
+    
+  cache:
+    image: redis
+    restart: unless-stopped
+    networks:
+      - skillshare_network
+
+  networks:    
+    skillshare_network:
+      driver: bridge
+         
+
 
