@@ -34,8 +34,8 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $comment = Comment::findOrFail(660);
-        dump($comment->getForum());
+        // $comment = Comment::findOrFail(660);
+        // dump($comment->getForum());
         assertTrue(true);
     }
 }
