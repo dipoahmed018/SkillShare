@@ -141,3 +141,9 @@ if (!function_exists('deleteFilesBut')) {
         }
     }
 }
+
+if (function_exists('update_files')) {
+    function update_files($files){
+
+    }
+}

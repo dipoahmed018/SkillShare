@@ -24,10 +24,10 @@
                     <input type="submit" value="send mail">
                 </form>
             </div>
+            <button id="send" class=" btn btn-primary"> send request </button>
+            @endif
         @endauth
-    @endif
     <h1>Dashboard</h1>
-    <button id="send" class=" btn btn-primary"> send request </button>
     <div class="error-box">
 
     </div>
