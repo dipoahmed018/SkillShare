@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\StripeServiceProvider;
+
 return [
 
     /*
@@ -178,7 +180,8 @@ return [
         App\Providers\RelationMapProvider::class,
 
 
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        StripeServiceProvider::class,
 
     ],
 
