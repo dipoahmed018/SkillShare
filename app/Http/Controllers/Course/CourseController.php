@@ -48,18 +48,17 @@ class CourseController extends Controller
         ]);
         $course->forum_id = $forum->id;
         $course->save();
-        return redirect('/show/course/' . $course->id);
+        return redirect()->back()->with('course', $course);
     }
     public function setThumblin(SetThumblin $request, Course $course)
     {
 
         $user = $request->user();
         if ($user->cannot('update', $course)) {
+            return 'hello';
             return back()->withErrors(['auth' => 'you are not the owner of this course']);
         };
-        if ($file = $course->thumblin) {
-            // $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
-            // Storage::disk('public')->delete($file_path);
+        if ($course->thumblin) {
             $course->thumblin->delete();
         }
         $thumblin = $request->file('thumblin');
@@ -69,13 +68,13 @@ class CourseController extends Controller
         $image->resize(600, null, function ($constraint) {
             $constraint->aspectRatio();
         })->save(storage_path('app/public/course/thumblin/' . $file_name));
-        $file = FileLink::create([
+        FileLink::create([
             'file_name' => $file_name,
             'file_link' => asset('/storage/course/thumblin/' . $file_name),
             'file_type' => 'thumblin',
             'fileable_id' => $course->id,
         ]);
-        return back()->with('status', 'success')->with('course',  $course);
+        return redirect('/show/course/'. $course->id);
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
@@ -150,7 +149,7 @@ class CourseController extends Controller
         $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
         $title = 'please provide your tutorial title';
-        $directory = '/tutorial//' . $directory_name;
+        $directory = '/' . $directory_name;
 
         if ($request->header('x-cancel')) {
             $chunk = chunkUpload($directory, 'no data');

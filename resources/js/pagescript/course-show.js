@@ -215,7 +215,7 @@ const showTutorial = async (e) => {
     //   const src = URL.createObjectURL(blob)
     // })
     video_modal.show();
-    video_frame.src = `https://skillshare.com/show/tutorial/${id}/${course.id}`;
+    video_frame.src = `${window.location.origin}/show/tutorial/${id}/${course.id}`;
     close_modal.addEventListener('click', () => {
       video_frame.src = '';
       video_modal.hide()

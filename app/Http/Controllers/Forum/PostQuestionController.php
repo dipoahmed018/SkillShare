@@ -65,24 +65,20 @@ class PostQuestionController extends Controller
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
-            $names = collect();
-            if (count($images) > 3) {
-                return abort(422, 'You can not upload more than 4 image');
-            }
-            foreach ($images as $key => $url) {
-                $name = preg_replace('#.*image/#', '', $url, 1);
-                $names->push($name);
-                $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
-                if (!Storage::exists('/private/post/' . $name)) {
-                    $image = Image::make(storage_path('app/temp/' . $name));
-                    $image->resize(800, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
-                    Storage::delete('temp/' . $name);
-                }
-            };
-            $post->save();
-            deleteFileBut('private/post', $names);
+            update_files($images, '/private/post/' . $post->id);
+            // foreach ($images as $key => $url) {
+            //     $name = preg_replace('#.*image/#', '', $url, 1);
+            //     $names->push($name);
+            //     $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
+            //     if (!Storage::exists('/private/post/' . $name)) {
+            //         $image = Image::make(storage_path('app/temp/' . $name));
+            //         $image->resize(800, null, function ($constraint) {
+            //             $constraint->aspectRatio();
+            //         })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
+            //         Storage::delete('temp/' . $name);
+            //     }
+            // };
+            // $post->save();
         }
         $post->save();
         return response($post, 200);

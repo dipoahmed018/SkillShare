@@ -5,6 +5,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
+
 
 if (!function_exists('assetToPath')) {
     function assetToPath(string $link, string $from)
@@ -143,7 +145,25 @@ if (!function_exists('deleteFilesBut')) {
 }
 
 if (function_exists('update_files')) {
-    function update_files($files){
-
+    function update_files($files, $directory)
+    {
+        Storage::makeDirectory($directory . '-temp');
+        $temp_directory = $directory . '-temp';
+        foreach ($files as $key => $url) {
+            $name = preg_replace('#.*image/#', '', $url, 1);
+            //save temp image
+            if (!Storage::exists($directory . $name) && Storage::exists('/temp//' . $name)) {
+                $image = Image::make(storage_path('app/temp/' . $name));
+                $image->resize(800, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save(storage_path($temp_directory . '/' . $name), 80);
+                Storage::delete('temp/' . $name);
+            } else if(Storage::exists($directory . '/' . $name)){
+                Storage::move($directory . '/' . $name, $temp_directory . '/' . $name);
+            }
+        }
+        Storage::delete($directory);
+        rename(storage_path('app'.$temp_directory), storage_path('app'. $directory));
+        return true;
     }
 }

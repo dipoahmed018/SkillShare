@@ -4,7 +4,7 @@
 
 @section('body')
     <div>
-        @if (!session('status'))
+        @if (!session('course'))
             <div class="container">
 
                 <form id='create-course' class="create-course row justify-content-center"
@@ -47,8 +47,8 @@
             </div>
         @endif
 
-        @if (session('status') == 'created' && !session('thumblin'))
-            <form class="form-control" action={{ route('update.course.thumblin', [session('course')->id]) }} method="post"
+        @if (session('course'))
+            <form class="form-control" action={{ route('update.course.thumblin', [2]) }} method="post"
                 enctype="multipart/form-data">
                 @csrf
                 @error('auth')

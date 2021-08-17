@@ -26,7 +26,7 @@ class SetThumblin extends FormRequest
     public function rules()
     {
         return [
-            'thumblin' => ['required','mimes:jpg,png,jpeg', Rule::dimensions()->maxWidth(5000)->maxHeight(7000)->minWidth(400)->minHeight(600),'max:10000'],
+            'thumblin' => ['required','mimes:jpg,png,jpeg', Rule::dimensions()->maxWidth(10000)->maxHeight(10000)->minWidth(400)->minHeight(600),'max:10000'],
         ];
     }
 }

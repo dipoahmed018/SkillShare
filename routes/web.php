@@ -70,7 +70,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         //create course
         Route::post('/create/course', [CourseController::class, 'createCourse'])->name('create.course');
-        Route::get('/create/course', fn () => view('pages/course/Create'));
+        Route::get('/create/course', fn () => view('pages/course/Create')->with('test', 'hello'));
 
         //update course
         Route::get('/update/course/{course}', fn (Course $course) => view('pages/course/EditCourse', ['course' => $course, 'catagories' => Catagory::all()]));

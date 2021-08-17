@@ -17,6 +17,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redis;
@@ -32,7 +33,7 @@ class UserController extends Controller
     }
     public function ShowRegisterForm()
     {
-        return Auth::check() ? redirect('/') : view('/user/pages/RegisterForm');
+        return Auth::check() ? redirect('/') : view('/pages/user/RegisterForm');
     }
 
     public function Register(RegisterRequest $request)

@@ -47,14 +47,14 @@ class CommentAnswerController extends Controller
             Storage::makeDirectory('/private/comment/' . $comment->id);
             foreach ($images as $key => $url) {
                 $name = preg_replace('#.*image/#', '', $url, 1);
-                $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
+                // $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
                 $image = Image::make(storage_path('app/temp/' . $name));
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save(storage_path('app/private/comment/' . $comment->id . '/' . $name), 80);
                 Storage::delete('temp/' . $name);
             };
-            $comment->save();
+            // $comment->save();
         }
         return $comment;
     }
@@ -72,24 +72,22 @@ class CommentAnswerController extends Controller
         }
         if ($request->images) {
             $images = json_decode($request->images, true);
-            $names = collect();
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
-            foreach ($images as $key => $url) {
-                $name = preg_replace('#.*image/#', '', $url, 1);
-                $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
-                $names->push($name);
-                if (!Storage::exists('/private/comment/' . $name)) {
-                    $image = Image::make(storage_path('app/temp/' . $name));
-                    $image->resize(800, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save(storage_path('app/private/comment/' . $comment->id . '/' . $name), 80);
-                    Storage::delete('temp/' . $name);
-                }
-            };
-            $comment->save();
-            deleteFileBut('private/comment', $names);
+            update_files($images, '/private/comment/'. $comment->id);
+            // foreach ($images as $key => $url) {
+            //     $name = preg_replace('#.*image/#', '', $url, 1);
+            //     $comment->content = str_replace($name, $name . '/' . $comment->id, $comment->content);
+            //     $names->push($name);
+            //     if (!Storage::exists('/private/comment/' . $name)) {
+            //         $image = Image::make(storage_path('app/temp/' . $name));
+            //         $image->resize(800, null, function ($constraint) {
+            //             $constraint->aspectRatio();
+            //         })->save(storage_path('app/private/comment/' . $name), 80);
+            //         Storage::delete('temp/' . $name);
+            //     }
+            // };
         }
         return $comment;
     }

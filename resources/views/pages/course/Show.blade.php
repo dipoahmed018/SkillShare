@@ -37,6 +37,12 @@
     @if ($course)
         <div class="container-fluid">
             <div class="details row">
+                @if ($course->thumblin)
+                <div class="col thumblin">
+                    <img src="{{$course->thumblin->file_link}}" alt="course thumblin">
+                </div>
+                    
+                @endif
                 <div class="title col col-10">
                     <h3>{{ $course->title }}</h3>
                 </div>
