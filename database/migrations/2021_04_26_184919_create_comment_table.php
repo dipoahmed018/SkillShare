@@ -17,7 +17,6 @@ class CreateCommentTable extends Migration
             $table->id();
             $table->string('content');
             $table->unsignedBigInteger('owner');
-            $table->integer('vote')->nullable();
             $table->unsignedBigInteger('commentable_id');
             $table->enum('commentable_type',['answer','reply','parent']);
             $table->timestamps();

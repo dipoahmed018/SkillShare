@@ -29,18 +29,6 @@ class ReviewFactory extends Factory
             'owner' => $owner->id,
         ];
     }
-
-    public function tuition()
-    {
-        return $this->state(function(array $attributes){
-            $owner = User::find($attributes['owner']);
-            $tuition = collect($owner->tuitions)->random();
-            return  [
-                'reviewable_id' => $tuition->id,
-                'reviewable_type' => 'tuition',
-            ];
-        });
-    }
     public function course()
     {
         return $this->state(function(array $attributes){
@@ -56,7 +44,7 @@ class ReviewFactory extends Factory
     {
         return $this->state(function(array $attributes){
            $owner = User::find($attributes['owner']);
-           $type = rand(0,1) ? collect($owner->courses)->random() : collect($owner->tuitions)->random();
+           $type =   collect($owner->courses)->random();
            $review = collect($type->review)->random();
            return [
                'reviewable_id' => $review->id,

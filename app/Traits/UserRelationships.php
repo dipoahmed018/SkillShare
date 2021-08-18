@@ -25,14 +25,6 @@ trait UserRelationships {
     {
         return $this->hasMany(Course::class, 'owner');
     }
-    public function admin_tuition()
-    {
-        return $this->hasMany(Tuition::class, 'owner');
-    }
-    public function admin_group()
-    {
-        return $this->hasMany(Group::class, 'owner');
-    }
     public function admin_comments()
     {
         return $this->hasMany(Comment::class,'owner');

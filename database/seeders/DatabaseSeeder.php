@@ -6,11 +6,8 @@ use App\Models\Catagory;
 use App\Models\Comment;
 use App\Models\Course;
 use App\Models\Forum;
-use App\Models\Group;
-use App\Models\Message;
 use App\Models\Notification;
 use App\Models\Post;
-use App\Models\Price;
 use App\Models\Referrel;
 use App\Models\Review;
 use App\Models\Tuition;
@@ -29,26 +26,19 @@ class DatabaseSeeder extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         DB::table('course_students')->truncate();
-        DB::table('tuition_students')->truncate();
         DB::table('catagoryable')->truncate();
-        DB::table('group_member')->truncate();
-        DB::table('friends')->truncate();
+
         User::truncate();
-        Tuition::truncate();
         Post::truncate();
         Forum::truncate();
         Comment::truncate();
-        Price::truncate();
         Referrel::truncate();
-        Group::truncate();
         Catagory::truncate();
         Notification::truncate();
         Review::truncate();
-        Message::truncate();
         Course::truncate();
 
         User::factory()->count(10)->create();
-        Tuition::factory()->count(10)->create();
         Course::factory()->count(10)->create();
 
         Post::factory()->count(80)
@@ -63,11 +53,7 @@ class DatabaseSeeder extends Seeder
                 'comments'
             )->create();
         Comment::factory()->count(8)->reply()->create();
-        Group::factory()->count(20)->create();
-        Message::factory()->count(50)->toFriends()->create();
-        Message::factory()->count(50)->toGroups()->create();
         Notification::factory()->count(50)->create();
-        Review::factory()->count(30)->tuition()->create();
         Review::factory()->count(30)->course()->create();
         Review::factory()->count(30)->reply()->create();
         Catagory::factory()->count(20)->create();

@@ -20,16 +20,6 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function configure()
-    {
-        return $this->afterCreating(function (User $user) {
-            $user_count = User::all()->count() > 1;
-            if ($user_count) {
-               $friend = User::all()->except((int)$user->id)->random();
-               $user->friends()->syncWithoutDetaching([$friend->id => ['friend_type' => 'friend']]);
-            }
-        });
-    }
     public function definition()
     {
         return [

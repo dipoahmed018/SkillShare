@@ -12,7 +12,6 @@ class Post extends Model
     protected $fillable = [
         'title',
         'content',
-        'vote',
         'owner',
         'postable_id',
         'post_type',

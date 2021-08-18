@@ -9,6 +9,7 @@ use App\Http\Controllers\Forum\CommentAnswerController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
 use App\Http\Controllers\Review\ReviewController;
+use App\Http\Controllers\Transaction\BuycourseController;
 use App\Models\Forum;
 
 /*
@@ -119,6 +120,9 @@ Route::middleware(['auth:web'])->group(function () {
         Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
         Route::post('/save/comment/image', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
         Route::get('/get/comment/image/{name}/{comment?}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
+
+        //
+        Route::post('/purchase/course/{course}', [BuycourseController::class, 'buy_course'])->name('purchase.course');
     });
 });
 

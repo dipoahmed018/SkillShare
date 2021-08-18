@@ -18,7 +18,6 @@ class CreatePostTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('content')->nullable();
-            $table->integer('vote');
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('postable_id');
             $table->enum('post_type',['question','post']);
@@ -26,7 +25,6 @@ class CreatePostTable extends Migration
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');
-            $table->foreign('postable_id')->references('id')->on('forum');
             
         });
     }

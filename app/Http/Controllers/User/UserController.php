@@ -77,7 +77,7 @@ class UserController extends Controller
     public function ShowUserUpdateForm(Request $request)
     {
         $user = $request->user();
-        return !Auth::check() ? redirect('/', 302) : view('/user/pages/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->getProfilePicture()]);
+        return !Auth::check() ? redirect('/', 302) : view('pages/user/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->getProfilePicture()]);
     }
     public function Update(UpdateRequest $request)
     {

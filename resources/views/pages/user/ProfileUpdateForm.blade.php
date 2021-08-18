@@ -1,6 +1,9 @@
 @extends('../Layout/Layout')
 
 @section('title', 'Profile Update')
+@section('headers')
+<script src="https://js.stripe.com/v3/"></script>
+@endsection
 
 @section('body')
 
@@ -116,11 +119,14 @@
                 <input type="submit" value="change email">
             </form>
         @endif
-
     </fieldset>
+    <form action="{{ route('purchase.course', ['course' => 2]) }}" method="post">
+        @csrf
+        <input type="submit" value="set">
+    </form>
 
 @endsection
 
 @section('scripts')
-    {{-- <script src={{ asset('js/profile_update.js') }}></script> --}}
+    <script src={{ asset('js/profile_update.js') }}></script>
 @endsection

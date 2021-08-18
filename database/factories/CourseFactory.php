@@ -25,17 +25,17 @@ class CourseFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Course $course) {
+            $users = User::all('id')->random(8);
+            $course->students()->syncWithoutDetaching($users);
             $forum = Forum::factory()->create([
                 'forumable_id' => $course->id,
                 'forumable_type' => 'course',
                 'owner' => $course->owner,
             ]);
-            $review = Review::factory()->create([
+           Review::factory()->create([
                 'reviewable_id' => $course->id,
                 'reviewable_type' => 'course',
             ]);
-            $users = User::all('id')->random(8);
-            $course->students()->syncWithoutDetaching($users);
             $course->forum_id = $forum->id;
             $course->save();
         });

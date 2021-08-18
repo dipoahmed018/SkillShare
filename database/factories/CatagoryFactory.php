@@ -25,31 +25,12 @@ class CatagoryFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Catagory $catagory) {
-            $lotery = rand(0, 2);
-            if ($lotery == 0) {
-                $tuition = Tuition::all()->random(5);
-                $catagoryable = [];
-                foreach ($tuition as $key => $tuition) {
-                    $catagoryable[(int)$tuition->id] = ['catagoryable_type' => 'tuition'];
-                }
-                $catagory->posts()->syncWithoutDetaching($catagoryable);
-            } elseif ($lotery == 1) {
-                $course = Course::all()->random(5);
-
-                $catagoryable = [];
-                foreach ($course as $key => $course) {
-                    $catagoryable[(int)$course->id] = ['catagoryable_type' => 'course'];
-                }
-                $catagory->posts()->syncWithoutDetaching($catagoryable);
-            } elseif ($lotery == 2) {
-                $posts = Post::all()->random(10);
-
-                $catagoryable = [];
-                foreach ($posts as $key => $post) {
-                    $catagoryable[(int)$post->id] = ['catagoryable_type' => 'post'];
-                }
-                $catagory->posts()->syncWithoutDetaching($catagoryable);
+            $course = Course::all()->random(5);
+            $catagoryable = [];
+            foreach ($course as $key => $course) {
+                $catagoryable[(int)$course->id] = ['catagoryable_type' => 'course'];
             }
+            $catagory->posts()->syncWithoutDetaching($catagoryable);
         });
     }
     public function definition()

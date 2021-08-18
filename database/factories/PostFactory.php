@@ -24,16 +24,13 @@ class PostFactory extends Factory
     public function definition()
     {
         $forum = Forum::all()->random();
-        $pivot_table = $forum->forumable_type === 'tuition' ? 'tuition_students' : 'course_students';
-        $column_name = $forum->forumable_type === 'tuition' ? 'tuition_id' : 'course_id';
-        $response = DB::table('users')->selectRaw('users.*')->join($pivot_table,'users.id','=',$pivot_table.'.student_id')->where($column_name,'=',$forum->forumable_id)->get();
-        $student = $response->random();
+        $student = $forum->members->random();
         return [
             'title' => $this->faker->paragraph(1),
             'content' => $this->faker->paragraph(2),
-            'vote' => random_int(1,1000),
             'postable_id' => $forum->id,
-            'post_type' => $this->faker->randomElement(['post','question']),
+            // 'post_type' => $this->faker->randomElement(['post','question']),
+            'post_type' => 'post',
             'owner' => $student->id,
         ];
     }

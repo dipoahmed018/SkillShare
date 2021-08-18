@@ -75,6 +75,14 @@
                         </form>
                     </div>
                 @endcan
+                @can('purchase', $course)
+                    <div class="purchase col col-2">
+                        <form action={{route('purchase.course', ['course' => $course->id])}} method="post">
+                            @csrf
+                            <input type="submit" class="btn btn-success" value="purchase">
+                        </form>
+                    </div>
+                @endcan
                 <div id="introduction-upload-box" class="col col-md-6">
                     @can('update', $course)
                         <input accept=".mp4" required class="add-introduction one-click-upload" type="file" name="introduction"

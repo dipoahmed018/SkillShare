@@ -30,16 +30,6 @@ class ReferrelFactory extends Factory
             'exipres_at' => now()->addMonth(),
         ];
     }
-    public function tuition()
-    {
-        return $this->state(function (array $attributes){
-           $tuition = Tuition::all()->random();
-           return [
-               'item_id' => $tuition->id,
-               'item_type' => 'tuition'
-           ];
-        });
-    }
     public function course()
     {
         return $this->state(function (array $attributes){

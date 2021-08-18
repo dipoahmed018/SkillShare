@@ -1857,6 +1857,7 @@ window.onload = function () {
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.csrf = document.head.querySelector('meta[name="_token"]').content;
+window.stripe = Stripe("pk_test_51HtPQPHlj47rZntYuLzKWaYHnSxQHhFIQEwGXtyUPWXqNUh5EpMxRXqMMO0BzlhW8xa0Bz3d6uYU7AA7E28Cp7gH00XcKcyRX3");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector("meta[name='_token']").content;
 

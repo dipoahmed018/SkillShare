@@ -46,7 +46,6 @@ class CommentFactory extends Factory
         return [
             'content' => $this->faker->paragraph(1),
             'owner' => $owner,
-            'vote' => rand(1, 500),
             'commentable_id' => $owner_type_id,
             'commentable_type' => $owner_type,
         ];
@@ -56,7 +55,7 @@ class CommentFactory extends Factory
         return $this->state(function (array $attributes) {
             $owner = $attributes['owner'];
             $user = User::find($owner);
-            $forums = collect($user->tuitionForum()->with('posts.comments','questions.answers')->get());
+            $forums = collect($user->courseForum()->with('posts.comments','questions.answers')->get());
             $comments = $forums->pluck('posts')->collapse()->pluck('comments')->collapse();
             $answers = $forums->pluck('questions')->collapse()->pluck('answers')->collapse();
             $comment = $comments->concat($answers)->random();

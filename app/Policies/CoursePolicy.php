@@ -30,7 +30,7 @@ class CoursePolicy
     {
         // Log::channel('event')->info('from delete',[$course->owner_details]);
         // Log::channel('event')->info('from delete',[$user]);
-        return ($course->students->count() < 1 && $course->owner_details->id == $user->id);
+        return ($course->students->count() < 1 && $course->owner == $user->id);
     }
     public function tutorial(User $user, Course $course)
     {
@@ -38,6 +38,10 @@ class CoursePolicy
     }
     public function review(User $user, Course $course)
     {
-       return $course->students()->wherePivot('student_id','=', $user->id)->get()->count() > 0 && $course->review()->where('owner','=',$user->id)->count() < 1 && $user->id !== $course->owner_details;
+       return $course->students()->wherePivot('student_id','=', $user->id)->get()->count() > 0 && $course->review()->where('owner','=',$user->id)->count() < 1 && $user->id !== $course->owner;
+    }
+    public function purchase(User $user, Course $course)
+    {
+        return $course->owner !== $user->id && $user->email_verified_at !== null;
     }
 }

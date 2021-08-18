@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMessageTable extends Migration
+class CreateOrderDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateMessageTable extends Migration
      */
     public function up()
     {
-        Schema::create('message', function (Blueprint $table) {
+        Schema::create('order_details', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
-            $table->unsignedBigInteger('owner');
-            $table->unsignedbigInteger('receiver_id');
-            $table->enum('receiver_type',['user','group']);
+            $table->string('payment_intent');
+            $table->unsignedBigInteger('product_id');
+            $table->string('product_type');
+            $table->boolean('status');
             $table->timestamps();
-
-            $table->foreign('owner')->references('id')->on('users');
         });
     }
 
@@ -32,6 +30,6 @@ class CreateMessageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('message');
+        Schema::dropIfExists('order_details');
     }
 }
