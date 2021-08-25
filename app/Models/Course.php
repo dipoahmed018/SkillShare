@@ -64,4 +64,9 @@ class Course extends Model
             ->get();
         return $tutorial_details;
     }
+
+    public function is_student($user)
+    {
+        return $this->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0;
+    }
 }

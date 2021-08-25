@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Modal } from "bootstrap";
 import Popup from '../asset/PopupHandler'
+import { Image_picker, Filter_length, Inject_images } from '../asset/CkEditorHelper'
 require('../asset/CommentCreate')
 
 const csrf = document.head.querySelector("meta[name='_token']").content;
@@ -15,21 +16,27 @@ const posts_box = document.querySelector('.posts-box')
 const questions_box = document.querySelector('.questions-box')
 const popup = new Popup()
 const modal = new Modal(modal_element)
+
+//this images variable holds the images for post creation
 let images = {};
+
+//show the editor on button click and editor is the holder for ck editor instance
 let editor;
 create_post_button.addEventListener('click', () => {
     modal.show()
     document.getElementById('create-post').classList.remove('hide')
 })
 
+//create question for forum
 create_question_button.addEventListener('click', (e) => {
     const edit_box = document.getElementById('content')
     document.getElementById('create-question').classList.remove('hide')
     if (!editor) {
+        //make an instance of ck editor and assign it to edit_box inside dom and editor variable
         ClassicEditor.create(edit_box, {
             toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
             simpleUpload: {
-                uploadUrl: `https://skillshare.com/${forum.id}/save/image`,
+                uploadUrl: `/save/image`,
                 withCredentials: true,
                 headers: {
                     'X-CSRF-TOKEN': window.csrf,
@@ -40,7 +47,10 @@ create_question_button.addEventListener('click', (e) => {
     }
     modal.show()
 })
+
+//upload the images of post on change of file input
 post_image.addEventListener('change', (e) => {
+    //filter the data of image input
     if (e.target.files.length > 3) {
         popup.addPopup('You can not selecet more then 3 files')
         e.target.value = '';
@@ -57,7 +67,7 @@ post_image.addEventListener('change', (e) => {
         let form_data = new FormData()
         form_data.append('upload', image)
         axios({
-            url: `/save/post/image`,
+            url: `/save/image`,
             method: 'post',
             data: form_data,
         })
@@ -77,51 +87,41 @@ post_image.addEventListener('change', (e) => {
     })
 })
 close_modal.addEventListener('click', () => {
-    //clear up
+    //clear up the modal
     document.getElementById('create-question').classList.add('hide')
     document.getElementById('create-post').classList.add('hide')
     modal.hide()
 })
 document.getElementById('create-question').addEventListener('submit', (e) => {
-    // e.preventDefault()
-    const parser = new DOMParser().parseFromString(editor.getData(), 'text/html')
-    const images = parser.querySelectorAll('img')
-    if (images.length > 3) {
+    //parse the content of text editor to html for filtering and picking the image urls
+    const data = editor.getData()
+    const images = Image_picker(data)
+    const filter = Filter_length(data)
+    if (typeof images == 'object') {
+        Inject_images(images,'images', e.target)
+    }
+    if (typeof images == 'string') {
         e.preventDefault()
-        popup.addPopup('You can not upload more then 3 image')
-        return false;
+        popup.addPopup(images)
+        return false
     }
-    if (editor.getData().length > 1500) {
+    if (typeof filter == 'string') {
         e.preventDefault()
-        popup.addPopup('Question must be completed under 1000 charecters ')
-        return false;
+        popup.addPopup(filter)
+        return false
     }
-    if (images.length > 0) {
-        let srclist = document.createElement('input')
-        let sources = {}
-        srclist.type = 'hidden'
-        srclist.name = 'images'
-        images.forEach(element => {
-            const { src } = element
-            sources[Object.keys(sources).length + 1] = src
-        })
-        sources = JSON.stringify(sources)
-        srclist.value = sources
-        e.target.prepend(srclist)
-    }
-    console.log(images)
 })
 
 document.getElementById('create-post').addEventListener('submit', () => {
-    // e.preventDefault()
+    // on submit create a input for injecting the images urls to upload
     if (Object.keys(images).length > 0) {
         let srclist = document.createElement('input')
         srclist.type = 'hidden'
         srclist.name = 'images'
         srclist.value = JSON.stringify(images)
         document.getElementById('create-post').append(srclist)
+        images = {}
     }
-    console.log(images)
 })
 
 //show 

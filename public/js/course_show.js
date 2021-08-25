@@ -11652,7 +11652,7 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 /*!************************************************!*\
-  !*** ./resources/js/pagescript/course-show.js ***!
+  !*** ./resources/js/pagescript/course_show.js ***!
   \************************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");

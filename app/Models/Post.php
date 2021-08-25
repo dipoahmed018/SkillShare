@@ -22,17 +22,20 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
-    public function forum()
+    public function parent()
     {
+        if ($this->post_type == 'answer') {
+           return $this->belongsTo(Post::class, 'postable_id');
+        }
         return $this->belongsTo(Forum::class, 'postable_id');
     }
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'parent');
+        return $this->hasMany(Comment::class, 'commentable_id')->where('comment_type', '=', 'parent');
     }
     public function answers()
     {
-        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'answer');
+        return $this->hasMany(Post::class, 'postable_id')->where('post_type', '=', 'answer');
     }
     public function catagory()
     {
@@ -41,6 +44,10 @@ class Post extends Model
     public function allvote()
     {
         return $this->morphMany(Vote::class, 'voteable');
+    }
+    public function images()
+    {
+        return $this->morphMany(FileLink::class, 'fileable');
     }
     public function voted($id)
     {
@@ -53,4 +60,14 @@ class Post extends Model
         $decrement = $votes->where('vote_type', '=', 'decrement')->count();
         return $increment - $decrement;
     }
+    
+    public function getForum()
+    {
+        if ($this->post_type == 'answer') {
+            return Post::with('parent')->where('id',$this->postable_id)->get()->pluck('parent')->first();
+        } else {
+            return Forum::find($this->postable_id);
+        }
+    }
+    
 }

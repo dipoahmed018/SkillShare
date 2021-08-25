@@ -20,7 +20,7 @@ class CreatePostTable extends Migration
             $table->string('content')->nullable();
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('postable_id');
-            $table->enum('post_type',['question','post']);
+            $table->enum('post_type',['question','post','answer']);
             $table->unsignedBigInteger('answer')->nullable();
             $table->timestamps();
 

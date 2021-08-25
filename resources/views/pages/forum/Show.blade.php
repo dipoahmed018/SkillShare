@@ -19,7 +19,7 @@
                 </div>
                 <div class="modal-body">
                     <form class="forum-group hide"
-                        action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'post']) }}"
+                        action="{{ route('post.create', ['postable' => $forum->id, 'type' => 'post']) }}"
                         id="create-post" method="post">
                         @csrf
                         <label class="form-label" for="title">caption</label>
@@ -35,7 +35,7 @@
                         <input class="btn btn-success" type="submit" value="create">
                     </form>
                     <form class="form-group hide"
-                        action="{{ route('forum.post.create', ['forum' => $forum->id, 'type' => 'question']) }}"
+                        action="{{ route('post.create', ['postable' => $forum->id, 'type' => 'question']) }}"
                         id="create-question" method="post">
                         @csrf
                         <label for="title">Title</label>
@@ -104,5 +104,5 @@
     <script>
         const forum = @json($forum);
     </script>
-    <script src={{ asset('js/forum-show.js') }}></script>
+    <script src={{ asset('js/forum_show.js') }}></script>
 @endsection

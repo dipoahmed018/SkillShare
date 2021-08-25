@@ -97,7 +97,7 @@ class CourseController extends Controller
                 return abort($chunk->status, $chunk->message);
             }
             if ($file = $course->introduction) {
-                $file_path = assetToPath($file->file_link, '/' . $file->fileable_type);
+                $file_path = strstr($file->file_link, '/' . $file->fileable_type);
                 Storage::disk('public')->delete($file_path);
                 $file->delete();
             }

@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Comment;
-use Illuminate\Support\Facades\Storage;
 
 class Commentobserver
 {
@@ -37,6 +36,7 @@ class Commentobserver
      */
     public function deleted(Comment $comment)
     {
+        $comment->reply()->delete();
     }
 
     /**
@@ -59,13 +59,5 @@ class Commentobserver
     public function forceDeleted(Comment $comment)
     {
         //
-    }
-
-    public function deleting(Comment $comment)
-    {
-        foreach ($comment->reply as $key => $reply) {
-            $reply->delete();
-        }
-        Storage::deleteDirectory('/private/comment/'.$comment->id);
     }
 }

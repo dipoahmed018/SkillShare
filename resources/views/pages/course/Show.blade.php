@@ -203,5 +203,5 @@
             let course = @json($course);
         </script>
     @endif
-    <script src={{ asset('js/course-show.js') }}></script>
+    <script src={{ asset('js/course_show.js') }}></script>
 @endsection

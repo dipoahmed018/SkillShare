@@ -6,51 +6,68 @@ use App\Models\Post;
 use App\Models\Vote;
 use App\Models\Forum;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
+use App\Models\FileLink;
+use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
 class PostQuestionController extends Controller
 {
-    public function postCreate(Request $request, Forum $forum, $type)
+    public function postCreate(Request $request, $postable, $type)
     {
-        $request->validate(['title' => 'required|string|max:250|min:5']);
-        if ($request->user()->cannot('access', $forum) && $request->user()->cannot('update', $forum)) {
+        $request->validate([
+            'title' => 'string|max:250|min:5',
+            'content' => 'string|max:2500|min:5'
+        ]);
+        $postable = $type == 'answer' ? Post::findOrFail($postable) : Forum::findOrFail($postable);
+        if ($request->user()->cannot('access', $postable)) {
             return abort(401, 'you are Unautorized');
         }
-        // return $type;
-        if ($type !== "post" && $type !== "question") {
-            return abort(422, 'post type not supported must be post or question');
+        $types = ['question', 'answer', 'post'];
+        if (!in_array($type, $types)) {
+            return  abort(404);
+        }
+        if (!$request->title && !$request->content) {
+            return abort(422, ['error' => 'You must provide title or content']);
         }
         $post = Post::create([
-            'title' => $request->title,
-            'content' => $request->content ?? ($request->images ?? ($type == 'question' ? abort(422, 'please provide some content') : '')),
+            'title' => $request->title ? $request->title : null,
+            'content' => $request->content ?: ($request->images && $type == 'post' ? $request->images : null),
             'owner' => $request->user()->id,
-            'vote' => 0,
-            'postable_id' => $forum->id,
+            'postable_id' => $postable->id,
             'post_type' => $type,
             'answer' => 0,
         ]);
         if ($request->images) {
+
             $images = (json_decode($request->images, true));
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
-            Storage::makeDirectory('/private/post/' . $post->id);
             foreach ($images as $key => $url) {
-                $name = preg_replace('#.*image/#', '', $url, 1);
-                $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
-                $image = Image::make(storage_path('app/temp/' . $name));
+                //move the image to new file and convert it
+                $name = preg_replace('#.*name=#', '', $url, 1);
+                $path = storage_path("app/private/post/$name");
+                $image = Image::make(storage_path("app/temp/$name"));
                 $image->resize(800, null, function ($constraint) {
-                    $constraint->aspectRatio();
-                })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
-                Storage::delete('temp/' . $name);
-            };
-            $post->save();
-        }
-        return redirect('/show/forum/' . $forum->id);
+                        $constraint->aspectRatio();
+                    })->save($path, 80);
+                    Storage::delete('temp/' . $name);
+                    
+                    // make a FileLink
+                    FileLink::create([
+                            'file_name' => $name,
+                            'file_type' => 'post',
+                            'file_link' => "private/post/$name",
+                            'fileable_id' => $post->id,
+                            'fileable_type' => 'post',
+                            'secutity' => 'private',
+                        ]);
+                    };
+                    $post->save();
+                }
+                return redirect()->back();
     }
     public function postUpdate(Request $request, Post $post)
     {
@@ -59,56 +76,23 @@ class PostQuestionController extends Controller
         }
         $request->validate(['title' => 'string|max:250|min:5']);
         $post->title = $request->title ?? $post->title;
-        $post->post_type == 'post' ? ($post->content = $request->images ?? $post->content) : ($post->content = $request->content ?? $post->content);
+        $post->content =  $request->content ?: ($request->images && $post->post_type == 'post' ? $request->images : $post->content);
         if ($request->images) {
             $images = json_decode($request->images, true);
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
-            update_files($images, '/private/post/' . $post->id);
-            // foreach ($images as $key => $url) {
-            //     $name = preg_replace('#.*image/#', '', $url, 1);
-            //     $names->push($name);
-            //     $post->content = str_replace($name, $name . '/' . $post->id, $post->content);
-            //     if (!Storage::exists('/private/post/' . $name)) {
-            //         $image = Image::make(storage_path('app/temp/' . $name));
-            //         $image->resize(800, null, function ($constraint) {
-            //             $constraint->aspectRatio();
-            //         })->save(storage_path('app/private/post/' . $post->id . '/' . $name), 80);
-            //         Storage::delete('temp/' . $name);
-            //     }
-            // };
-            // $post->save();
+            $new_image_names = collect($images)->flatten()->map(fn($el) => preg_replace('/.*name=/','',$el));
+            $old_image_names = $post->images->pluck('file_link')->map(fn($el) => preg_replace('/.*post\//','',$el));
+            update_files($new_image_names, $old_image_names, 'private/post/');
         }
         $post->save();
-        return response($post, 200);
-    }
-    public function saveImage(Request $request, Forum $forum)
-    {
-        if ($request->file('upload')->getSize() / 1000 > 2000) {
-            return response()->json(['error' => ['message' => 'The image uploaded was too big. Image Must be under 2000kb']], 422);
-        }
-        if (!preg_match('#image/(png|jpg|jpeg)$#', $request->file('upload')->getMimeType())) {
-            return response()->json(['error' => ['message' => 'The provided file must be an image of jpg, jpeg or png type']], 422);
-        }
-        $extension = $request->file('upload')->getClientOriginalExtension();
-        $random_name = uniqid() . '.' . $extension;
-        $request->file('upload')->storeAs('temp/', $random_name);
-        return response()->json(['url' => 'https://skillshare.com/get/post/image/' . $random_name]);
-    }
-    public function getImage($name, $post = null)
-    {
-        if ($post && File::exists(storage_path('app/private/post/' . $post . '/' . $name))) {
-            return response()->file(storage_path('app/private/post/' . $post . '/' . $name), ['content-type' => 'image/*']);
-        } else if (File::exists(storage_path('app/temp/' . $name))) {
-            return response()->file(storage_path('app/temp/' . $name), ['content-type' => 'image/*']);
-        }
-        return response()->file(storage_path('app/private/post/default.JPG'), ['content-type' => 'image/*']);
+        return redirect()->back();
     }
 
     public function getQuestion(Request $request, Post $question)
     {
-        if (!$request->user()->canany(['access', 'update'], $question->forum)) {
+        if ($request->user()->cannot('access', $question->parent)) {
             return abort(401, 'You are unauthorized');
         }
         if ($question->post_type == 'post') {

@@ -27,17 +27,8 @@ class PostPolicy
     }
     public function access(User $user, Post $post)
     {
-        $student = $post->forum()->with([
-            'members' => function ($query) use ($user) {
-                $query->where('student_id', $user->id);
-            },
-            'owner_details' => function ($query) use ($user) {
-                $query->where('id', $user->id);
-            }
-        ])->get();
-        if ($student->pluck('members')->first() || $student->pluck('owner_details')->first()) {
-            return true;
-        }
-        return false;
+        $forum = $post->getForum();
+        $student = $forum->members()->where('student_id',$user->id)->first();
+        return $forum->owner == $user->id || $student ? true : false;
     }
 }

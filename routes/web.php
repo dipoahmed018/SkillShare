@@ -5,12 +5,14 @@ use App\Models\Catagory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
-use App\Http\Controllers\Forum\CommentAnswerController;
+use App\Http\Controllers\Files\ImageController;
+use App\Http\Controllers\Forum\CommentController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Http\Controllers\Transaction\BuycourseController;
 use App\Models\Forum;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,7 +105,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/edit/forum/{forum}', [ForumController::class, 'updateForumDetails'])->name('update.forum');
 
         //post
-        Route::post('/{forum}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('forum.post.create');
+        Route::post('/{postable}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('post.create');
+        Route::put('/post/edit/{post}', [PostQuestionController::class, 'postUpdate'])->name('post.edit');
         Route::post('/save/post/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
         Route::get('/get/post/image/{name}/{post?}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
 
@@ -114,15 +117,17 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/{post}/post/delete', [PostQuestionController::class, 'deletePost'])->name('post.delete');
 
         //comment
-        Route::post('/comment/create', [CommentAnswerController::class, 'commentCreate'])->name('comment.create');
-        Route::put('/{comment}/comment/update', [CommentAnswerController::class, 'updateComment'])->name('comment.update');
-        Route::delete('/{comment}/comment/delete', [CommentAnswerController::class, 'deleteComment'])->name('comment.delete');
-        Route::post('/{comment}/comment/update/vote', [CommentAnswerController::class, 'updateVote'])->name('comment.update.vote');
-        Route::post('/save/comment/image', [CommentAnswerController::class, 'saveCommentImage'])->name('comment.image.save');
-        Route::get('/get/comment/image/{name}/{comment?}', [CommentAnswerController::class, 'getCommentImage'])->name('comment.image.get');
-
+        Route::post('/comment/create', [CommentController::class, 'commentCreate'])->name('comment.create');
+        Route::put('/{comment}/comment/update', [CommentController::class, 'updateComment'])->name('comment.update');
+        Route::delete('/{comment}/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
+        Route::post('/{comment}/comment/update/vote', [CommentController::class, 'updateVote'])->name('comment.update.vote');
+        
         //
         Route::post('/purchase/course/{course}', [BuycourseController::class, 'buy_course'])->name('purchase.course');
+
+        //images control
+        Route::post('/save/image', fn(Request $request) => saveImage($request->file('upload'), env('APP_URL')."/get/image"))->name('save.image');
+        Route::get('/get/image', fn(Request $request) => getImage($request->name))->name('get.image');
     });
 });
 

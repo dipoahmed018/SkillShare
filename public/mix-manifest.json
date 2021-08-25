@@ -2,8 +2,9 @@
     "/js/app.js": "/js/app.js",
     "/js/profile_update.js": "/js/profile_update.js",
     "/js/dashboard.js": "/js/dashboard.js",
-    "/js/course-show.js": "/js/course-show.js",
-    "/js/forum-show.js": "/js/forum-show.js",
+    "/js/course_show.js": "/js/course_show.js",
+    "/js/forum_show.js": "/js/forum_show.js",
     "/js/forum_edit.js": "/js/forum_edit.js",
+    "/js/post_edit.js": "/js/post_edit.js",
     "/css/app.css": "/css/app.css"
 }

@@ -23,45 +23,34 @@ class CommentFactory extends Factory
      *
      * @return array
      */
-    public function configure()
-    {
-        return $this->afterCreating(function (Comment $comment) {
-            if ($comment->commentable_type !== 'reply') {
-                $post =  $comment->parent;
-                if ($post->answer == null) {
-                    $post->answer = $comment->id;
-                    $post->save();
-                }
-            }
-        });
-    }
     public function definition()
     {
-        $post = Post::all()->random();
-        $owner_type = null;
-        $owner_type_id = null;
-        $owner = collect(Forum::find($post->postable_id)->members)->random()->id;
-        $owner_type = $this->faker->randomElement(['parent', 'answer']);
-        $owner_type_id = $post->id;
         return [
             'content' => $this->faker->paragraph(1),
-            'owner' => $owner,
-            'commentable_id' => $owner_type_id,
-            'commentable_type' => $owner_type,
         ];
     }
     public function reply()
     {
         return $this->state(function (array $attributes) {
-            $owner = $attributes['owner'];
-            $user = User::find($owner);
-            $forums = collect($user->courseForum()->with('posts.comments','questions.answers')->get());
-            $comments = $forums->pluck('posts')->collapse()->pluck('comments')->collapse();
-            $answers = $forums->pluck('questions')->collapse()->pluck('answers')->collapse();
-            $comment = $comments->concat($answers)->random();
+            $user = User::has('courseForum')->get()->random();
+            $forums = collect($user->courseForum()->with('posts.comments')->get());
+            $comment = $forums->pluck('posts')->collapse()->pluck('comments')->collapse()->random()->id;
             return [
-                'commentable_id' => $comment->id,
-                'commentable_type' => 'reply',
+                'owner' => $user->id,
+                'commentable_id' => $comment,
+                'comment_type' => 'reply',
+            ];
+        });
+    }
+    public function parent()
+    {
+        return $this->state(function (array $attributes) {
+            $user = User::has('courseForum')->get()->random();
+            $post = $user->courseForum()->with('posts')->get()->pluck('posts')->collapse()->random();
+            return [
+                'owner' => $user->id,
+                'commentable_id' => $post->id,
+                'comment_type' => 'parent',
             ];
         });
     }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class FileLink extends Model
 {
@@ -27,4 +28,5 @@ class FileLink extends Model
     {
         return $this->morphTo('fileable','fileable_type','fileable_id');
     }
+    
 }

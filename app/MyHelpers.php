@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\FileLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -7,14 +8,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
-
-if (!function_exists('assetToPath')) {
-    function assetToPath(string $link, string $from)
-    {
-        $path = strstr($link, $from);
-        return $path;
-    }
-}
 
 if (!function_exists('blobConvert')) {
     function blobConvert($file)
@@ -106,8 +99,9 @@ if (!function_exists('chunkUpload')) {
     }
 }
 
+//save image in temp directory
 if (!function_exists('saveImage')) {
-    function saveImage($file, $url)
+    function saveImage($file, $url, $directory = 'temp/')
     {
         if ($file->getSize() / 1000 > 2000) {
             return response()->json(['error' => ['message' => 'The image uploaded was too big. Image Must be under 2000kb']], 422);
@@ -116,54 +110,43 @@ if (!function_exists('saveImage')) {
             return response()->json(['error' => ['message' => 'The provided file must be an image of jpg, jpeg or png type']], 422);
         }
         $extension = $file->getClientOriginalExtension();
-        $random_name = uniqid() . '.' . $extension;
-        $file->storeAs('temp/', $random_name);
-        return response()->json(['url' => $url . $random_name ?? 'https://skillshare.com/temp/' . $random_name]);
+        $random_name = uniqid() . ".$extension";
+        $file->storeAs($directory, $random_name);
+        return response()->json(['url' =>  "$url?name=$random_name"], 200);
     }
 }
-
-if (!function_exists('deleteFilesBut')) {
-    function deleteFileBut($directory, $files)
+if (!function_exists("getImage")) {
+    function getImage($name)
     {
-        Log::channel('event')->info('i was here');
-        $destination = collect(Storage::files($directory));
-        foreach ($destination as $key => $exist_path) {
-            $exists = false;
-            foreach ($files as $key => $name) {
-                if ($exist_path == $directory . '/' . $name) {
-                    $exists = true;
-                    break;
-                } else {
-                    $exists = false;
-                }
+        $file_details = FileLink::where('file_name', $name)->first();
+        if ($file_details) {
+            $owner_table = $file_details->owner;
+            if (request()->user()->cannot('access', $owner_table)) {
+                return abort(403, 'you are not allowed to access this file');
             }
-            if (!$exists) {
-                Storage::delete($exist_path);
-            }
+            $path = Storage::path($file_details->file_link);
+            return response()->file($path);
+        } else if (Storage::exists("temp/$name")) {
+            return response()->file(Storage::path("temp/$name"));
         }
+        return response('your requested file does not exists', 404);
     }
 }
 
-if (function_exists('update_files')) {
-    function update_files($files, $directory)
+if (!function_exists('update_files')) {
+    function update_files($new, $old, $destination)
     {
-        Storage::makeDirectory($directory . '-temp');
-        $temp_directory = $directory . '-temp';
-        foreach ($files as $key => $url) {
-            $name = preg_replace('#.*image/#', '', $url, 1);
-            //save temp image
-            if (!Storage::exists($directory . $name) && Storage::exists('/temp//' . $name)) {
-                $image = Image::make(storage_path('app/temp/' . $name));
+        $delete = $new->diff($old);
+        $add = $old->diff($new);
+        $delete->each(fn ($name) => Storage::delete($destination . $name));
+        $add->each(function ($name) use ($destination) {
+            if (Storage::exists("temp/$name")) {
+                $image = Image::make(Storage::path($destination . $name));
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
-                })->save(storage_path($temp_directory . '/' . $name), 80);
-                Storage::delete('temp/' . $name);
-            } else if(Storage::exists($directory . '/' . $name)){
-                Storage::move($directory . '/' . $name, $temp_directory . '/' . $name);
+                })->save(Storage::path("temp/$name"), 80);
+                Storage::delete("temp/$name");
             }
-        }
-        Storage::delete($directory);
-        rename(storage_path('app'.$temp_directory), storage_path('app'. $directory));
-        return true;
+        });
     }
 }

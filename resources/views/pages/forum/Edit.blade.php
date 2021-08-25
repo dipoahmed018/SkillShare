@@ -45,5 +45,5 @@
     <script>
         let forum_details = @json($forum);
     </script>
-    <script src={{ asset('./js/forum_edit.js') }}></script>
+    <script src={{ asset('js/forum_edit.js') }}></script>
 @endsection

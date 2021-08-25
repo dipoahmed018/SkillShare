@@ -78,7 +78,7 @@ class VideoStream
             fseek($this->stream, $this->start);
             header('HTTP/1.1 206 Partial Content');
             header("Content-Length: ".$length);
-            header("Content-Range: bytes $this->start-$this->end/".$this->size);
+            header("Content-Range: bytes $this->start-$this->end/$this->size");
         }
         else
         {

@@ -5,7 +5,6 @@ const comment_edit_box = document.getElementById('comment-content')
 const error = document.querySelector('.comment-error');
 const comment_form = document.getElementById('create-comment-form')
 const edit_buttons = document.querySelectorAll('.edit-comment')
-console.log(edit_buttons)
 const create_comment = document.querySelectorAll('.create-comment')
 const close_modal = document.querySelectorAll('.close-comment-modal')
 //unique identifier 
@@ -33,9 +32,9 @@ const modal_opener = (e) => {
     action = e.target.getAttribute('data-bs-action')
     if (action == 'create') {
         comment_editor.setData('');
-        url = `https://skillshare.com/comment/create`
+        url = `/comment/create`
     } else {
-        url = `https://skillshare.com/${comment_id}/comment/update`
+        url = `/${comment_id}/comment/update`
         content = document.getElementById(`${comment_id}-comment-wrapper`).querySelector('.content').innerHTML
         comment_editor.setData(content)
     }
@@ -43,14 +42,16 @@ const modal_opener = (e) => {
 }
 comment_form.addEventListener('submit', (e) => {
     e.preventDefault()
-    console.log(url)
+    //sources is the object for storing the image urls
     let sources = {}
     if (comment_editor) {
+        //fiter and pick the images from the content of comment_editor
         const data = comment_editor.getData()
         if (data.length < 1) {
             error.innerHTML = 'content must not be empty'
             return;
         }
+
         const parser = new DOMParser().parseFromString(data, 'text/html')
         const images = parser.querySelectorAll('img')
         if (images.length > 3) {
@@ -72,7 +73,10 @@ comment_form.addEventListener('submit', (e) => {
             sources = null
         }
     }
+    //form_data is the object that is sent to server
     let form_data = {}
+
+    //change details of form_data based on action type
     if (action == 'create') {
         form_data['type'] = comment_type
         sources ? form_data['images'] = sources : null
@@ -84,6 +88,7 @@ comment_form.addEventListener('submit', (e) => {
         form_data['content'] = comment_editor.getData()
     }
     form_data = JSON.stringify(form_data)
+    //make the request to server
     fetch(url, {
         method: action == 'create' ? 'POST' : 'PUT',
         body: form_data,
@@ -97,12 +102,17 @@ comment_form.addEventListener('submit', (e) => {
         })
         .catch(err => console.log(err))
 
+    //hide the modal 
     comment_modal.hide()
 })
+
+//update commentbox inside dom
 const update_comment = (comment) => {
     const box = document.getElementById(`${comment.id}-comment-wrapper`)
     box.querySelector('.content').innerHTML = comment.content
 }
+
+//comment tamplate creator and attaching it to dom
 const attach = (comment) => {
     const box = document.getElementById(`${comment.commentable_type == 'reply' ? comment.commentable_id : commentable_id}-comment-box`)
     const wrapper = document.querySelector('.tamplate-comment').cloneNode(true)
@@ -128,13 +138,34 @@ const attach = (comment) => {
     delete_comment.addEventListener('click', (e) => comment_deleter(e))
     edit_comment.addEventListener('click', (e) => modal_opener(e))
 }
+
+//set event listener to all the delete buttons for deleting a comment
+document.querySelectorAll('.delete-comment').forEach((element) => {
+    element.addEventListener('click', (e) => comment_deleter(e))
+})
+
+//delete a comment
+const comment_deleter = (e) => {
+    const id = e.target.getAttribute('data-comment-id')
+    fetch(`/${id}/comment/delete`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': window.csrf
+        }
+    }).then(res => document.getElementById(`${id}-comment-wrapper`).remove())
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+//initializeing the editor box and setting it to a veriable so it can be accessabele throughout the script
 document.addEventListener('DOMContentLoaded', () => {
     ClassicEditor.create(comment_edit_box, {
         toolbar: ['undo', 'redo', '|', 'bold', 'italic',
             'blockQuote', '|', 'ImageUpload'
         ],
         simpleUpload: {
-            uploadUrl: `https://skillshare.com/save/comment/image`,
+            uploadUrl: `/save/comment/image`,
             withCredentials: true,
             headers: {
                 'X-CSRF-TOKEN': window.csrf,
@@ -145,19 +176,3 @@ document.addEventListener('DOMContentLoaded', () => {
     })
         .catch(error => console.log(error))
 })
-
-document.querySelectorAll('.delete-comment').forEach((element) => {
-    element.addEventListener('click', (e) => comment_deleter(e))
-})
-const comment_deleter = (e) => {
-    const id = e.target.getAttribute('data-comment-id')
-    fetch(`/${id}/comment/delete`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': window.csrf
-        }
-    }).then(res => document.getElementById(`${id}-comment-wrapper`).remove())
-        .catch(err => {
-            console.log(err)
-        })
-}

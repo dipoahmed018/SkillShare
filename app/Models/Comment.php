@@ -14,7 +14,7 @@ class Comment extends Model
         'owner',
         'vote',
         'commentable_id',
-        'commentable_type',
+        'comment_type',
 
     ];
     public function owner_details()
@@ -23,11 +23,11 @@ class Comment extends Model
     }
     public function reply()
     {
-        return $this->hasMany(Comment::class, 'commentable_id')->where('commentable_type', '=', 'reply');
+        return $this->hasMany(Comment::class, 'commentable_id')->where('comment_type', '=', 'reply');
     }
     public function parent()
     {
-        if ($this->commentable_type == 'reply') {
+        if ($this->comment_type == 'reply') {
             return $this->belongsTo(Comment::class, 'commentable_id');
         } else {
             return $this->belongsTo(Post::class, 'commentable_id');
@@ -43,7 +43,7 @@ class Comment extends Model
     }
     public function getPost()
     {
-        if ($this->commentable_type == 'reply') {
+        if ($this->comment_type == 'reply') {
             return Comment::with('parent')->where('id',$this->commentable_id)->get()->pluck('parent')->first();
         } else {
             return Post::find($this->commentable_id);

@@ -22,19 +22,15 @@ class CoursePolicy
     }
     public function update(User $user, Course $course)
     {
-        // Log::channel('event')->info('form update',[$course->owner_details]);
-        // Log::channel('event')->info('form update',[$user->id]);
         return $user->id === $course->owner_details->id;
     }
     public function delete(User $user, Course $course)
     {
-        // Log::channel('event')->info('from delete',[$course->owner_details]);
-        // Log::channel('event')->info('from delete',[$user]);
         return ($course->students->count() < 1 && $course->owner == $user->id);
     }
     public function tutorial(User $user, Course $course)
     {
-        return $course->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0;
+        return $course->is_student($user);
     }
     public function review(User $user, Course $course)
     {
@@ -42,6 +38,6 @@ class CoursePolicy
     }
     public function purchase(User $user, Course $course)
     {
-        return $course->owner !== $user->id && $user->email_verified_at !== null;
+        return $course->owner !== $user->id && $user->email_verified_at !== null && !$course->is_student($user);
     }
 }

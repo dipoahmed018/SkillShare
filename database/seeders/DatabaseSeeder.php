@@ -41,18 +41,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->count(10)->create();
         Course::factory()->count(10)->create();
 
-        Post::factory()->count(80)
-            ->has(
-                Comment::factory()
-                    ->count(8)
-                    ->state(function (array $attributes, Post $post) {
-                        return [
-                            'commentable_id' => $post->id,
-                        ];
-                    }),
-                'comments'
-            )->create();
-        Comment::factory()->count(8)->reply()->create();
+        Post::factory()->count(80)->create();
+        Comment::factory()->count(20)->parent()->create();
+        Comment::factory()->count(50)->reply()->create();
         Notification::factory()->count(50)->create();
         Review::factory()->count(30)->course()->create();
         Review::factory()->count(30)->reply()->create();

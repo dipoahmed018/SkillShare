@@ -11,10 +11,10 @@ class QuestionShow extends Component
      *
      * @return void
      */
-    public $question;
-    public function __construct($question)
+    public $post;
+    public function __construct($post)
     {
-        $this->question = $question;
+        $this->post = $post;
     }
 
     /**
@@ -24,6 +24,6 @@ class QuestionShow extends Component
      */
     public function render()
     {
-        return view('Components.question-show');
+        return view('Components.QNA-show');
     }
 }

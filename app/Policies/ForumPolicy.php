@@ -24,8 +24,7 @@ class ForumPolicy
     {
         $parent = $forum->forum_type;
         $students = $parent->students->where('id','=',$user->id)->pluck('id');
-        // Log::channel('event')->info($user->count, ['i was here']);
-        return $students->count() > 0;
+        return $students->count() > 0 || $forum->owner == $user->id;
     }
     public function update(User $user, Forum $forum)
     {

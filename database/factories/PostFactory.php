@@ -29,8 +29,7 @@ class PostFactory extends Factory
             'title' => $this->faker->paragraph(1),
             'content' => $this->faker->paragraph(2),
             'postable_id' => $forum->id,
-            // 'post_type' => $this->faker->randomElement(['post','question']),
-            'post_type' => 'post',
+            'post_type' => $this->faker->randomElement(['post','question','answer']),
             'owner' => $student->id,
         ];
     }
