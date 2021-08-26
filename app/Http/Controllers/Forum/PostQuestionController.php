@@ -51,23 +51,23 @@ class PostQuestionController extends Controller
                 $path = storage_path("app/private/post/$name");
                 $image = Image::make(storage_path("app/temp/$name"));
                 $image->resize(800, null, function ($constraint) {
-                        $constraint->aspectRatio();
-                    })->save($path, 80);
-                    Storage::delete('temp/' . $name);
-                    
-                    // make a FileLink
-                    FileLink::create([
-                            'file_name' => $name,
-                            'file_type' => 'post',
-                            'file_link' => "private/post/$name",
-                            'fileable_id' => $post->id,
-                            'fileable_type' => 'post',
-                            'secutity' => 'private',
-                        ]);
-                    };
-                    $post->save();
-                }
-                return redirect()->back();
+                    $constraint->aspectRatio();
+                })->save($path, 80);
+                Storage::delete('temp/' . $name);
+
+                // make a FileLink
+                FileLink::create([
+                    'file_name' => $name,
+                    'file_type' => 'post',
+                    'file_link' => "private/post/$name",
+                    'fileable_id' => $post->id,
+                    'fileable_type' => 'post',
+                    'secutity' => 'private',
+                ]);
+            };
+            $post->save();
+        }
+        return redirect()->back();
     }
     public function postUpdate(Request $request, Post $post)
     {
@@ -82,8 +82,8 @@ class PostQuestionController extends Controller
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
-            $new_image_names = collect($images)->flatten()->map(fn($el) => preg_replace('/.*name=/','',$el));
-            $old_image_names = $post->images->pluck('file_link')->map(fn($el) => preg_replace('/.*post\//','',$el));
+            $new_image_names = collect($images)->flatten()->map(fn ($el) => preg_replace('/.*name=/', '', $el));
+            $old_image_names = $post->images->pluck('file_link')->map(fn ($el) => preg_replace('/.*post\//', '', $el));
             update_files($new_image_names, $old_image_names, 'private/post/');
         }
         $post->save();
@@ -114,15 +114,20 @@ class PostQuestionController extends Controller
             if ($vote = $post->voted($request->user()->id)) {
                 $request->method == 'decrement' ? $vote->delete() : $vote;
             } else {
-                $request->method == 'decrement' ? abort(404, 'vote not found') : $post->allvote()->save(new Vote([
+                $request->method == 'decrement' ? abort(422, 'vote not found') : $post->allvote()->save(new Vote([
                     'vote_type' => 'increment',
                     'voter_id' => $request->user()->id
                 ]));
             };
         }
-        if ($post->post_type == 'question') {
+        if ($post->post_type !== 'post') {
             if ($vote = $post->voted($request->user()->id)) {
-                $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+                //need workd
+                if ($vote->vote_type == 'decrement') {
+                    $request->method == 'decrement' ? $vote->delete() : $vote->save(['vote_type' => 'increment']);
+                } else {
+                    $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+                }
             } else {
                 if ($request->method == 'decrement') {
                     $post->allvote()->save(new Vote([
@@ -141,11 +146,24 @@ class PostQuestionController extends Controller
         return response($post->voteCount(), 200);
     }
 
+    public function acceptAnswer(Request $request, Post $postable, Post $answer)
+    {
+        $user = $request->user();
+
+        if ($user->cannot()->update($postable) || !$postable->answers()->where('id', $answer->id)->first()) {
+            return abort(401, 'You are not allowed to update this post');
+        }
+        $postable->answer = $answer->id;
+        $postable->save();
+        return redirect()->back();
+    }
+
     public function deletePost(Request $request, Post $post)
     {
         if ($request->user()->cannot('update', $post)) {
             return abort(401, 'unauthorized');
         }
-        return $post->delete();
+        $post->delete();
+        redirect()->back();
     }
 }

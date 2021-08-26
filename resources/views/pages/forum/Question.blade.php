@@ -10,8 +10,8 @@
                 <div class="modal-body">
                     <form id="edit-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}" method="post">
                         @csrf
-                        <textarea name="content" id="answer-content" cols="30" rows="10"></textarea>
-                        <input type="submit" value="create answer">
+                        <textarea name="content" id="answer-editor-box" cols="30" rows="10"></textarea>
+                        <input id="answer-submit" type="submit" value="create answer">
                     </form>
                 </div>
             </div>
@@ -23,9 +23,9 @@
                 id="edit-question">
                 @csrf
                 @method('put')
-                <label for="title">title</label><br>
-                <input class="form-control" type="text" name="title" id="title" value="{{ $question->title }}"><br>
-                <textarea name="content" id="question-content" cols="30" rows="10"></textarea>
+                <label for="question-title">title</label><br>
+                <input class="form-control" type="text" name="title" id="question-title" value="{{ $question->title }}"><br>
+                <textarea name="content" id="question-editor-box" cols="30" rows="10"></textarea>
                 <input type="submit" value="update">
                 <button id="preview-question-button">preview</button>
             </form>
@@ -34,7 +34,7 @@
             <x-QNA-show :post="$question"></x-question-show>
         </div>
         {{-- answer editor modal show button--}}
-        <button id="create-answer" data-bs-type="create-answer" class="btn btn-success post-editor">create answer</button>
+        <button id="answer-create" data-bs-type="create-answer" class="btn btn-success">create answer</button>
 
         <div class="col col-12 answers-box">
             @foreach ($question->answers as $answer)
@@ -48,7 +48,6 @@
     <script>
         const question = @json($question);
         const answers = @json($question->answers);
-        console.log(answers);
     </script>
     <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
     <script src="{{ asset('js/post_edit.js') }}"></script>

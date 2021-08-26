@@ -67,7 +67,7 @@ class CommentController extends Controller
             return abort(401, 'unautorized');
         }
         $request->validate(['method' => 'required|in:increment,decrement']);
-        if ($comment->commentable_type == 'parent' || 'reply') {
+        if ($comment) {
             if ($vote = $comment->voted($request->user()->id)) {
                 return $request->method == 'decrement' ? $vote->delete() : $vote;
             } else {
@@ -77,23 +77,8 @@ class CommentController extends Controller
                 ]));
             };
         }
-        if ($comment->commentable_type == 'answer') {
-            if ($vote = $comment->voted($request->user()->id)) {
-                return $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
-            } else {
-                if ($request->method == 'decrement') {
-                    $comment->allvote()->save(new Vote([
-                        'vote_type' => 'decrement',
-                        'voter_id' => $request->user()->id
-                    ]));
-                } else {
-                    $comment->allvote()->save(new Vote([
-                        'vote_type' => 'increment',
-                        'voter_id' => $request->user()->id
-                    ]));
-                }
-            };
-        }
         return response('something went wrong', 500);
     }
+
+
 }
