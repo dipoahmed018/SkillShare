@@ -123,11 +123,11 @@ class PostQuestionController extends Controller
         if ($post->post_type !== 'post') {
             if ($vote = $post->voted($request->user()->id)) {
                 //need workd
-                if ($vote->vote_type == 'decrement') {
-                    $request->method == 'decrement' ? $vote->delete() : $vote->save(['vote_type' => 'increment']);
-                } else {
-                    $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+                if ($vote->vote_type == $request->vote_type) {
+                    $vote->delete();
+                    return true;
                 }
+                $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
             } else {
                 if ($request->method == 'decrement') {
                     $post->allvote()->save(new Vote([
