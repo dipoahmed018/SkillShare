@@ -113,7 +113,8 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
 
-        Route::post('/{post}/post/update/vote', [PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+        Route::put('/{post}/post/vote', [PostQuestionController::class, 'updateVote'])->name('post.update.vote');
+        Route::put('/{post}/post/answer', [PostQuestionController::class, 'acceptAnswer'])->name('post.update.answer');
         Route::delete('/{post}/post/delete', [PostQuestionController::class, 'deletePost'])->name('post.delete');
 
         //comment

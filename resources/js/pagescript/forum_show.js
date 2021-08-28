@@ -97,7 +97,7 @@ document.getElementById('create-question').addEventListener('submit', (e) => {
     const data = editor.getData()
     const images = Image_picker(data)
     const filter = Filter_length(data)
-    if (typeof images == 'object') {
+    if (typeof images == 'object' && images) {
         Inject_images(images,'images', e.target)
     }
     if (typeof images == 'string') {

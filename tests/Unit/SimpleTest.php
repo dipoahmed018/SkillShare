@@ -16,11 +16,14 @@ use Tests\TestCase;
 
 use function PHPUnit\Framework\assertTrue;
 
-class SimpleTest extends TestCase 
+class SimpleTest extends TestCase
 {
-    function test_simple(){
-    //   $post = Post::find(1);
-    //   dump($post->getForum()->id);
-    //   assertTrue(true);
+    function test_simple()
+    {
+        $post = Post::find(28);
+        $votes  = $post->allVote;
+        $count = $votes->where('vote_type','increment')->count() - $votes->where('vote_type', 'decrement')->count();
+        dump($count);
+        assertTrue(true);
     }
 }

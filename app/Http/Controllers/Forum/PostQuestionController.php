@@ -39,9 +39,7 @@ class PostQuestionController extends Controller
             'post_type' => $type,
             'answer' => 0,
         ]);
-        if ($request->images) {
-
-            $images = (json_decode($request->images, true));
+        if ($images = json_decode($request->images, true)) {
             if (count($images) > 3) {
                 return abort(422, 'You can not upload more than 4 image');
             }
@@ -99,6 +97,7 @@ class PostQuestionController extends Controller
             return abort(422, 'question not available');
         }
         $question->owner_details;
+        $question->voted = $question->voted($request->user()->id);
         return view('pages/forum/Question', ['question' => $question, 'answers' => $question->answers]);
     }
     public function getPost(Request $request, Post $post)
@@ -109,12 +108,14 @@ class PostQuestionController extends Controller
         if ($request->user()->cannot('access', $post)) {
             return abort(401, 'unautorized');
         }
-        $request->validate(['method' => 'required|in:increment,decrement']);
+
+        $request->validate(['type' => 'required|in:increment,decrement']);
         if ($post->post_type == 'post') {
             if ($vote = $post->voted($request->user()->id)) {
-                $request->method == 'decrement' ? $vote->delete() : $vote;
+                $request->type == 'decrement' ? $vote->delete() : $vote;
+                return response()->json(['votes' => $post->voteCount(), 'type' => 'remove']);
             } else {
-                $request->method == 'decrement' ? abort(422, 'vote not found') : $post->allvote()->save(new Vote([
+                $request->type == 'decrement' ? abort(422, 'vote not found') : $post->allvote()->save(new Vote([
                     'vote_type' => 'increment',
                     'voter_id' => $request->user()->id
                 ]));
@@ -123,13 +124,15 @@ class PostQuestionController extends Controller
         if ($post->post_type !== 'post') {
             if ($vote = $post->voted($request->user()->id)) {
                 //need workd
-                if ($vote->vote_type == $request->vote_type) {
+                if ($vote->vote_type == $request->type) {
                     $vote->delete();
-                    return true;
+                    return response()->json(['votes' => $post->voteCount(), 'type' => 'remove']);
                 }
-                $request->method == 'decrement' ? $vote->save(['vote_type' => 'decrement']) : $vote->save(['vote_type' => 'increment']);
+                $request->type == 'decrement' ? $vote->vote_type = 'decrement' : $vote->vote_type = 'increment';
+                $vote->save();
             } else {
-                if ($request->method == 'decrement') {
+                // return 'not found';
+                if ($request->type == 'decrement') {
                     $post->allvote()->save(new Vote([
                         'vote_type' => 'decrement',
                         'voter_id' => $request->user()->id
@@ -142,20 +145,32 @@ class PostQuestionController extends Controller
                 }
             };
         }
-
-        return response($post->voteCount(), 200);
+        return response()->json(['votes' => $post->voteCount(), 'type' => $request->type]);
     }
 
-    public function acceptAnswer(Request $request, Post $postable, Post $answer)
+    public function acceptAnswer(Request $request, Post $post)
     {
+        return $request->ip();
         $user = $request->user();
-
-        if ($user->cannot()->update($postable) || !$postable->answers()->where('id', $answer->id)->first()) {
+        if ($post->post_type !== 'answer') {
+            return abort(404, 'answer not found');
+        }
+        $postable = $post->parent;
+        if ($user->cannot('update', $postable)) {
             return abort(401, 'You are not allowed to update this post');
         }
-        $postable->answer = $answer->id;
-        $postable->save();
-        return redirect()->back();
+
+        //toggle post answer 
+        if ($postable->answer == $post->id) {
+            $postable->answer = null;
+            $post->save();
+        
+        //change post answer
+        } else {
+            $postable->answer = $post->id;
+            $postable->save();
+        }
+        return true;
     }
 
     public function deletePost(Request $request, Post $post)
@@ -164,6 +179,6 @@ class PostQuestionController extends Controller
             return abort(401, 'unauthorized');
         }
         $post->delete();
-        redirect()->back();
+        return redirect()->back();
     }
 }

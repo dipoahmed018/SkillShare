@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Post extends Model
 {
@@ -25,7 +26,7 @@ class Post extends Model
     public function parent()
     {
         if ($this->post_type == 'answer') {
-           return $this->belongsTo(Post::class, 'postable_id');
+            return $this->belongsTo(Post::class, 'postable_id');
         }
         return $this->belongsTo(Forum::class, 'postable_id');
     }
@@ -56,18 +57,26 @@ class Post extends Model
     public function voteCount()
     {
         $votes = $this->allvote;
-        $increment = $votes->where('vote_type', '=', 'increment')->count();
-        $decrement = $votes->where('vote_type', '=', 'decrement')->count();
+        $increment = $votes->where('vote_type', 'increment')->count();
+        $decrement = $votes->where('vote_type', 'decrement')->count();
         return $increment - $decrement;
     }
-    
+
     public function getForum()
     {
         if ($this->post_type == 'answer') {
-            return Post::with('parent')->where('id',$this->postable_id)->get()->pluck('parent')->first();
+            return Post::with('parent')->where('id', $this->postable_id)->get()->pluck('parent')->first();
         } else {
             return Forum::find($this->postable_id);
         }
     }
-    
+
+    public function answerdByMe()
+    {
+        if ($this->post_type == 'answer') {
+            $postable = Post::find($this->postable_id);
+            return $postable->answer == $this->id;
+        }
+        return false;
+    }
 }

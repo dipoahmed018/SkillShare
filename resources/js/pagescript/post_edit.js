@@ -3,10 +3,12 @@ import { Modal } from 'bootstrap'
 
 let question_editor;
 let answer_editor;
+const accept_answer = document.querySelectorAll('.accept-answer')
 const answer_create_btn = document.getElementById('answer-create')
 const answer_edit_btn = document.querySelectorAll('.answer-edit')
 const answer_editor_box = document.querySelector('#answer-editor-box')
 const answer_forum = document.getElementById('edit-answer')
+const like_buttons = document.querySelectorAll('.vote')
 const question_edit_btn = document.querySelector('.question-edit')
 const preview_question_btn = document.getElementById('preview-question-button')
 const question_forum = document.getElementById('edit-question')
@@ -17,7 +19,7 @@ const question_editor_box = document.querySelector('#question-editor-box')
 
 //initialize modal form answer create or edit
 const modal = new Modal('#answer-editor')
-answer_create_btn.addEventListener('click', (e) => {
+answer_create_btn?.addEventListener('click', (e) => {
 
     //change action url
     answer_forum.action = `/${question.id}/answer/create`
@@ -31,7 +33,7 @@ answer_create_btn.addEventListener('click', (e) => {
     answer_editor.setData('')
     modal.show()
 })
-answer_edit_btn.forEach(e => {
+answer_edit_btn?.forEach(e => {
     e.addEventListener('click', e => {
 
         //set editor content
@@ -92,14 +94,14 @@ if (answer_editor_box) {
 
 
 //toggole edit box and question shower
-question_edit_btn.addEventListener('click', (e) => {
+question_edit_btn?.addEventListener('click', (e) => {
     if (question_forum.classList.contains('hide')) {
         question_forum.classList.remove('hide')
         question_box.classList.add('hide')
     }
 })
 
-preview_question_btn.addEventListener('click', (e) => {
+preview_question_btn?.addEventListener('click', (e) => {
     e.preventDefault()
     const content = question_editor.getData()
     const title = document.querySelector('[name="title"]').value
@@ -110,8 +112,8 @@ preview_question_btn.addEventListener('click', (e) => {
 })
 
 //submit fourm 
-answer_forum.addEventListener('submit', (e) => ck_submit_handler(e, answer_editor))
-question_forum.addEventListener('submit', (e) => ck_submit_handler(e, question_editor))
+answer_forum?.addEventListener('submit', (e) => ck_submit_handler(e, answer_editor))
+question_forum?.addEventListener('submit', (e) => ck_submit_handler(e, question_editor))
 
 const ck_submit_handler = (e, editor) => {
     //parse the content of text question_editor to html for filtering and picking the image urls
@@ -136,18 +138,73 @@ const ck_submit_handler = (e, editor) => {
 //like dislike
 
 like_buttons.forEach(element => {
+    element?.addEventListener('click', (e) => {
 
-    fetch(`${question.id}/vote=${type}`, {
-        method: 'put',
-        headers: {
-            'X-CSRF-TOKEN': window.csrf
-        }
-    }).then(res => {
-        if (res.ok) {
-
-        } else {
-            Promise.reject(res)
-        }
-    }).catch((err) => console.log(err))
+        const post_id = e.target.getAttribute('data-post-id')
+        const type = e.target.getAttribute('data-vote-type')
+        const parent = e.target.parentElement
+        const vote_counter = parent.querySelector('.vote-counter')
+        const increment_icon = parent.querySelector('.increment')
+        const dicrement_icon = parent.querySelector('.dicrement')
+        fetch(`/${post_id}/post/vote?type=${type}`, {
+            method: 'put',
+            headers: {
+                'X-CSRF-TOKEN': window.csrf
+            }
+        }).then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(data => {
+                vote_counter.innerText = data.votes
+                switch (data.type) {
+                    case 'increment':
+                        increment_icon.className = increment_icon.className.replace('square', 'square-fill')
+                        dicrement_icon.className = dicrement_icon.className.replace('-fill', '')
+                        break;
+                    case 'decrement':
+                        dicrement_icon.className = dicrement_icon.className.replace('square', 'square-fill')
+                        increment_icon.className = increment_icon.className.replace('-fill', '')
+                        break;
+                    case 'remove':
+                        dicrement_icon.className = dicrement_icon.className.replace('-fill', '')
+                        increment_icon.className = increment_icon.className.replace('-fill', '')
+                        break
+                    default:
+                        dicrement_icon.className = dicrement_icon.className.replace('-fill', '')
+                        increment_icon.className = increment_icon.className.replace('-fill', '')
+                        break;
+                }
+            })
+            .catch((err) => console.log(err))
+    })
 });
+
+//accept answer
+
+accept_answer?.forEach(element => {
+    element.addEventListener('click', (e) => {
+        const post_id = e.target.getAttribute('data-post-id')
+        const answered = document.querySelector('.answered')
+        fetch(`/${post_id}/post/answer`, {
+            method: 'put',
+            headers: {
+                'X-CSRF-TOKEN': window.csrf
+            }
+        }).then(res => {
+            if (res.ok) {
+                if (e.target.isSameNode(answered) && e.target.classList.contains('answered')) {
+                    answered?.classList.remove('text-success')
+                    answered?.classList.remove('answered')
+                } else {
+                    answered?.classList.remove('text-success')
+                    answered?.classList.remove('answered')
+                    e.target.classList.add('text-success')
+                    e.target.classList.add('answered')
+                }
+
+            } else {
+                Promise.reject(res)
+            }
+        })
+            .catch(err => console.log(err))
+    })
+})
 

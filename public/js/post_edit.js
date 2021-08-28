@@ -8156,10 +8156,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 var question_editor;
 var answer_editor;
+var accept_answer = document.querySelectorAll('.accept-answer');
 var answer_create_btn = document.getElementById('answer-create');
 var answer_edit_btn = document.querySelectorAll('.answer-edit');
 var answer_editor_box = document.querySelector('#answer-editor-box');
 var answer_forum = document.getElementById('edit-answer');
+var like_buttons = document.querySelectorAll('.vote');
 var question_edit_btn = document.querySelector('.question-edit');
 var preview_question_btn = document.getElementById('preview-question-button');
 var question_forum = document.getElementById('edit-question');
@@ -8169,7 +8171,7 @@ var question_content = document.querySelector('.question-content');
 var question_editor_box = document.querySelector('#question-editor-box'); //initialize modal form answer create or edit
 
 var modal = new bootstrap__WEBPACK_IMPORTED_MODULE_1__.Modal('#answer-editor');
-answer_create_btn.addEventListener('click', function (e) {
+answer_create_btn === null || answer_create_btn === void 0 ? void 0 : answer_create_btn.addEventListener('click', function (e) {
   var _document$getElementB;
 
   //change action url
@@ -8181,7 +8183,7 @@ answer_create_btn.addEventListener('click', function (e) {
   answer_editor.setData('');
   modal.show();
 });
-answer_edit_btn.forEach(function (e) {
+answer_edit_btn === null || answer_edit_btn === void 0 ? void 0 : answer_edit_btn.forEach(function (e) {
   e.addEventListener('click', function (e) {
     //set editor content
     var answer = answers.find(function (answer) {
@@ -8239,13 +8241,13 @@ if (answer_editor_box) {
 } //toggole edit box and question shower
 
 
-question_edit_btn.addEventListener('click', function (e) {
+question_edit_btn === null || question_edit_btn === void 0 ? void 0 : question_edit_btn.addEventListener('click', function (e) {
   if (question_forum.classList.contains('hide')) {
     question_forum.classList.remove('hide');
     question_box.classList.add('hide');
   }
 });
-preview_question_btn.addEventListener('click', function (e) {
+preview_question_btn === null || preview_question_btn === void 0 ? void 0 : preview_question_btn.addEventListener('click', function (e) {
   e.preventDefault();
   var content = question_editor.getData();
   var title = document.querySelector('[name="title"]').value;
@@ -8255,10 +8257,10 @@ preview_question_btn.addEventListener('click', function (e) {
   question_box.classList.remove('hide');
 }); //submit fourm 
 
-answer_forum.addEventListener('submit', function (e) {
+answer_forum === null || answer_forum === void 0 ? void 0 : answer_forum.addEventListener('submit', function (e) {
   return ck_submit_handler(e, answer_editor);
 });
-question_forum.addEventListener('submit', function (e) {
+question_forum === null || question_forum === void 0 ? void 0 : question_forum.addEventListener('submit', function (e) {
   return ck_submit_handler(e, question_editor);
 });
 
@@ -8283,7 +8285,82 @@ var ck_submit_handler = function ck_submit_handler(e, editor) {
     popup.addPopup(filter);
     return false;
   }
-};
+}; //like dislike
+
+
+like_buttons.forEach(function (element) {
+  element === null || element === void 0 ? void 0 : element.addEventListener('click', function (e) {
+    var post_id = e.target.getAttribute('data-post-id');
+    var type = e.target.getAttribute('data-vote-type');
+    var parent = e.target.parentElement;
+    var vote_counter = parent.querySelector('.vote-counter');
+    var increment_icon = parent.querySelector('.increment');
+    var dicrement_icon = parent.querySelector('.dicrement');
+    fetch("/".concat(post_id, "/post/vote?type=").concat(type), {
+      method: 'put',
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }).then(function (res) {
+      return res.ok ? res.json() : Promise.reject(res);
+    }).then(function (data) {
+      vote_counter.innerText = data.votes;
+
+      switch (data.type) {
+        case 'increment':
+          increment_icon.className = increment_icon.className.replace('square', 'square-fill');
+          dicrement_icon.className = dicrement_icon.className.replace('-fill', '');
+          break;
+
+        case 'decrement':
+          dicrement_icon.className = dicrement_icon.className.replace('square', 'square-fill');
+          increment_icon.className = increment_icon.className.replace('-fill', '');
+          break;
+
+        case 'remove':
+          dicrement_icon.className = dicrement_icon.className.replace('-fill', '');
+          increment_icon.className = increment_icon.className.replace('-fill', '');
+          break;
+
+        default:
+          dicrement_icon.className = dicrement_icon.className.replace('-fill', '');
+          increment_icon.className = increment_icon.className.replace('-fill', '');
+          break;
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  });
+}); //accept answer
+
+accept_answer === null || accept_answer === void 0 ? void 0 : accept_answer.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var post_id = e.target.getAttribute('data-post-id');
+    var answered = document.querySelector('.answered');
+    fetch("/".concat(post_id, "/post/answer"), {
+      method: 'put',
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }).then(function (res) {
+      if (res.ok) {
+        if (e.target.isSameNode(answered) && e.target.classList.contains('answered')) {
+          answered === null || answered === void 0 ? void 0 : answered.classList.remove('text-success');
+          answered === null || answered === void 0 ? void 0 : answered.classList.remove('answered');
+        } else {
+          answered === null || answered === void 0 ? void 0 : answered.classList.remove('text-success');
+          answered === null || answered === void 0 ? void 0 : answered.classList.remove('answered');
+          e.target.classList.add('text-success');
+          e.target.classList.add('answered');
+        }
+      } else {
+        Promise.reject(res);
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  });
+});
 })();
 
 /******/ })()

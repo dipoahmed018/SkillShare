@@ -10714,7 +10714,7 @@ document.getElementById('create-question').addEventListener('submit', function (
   var images = (0,_asset_CkEditorHelper__WEBPACK_IMPORTED_MODULE_3__.Image_picker)(data);
   var filter = (0,_asset_CkEditorHelper__WEBPACK_IMPORTED_MODULE_3__.Filter_length)(data);
 
-  if (_typeof(images) == 'object') {
+  if (_typeof(images) == 'object' && images) {
     (0,_asset_CkEditorHelper__WEBPACK_IMPORTED_MODULE_3__.Inject_images)(images, 'images', e.target);
   }
 
