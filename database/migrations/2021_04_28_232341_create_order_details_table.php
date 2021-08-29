@@ -18,9 +18,13 @@ class CreateOrderDetailsTable extends Migration
             $table->string('payment_intent');
             $table->unsignedBigInteger('product_id');
             $table->string('product_type');
+            $table->unsignedBigInteger('owner');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('owner')->references('id')->on('users');
         });
+
     }
 
     /**

@@ -41,9 +41,9 @@
     @endcannot
 @endsection
 @section('scripts')
-    <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
     <script>
         let forum_details = @json($forum);
     </script>
+    <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
     <script src={{ asset('js/forum_edit.js') }}></script>
 @endsection

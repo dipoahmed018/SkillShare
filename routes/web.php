@@ -123,8 +123,9 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/{comment}/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
         Route::post('/{comment}/comment/update/vote', [CommentController::class, 'updateVote'])->name('comment.update.vote');
         
-        //
-        Route::post('/purchase/course/{course}', [BuycourseController::class, 'buy_course'])->name('purchase.course');
+        //transaction
+
+        Route::get('/purchase/course/{product}', [BuycourseController::class, 'show_payment_methods'])->name('purchase.product');
 
         //images control
         Route::post('/save/image', fn(Request $request) => saveImage($request->file('upload'), env('APP_URL')."/get/image"))->name('save.image');

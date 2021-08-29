@@ -77,10 +77,7 @@
                 @endcan
                 @can('purchase', $course)
                     <div class="purchase col col-2">
-                        <form action={{route('purchase.course', ['course' => $course->id])}} method="post">
-                            @csrf
-                            <input type="submit" class="btn btn-success" value="purchase">
-                        </form>
+                        <a class="btn btn-success" href={{route('purchase.product', ['product' => $course->id])}}> purchase </a>
                     </div>
                 @endcan
                 <div id="introduction-upload-box" class="col col-md-6">

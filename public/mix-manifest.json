@@ -6,5 +6,6 @@
     "/js/forum_show.js": "/js/forum_show.js",
     "/js/forum_edit.js": "/js/forum_edit.js",
     "/js/post_edit.js": "/js/post_edit.js",
+    "/js/transaction.js": "/js/transaction.js",
     "/css/app.css": "/css/app.css"
 }
