@@ -16,13 +16,14 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->string('payment_intent');
-            $table->unsignedBigInteger('product_id');
-            $table->string('product_type');
+            $table->string('client_sc');
+            $table->unsignedBigInteger('productable_id');
+            $table->string('productable_type');
             $table->unsignedBigInteger('owner');
             $table->boolean('status');
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('users');
+            $table->foreign('owner')->references('id')->on('users')->onDelete('cascade');
         });
 
     }

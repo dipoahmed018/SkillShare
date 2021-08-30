@@ -5,7 +5,6 @@ use App\Models\Catagory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
-use App\Http\Controllers\Files\ImageController;
 use App\Http\Controllers\Forum\CommentController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
@@ -35,7 +34,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [UserController::class, 'Register'])->name('register');
     Route::get('/register', [UserController::class, 'ShowRegisterForm'])->name('ShowRegisterForm');
 
-    Route::get('/login', [UserController::class, 'ShowLoginForm'])->name('login');
+    Route::get('/login', [UserController::class, 'ShowLoginForm'])->name('show.login');
     Route::post('/login', [UserController::class, 'Login'])->name('login')->middleware(['throttle:login']);
 
 
@@ -126,6 +125,8 @@ Route::middleware(['auth:web'])->group(function () {
         //transaction
 
         Route::get('/purchase/course/{product}', [BuycourseController::class, 'show_payment_methods'])->name('purchase.product');
+        Route::post('/purchase/course/confirm', [BuycourseController::class, 'confirm_purchase'])->name('purchase.confirm');
+
 
         //images control
         Route::post('/save/image', fn(Request $request) => saveImage($request->file('upload'), env('APP_URL')."/get/image"))->name('save.image');
