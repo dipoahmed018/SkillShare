@@ -9,7 +9,7 @@
         @endif
     </div>
     @auth
-    {{Auth::user()->id}}
+    @dump(Auth::user())
     <h1>authenticated</h1>
     @if (Auth::user()->email_verified_at == null)
 

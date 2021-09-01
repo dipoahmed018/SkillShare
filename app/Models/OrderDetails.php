@@ -20,7 +20,7 @@ class OrderDetails extends Model
 
     public function course()
     {
-        return $this->morphOne(Course::class, 'productable');
+        return $this->morphTo('productable');
     }
 
 }

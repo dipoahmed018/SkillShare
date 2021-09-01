@@ -258,13 +258,14 @@ checkout_btn.addEventListener('click', function () {
       if (res.error) {
         error_box.textContent = res.error.message;
       } else {
-        fetch('/puchase/course/confirm', {
+        fetch('/purchase/course/confirm', {
           method: 'post',
           body: JSON.stringify({
-            client_sc: client_sc
+            "client_sc": client_sc
           }),
           headers: {
-            'X-CSRF-TOKEN': window.csrf
+            'X-CSRF-TOKEN': window.csrf,
+            'Content-Type': 'Application/json'
           }
         }).then(function (res) {
           alert('payment_success');

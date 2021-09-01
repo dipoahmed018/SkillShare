@@ -7,6 +7,8 @@ use App\Models\Course;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Stripe\StripeClient;
 
 class BuycourseController extends Controller
@@ -46,14 +48,22 @@ class BuycourseController extends Controller
         ]);
         $order_details = OrderDetails::where('client_sc',$request->client_sc)->first();
         try {
+            DB::beginTransaction();
             $payment_intent = $this->stripeClient->paymentIntents->retrieve($order_details->payment_intent);
             if ($payment_intent->status == "succeeded") {
                 $course = $order_details->course;
+                Log::channel('event')->info($course);
                 $order_details->status = 1;
-                $course->members()->syncWithoutDetaching([Auth::user()->id]);
+                $course->students()->syncWithoutDetaching([Auth::user()->id]);
                 $order_details->save();
+                DB::commit();
+                return response('success',200);
+            } else {
+                abort(422,'you did not paid for the course yest');
             }
+
         } catch (\Throwable $th) {
+            DB::rollBack();
             return $th;
         }
     }
