@@ -20,10 +20,8 @@ class SimpleTest extends TestCase
 {
     function test_simple()
     {
-        $post = Post::find(28);
-        $votes  = $post->allVote;
-        $count = $votes->where('vote_type','increment')->count() - $votes->where('vote_type', 'decrement')->count();
-        dump($count);
+        $post = Post::search('Repellendus voluptatibus quia mollitia ')->get();
+        dump($post);
         assertTrue(true);
     }
 }
