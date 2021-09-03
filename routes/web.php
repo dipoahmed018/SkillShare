@@ -46,6 +46,9 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [UserController::class, 'passwordReset'])->name('password.update');
 });
 
+//public
+Route::get('/course/index', [CourseController::class, 'index'])->name('index.courses');
+
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/{user}/profile', [UserController::class, 'getUser'])->name('show.user');

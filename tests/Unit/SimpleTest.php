@@ -20,8 +20,8 @@ class SimpleTest extends TestCase
 {
     function test_simple()
     {
-        $post = Post::search('Repellendus voluptatibus quia mollitia ')->get();
-        dump($post);
+        DB::enableQueryLog();
+        $post = Post::search('Repellendus')->query(fn ($query) => $query->with('owner_details'))->get();
         assertTrue(true);
     }
 }

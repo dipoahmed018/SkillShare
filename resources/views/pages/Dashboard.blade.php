@@ -8,6 +8,7 @@
             <div>{{ session('sent') }}</div>
         @endif
     </div>
+    @include('Layout.Header')
     @auth
     @dump(Auth::user())
     <h1>authenticated</h1>
@@ -34,5 +35,6 @@
 @endsection
 
 @section('scripts')
+    @stack('scripts')
     <script src={{ asset('js/dashboard.js') }}></script>
 @endsection
