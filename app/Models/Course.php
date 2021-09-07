@@ -18,6 +18,10 @@ class Course extends Model
         'owner',
         'forum_id',
     ];
+    public static $searchable = [
+        'title',
+        'description',
+    ];
 
     public function owner_details()
     {

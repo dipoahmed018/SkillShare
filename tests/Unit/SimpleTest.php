@@ -9,6 +9,8 @@ use App\Models\Post;
 use App\Models\Referrel;
 use App\Models\Review;
 use App\Models\User;
+use App\Services\Filters\Sort;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,8 +22,8 @@ class SimpleTest extends TestCase
 {
     function test_simple()
     {
-        DB::enableQueryLog();
-        $post = Post::search('Repellendus')->query(fn ($query) => $query->with('owner_details'))->get();
+        $query = Course::search('v')->where('price', '<', 4000)->get();
+        dump($query);
         assertTrue(true);
     }
 }
