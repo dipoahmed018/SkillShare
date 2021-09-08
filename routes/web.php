@@ -47,7 +47,7 @@ Route::middleware('guest')->group(function () {
 });
 
 //public
-Route::get('/course/index', [CourseController::class, 'index'])->name('index.courses');
+Route::get('/courses', [CourseController::class, 'index'])->name('index.courses');
 
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->group(function () {

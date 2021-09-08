@@ -22,7 +22,7 @@ class SimpleTest extends TestCase
 {
     function test_simple()
     {
-        $query = Course::search('v')->where('price', '<', 4000)->get();
+        $query = Course::query()->selectRaw('course.title, course.id')->join('review', 'course.id', '=', 'review.reviewable_id')->get();
         dump($query);
         assertTrue(true);
     }

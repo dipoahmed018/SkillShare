@@ -21,14 +21,38 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
+use App\Services\Filters\Search;
+use App\Services\Filters\Sort;
 use App\Services\VideoStream;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Course::all();
+        if ($request->has('search_query')) {
+            $data = Course::search($request->search_query)->get();
+            if ($request->suggestion) {
+                return response()->json(['data' => $data->pluck('title'), 'success' => 'true']);
+            }
+            return $data;
+        }
+        $builder = Course::query()->with('review', fn ($q) => $q->select('stars'));
+
+        //price filter
+        if ($request->min_price && $request->max_price) {
+            $builder->scopePrice($request->min_price, $request->max_price);
+        }
+        //catagory filter
+        if ($request->catagory) {
+            $builder->scopeCatagory($request->catagory);
+        }
+
+        //order and paginate
+        $builder->orderBy($request->order_by ?: 'price', 'asc');
+        $data = $builder->paginate($request->per_page ?: 5);
+        
+        return view('pages.course.index',['data' => $data]);
     }
     public function createCourse(createCourse $request)
     {
@@ -74,7 +98,7 @@ class CourseController extends Controller
             'file_type' => 'thumblin',
             'fileable_id' => $course->id,
         ]);
-        return redirect('/show/course/'. $course->id);
+        return redirect('/show/course/' . $course->id);
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
@@ -200,7 +224,6 @@ class CourseController extends Controller
             return abort(401, 'you are not authorized');
         };
         return $course->catagory()->syncWithoutDetaching($request->catagory);
-
     }
     public function detachCatagory(Request $request, Course $course)
     {
@@ -289,10 +312,10 @@ class CourseController extends Controller
         $course->delete();
         return redirect('/');
     }
-    public function streamTutorial(Request $request,TutorialDetails $tutorial, Course $course)
+    public function streamTutorial(Request $request, TutorialDetails $tutorial, Course $course)
     {
         if ($request->user()->cannot('tutorial', $course) && $request->user()->cannot('update', $course)) {
-            return abort(401,'you are not autorized to access this course tutorial');
+            return abort(401, 'you are not autorized to access this course tutorial');
         }
         $file_details = FileLink::findOrFail($tutorial->tutorial_id);
         $stream = new VideoStream(storage_path('/app//' . $file_details->file_link));
