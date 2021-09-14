@@ -1389,6 +1389,7 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?94eeade15e6b7fbed95b18ff3
 .bi-x-lg::before { content: "\f659"; }
 .bi-safe::before { content: "\f65a"; }
 
+
 @charset "UTF-8";
 
 /*!
@@ -13365,6 +13366,70 @@ fieldset:disabled .btn {
 .content-box img {
   max-width: 80%;
   min-width: 50%;
+}
+
+.header {
+  background-color: #707070;
+  display: flex;
+  width: 100%;
+  height: 80px;
+}
+
+.header .header-items {
+  display: block;
+  margin-right: 10px;
+  align-self: center;
+}
+
+.header .filter {
+  position: relative;
+  margin-left: auto;
+}
+
+.header .filter .filters {
+  position: absolute;
+  right: 100%;
+}
+
+.header .filter button {
+  background: url(/images/filter_icon.png?cfe7d271f80f9a4efeeffcec2668a63f);
+  background-repeat: no-repeat;
+  background-size: 25px, 25px;
+  border: none;
+  min-width: 25px;
+  min-height: 25px;
+}
+
+.header .search {
+  position: relative;
+  position: relative;
+}
+
+.header .search input {
+  background: url(/images/search_background.png?1d8e01a4758a905ecff1ff182e031d6f);
+  background-repeat: no-repeat;
+  background-size: 250px;
+  min-width: 250px;
+  min-height: 30px;
+  padding-left: 15px;
+  padding-right: 40px;
+  border: none;
+  outline: none;
+}
+
+.header .search button {
+  background: url(/images/search_icon.png?81b779d31f30f212d411925087194f8d);
+  background-repeat: no-repeat;
+  background-size: 30px, 30px;
+  border: none;
+  min-width: 30px;
+  min-height: 30px;
+  position: absolute;
+  right: 10px;
+}
+
+.header .search .suggestion-box {
+  position: absolute;
 }
 
 

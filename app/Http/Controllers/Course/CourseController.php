@@ -50,7 +50,7 @@ class CourseController extends Controller
 
         //order and paginate
         $builder->orderBy($request->order_by ?: 'price', 'asc');
-        $data = $builder->paginate($request->per_page ?: 5);
+        $data = $builder->paginate($request->per_page ?: 5,['*'],'course_page');
         
         return view('pages.course.index',['data' => $data]);
     }

@@ -1,5 +1,6 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+@import url("./header.scss");
 $primary: #0d6efd;
 $stars: rgb(244, 232, 107);
 #check {
@@ -187,5 +188,65 @@ $stars: rgb(244, 232, 107);
   img {
     max-width: 80%;
     min-width: 50%;
+  }
+}
+
+//header stype
+.header {
+  background-color: rgb(112, 112, 112);
+  display: flex;
+  width: 100%;
+  height: 80px;
+  .header-items {
+    display: block;
+    margin-right: 10px;
+    align-self: center;
+  }
+  .link {
+
+  }
+  .filter {
+    position: relative;
+    margin-left: auto;
+    .filters {
+      position: absolute;
+      right: 100%;
+    }
+    button {
+      background: url('./assets/filter_icon.png');
+      background-repeat: no-repeat;
+      background-size: 25px, 25px;
+      border: none;
+      min-width: 25px;
+      min-height: 25px;
+    }
+  }
+  .search {
+    position: relative;
+    input {
+      background: url('./assets/search_background.png');
+      background-repeat: no-repeat;
+      background-size: 250px;
+      min-width: 250px;
+      min-height: 30px;
+      padding-left: 15px;
+      padding-right: 40px;
+      border: none;
+      outline: none;
+    }
+    button {
+      background: url('./assets/search_icon.png');
+      background-repeat: no-repeat;
+      background-size: 30px, 30px;
+      border: none;
+      min-width: 30px;
+      min-height: 30px;
+      position: absolute;
+      right: 10px;
+    }
+    position: relative;
+    .suggestion-box {
+      position: absolute;
+    }
   }
 }

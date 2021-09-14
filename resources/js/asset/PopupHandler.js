@@ -56,7 +56,6 @@ export default class PopupHandler {
         popup_message_box.append(close_popup)
         popup_message_box.append(popup_message)
         popup_box.appendChild(popup_message_box)
-
         // close popup call
 
         this._popups.find(value => value.id == popup.id).running = setTimeout( () => this._closePopup(popup.id, close_popup.parentNode), 1000 * 30)

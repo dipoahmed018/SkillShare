@@ -3,11 +3,6 @@
 @section('title', 'Dashboard')
 
 @section('body')
-    <div id="popup_box">
-        @if (session('sent'))
-            <div>{{ session('sent') }}</div>
-        @endif
-    </div>
     @include('Layout.Header')
     @auth
     @dump(Auth::user())

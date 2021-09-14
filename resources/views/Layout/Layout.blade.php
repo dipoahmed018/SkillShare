@@ -12,6 +12,10 @@
 </head>
 <body>
     @yield('tamplates')
+    
+    {{-- popup box --}}
+    <div id="popup_box" class="hide"></div>
+
     @yield('body')
 
     <script src={{ asset('js/app.js') }}></script>
