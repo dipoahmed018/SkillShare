@@ -13177,7 +13177,7 @@ fieldset:disabled .btn {
 }
 
 .stars i {
-  color: #f4e86b;
+  color: #F2DD1F;
 }
 
 .error-box {
@@ -13375,6 +13375,23 @@ fieldset:disabled .btn {
   height: 80px;
 }
 
+.header .link {
+  cursor: pointer;
+  color: #B8E9D3;
+  margin: 0px 10px;
+  font-size: 1.8rem;
+}
+
+.header .profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #B8E9D3;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 .header .header-items {
   display: block;
   margin-right: 10px;
@@ -13387,17 +13404,135 @@ fieldset:disabled .btn {
 }
 
 .header .filter .filters {
+  background-color: #B8E9D3;
+  border-radius: 10px;
+  padding: 10px;
+  padding-left: 10px;
+  min-width: 250px;
   position: absolute;
   right: 100%;
 }
 
-.header .filter button {
-  background: url(/images/filter_icon.png?cfe7d271f80f9a4efeeffcec2668a63f);
-  background-repeat: no-repeat;
-  background-size: 25px, 25px;
+.header .filter .filters .catagories {
+  background-color: #6ACC9A;
+  min-width: 100%;
+  min-height: 2em;
+  border: none;
+  color: #0FA958;
+  font-size: 1.1rem;
+  padding: 5px;
+}
+
+.header .filter .filters .price-range {
+  color: #0FA958;
+  margin: 10px 0px;
+}
+
+.header .filter .filters .price-range .multi-range {
+  display: inline-block;
+  position: relative;
+  height: 20px;
+  min-width: 80%;
+  max-width: 100%;
+}
+
+.header .filter .filters .price-range .multi-range input[type=range] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  box-sizing: border-box;
+  background: linear-gradient(#6ACC9A, #6ACC9A) no-repeat center;
+  background-size: 100% 5px;
+  border: 0;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  outline: none;
+  padding: 0 2px;
+  pointer-events: none;
+  position: absolute;
+}
+
+.header .filter .filters .price-range .multi-range input[type=range]:active,
+.header .filter .filters .price-range .multi-range input[type=range]:focus {
+  outline: none;
+}
+
+.header .filter .filters .price-range .multi-range input[type=range]::-webkit-slider-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 20px;
+  background-color: #0FA958;
+  position: relative;
+  margin: 5px 0;
+  /* Add some margin to ensure box shadow is shown */
+  cursor: pointer;
+  -webkit-appearance: none;
+          appearance: none;
+  pointer-events: all;
+  box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+}
+
+.header .filter .filters .price-range .multi-range input[type=range]:nth-child(2) {
+  background: none;
+}
+
+.header .filter .filters .price-input {
+  width: 100%;
+}
+
+.header .filter .filters .price-input label {
+  font-size: 14px;
+  color: #0FA958;
+}
+
+.header .filter .filters .price-input input {
+  background-color: #6ACC9A;
+  border: none;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  width: 5rem;
+}
+
+.header .filter .filters .review p {
+  margin-bottom: 0px;
+  margin-top: 10px;
+  color: #0FA958;
+}
+
+.header .filter .filters .review .review-stars {
+  cursor: pointer;
+  color: #F2DD1F;
+  font-size: 1.5rem;
+  padding-left: 10px;
+}
+
+.header .filter .filters .review .selected {
+  border: 2px solid #0FA958;
+  border-radius: 5px;
+}
+
+.header .filter .filters .submit-filter {
+  margin: 10px 0px;
+  background-color: #6ACC9A;
+  border: none;
+  border-radius: 2px;
+  color: #0FA958;
+  width: 100%;
+  height: 2rem;
+  font-size: 1.2em;
+}
+
+.header .filter .filter-button {
+  background: url(/images/filter_icon.png?cfe7d271f80f9a4efeeffcec2668a63f) no-repeat right top/25px 25px;
   border: none;
   min-width: 25px;
   min-height: 25px;
+}
+
+.header .filter .close-filter {
+  background: url(/images/close_filter_icon.png?73a89a3c425f19a17e1d0d3498b7bf11) no-repeat right top/25px 25px;
 }
 
 .header .search {
