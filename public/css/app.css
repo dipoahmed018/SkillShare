@@ -13383,6 +13383,10 @@ fieldset:disabled .btn {
 }
 
 .header .profile {
+  position: relative;
+}
+
+.header .profile .profile-icon {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -13390,6 +13394,51 @@ fieldset:disabled .btn {
   text-align: center;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.header .profile .profile-links {
+  position: absolute;
+  display: none;
+  border-radius: 8px;
+  min-width: 250px;
+  padding: 5px;
+  margin-top: 10px;
+  right: 50%;
+  background-color: #B8E9D3;
+}
+
+.header .profile .profile-links a {
+  width: 100%;
+  display: block;
+  color: #B8E9D3;
+  text-decoration: none;
+  padding-left: 8px;
+  color: #0FA958;
+  border-bottom: white;
+  min-height: 1.2em;
+}
+
+.header .profile .profile-overlay {
+  display: none;
+  background-color: transparent;
+  position: fixed;
+  width: 60px;
+  height: 30px;
+  top: 50px;
+  right: 20px;
+  z-index: 1;
+}
+
+.header .profile .profile-overlay:hover .profile-links {
+  display: block;
+}
+
+.header .profile:hover .profile-overlay {
+  display: block;
+}
+
+.header .profile:hover .profile-links {
+  display: block;
 }
 
 .header .header-items {
@@ -13565,6 +13614,24 @@ fieldset:disabled .btn {
 
 .header .search .suggestion-box {
   position: absolute;
+  width: 100%;
+  background-color: #B8E9D3;
+  border-radius: 10px;
+  margin: 10px 0px;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.header .search .suggestion-box a {
+  display: block;
+  text-decoration: none;
+  color: #0FA958;
+  cursor: pointer;
+  text-align: left;
+  margin: 0px;
+  padding: 0px 7px;
+  border-bottom: 2px solid white;
 }
 
 

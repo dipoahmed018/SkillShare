@@ -220,6 +220,7 @@ $glass_green : #B8E9D3;
 }
 
 //header stype
+
 .header {
     background-color: rgb(112, 112, 112);
     display: flex;
@@ -232,15 +233,63 @@ $glass_green : #B8E9D3;
         margin: 0px 10px;
         font-size: 1.8rem;
     }
+
     .profile {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: $glass_green;
-        text-align: center;
-        font-size: 1.5rem;
-        cursor: pointer;
+        position: relative;
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: $glass_green;
+            text-align: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .profile-links {
+            position: absolute;
+            display: none;
+            border-radius: 8px;
+            min-width: 250px;
+            padding: 5px;
+            margin-top: 10px;
+            right : 50%;
+            background-color: $glass_green;
+            a {
+                width: 100%;
+                display: block;
+                color: $glass_green;
+                text-decoration: none;
+                padding-left: 8px;
+                color: $deep_green;
+                border-bottom: white;
+                min-height: 1.2em;
+            }
+        }
+        .profile-overlay {
+            display: none;
+            background-color: transparent;
+            position: fixed;
+            width: 60px;
+            height: 30px;
+            top: 50px;
+            right: 20px;
+            z-index: 1;
+            &:hover {
+                .profile-links {
+                    display: block;
+                }
+            }
+        }
+        &:hover {
+            .profile-overlay {
+                display: block;
+            }
+            .profile-links {
+                display: block;
+            }
+        }
     }
+
     .header-items {
         display: block;
         margin-right: 10px;
@@ -250,7 +299,7 @@ $glass_green : #B8E9D3;
     .filter {
         position: relative;
         margin-left: auto;
-        
+
         .filters {
             background-color: $glass_green;
             border-radius: 10px;
@@ -281,7 +330,7 @@ $glass_green : #B8E9D3;
                     height: 20px;
                     min-width: 80%;
                     max-width: 100%;
-                
+
 
                     input[type=range] {
                         //slider style
@@ -343,24 +392,27 @@ $glass_green : #B8E9D3;
                     width: 5rem;
                 }
             }
-            
+
             .review {
                 p {
                     margin-bottom: 0px;
                     margin-top: 10px;
                     color: $deep_green;
                 }
+
                 .review-stars {
                     cursor: pointer;
                     color: $stars;
                     font-size: 1.5rem;
                     padding-left: 10px;
                 }
+
                 .selected {
                     border: 2px solid $deep_green;
                     border-radius: 5px;
                 }
             }
+
             .submit-filter {
                 margin: 10px 0px;
                 background-color: $shallow_green;
@@ -415,6 +467,24 @@ $glass_green : #B8E9D3;
 
         .suggestion-box {
             position: absolute;
+            width: 100%;
+            background-color: $glass_green;
+            border-radius: 10px;
+            margin: 10px 0px;
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            a {
+                display: block;
+                text-decoration: none;
+                color: $deep_green;
+                cursor: pointer;
+                text-align: left;
+                margin: 0px;
+                padding: 0px 7px;
+                border-bottom: 2px solid white;
+            }
         }
     }
 }

@@ -55,12 +55,35 @@
         <input type="text" name="search" id="search">
         <button type="submit" id="search_submit"></button>
         <div class="suggestion-box hide" id="suggestion-box">
-            <p>hello world new course</p>
-            <p>hello world new course</p>
-            <p>hello world new course</p>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
+            <a href="#">hello world new course</a>
         </div>
     </form>
-    <div class="header-items profile">d</div>
+    <div class="header-items profile">
+        <div class="profile-icon">d</div>
+        <div class="profile-overlay"></div>
+        <div class="profile-links">
+            <a href="/profile">my profile</a>
+            <a href="/user/logout">logout</a>
+        </div>
+    </div>
     {{-- <button class="header-items">Login</button>
     <button class="header-items">Register</button> --}}
 </header>
