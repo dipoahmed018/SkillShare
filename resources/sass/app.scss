@@ -221,223 +221,263 @@ $glass_green : #B8E9D3;
 
 //header stype
 
-.header {
-    background-color: rgb(112, 112, 112);
-    display: flex;
-    width: 100%;
-    height: 80px;
 
-    .link {
-        cursor: pointer;
-        color: $glass_green;
-        margin: 0px 10px;
-        font-size: 1.8rem;
-    }
+@media screen and (min-width: 768px) {
+    .mobile-home { display: none;}
+    .header {
+        background-color: rgb(112, 112, 112);
+        width: 100%;
+        height: 80px;
 
-    .profile {
-        position: relative;
-        .profile-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: $glass_green;
-            text-align: center;
-            font-size: 1.5rem;
+        .link {
+            display: block !important ;
             cursor: pointer;
+            color: $glass_green;
+            margin: 0px 10px;
+            font-size: 1.8rem;
         }
-        .profile-links {
-            position: absolute;
-            display: none;
-            border-radius: 8px;
-            min-width: 250px;
-            padding: 5px;
-            margin-top: 10px;
-            right : 50%;
-            background-color: $glass_green;
-            a {
-                width: 100%;
-                display: block;
-                color: $glass_green;
-                text-decoration: none;
-                padding-left: 8px;
-                color: $deep_green;
-                border-bottom: white;
-                min-height: 1.2em;
+
+        .profile {
+            order: 3;
+            position: relative;
+
+            .profile-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: $glass_green;
+                text-align: center;
+                font-size: 1.5rem;
+                cursor: pointer;
             }
-        }
-        .profile-overlay {
-            display: none;
-            background-color: transparent;
-            position: fixed;
-            width: 60px;
-            height: 30px;
-            top: 50px;
-            right: 20px;
-            z-index: 1;
+
+            .profile-links {
+                position: absolute;
+                display: none;
+                border-radius: 8px;
+                min-width: 250px;
+                padding: 5px;
+                margin-top: 10px;
+                right: 50%;
+                background-color: $glass_green;
+
+                a {
+                    width: 100%;
+                    display: block;
+                    color: $glass_green;
+                    text-decoration: none;
+                    padding-left: 8px;
+                    color: $deep_green;
+                    border-bottom: white;
+                    min-height: 1.2em;
+                }
+            }
+
+            .profile-overlay {
+                display: none;
+                background-color: transparent;
+                position: fixed;
+                width: 60px;
+                height: 30px;
+                top: 50px;
+                right: 20px;
+                z-index: 1;
+
+                &:hover {
+                    .profile-links {
+                        display: block;
+                    }
+                }
+            }
+
             &:hover {
+                .profile-overlay {
+                    display: block;
+                }
+
                 .profile-links {
                     display: block;
                 }
             }
         }
-        &:hover {
-            .profile-overlay {
-                display: block;
-            }
-            .profile-links {
-                display: block;
-            }
+
+        .header-items {
+            display: block;
+            margin-right: 10px;
+            align-self: center;
         }
-    }
 
-    .header-items {
-        display: block;
-        margin-right: 10px;
-        align-self: center;
-    }
+        .filter {
+            order: 1;
+            position: relative;
+            margin-left: auto;
 
-    .filter {
-        position: relative;
-        margin-left: auto;
+            .filters {
 
-        .filters {
-            background-color: $glass_green;
-            border-radius: 10px;
-            padding: 10px;
-            padding-left: 10px;
-            min-width: 250px;
-            position: absolute;
-            right: 100%;
+                background-color: $glass_green;
+                border-radius: 10px;
+                padding: 10px;
+                padding-left: 10px;
+                min-width: 250px;
+                position: absolute;
+                right: 100%;
 
-            .catagories {
-                background-color: $shallow_green;
-                min-width: 100%;
-                min-height: 2em;
-                border: none;
-                color: $deep_green;
-                font-size: 1.1rem;
-                padding: 5px;
-            }
+                .catagories {
+                    background-color: $shallow_green;
+                    min-width: 100%;
+                    min-height: 2em;
+                    border: none;
+                    color: $deep_green;
+                    font-size: 1.1rem;
+                    padding: 5px;
+                }
 
-            //dual slider range
-            .price-range {
-                color: $deep_green;
-                margin: 10px 0px;
+                //dual slider range
+                .price-range {
+                    color: $deep_green;
+                    margin: 10px 0px;
 
-                .multi-range {
-                    display: inline-block;
-                    position: relative;
-                    height: 20px;
-                    min-width: 80%;
-                    max-width: 100%;
+                    .multi-range {
+                        display: inline-block;
+                        position: relative;
+                        height: 20px;
+                        min-width: 80%;
+                        max-width: 100%;
 
 
-                    input[type=range] {
-                        //slider style
-                        appearance: none;
-                        box-sizing: border-box;
-                        background: linear-gradient(#6ACC9A, #6ACC9A) no-repeat center;
-                        background-size: 100% 5px;
-                        border: 0;
-                        width: 100%;
-                        margin: 0;
-                        overflow: hidden;
-                        outline: none;
-                        padding: 0 2px;
-                        pointer-events: none;
-                        position: absolute;
-
-                        &:active,
-                        &:focus {
-                            outline: none;
-                        }
-
-                        //slider thumb styles
-                        &::-webkit-slider-thumb {
-                            height: 20px;
-                            width: 20px;
-                            border-radius: 20px;
-                            background-color: #0FA958;
-                            position: relative;
-                            margin: 5px 0;
-                            /* Add some margin to ensure box shadow is shown */
-                            cursor: pointer;
+                        input[type=range] {
+                            //slider style
                             appearance: none;
-                            pointer-events: all;
-                            box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+                            box-sizing: border-box;
+                            background: linear-gradient(#6ACC9A, #6ACC9A) no-repeat center;
+                            background-size: 100% 5px;
+                            border: 0;
+                            width: 100%;
+                            margin: 0;
+                            overflow: hidden;
+                            outline: none;
+                            padding: 0 2px;
+                            pointer-events: none;
+                            position: absolute;
 
-                        }
+                            &:active,
+                            &:focus {
+                                outline: none;
+                            }
 
-                        &:nth-child(2) {
-                            background: none;
+                            //slider thumb styles
+                            &::-webkit-slider-thumb {
+                                height: 20px;
+                                width: 20px;
+                                border-radius: 20px;
+                                background-color: #0FA958;
+                                position: relative;
+                                margin: 5px 0;
+                                /* Add some margin to ensure box shadow is shown */
+                                cursor: pointer;
+                                appearance: none;
+                                pointer-events: all;
+                                box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+
+                            }
+
+                            &:nth-child(2) {
+                                background: none;
+                            }
                         }
                     }
                 }
-            }
 
-            .price-input {
-                width: 100%;
+                .price-input {
+                    width: 100%;
 
-                label {
-                    font-size: 14px;
-                    color: $deep_green;
+                    label {
+                        font-size: 14px;
+                        color: $deep_green;
+                    }
+
+                    input {
+                        background-color: $shallow_green;
+                        border: none;
+                        color: white;
+                        font-size: 14px;
+                        outline: none;
+                        width: 5rem;
+                    }
                 }
 
-                input {
+                .review {
+                    p {
+                        margin-bottom: 0px;
+                        margin-top: 10px;
+                        color: $deep_green;
+                    }
+
+                    .review-stars {
+                        cursor: pointer;
+                        color: $stars;
+                        font-size: 1.5rem;
+                        padding-left: 10px;
+                    }
+
+                    .selected {
+                        border: 2px solid $deep_green;
+                        border-radius: 5px;
+                    }
+                }
+
+                .submit-filter {
+                    margin: 10px 0px;
                     background-color: $shallow_green;
                     border: none;
-                    color: white;
-                    font-size: 14px;
-                    outline: none;
-                    width: 5rem;
-                }
-            }
-
-            .review {
-                p {
-                    margin-bottom: 0px;
-                    margin-top: 10px;
+                    border-radius: 2px;
                     color: $deep_green;
-                }
-
-                .review-stars {
-                    cursor: pointer;
-                    color: $stars;
-                    font-size: 1.5rem;
-                    padding-left: 10px;
-                }
-
-                .selected {
-                    border: 2px solid $deep_green;
-                    border-radius: 5px;
+                    width: 100%;
+                    height: 2rem;
+                    font-size: 1.2em;
                 }
             }
 
-            .submit-filter {
-                margin: 10px 0px;
-                background-color: $shallow_green;
+            .filter-button {
+                background: url('./assets/filter_icon.png') no-repeat right top/ 25px 25px;
                 border: none;
-                border-radius: 2px;
-                color: $deep_green;
-                width: 100%;
-                height: 2rem;
-                font-size: 1.2em;
+                min-width: 25px;
+                min-height: 25px;
             }
+
+            .close-filter {
+                background: url('./assets/close_filter_icon.png') no-repeat right top/25px 25px;
+            }
+
+            z-index: 2;
         }
 
-        .filter-button {
-            background: url('./assets/filter_icon.png') no-repeat right top/ 25px 25px;
-            border: none;
-            min-width: 25px;
-            min-height: 25px;
+        .search {
+            order: 2 !important;
+            position: relative;
+            // .suggestion-box {
+            // }
+            z-index: 2;
         }
+        .slider-icon {
+            display: none;
+        }
+    }
+}
 
-        .close-filter {
-            background: url('./assets/close_filter_icon.png') no-repeat right top/25px 25px;
-        }
+//mobile design
+
+.header {
+    display: flex;
+    position: fixed;
+    right: 0px;
+
+    .link {
+        display: none;
     }
 
     .search {
+        order: 1;
         position: relative;
 
         input {
@@ -486,5 +526,13 @@ $glass_green : #B8E9D3;
                 border-bottom: 2px solid white;
             }
         }
+
+        z-index: 2;
     }
+
+
+    .filter {
+      order: 2;
+    }
+    
 }

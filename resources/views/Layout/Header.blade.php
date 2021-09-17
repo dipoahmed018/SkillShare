@@ -1,87 +1,92 @@
 <header class="header">
-    <div class="header-items link">Home</div>
-    <div class="header-items link">Course</div>
-    <div class="header-items filter">
-        <button class="filter-button"></button>
-        <div class="filters hide">
-            <form action="" method="get" id="filter-form">
-                <input type="hidden" name="review" id="review">
-                <select name="catagory" id="catagory" class="catagories">
-                    <option value="default">select catagory</option>
-                    <option value="hellowor">hellowo</option>
-                </select>
-                <div class="price-range">
-                    <span>price:</span>
-                    <div class="multi-range">
-                        <input type="range" min="0" max="100" value="0" id="lower">
-                        <input type="range" min="0" max="100" value="100" id="upper">
+    <nav>
+        <div class="desktop-home header-items link">Home</div>
+        <div class="header-items link">Course</div>
+    </nav>
+    <i class="bi bi-list slider-icon"></i>
+    <div class="sidebar">
+        <div class="header-items filter">
+            <button class="filter-button"></button>
+            <div class="filters hide">
+                <form action="" method="get" id="filter-form">
+                    <input type="hidden" name="review" id="review">
+                    <select name="catagory" id="catagory" class="catagories">
+                        <option value="default">select catagory</option>
+                        <option value="hellowor">hellowo</option>
+                    </select>
+                    <div class="price-range">
+                        <span>price:</span>
+                        <div class="multi-range">
+                            <input type="range" min="0" max="100" value="0" id="lower">
+                            <input type="range" min="0" max="100" value="100" id="upper">
+                        </div>
                     </div>
-                </div>
-                <div class="price-input">
-                    <label for="min_price">min:</label>
-                    <input type="text" name="min" id="min_price" type="number" value="10">
-                    <label for="max_price">max:</label>
-                    <input type="text" name="max" id="max_price" type="number" value="1000">
-                </div>
-                <div class="review">
-                    <p>review:</p>
-                    <div data-stars="5" class="review-stars selected">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
+                    <div class="price-input">
+                        <label for="min_price">min:</label>
+                        <input type="text" name="min" id="min_price" type="number" value="10">
+                        <label for="max_price">max:</label>
+                        <input type="text" name="max" id="max_price" type="number" value="1000">
                     </div>
-                    <div data-stars="4" class="review-stars">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star"></i>
+                    <div class="review">
+                        <p>review:</p>
+                        <div data-stars="5" class="review-stars selected">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <div data-stars="4" class="review-stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <div data-stars="3" class="review-stars">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star"></i>
+                            <i class="bi bi-star"></i>
+                        </div>
                     </div>
-                    <div data-stars="3" class="review-stars">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star"></i>
-                        <i class="bi bi-star"></i>
-                    </div>
-                </div>
-                <button class="submit-filter" type="submit">filter</button>
-            </form>
+                    <button class="submit-filter" type="submit">filter</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <form action="" method="get" class="header-items search">
-        <input type="text" name="search" id="search">
-        <button type="submit" id="search_submit"></button>
-        <div class="suggestion-box hide" id="suggestion-box">
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-            <a href="#">hello world new course</a>
-        </div>
-    </form>
-    <div class="header-items profile">
-        <div class="profile-icon">d</div>
-        <div class="profile-overlay"></div>
-        <div class="profile-links">
-            <a href="/profile">my profile</a>
-            <a href="/user/logout">logout</a>
+        <form action="" method="get" class="header-items search">
+            <input type="text" name="search" id="search">
+            <button type="submit" id="search_submit"></button>
+            <div class="suggestion-box hide" id="suggestion-box">
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+                <a href="#">hello world new course</a>
+            </div>
+        </form>
+        <div class="header-items profile">
+            <div class="profile-icon">d</div>
+            <div class="profile-overlay"></div>
+            <div class="profile-links">
+                <a href="/profile">my profile</a>
+                <a href="/user/logout">logout</a>
+            </div>
         </div>
     </div>
     {{-- <button class="header-items">Login</button>

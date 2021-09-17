@@ -23,10 +23,10 @@
             <button id="send" class=" btn btn-primary"> send request </button>
             @endif
         @endauth
-    <h1>Dashboard</h1>
-    <div class="error-box">
+    {{-- <h1>Dashboard</h1> --}}
+    {{-- <div class="error-box">
 
-    </div>
+    </div> --}}
 @endsection
 
 @section('scripts')
