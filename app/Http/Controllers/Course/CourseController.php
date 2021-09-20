@@ -30,15 +30,16 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
+        // return $request->all();
         if ($request->has('search_query')) {
             $data = Course::search($request->search_query)->get();
             if ($request->suggestion) {
-                return response()->json(['data' => $data->pluck('title'), 'success' => 'true']);
+                return response()->json(['data' => $data->map->only('title', 'id'), 'success' => 'true']);
             }
             return $data;
         }
         $builder = Course::query()->with('review', fn ($q) => $q->select('stars'));
-
+        
         //price filter
         if ($request->min_price && $request->max_price) {
             $builder->scopePrice($request->min_price, $request->max_price);

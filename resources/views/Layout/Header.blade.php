@@ -1,13 +1,14 @@
 <header class="header">
     <nav>
-        <div class="desktop-home header-items link">Home</div>
-        <div class="header-items link">Course</div>
+        <a class="header-items home link" href="/dashbord">Home </a>
+        <a class="header-items link" href="/courses">Course</a>
+        <i class="bi bi-list sidebar-opn-icn"></i>
     </nav>
-    <i class="bi bi-list slider-icon"></i>
     <div class="sidebar">
+        <i class="bi bi-x-lg sidebar-cls-icn"></i>
         <div class="header-items filter">
             <button class="filter-button"></button>
-            <div class="filters hide">
+            <div class="filters">
                 <form action="" method="get" id="filter-form">
                     <input type="hidden" name="review" id="review">
                     <select name="catagory" id="catagory" class="catagories">
@@ -102,17 +103,32 @@
         search_input.addEventListener('input', (e) => {
             const input = e.target.value
             if (input.length >= 4) {
-                // fetch('/courses?suggestion=true ', {
-                //         method: 'get',
-                //         headers: {
-                //             'X-CSRF-TOKEN': window.csrf,
-                //         }
-                //     }).then(res => {
-                //         console.log(res);
-                //     })
-                //     .catch(err => {
-                //         console.log(err)
-                //     })
+                fetch(`/courses?suggestion=true&search_query=${input}`, {
+                        method: 'get',
+                        headers: {
+                            'X-CSRF-TOKEN': window.csrf,
+                        }
+                    })
+                    .then(res => res.ok ? res.json() : Promise.reject(res))
+                    .then(res => {
+                        //slice the suggestions to 9
+                        const data = res.data?.slice(1, 10)
+                        //clear suggestion box 
+                        while (child = suggestion_box.firstChild) {
+                            suggestion_box.removeChild(child)
+                        }
+                        data?.forEach(element => {
+                            const wrapper = document.createElement('a');
+                            wrapper.href = `/show/course/${element.id}`
+                            wrapper.innerText = element.title.length > 30 ? element.title.slice(1, 30) +
+                                '...' : element.title
+                            wrapper.classList.add('searched-item')
+                            suggestion_box.appendChild(wrapper);
+                        });
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
 
                 //suggestion box hider listener
                 const hideSuggestion = (e) => {
@@ -138,12 +154,12 @@
 
         //toogle filter box
         filter_button.addEventListener('click', () => {
-            if (!filter_button.classList.contains('close-filter')) {
+            if (filter_box.style.display !== 'block') {
                 filter_button.classList.add('close-filter')
-                filter_box.classList.remove('hide')
+                filter_box.style.display = 'block'
             } else {
                 filter_button.classList.remove('close-filter')
-                filter_box.classList.add('hide')
+                filter_box.style.display = 'none'
             }
         })
 
@@ -176,16 +192,24 @@
         review_inputs.forEach(elm => {
             elm.addEventListener('click', (e) => {
                 const target = e.target.getAttribute('data-stars') ? e.target : e.target.parentElement;
-                Array.prototype.find.call(review_inputs, (elm) => elm.classList.contains('selected')).classList.remove('selected')
+                Array.prototype.find.call(review_inputs, (elm) => elm.classList.contains('selected'))
+                    .classList.remove('selected')
                 target.classList.add('selected');
                 document.getElementById('review').value = target.getAttribute('data-stars');
             })
         })
 
+
+        //mobile sider bar toogle
+        const close_btn = document.querySelector('.sidebar-cls-icn')
+        const open_btn = document.querySelector('.sidebar-opn-icn')
+        const side_bar = document.querySelector('.sidebar')
+        open_btn.addEventListener('click', (e) => side_bar.style.display = 'flex')
+        close_btn.addEventListener('click', (e) => side_bar.style.display = 'none')
         //form submit 
         filter_form.addEventListener('submit', (e) => {
             e.preventDefault()
-            
+
             console.log(upperSlider.value);
         })
     </script>
