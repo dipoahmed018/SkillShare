@@ -30,6 +30,6 @@
 @endsection
 
 @section('scripts')
-    @stack('scripts')
-    <script src={{ asset('js/dashboard.js') }}></script>
+@stack('header')
+<script src={{ asset('js/dashboard.js') }}></script>
 @endsection

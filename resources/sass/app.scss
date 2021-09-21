@@ -7,6 +7,10 @@ $shallow_green : #6ACC9A;
 $deep_green : #0FA958;
 $glass_green : #B8E9D3;
 
+// body {
+//     margin-top: 50px;
+// }
+
 #check {
     color: aquamarine;
 }
@@ -16,7 +20,8 @@ $glass_green : #B8E9D3;
 }
 
 .hide {
-    display: none !important;
+    display: none;
+    pointer-events: none;
 }
 
 .disabled {
@@ -225,17 +230,17 @@ $glass_green : #B8E9D3;
 //mobile design
 
 .header {
-    // display: flex;
-    width: auto;
-    // position: fixed;
-    // right: 0px;
-
+    width: 100%;
+    display: block;
+    position: fixed;
     nav {
         display: flex;
         .link {
-            display: none;
+            display: block;
             color: $shallow_green;
             text-decoration: none;
+            margin: 10px;
+            font-size: 15px;
         }
         .home {
             display: block;
@@ -243,13 +248,18 @@ $glass_green : #B8E9D3;
         .sidebar-opn-icn {
             display: block;
             color: $deep_green;
-            margin-left: auto;
+            margin: 0px 0px 0px auto;
             font-size: 25px;
         }
     }
-
-    .sidebar {
+    .sidebar-show {
+        display: flex;
+    }
+    .sidebar-hidden {
         display: none;
+    }
+    .sidebar {
+        pointer-events: all;
         flex-wrap: wrap;
         justify-content: center;
         width: clamp(200px, 100vw, 300px);
@@ -260,14 +270,14 @@ $glass_green : #B8E9D3;
         height: 100%;
         background-color: rgb(68, 68, 68);
         .sidebar-cls-icn {
-            display: block;
-            width: 80%;
+            margin-right: auto;
             color: $deep_green;
             font-size: 20px;
+            max-height: 20px;
         }
         .profile {
-            // order: 1;
             position: relative;
+            max-height: 40px;
             justify-content: end;
             .profile-icon {
                 width: 40px;
@@ -340,19 +350,15 @@ $glass_green : #B8E9D3;
         .filter {
             order: 2;
             position: relative;
-            display: block;
             margin-top: 10px;
             .filters {
-
                 background-color: $glass_green;
                 border-radius: 10px;
+                display: flex;
                 padding: 10px;
                 padding-left: 10px;
                 min-width: 250px;
-                // position: absolute;
                 right: 100%;
-                display: block;
-
                 .catagories {
                     background-color: $shallow_green;
                     min-width: 100%;
@@ -488,6 +494,9 @@ $glass_green : #B8E9D3;
         display: block;
     }
 }
+.header-spacing {
+    height: clamp(25px, 10vw, 100px)
+}
 
 
 @media screen and (min-width: 768px) {
@@ -516,8 +525,8 @@ $glass_green : #B8E9D3;
 
         .sidebar {
             background-color: rgba(0, 0, 0, 0);
-            display: flex !important;
-            position: inherit;
+            display: flex;
+            position:initial;
             height: auto;
             margin-left: auto;
             min-width: 350px;
@@ -596,8 +605,15 @@ $glass_green : #B8E9D3;
                 position: relative;
                 margin-left: auto;
 
-                .filters {
+                //deskto toggle
+                .filters-show {
+                    display: flex;
+                }
+                .filters-hidden {
                     display: none;
+                }
+
+                .filters {
                     position: absolute;
                     right: 100%;
                 }
@@ -612,8 +628,7 @@ $glass_green : #B8E9D3;
                 .close-filter {
                     display: block;
                 }
-
-                z-index: 2;
+                z-index: 23;
             }
 
             .search {

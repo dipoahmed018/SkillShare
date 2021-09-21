@@ -17,7 +17,15 @@ class Review extends Model
         'reviewable_type',
         'reviewable_id',
     ];
-
+    public function scopePrice($query, $from, $to)
+    {
+        return $query->whereBetween('price', [$from, $to]);
+    }
+    public function scopeCatagory($query, $catagory)
+    {
+        return $query->whereHas('catagory', fn ($q) => $q->where('id', $catagory));
+    }
+    
     public function owner_details()
     {
         return $this->belongsTo(User::class, 'owner');

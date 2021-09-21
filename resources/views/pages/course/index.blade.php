@@ -4,11 +4,31 @@
 
 @section('body')
     @include('Layout.Header')
-        
-    @dump($data);
+    @foreach ($data as $item)
+        <p>{{ $item->title }}</p>
+        <span>{{ $item->price }}</span>
+    @endforeach
+    @foreach ($data as $item)
+        <p>{{ $item->title }}</p>
+        <span>{{ $item->price }}</span>
+    @endforeach
+    @foreach ($data as $item)
+        <p>{{ $item->title }}</p>
+        <span>{{ $item->price }}</span>
+    @endforeach
+    @foreach ($data as $item)
+        <p>{{ $item->title }}</p>
+        <span>{{ $item->price }}</span>
+    @endforeach
+    @foreach ($data as $item)
+        <p>{{ $item->title }}</p>
+        <span>{{ $item->price }}</span>
+    @endforeach
+
 @endsection
 
 @section('scripts')
+    @stack('header')
     <script>
         const courses = @json($data);
         console.log(courses);

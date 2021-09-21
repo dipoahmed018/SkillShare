@@ -21,8 +21,6 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
-use App\Services\Filters\Search;
-use App\Services\Filters\Sort;
 use App\Services\VideoStream;
 use Illuminate\Support\Facades\DB;
 
@@ -31,22 +29,21 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         // return $request->all();
-        if ($request->has('search_query')) {
-            $data = Course::search($request->search_query)->get();
+        if ($request->has('search')) {
+            $data = Course::search($request->search)->get();
             if ($request->suggestion) {
                 return response()->json(['data' => $data->map->only('title', 'id'), 'success' => 'true']);
             }
             return $data;
         }
-        $builder = Course::query()->with('review', fn ($q) => $q->select('stars'));
-        
-        //price filter
+        $builder = Course::query();
+        // price filter
         if ($request->min_price && $request->max_price) {
-            $builder->scopePrice($request->min_price, $request->max_price);
+            $builder->Price($request->min_price, $request->max_price);
         }
         //catagory filter
-        if ($request->catagory) {
-            $builder->scopeCatagory($request->catagory);
+        if ($request->catagory && $request->catagory !== 'default') {
+            $builder->Catagory($request->catagory);
         }
 
         //order and paginate

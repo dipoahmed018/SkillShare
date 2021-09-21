@@ -1,19 +1,20 @@
 <header class="header">
     <nav>
-        <a class="header-items home link" href="/dashbord">Home </a>
+        <a class="header-items home link" href="/dashboard">Home </a>
         <a class="header-items link" href="/courses">Course</a>
         <i class="bi bi-list sidebar-opn-icn"></i>
     </nav>
-    <div class="sidebar">
+    <div class="sidebar sidebar-hidden">
         <i class="bi bi-x-lg sidebar-cls-icn"></i>
         <div class="header-items filter">
             <button class="filter-button"></button>
-            <div class="filters">
-                <form action="" method="get" id="filter-form">
-                    <input type="hidden" name="review" id="review">
+            <div class="filters filters-hidden">
+                <form id="filter-form" method="GET">
+                    <input type="hidden" name="review">
                     <select name="catagory" id="catagory" class="catagories">
-                        <option value="default">select catagory</option>
-                        <option value="hellowor">hellowo</option>
+                        <option value="default" selected>select catagory</option>
+                        <option value="first">first</option>
+                        <option value="second">second</option>
                     </select>
                     <div class="price-range">
                         <span>price:</span>
@@ -24,9 +25,9 @@
                     </div>
                     <div class="price-input">
                         <label for="min_price">min:</label>
-                        <input type="text" name="min" id="min_price" type="number" value="10">
+                        <input type="text" name="min_price" id="min_price" type="number" value="10">
                         <label for="max_price">max:</label>
-                        <input type="text" name="max" id="max_price" type="number" value="1000">
+                        <input type="text" name="max_price" id="max_price" type="number" value="1000">
                     </div>
                     <div class="review">
                         <p>review:</p>
@@ -93,8 +94,9 @@
     {{-- <button class="header-items">Login</button>
     <button class="header-items">Register</button> --}}
 </header>
+<div class="header-spacing"></div>
 
-@push('scripts')
+@push('header')
     <script>
         //serach box
         const search_input = document.getElementById('search');
@@ -103,7 +105,7 @@
         search_input.addEventListener('input', (e) => {
             const input = e.target.value
             if (input.length >= 4) {
-                fetch(`/courses?suggestion=true&search_query=${input}`, {
+                fetch(`/courses?suggestion=true&search=${input}`, {
                         method: 'get',
                         headers: {
                             'X-CSRF-TOKEN': window.csrf,
@@ -154,12 +156,14 @@
 
         //toogle filter box
         filter_button.addEventListener('click', () => {
-            if (filter_box.style.display !== 'block') {
+            if (filter_box.classList.contains('filters-hidden')) {
                 filter_button.classList.add('close-filter')
-                filter_box.style.display = 'block'
+                filter_box.classList.remove('filters-hidden')
+                filter_box.classList.add('filters-show')
             } else {
                 filter_button.classList.remove('close-filter')
-                filter_box.style.display = 'none'
+                filter_box.classList.remove('filters-show')
+                filter_box.classList.add('filters-hidden')
             }
         })
 
@@ -195,7 +199,7 @@
                 Array.prototype.find.call(review_inputs, (elm) => elm.classList.contains('selected'))
                     .classList.remove('selected')
                 target.classList.add('selected');
-                document.getElementById('review').value = target.getAttribute('data-stars');
+                document.querySelector('[name="review"').value = target.getAttribute('data-stars');
             })
         })
 
@@ -204,13 +208,16 @@
         const close_btn = document.querySelector('.sidebar-cls-icn')
         const open_btn = document.querySelector('.sidebar-opn-icn')
         const side_bar = document.querySelector('.sidebar')
-        open_btn.addEventListener('click', (e) => side_bar.style.display = 'flex')
-        close_btn.addEventListener('click', (e) => side_bar.style.display = 'none')
-        //form submit 
-        filter_form.addEventListener('submit', (e) => {
-            e.preventDefault()
-
-            console.log(upperSlider.value);
-        })
+        const toggleSideBar = (e) => {
+            if (side_bar.classList.contains('sidebar-hidden')) {
+                side_bar.classList.remove('sidebar-hidden')
+                side_bar.classList.add('sidebar-show')
+            } else {
+                side_bar.classList.add('sidebar-hidden')
+                side_bar.classList.remove('sidebar-show')
+            }
+        }
+        open_btn.addEventListener('click', toggleSideBar)
+        close_btn.addEventListener('click', toggleSideBar)
     </script>
 @endpush
