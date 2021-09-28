@@ -13,8 +13,9 @@
                     <input type="hidden" name="review">
                     <select name="catagory" id="catagory" class="catagories">
                         <option value="default" selected>select catagory</option>
-                        <option value="first">first</option>
-                        <option value="second">second</option>
+                        @foreach ($catagories as $catagory)
+                            <option value="{{ $catagory->id }}">{{ $catagory->name }}</option>
+                        @endforeach
                     </select>
                     <div class="price-range">
                         <span>price:</span>
@@ -25,27 +26,27 @@
                     </div>
                     <div class="price-input">
                         <label for="min_price">min:</label>
-                        <input type="text" name="min_price" id="min_price" type="number" value="10">
+                        <input type="text" name="min_price" id="min_price" type="number" value="100">
                         <label for="max_price">max:</label>
-                        <input type="text" name="max_price" id="max_price" type="number" value="1000">
+                        <input type="text" name="max_price" id="max_price" type="number" value="10000">
                     </div>
                     <div class="review">
                         <p>review:</p>
-                        <div data-stars="5" class="review-stars selected">
+                        <div data-stars="10" class="review-stars selected">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                         </div>
-                        <div data-stars="4" class="review-stars">
+                        <div data-stars="8" class="review-stars">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star"></i>
                         </div>
-                        <div data-stars="3" class="review-stars">
+                        <div data-stars="6" class="review-stars">
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
                             <i class="bi bi-star-fill"></i>
@@ -82,21 +83,28 @@
                 <a href="#">hello world new course</a>
             </div>
         </form>
-        <div class="header-items profile">
-            <div class="profile-icon">d</div>
-            <div class="profile-overlay"></div>
-            <div class="profile-links">
-                <a href="/profile">my profile</a>
-                <a href="/user/logout">logout</a>
+        @if ($user)
+            <div class="header-items profile user-info">
+                <div class="profile-icon">d</div>
+                <div class="profile-overlay"></div>
+                <div class="profile-links">
+                    <a href="/profile">my profile</a>
+                    <a href="/user/logout">logout</a>
+                </div>
             </div>
+        @else
+        <div class="authenticate user-info">
+            <a class="login" href="/login">Log in</a>
+            <a class="register" href="/register">Sign up</a>
         </div>
+        @endif
     </div>
     {{-- <button class="header-items">Login</button>
     <button class="header-items">Register</button> --}}
 </header>
 <div class="header-spacing"></div>
 
-@push('header')
+@push('menu')
     <script>
         //serach box
         const search_input = document.getElementById('search');
@@ -178,15 +186,15 @@
             let lowerVal = parseInt(lowerSlider.value);
             let upperVal = parseInt(upperSlider.value);
 
-            if (upperVal < lowerVal + 20) {
-                upperSlider.value = lowerVal + 20
+            if (upperVal < lowerVal + 15) {
+                upperSlider.value = lowerVal + 15
             }
-            if (lowerVal > upperVal - 20) {
-                lowerSlider.value = upperVal - 20
+            if (lowerVal > upperVal - 15) {
+                lowerSlider.value = upperVal - 15
             }
             //set max min price input 
-            min_price.value = lowerSlider.value * 10
-            max_price.value = upperSlider.value * 10
+            min_price.value = lowerSlider.value * 100
+            max_price.value = upperSlider.value * 100
         }
         upperSlider.addEventListener('input', range_input_listener)
         lowerSlider.addEventListener('input', range_input_listener)
@@ -201,6 +209,8 @@
                 target.classList.add('selected');
                 document.querySelector('[name="review"').value = target.getAttribute('data-stars');
             })
+            document.querySelector('[name="review"').value = elm.classList.contains('selected') ? elm.getAttribute(
+                'data-stars') : 10;
         })
 
 

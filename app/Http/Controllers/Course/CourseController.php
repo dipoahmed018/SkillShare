@@ -36,7 +36,8 @@ class CourseController extends Controller
             }
             return $data;
         }
-        $builder = Course::query();
+        $builder = Course::query()->selectRaw('AVG(review.stars) AS avg_rate, course.*')
+        ->with(['thumblin' => fn($q) => $q->select('file_link.*'), 'owner_details' => fn($q) => $q->select('users.*')]);
         // price filter
         if ($request->min_price && $request->max_price) {
             $builder->Price($request->min_price, $request->max_price);
@@ -46,11 +47,13 @@ class CourseController extends Controller
             $builder->Catagory($request->catagory);
         }
 
+        $builder->Review($request->review ?: 10);
+        // $builder->where('course.id', '=', '6');
         //order and paginate
         $builder->orderBy($request->order_by ?: 'price', 'asc');
-        $data = $builder->paginate($request->per_page ?: 5,['*'],'course_page');
-        
-        return view('pages.course.index',['data' => $data]);
+        $data = $builder->paginate($request->per_page ?: 5, ['*'], 'course_page');
+
+        return view('pages.course.index', ['data' => $data]);
     }
     public function createCourse(createCourse $request)
     {

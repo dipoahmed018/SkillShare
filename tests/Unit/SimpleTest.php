@@ -22,8 +22,10 @@ class SimpleTest extends TestCase
 {
     function test_simple()
     {
-        $query = Course::query()->selectRaw('course.title, course.id')->join('review', 'course.id', '=', 'review.reviewable_id')->get();
-        dump($query);
-        assertTrue(true);
+        // $builder = Course::query();
+        // $builder->Price(200, 5000);
+        // $builder->get();
+        // dump($builder);
+        // assertTrue(true);
     }
 }

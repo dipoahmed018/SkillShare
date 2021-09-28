@@ -1,0 +1,124 @@
+$primary: #0d6efd;
+$stars: #F2DD1F;
+$shallow_green : #6ACC9A;
+$deep_green : #0FA958;
+$glass_green : #B8E9D3;
+
+
+.courses {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    // align-items: flex-start;
+    .course-card {
+        margin: 0.5rem 0.5rem auto 0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        background: $glass_green;
+        padding: 10px;
+        max-width: 90vw;
+        font-size: 12px;
+
+        .title {
+            color: $shallow_green;
+        }
+
+        .thumbnail {
+            width: 100%;
+            overflow: hidden;
+
+            img {
+                max-height: 100%;
+                max-width: 100%;
+            }
+        }
+
+        // .details  
+        .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1em;
+            color: $deep_green;
+
+            >* {
+                display: inline-block;
+            }
+
+            .rate {
+                overflow: hidden;
+                display: flex;
+                flex-wrap: nowrap;
+                overflow: hidden;
+
+                // max-width: ;
+                span {
+                    display: inline-block;
+                }
+
+                .rate-overlay {
+                    display: inline-block;
+                    position: relative;
+                    background: no-repeat top left url('assets/transparent_stars.png');
+                    background-size: 6em 1em;
+                    width: 6em;
+                    height: 1em;
+                    margin: auto;
+
+                    .rate-image {
+                        background: no-repeat top left url('assets/colored_stars.png');
+                        background-size: 6em 1em;
+                        height: 100%;
+                        position: absolute;
+                        top: 0%;
+                        left: 0%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 700px) {
+    .courses {
+        .course-card {
+            max-width: 45vw;
+        }
+    }
+}
+
+//laravel bootstrap default link coloring and positioning
+
+.links-wrapper {
+    display: flex;
+    margin-top: 2rem;
+
+    nav {
+        margin: auto;
+
+        ul {
+            
+            .page-item {
+                .page-link {
+                    background-color: $glass_green;
+                    color: $deep_green;
+                    outline: none;
+                    text-decoration: none;
+                    border: 1px solid gray;
+                }
+            }
+            .disabled {
+                .page-link {
+                    color: gray;
+                }
+            }
+            .active > .page-link {
+                border : 1px solid $deep_green;
+                outline :none;
+                // background: $shallow_green;
+            }
+        }
+
+    }
+}

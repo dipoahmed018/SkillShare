@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\StripeServiceProvider;
+use App\Providers\ViewServiceProvider;
 
 return [
 
@@ -178,7 +179,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         // App\Providers\TelescopeServiceProvider::class,
         App\Providers\RelationMapProvider::class,
-
+        ViewServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
         StripeServiceProvider::class,

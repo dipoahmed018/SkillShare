@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Http;
 
 use function PHPUnit\Framework\assertTrue;
 
@@ -34,11 +35,8 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        // $new = collect([1, 3, 4, 5]);
-        // $old = collect([1,2,3]);
-        // $rest = $old->diff($new);
-        // dump($rest);
-        // $rest->all();
-        // assertTrue(true);
+        $response = Course::query()->Price(300, 5000)->Catagory(5);
+        // $response->selectRaw('select stars from reviews')
+        dump($response->get());
     }
 }

@@ -1,6 +1,5 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
-@import url("./header.scss");
 $primary: #0d6efd;
 $stars: #F2DD1F;
 $shallow_green : #6ACC9A;
@@ -233,8 +232,11 @@ $glass_green : #B8E9D3;
     width: 100%;
     display: block;
     position: fixed;
+    z-index: 10;
+
     nav {
         display: flex;
+
         .link {
             display: block;
             color: $shallow_green;
@@ -242,9 +244,11 @@ $glass_green : #B8E9D3;
             margin: 10px;
             font-size: 15px;
         }
+
         .home {
             display: block;
         }
+
         .sidebar-opn-icn {
             display: block;
             color: $deep_green;
@@ -252,13 +256,17 @@ $glass_green : #B8E9D3;
             font-size: 25px;
         }
     }
+
     .sidebar-show {
         display: flex;
     }
+
     .sidebar-hidden {
         display: none;
     }
+
     .sidebar {
+        overflow-y: auto;
         pointer-events: all;
         flex-wrap: wrap;
         justify-content: center;
@@ -269,16 +277,19 @@ $glass_green : #B8E9D3;
         top: 0px;
         height: 100%;
         background-color: rgb(68, 68, 68);
+
         .sidebar-cls-icn {
             margin-right: auto;
             color: $deep_green;
             font-size: 20px;
             max-height: 20px;
         }
+
         .profile {
             position: relative;
             max-height: 40px;
             justify-content: end;
+
             .profile-icon {
                 width: 40px;
                 height: 40px;
@@ -288,8 +299,26 @@ $glass_green : #B8E9D3;
                 font-size: 1.5rem;
                 cursor: pointer;
             }
+
             .profile-links {
                 display: none;
+            }
+        }
+
+        .authenticate {
+            display: flex;
+
+            .login,
+            .register {
+                display: block;
+                color: $deep_green;
+                text-decoration: none;
+                background: $shallow_green;
+                padding-top: 0.2em;
+                width: 4em;
+                height: 2em;
+                text-align: center;
+                border: 1px solid $glass_green;
             }
         }
 
@@ -297,6 +326,8 @@ $glass_green : #B8E9D3;
             order: 1;
             position: relative;
             margin-top: 10px;
+            z-index: 20;
+
             input {
                 background: url('./assets/search_background.png');
                 background-repeat: no-repeat;
@@ -332,6 +363,8 @@ $glass_green : #B8E9D3;
                 overflow-y: auto;
                 overflow-x: hidden;
                 border-bottom: 2px solid black;
+                z-index: 4555;
+
                 a {
                     display: block;
                     text-decoration: none;
@@ -351,6 +384,7 @@ $glass_green : #B8E9D3;
             order: 2;
             position: relative;
             margin-top: 10px;
+
             .filters {
                 background-color: $glass_green;
                 border-radius: 10px;
@@ -359,6 +393,7 @@ $glass_green : #B8E9D3;
                 padding-left: 10px;
                 min-width: 250px;
                 right: 100%;
+
                 .catagories {
                     background-color: $shallow_green;
                     min-width: 100%;
@@ -494,6 +529,7 @@ $glass_green : #B8E9D3;
         display: block;
     }
 }
+
 .header-spacing {
     height: clamp(25px, 10vw, 100px)
 }
@@ -506,10 +542,11 @@ $glass_green : #B8E9D3;
         background-color: rgb(112, 112, 112);
         width: 100%;
         height: 80px;
-
+        z-index: 20;
+        
         nav {
             display: flex;
-
+            
             .link {
                 display: block;
                 align-self: center;
@@ -518,26 +555,36 @@ $glass_green : #B8E9D3;
                 margin: 0px 10px;
                 font-size: 1.8rem;
             }
+            
             .sidebar-opn-icn {
                 display: none;
             }
         }
-
+        
         .sidebar {
             background-color: rgba(0, 0, 0, 0);
             display: flex;
-            position:initial;
+            position: initial;
             height: auto;
+            width: auto;
             margin-left: auto;
             min-width: 350px;
             padding: 0px;
+            overflow-y:visible;
+
             .sidebar-cls-icn {
                 display: none;
             }
 
-            .profile {
+            // for fixing the borken postion of profile and authentiaction links order
+            .user-info {
                 order: 3;
+            }
+
+
+            .profile {
                 position: relative;
+
                 .profile-links {
                     position: absolute;
                     display: none;
@@ -584,13 +631,24 @@ $glass_green : #B8E9D3;
 
                     .profile-links {
                         display: block;
+
                         a {
                             display: block;
+
                             &:hover {
                                 background-color: $shallow_green;
                             }
                         }
                     }
+                }
+            }
+
+            //login button postion for desktop
+            .authenticate {
+                margin: auto 10px auto 0px;
+
+                .login, .register {
+                    margin-top: 0.5em;
                 }
             }
 
@@ -609,6 +667,7 @@ $glass_green : #B8E9D3;
                 .filters-show {
                     display: flex;
                 }
+
                 .filters-hidden {
                     display: none;
                 }
@@ -628,15 +687,13 @@ $glass_green : #B8E9D3;
                 .close-filter {
                     display: block;
                 }
+
                 z-index: 23;
             }
 
             .search {
                 order: 2;
                 position: relative;
-                // .suggestion-box {
-                // }
-                z-index: 2;
             }
         }
     }

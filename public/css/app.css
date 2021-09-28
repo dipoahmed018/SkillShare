@@ -1389,7 +1389,6 @@ url(/fonts/vendor/bootstrap-icons/bootstrap-icons.woff?94eeade15e6b7fbed95b18ff3
 .bi-x-lg::before { content: "\f659"; }
 .bi-safe::before { content: "\f65a"; }
 
-
 @charset "UTF-8";
 
 /*!
@@ -13373,6 +13372,7 @@ fieldset:disabled .btn {
   width: 100%;
   display: block;
   position: fixed;
+  z-index: 10;
 }
 
 .header nav {
@@ -13407,6 +13407,7 @@ fieldset:disabled .btn {
 }
 
 .header .sidebar {
+  overflow-y: auto;
   pointer-events: all;
   flex-wrap: wrap;
   justify-content: center;
@@ -13446,10 +13447,28 @@ fieldset:disabled .btn {
   display: none;
 }
 
+.header .sidebar .authenticate {
+  display: flex;
+}
+
+.header .sidebar .authenticate .login,
+.header .sidebar .authenticate .register {
+  display: block;
+  color: #0FA958;
+  text-decoration: none;
+  background: #6ACC9A;
+  padding-top: 0.2em;
+  width: 4em;
+  height: 2em;
+  text-align: center;
+  border: 1px solid #B8E9D3;
+}
+
 .header .sidebar .search {
   order: 1;
   position: relative;
   margin-top: 10px;
+  z-index: 20;
   position: relative;
   z-index: 2;
 }
@@ -13487,6 +13506,7 @@ fieldset:disabled .btn {
   overflow-y: auto;
   overflow-x: hidden;
   border-bottom: 2px solid black;
+  z-index: 4555;
 }
 
 .header .sidebar .search .suggestion-box a {
@@ -13654,6 +13674,7 @@ fieldset:disabled .btn {
     background-color: #707070;
     width: 100%;
     height: 80px;
+    z-index: 20;
   }
 
   .header nav {
@@ -13678,17 +13699,22 @@ fieldset:disabled .btn {
     display: flex;
     position: initial;
     height: auto;
+    width: auto;
     margin-left: auto;
     min-width: 350px;
     padding: 0px;
+    overflow-y: visible;
   }
 
   .header .sidebar .sidebar-cls-icn {
     display: none;
   }
 
-  .header .sidebar .profile {
+  .header .sidebar .user-info {
     order: 3;
+  }
+
+  .header .sidebar .profile {
     position: relative;
   }
 
@@ -13745,6 +13771,15 @@ fieldset:disabled .btn {
     background-color: #6ACC9A;
   }
 
+  .header .sidebar .authenticate {
+    margin: auto 10px auto 0px;
+  }
+
+  .header .sidebar .authenticate .login,
+  .header .sidebar .authenticate .register {
+    margin-top: 0.5em;
+  }
+
   .header .sidebar .header-items {
     display: block;
     margin-right: 10px;
@@ -13785,7 +13820,6 @@ fieldset:disabled .btn {
   .header .sidebar .search {
     order: 2;
     position: relative;
-    z-index: 2;
   }
 }
 

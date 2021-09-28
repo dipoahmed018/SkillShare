@@ -67,7 +67,14 @@ class Course extends Model
     }
     public function scopeCatagory($query, $catagory)
     {
-        return $query->whereHas('catagory', fn ($q) => $q->where('id', $catagory));
+        return $query->whereHas('catagory', fn ($q) => $q->where('catagory.id', $catagory));
+    }
+    public function scopeReview($query, $review)
+    {
+        return $query->leftJoin('review', fn($join) => $join->on('course.id', '=', 'review.reviewable_id')->where('review.reviewable_type','=','course'))
+            ->groupBy('course.id')
+            ->havingRaw('avg_rate <= ?',[$review])
+            ->orHavingRaw('avg_rate IS NULL');
     }
     public function get_tutorials_details()
     {

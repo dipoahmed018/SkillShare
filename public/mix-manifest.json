@@ -7,5 +7,7 @@
     "/js/forum_edit.js": "/js/forum_edit.js",
     "/js/post_edit.js": "/js/post_edit.js",
     "/js/transaction.js": "/js/transaction.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/dashboard.css": "/css/dashboard.css",
+    "/css/course.css": "/css/course.css"
 }
