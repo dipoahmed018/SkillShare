@@ -5,6 +5,7 @@ use App\Models\Catagory;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Forum\CommentController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
@@ -26,7 +27,7 @@ use Illuminate\Http\Request;
 
 //root routes
 Route::redirect('/', '/dashboard');
-Route::view('/dashboard', 'pages/Dashboard');
+Route::get('/dashboard', DashboardController::class);
 
 
 //user interection routes

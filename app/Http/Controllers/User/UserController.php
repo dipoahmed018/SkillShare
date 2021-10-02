@@ -77,7 +77,7 @@ class UserController extends Controller
     public function ShowUserUpdateForm(Request $request)
     {
         $user = $request->user();
-        return !Auth::check() ? redirect('/', 302) : view('pages/user/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->getProfilePicture()]);
+        return !Auth::check() ? redirect('/', 302) : view('pages/user/ProfileUpdateForm', ['user' => $user, 'profile_picture' => $user->profilePicture]);
     }
     public function Update(UpdateRequest $request)
     {
@@ -89,12 +89,12 @@ class UserController extends Controller
         $birthdate = $request->birthdate;
 
         if ($profile_picture) {
-            $newfilename = str_replace(['.', ' ','/'], '', $user->name).time(). '_profile.' . $profile_picture->getClientOriginalExtension();
+            $newfilename = str_replace(['.', ' ','/'], '', $user->name) . time(). '_profile.' . $profile_picture->getClientOriginalExtension();
             $file_path = storage_path('/app/public/profile/profile_photo/' . $newfilename);
             $image = Image::make($profile_picture->getRealPath());
-            if ($user->getProfilePicture() !== 'https://skillshare.com/storage/profile/profile_photo/default.JPG') {
-                Storage::disk('public')->delete("/profile/profile_photo/" . $user->profile_details->file_name);
-                $user->profile_details->delete();
+            if ($user->profilePicture) {
+                Storage::disk('public')->delete("/profile/profile_photo/" . $user->profilePicture->file_name);
+                $user->profilePicture()->delete();
             }
             $image->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();

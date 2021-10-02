@@ -64,15 +64,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Forum::class, 'course_students', 'student_id', 'course_id');
     }
 
-    public function profile_details()
+    public function profilePicture()
     {
         return $this->morphOne(FileLink::class, 'fileable','fileable_type','fileable_id')->where('file_type','=','profile_photo');
     }
-    public function getProfilePicture()
-    {
-        $profile_picture = DB::table('file_link')->whereRaw('file_type = ? AND fileable_id = ? AND fileable_type = ?',['profile_photo',$this->id,'user'])->first();
-        return !$profile_picture ? asset('/storage/profile/profile_photo/default.JPG') : $profile_picture->file_link;
-    }
+    // public function getProfilePicture()
+    // {
+    //     $profile_picture = DB::table('file_link')->whereRaw('file_type = ? AND fileable_id = ? AND fileable_type = ?',['profile_photo',$this->id,'user'])->first();
+    //     return !$profile_picture ? asset('/storage/profile/profile_photo/default.JPG') : $profile_picture->file_link;
+    // }
     public function getProfileLocation()
     {
         return Str::slug($this->name . $this->id);

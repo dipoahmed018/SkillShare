@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'profile_picture' => ['mimes:jpg,png', Rule::dimensions()->maxWidth(5000)->maxHeight(7000)->minWidth(400)->minHeight(600),'max:10000'],
+            'profile_picture' => ['mimes:jpg,png', Rule::dimensions()->maxWidth(10000)->maxHeight(10000)->minWidth(400)->minHeight(600),'max:10000'],
             'name' => 'max:100',
             'gender' => Rule::in(['male','female']),
             'birthdate' => 'date|before:'. now()->subYears(12) .'|after:' . now()->subYears(150)

@@ -22,7 +22,7 @@
             <legend>
                 profie picture
             </legend>
-            <img width="150px" src={{ $profile_picture }} alt="">
+            <img width="150px" height="auto" src={{ $profile_picture ? $profile_picture->file_link }} alt="">
             <input accept=".jpeg, .jpg, .png" type="file" name="profile_picture" id="profile_picture">
             @error('profile_picture')
                 <p id="profile_picture_phperror">{{ $message }}</p>
@@ -105,25 +105,17 @@
     </form>
     <fieldset>
         <legend>change email</legend>
-        @if (Auth::user()->email_verified_at)
             <form action={{ route('user.update.email') }} method="post">
-                <input type="hidden" name="_method" value="put">
                 @csrf
+                <input type="hidden" name="_method" value="put">
+                <input type="text" name="email" id="email">
                 <input type="submit" value="change email">
             </form>
-        @else
-            <form action={{ route('user.update.email') }} method="post">
-                <input type="hidden" name="_method" value="put">
-                @csrf
-                <input type="email" name="email" id="email">
-                <input type="submit" value="change email">
-            </form>
-        @endif
     </fieldset>
-    <form action="{{ route('purchase.course', ['course' => 2]) }}" method="post">
+    {{-- <form action="{{ route('purchase.course', ['course' => 2]) }}" method="post">
         @csrf
         <input type="submit" value="set">
-    </form>
+    </form> --}}
 
 @endsection
 

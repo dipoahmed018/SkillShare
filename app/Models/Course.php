@@ -65,17 +65,39 @@ class Course extends Model
     {
         return $query->whereBetween('price', [$from, $to]);
     }
+
     public function scopeCatagory($query, $catagory)
     {
-        return $query->whereHas('catagory', fn ($q) => $q->where('catagory.id', $catagory));
+        return $query->whereHas('catagory', fn ($q) => $q->whereIn('catagory.id', is_array($catagory) ? $catagory : [$catagory]));
     }
-    public function scopeReview($query, $review)
+
+    public function scopeReview($query, $review = 10)
     {
-        return $query->leftJoin('review', fn($join) => $join->on('course.id', '=', 'review.reviewable_id')->where('review.reviewable_type','=','course'))
+        //each time wheile using this scope you have to add { AVG(review.stars) AS avg_rate } to you select statement
+        return $query->leftJoin('review', fn ($join) => $join->on('course.id', '=', 'review.reviewable_id')->where('review.reviewable_type', '=', 'course'))
             ->groupBy('course.id')
-            ->havingRaw('avg_rate <= ?',[$review])
+            ->havingRaw('avg_rate <= ?', [$review])
             ->orHavingRaw('avg_rate IS NULL');
     }
+
+    public function scopeMyCourse($query, $user)
+    {
+        return $query->join('course_students', fn ($j) => $j->on('course_students.course_id', '=', 'course.id')
+            ->where('course_students.id', '=', $user));
+    }
+
+    public function scopeMonthlySales($query, $sales = 10)
+    {
+        //need to add { COUNT(course_students.id) AS sales }
+        return $query->join('course_students', 'course.id', 'course_students.course_id')
+            ->where('course_students.created_at', '>', now()->subMonth())
+            ->groupBy('course.id')
+            ->havingRaw('sales >= ?', [$sales]);
+    }
+
+
+
+    //get all the tutorial details for a specific course
     public function get_tutorials_details()
     {
         $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type', '=', 'course');

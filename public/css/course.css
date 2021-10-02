@@ -4,7 +4,7 @@
   justify-content: center;
 }
 
-.courses .course-card {
+.course-card {
   margin: 0.5rem 0.5rem auto 0.5rem;
   display: flex;
   flex-wrap: wrap;
@@ -15,43 +15,43 @@
   font-size: 12px;
 }
 
-.courses .course-card .title {
+.course-card .title {
   color: #6ACC9A;
 }
 
-.courses .course-card .thumbnail {
+.course-card .thumbnail {
   width: 100%;
   overflow: hidden;
 }
 
-.courses .course-card .thumbnail img {
+.course-card .thumbnail img {
   max-height: 100%;
   max-width: 100%;
 }
 
-.courses .course-card .details {
+.course-card .details {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
   color: #0FA958;
 }
 
-.courses .course-card .details > * {
+.course-card .details > * {
   display: inline-block;
 }
 
-.courses .course-card .details .rate {
+.course-card .details .rate {
   overflow: hidden;
   display: flex;
   flex-wrap: nowrap;
   overflow: hidden;
 }
 
-.courses .course-card .details .rate span {
+.course-card .details .rate span {
   display: inline-block;
 }
 
-.courses .course-card .details .rate .rate-overlay {
+.course-card .details .rate .rate-overlay {
   display: inline-block;
   position: relative;
   background: no-repeat top left url(/images/transparent_stars.png?c8a15eed1ddc7fa65f4c205555e057ae);
@@ -61,7 +61,7 @@
   margin: auto;
 }
 
-.courses .course-card .details .rate .rate-overlay .rate-image {
+.course-card .details .rate .rate-overlay .rate-image {
   background: no-repeat top left url(/images/colored_stars.png?0022fba86dea5edad61270c12810b281);
   background-size: 6em 1em;
   height: 100%;
@@ -71,8 +71,8 @@
 }
 
 @media screen and (min-width: 700px) {
-  .courses .course-card {
-    max-width: 45vw;
+  .course-card {
+    max-width: 45%;
   }
 }
 

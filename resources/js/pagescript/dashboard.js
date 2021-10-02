@@ -1,12 +1,25 @@
-const { default: axios } = require("axios");
+import Splide from "@splidejs/splide";
+// const { default: axios } = require("axios");
+const course_slider_el = document.getElementById('course-slider')
+console.log(course_slider_el)
 
-const change_email = document.getElementById("change_email")
-const test = document.getElementById('send');
-if (change_email) {
-  change_email.addEventListener("click", (event) => {
-    event.preventDefault();
-    document.getElementById("sendmail").classList.add("hide");
-    document.getElementById("change_email_form").classList.remove("hide");
-    console.log("hello");
-  });
-}
+const course_slider = new Splide(course_slider_el, {
+  type: 'loop',
+  perPage: 2,
+  perMove:1,
+  width: '100%',
+  pagination: false,
+  autoplay: true,
+  pauseOnHover: true,
+  height: '70vh',
+  breakpoints : {
+    700 : {
+      perPage: 1,
+      height: '80vh',
+    }
+  }
+})
+document.addEventListener('DOMContentLoaded', () => {
+  course_slider.mount()
+  console.log(course_slider)
+})
