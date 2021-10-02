@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{{ asset('css/course.css') }}">
 @endsection
 @section('body')
-    @include('Layout.Header')
     {{-- @dump($data) --}}
     <div class="courses">
         @foreach ($data as $item)
@@ -19,7 +18,6 @@
 @endsection
 
 @section('scripts')
-    @stack('menu')
     <script>
         const courses = @json($data);
         document.querySelectorAll('.owner-link').forEach((el) => {

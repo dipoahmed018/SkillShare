@@ -11,11 +11,10 @@ const course_slider = new Splide(course_slider_el, {
   pagination: false,
   autoplay: true,
   pauseOnHover: true,
-  height: '70vh',
+  autoHeight: true,
   breakpoints : {
     700 : {
       perPage: 1,
-      height: '80vh',
     }
   }
 })

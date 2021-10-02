@@ -12,13 +12,18 @@
 </head>
 <body>
     @yield('tamplates')
+    @include('Layout.Header')
     
     {{-- popup box --}}
     <div id="popup_box" class="hide"></div>
-
     @yield('body')
 
+    @include('Layout.Footer')
+
+    {{-- menu stack is the script for header  --}}
+    @stack('menu')
     <script src={{ asset('js/app.js') }}></script>
+
     @yield('scripts')
 </body>
 </html>

@@ -6004,11 +6004,10 @@ var course_slider = new (_splidejs_splide__WEBPACK_IMPORTED_MODULE_0___default()
   pagination: false,
   autoplay: true,
   pauseOnHover: true,
-  height: '70vh',
+  autoHeight: true,
   breakpoints: {
     700: {
-      perPage: 1,
-      height: '80vh'
+      perPage: 1
     }
   }
 });

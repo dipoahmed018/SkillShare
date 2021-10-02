@@ -694,3 +694,30 @@ $glass_green : #B8E9D3;
         }
     }
 }
+
+
+//footer styles
+.footer {
+    display: flex;
+    flex-direction: column;
+    background: $glass_green;
+    justify-content: space-around;
+    min-height: clamp(10px, 20vh, 100px);
+    margin-top: 10px;
+    .links {
+        display: flex;
+        justify-content: center;
+        margin: 0px auto;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .links > a {
+        display: inline-block;
+        color: $deep_green;
+        text-decoration: none;
+    }
+    p {
+        color: $shallow_green;
+        margin: 0px auto;
+    }
+}
