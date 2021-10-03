@@ -1,7 +1,7 @@
 <a href="/show/course/{{ $course->id }}" style="text-decoration: none" class="course-card">
     <div class="thumbnail">
-        @if ($course->thumblin)
-            <img src="{{ asset($course->thumblin->file_link) }}" alt="no image">
+        @if ($course->thumbnail)
+            <img src="{{ asset($course->thumbnail->file_link) }}" alt="no image">
         @endif
     </div>
     <div class="title">

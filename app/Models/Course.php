@@ -47,9 +47,9 @@ class Course extends Model
     {
         return $this->morphMany(Review::class, 'reviewable', 'reviewable_type', 'reviewable_id');
     }
-    public function thumblin()
+    public function thumbnail()
     {
-        return $this->morphOne(FileLink::class, 'fileable', 'fileable_type', 'fileable_id')->where('file_type', '=', 'thumblin');
+        return $this->morphOne(FileLink::class, 'fileable', 'fileable_type', 'fileable_id')->where('file_type', '=', 'thumbnail');
     }
     public function introduction()
     {

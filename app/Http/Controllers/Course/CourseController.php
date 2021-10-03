@@ -16,7 +16,7 @@ use Intervention\Image\Facades\Image;
 use App\Http\Requests\Course\AddVideo;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Course\DeleteVideo;
-use App\Http\Requests\Course\SetThumblin;
+use App\Http\Requests\Course\SetThumbnail;
 use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
@@ -37,7 +37,7 @@ class CourseController extends Controller
             return $data;
         }
         $builder = Course::query()->selectRaw('AVG(review.stars) AS avg_rate, course.*')
-        ->with(['thumblin' => fn($q) => $q->select('file_link.*'), 'owner_details' => fn($q) => $q->select('users.*')]);
+        ->with(['thumbnail' => fn($q) => $q->select('file_link.*'), 'owner_details' => fn($q) => $q->select('users.*')]);
         // price filter
         if ($request->min_price && $request->max_price) {
             $builder->Price($request->min_price, $request->max_price);
@@ -75,7 +75,7 @@ class CourseController extends Controller
         $course->save();
         return redirect()->back()->with('course', $course);
     }
-    public function setThumblin(SetThumblin $request, Course $course)
+    public function setThumbnail(setThumbnail $request, Course $course)
     {
 
         $user = $request->user();
@@ -83,20 +83,20 @@ class CourseController extends Controller
             return 'hello';
             return back()->withErrors(['auth' => 'you are not the owner of this course']);
         };
-        if ($course->thumblin) {
-            $course->thumblin->delete();
+        if ($course->thumbnail) {
+            $course->thumbnail->delete();
         }
-        $thumblin = $request->file('thumblin');
-        $file_name = (string) Str::uuid() . time() . '.' . $thumblin->getClientOriginalExtension();
-        $image = Image::make($thumblin->getRealPath());
+        $thumbnail = $request->file('thumbnail');
+        $file_name = (string) Str::uuid() . time() . '.' . $thumbnail->getClientOriginalExtension();
+        $image = Image::make($thumbnail->getRealPath());
 
         $image->resize(600, null, function ($constraint) {
             $constraint->aspectRatio();
-        })->save(storage_path('app/public/course/thumblin/' . $file_name));
+        })->save(storage_path('app/public/course/thumbnail/' . $file_name));
         FileLink::create([
             'file_name' => $file_name,
-            'file_link' => asset('/storage/course/thumblin/' . $file_name),
-            'file_type' => 'thumblin',
+            'file_link' => asset('/storage/course/thumbnail/' . $file_name),
+            'file_type' => 'thumbnail',
             'fileable_id' => $course->id,
         ]);
         return redirect('/show/course/' . $course->id);
@@ -144,7 +144,7 @@ class CourseController extends Controller
     }
     public function showDetails(Course $course)
     {
-        $course->thumblin;
+        $course->thumbnail;
         $course->introduction = $course->introduction ? $course->introduction->file_link : null;
         $course->tutorials = $course->get_tutorials_details();
         return view('pages/course/Show', ['course' => $course]);
@@ -298,7 +298,7 @@ class CourseController extends Controller
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         $course->forum ? $course->forum->delete() : null;
         $course->introduction ? $course->introduction->delete() : null;
-        $course->thumblin ? $course->introduction->delete() : null;
+        $course->thumbnail ? $course->introduction->delete() : null;
         $course->referrels ? $course->referrels()->delete() : null;
         //tutorials delete
         $tutorials = $course->tutorial_files;

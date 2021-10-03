@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $bestSellersCourses = Course::with([
             'owner_details' => fn ($q) => $q->select('users.*')->with('profilePicture'),
-            'thumblin' => fn ($q) => $q->select('file_link.*'),
+            'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
             ->selectRaw('AVG(review.stars) AS avg_rate, course.*, COUNT(course_students.id) AS sales')
             ->MonthlySales()
@@ -24,7 +24,7 @@ class DashboardController extends Controller
         //recomended courses
         $recommendedCourse = Course::with([
             'owner_details' => fn ($q) => $q->select('users.*'),
-            'thumblin' => fn ($q) => $q->select('file_link.*'),
+            'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
             ->selectRaw('AVG(review.stars) as avg_rate, course.*');
 

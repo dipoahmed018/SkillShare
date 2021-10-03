@@ -25,9 +25,9 @@
             </div>
             <div class="col-sm-12 col-md-6 bg-primary order-md-1">
                 <div class="row product-wrapper">
-                    @if ($product->thumblin)
+                    @if ($product->thumbnail)
                         <div class="col-12 mb-2">
-                            <img style="max-width: 100%" src="{{ $product->thumblin->file_link }}" alt="no thumblin">
+                            <img style="max-width: 100%" src="{{ $product->thumbnail->file_link }}" alt="no thumbnail">
                         </div>
                     @endif
                     <h3 class="title mb-2">{{ $product->title }}</h3>

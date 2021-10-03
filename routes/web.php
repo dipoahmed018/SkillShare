@@ -81,7 +81,7 @@ Route::middleware(['auth:web'])->group(function () {
         //update course
         Route::get('/update/course/{course}', fn (Course $course) => view('pages/course/EditCourse', ['course' => $course, 'catagories' => Catagory::all()]));
         Route::put('/update/course/{course}', [CourseController::class, 'updateDetails'])->name('update.course');
-        Route::post('/update/course/{course}/thumblin', [CourseController::class, 'setThumblin'])->name('update.course.thumblin');
+        Route::post('/update/course/{course}/thumbnail', [CourseController::class, 'setThumbnail'])->name('update.course.thumbnail');
         Route::post('/update/course/{course}/introduction', [CourseController::class, 'setIntroduction'])->name('update.course.introduction');
 
         //catagory

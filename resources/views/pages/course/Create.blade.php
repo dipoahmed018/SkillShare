@@ -48,17 +48,17 @@
         @endif
 
         @if (session('course'))
-            <form class="form-control" action={{ route('update.course.thumblin', [2]) }} method="post"
+            <form class="form-control" action={{ route('update.course.thumbnail', [2]) }} method="post"
                 enctype="multipart/form-data">
                 @csrf
                 @error('auth')
                     <p>{{ $message }}</p>
                 @enderror
-                <input accept=".jpg, .jpeg, .png" type="file" name="thumblin" id="thumblin" required><br>
-                @error('thumblin')
+                <input accept=".jpg, .jpeg, .png" type="file" name="thumbnail" id="thumbnail" required><br>
+                @error('thumbnail')
                     <p>{{ $message }}</p>
                 @enderror
-                <input type="submit" value="Set Thumblin">
+                <input type="submit" value="Set thumbnail">
             </form>
         @endif
 

@@ -38,7 +38,7 @@ class FileObserver
      */
     public function deleted(FileLink $fileLink)
     {
-        $public = ['thumblin', 'introduction', 'profile_photo', 'profile_video'];
+        $public = ['thumbnail', 'introduction', 'profile_photo', 'profile_video'];
         $private = ['tutorial', 'records', 'post', 'comment', 'message'];
         if (in_array($fileLink->file_type, $public)) {
             // Log::channel('event')->info('file observer public inside', [$fileLink]);

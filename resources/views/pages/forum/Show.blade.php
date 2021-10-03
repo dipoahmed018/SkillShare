@@ -49,9 +49,9 @@
     </div>
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col col-md-6 col-sm-12  thumblins">
-                <img src={{ $forum->forum_type->thumblin ? $forum->forum_type->thumblin->file_link : asset('default/Default.jpg') }}
-                    alt="Forum Thumblin" style="max-width:100%">
+            <div class="col col-md-6 col-sm-12  thumbnails">
+                <img src={{ $forum->forum_type->thumbnail ? $forum->forum_type->thumbnail->file_link : asset('default/Default.jpg') }}
+                    alt="Forum thumbnail" style="max-width:100%">
             </div>
             <div class="d-block"></div>
             <div class="col m-2 col-sm-2 forum-details">
