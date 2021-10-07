@@ -40,36 +40,6 @@
   display: inline-block;
 }
 
-.course-card .details .rate {
-  overflow: hidden;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
-.course-card .details .rate span {
-  display: inline-block;
-}
-
-.course-card .details .rate .rate-overlay {
-  display: inline-block;
-  position: relative;
-  background: no-repeat top left url(/images/transparent_stars.png?c8a15eed1ddc7fa65f4c205555e057ae);
-  background-size: 6em 1em;
-  width: 6em;
-  height: 1em;
-  margin: auto;
-}
-
-.course-card .details .rate .rate-overlay .rate-image {
-  background: no-repeat top left url(/images/colored_stars.png?0022fba86dea5edad61270c12810b281);
-  background-size: 6em 1em;
-  height: 100%;
-  position: absolute;
-  top: 0%;
-  left: 0%;
-}
-
 @media screen and (min-width: 700px) {
   .course-card {
     max-width: 45%;
@@ -100,6 +70,83 @@
 .links-wrapper nav ul .active > .page-link {
   border: 1px solid #0FA958;
   outline: none;
+}
+
+.course-introduction {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+}
+
+.course-introduction .course-details {
+  display: flex;
+  background-color: #B8E9D3;
+  align-self: center;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 100%;
+  padding: 1em;
+}
+
+.course-introduction .course-details h5 {
+  font-size: 0.9em;
+  color: #0FA958;
+}
+
+.course-introduction .course-details .details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  font-size: 0.6em;
+  color: #0FA958;
+}
+
+.course-introduction .course-details .details a {
+  text-decoration: none;
+  color: #0FA958;
+}
+
+.course-introduction .course-details .tools {
+  display: flex;
+  gap: 1em;
+  margin: auto auto 0px auto;
+  padding: 0.2em 0.8em 0.2em 0.8em;
+  border-radius: 10px;
+  background-color: #0FA958;
+  color: #B8E9D3;
+  font-size: 1em;
+}
+
+.course-introduction .course-details .tools a {
+  text-decoration: none;
+  color: #B8E9D3;
+}
+
+.course-introduction .course-details .tools .tool-icon {
+  display: block;
+  color: black;
+  transition: transform 0.2s linear;
+}
+
+.course-introduction .course-details .tools .tool-icon:hover {
+  transform: scale(1.2);
+}
+
+@media screen and (min-width: 700px) {
+  .course-introduction {
+    flex-direction: row;
+    font-size: 22px;
+  }
+
+  .course-introduction .course-details {
+    min-height: 10em;
+    width: 50%;
+  }
+
+  .course-introduction .thumbnail-video {
+    align-self: center;
+    max-width: 40%;
+  }
 }
 
 

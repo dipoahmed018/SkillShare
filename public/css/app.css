@@ -13368,6 +13368,37 @@ fieldset:disabled .btn {
   min-width: 50%;
 }
 
+.rate {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  align-items: center;
+}
+
+.rate span {
+  display: inline-block;
+}
+
+.rate .rate-overlay {
+  display: inline-block;
+  position: relative;
+  background: no-repeat top left url(/images/transparent_stars.png?c8a15eed1ddc7fa65f4c205555e057ae);
+  background-size: 6em 1em;
+  width: 6em;
+  height: 1em;
+  margin: auto;
+}
+
+.rate .rate-overlay .rate-image {
+  background: no-repeat top left url(/images/colored_stars.png?0022fba86dea5edad61270c12810b281);
+  background-size: 6em 1em;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+}
+
 .header {
   width: 100%;
   display: block;

@@ -42,7 +42,7 @@ class FileObserver
         $private = ['tutorial', 'records', 'post', 'comment', 'message'];
         if (in_array($fileLink->file_type, $public)) {
             // Log::channel('event')->info('file observer public inside', [$fileLink]);
-            $path = assetToPath($fileLink->file_link, '/'.$fileLink->fileable_type.'/' . $fileLink->file_type);
+            $path = substr($fileLink->file_link, '/'.$fileLink->fileable_type.'/' . $fileLink->file_type);
             Storage::disk('public')->delete($path);
         }
         if (in_array($fileLink->file_type, $private)) {

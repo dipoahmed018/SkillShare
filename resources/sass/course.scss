@@ -4,6 +4,7 @@ $shallow_green : #6ACC9A;
 $deep_green : #0FA958;
 $glass_green : #B8E9D3;
 
+//course index page styles
 
 //index courses wrapper
 .courses {
@@ -47,41 +48,11 @@ $glass_green : #B8E9D3;
         >* {
             display: inline-block;
         }
-
-        .rate {
-            overflow: hidden;
-            display: flex;
-            flex-wrap: nowrap;
-            overflow: hidden;
-
-            // max-width: ;
-            span {
-                display: inline-block;
-            }
-
-            .rate-overlay {
-                display: inline-block;
-                position: relative;
-                background: no-repeat top left url('assets/transparent_stars.png');
-                background-size: 6em 1em;
-                width: 6em;
-                height: 1em;
-                margin: auto;
-
-                .rate-image {
-                    background: no-repeat top left url('assets/colored_stars.png');
-                    background-size: 6em 1em;
-                    height: 100%;
-                    position: absolute;
-                    top: 0%;
-                    left: 0%;
-                }
-            }
-        }
     }
 }
 
 @media screen and (min-width: 700px) {
+
     //course card responsive sizing
     .course-card {
         max-width: 45%;
@@ -122,5 +93,84 @@ $glass_green : #B8E9D3;
             }
         }
 
+    }
+}
+
+//course show page styles
+
+.course-introduction {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+
+    .course-details {
+        display: flex;
+        background-color: $glass_green;
+        align-self: center;
+        flex-direction: column;
+        gap: 0.5em;
+        width: 100%;
+        padding: 1em;
+
+        h5 {
+            font-size: 0.9em;
+            color: $deep_green;
+        }
+
+        .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em;
+            font-size: 0.6em;
+            color: $deep_green;
+
+            a {
+                text-decoration: none;
+                color: $deep_green;
+            }
+        }
+
+        .tools {
+            display: flex;
+            gap: 1em;
+            margin: auto auto 0px auto;
+            padding: 0.2em 0.8em 0.2em 0.8em;
+            border-radius: 10px;
+            background-color: $deep_green;
+            color: $glass_green;
+            font-size: 1em;
+
+            a {
+                text-decoration: none;
+                color: $glass_green;
+            }
+
+            .tool-icon {
+                display: block;
+                color: black;
+                transition: transform 0.2s linear;
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+
+    @media screen and (min-width: 700px) {
+        flex-direction: row;
+        font-size: 22px;
+
+        .course-details {
+            min-height: 10em;
+            width: 50%;
+
+            // .tools {}
+        }
+
+        .thumbnail-video {
+            align-self: center;
+            max-width: 40%;
+        }
     }
 }

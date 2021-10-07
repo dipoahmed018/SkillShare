@@ -142,11 +142,18 @@ class CourseController extends Controller
             return $chunk->file_name;
         }
     }
-    public function showDetails(Course $course)
+    public function showDetails($course)
     {
-        $course->thumbnail;
-        $course->introduction = $course->introduction ? $course->introduction->file_link : null;
-        $course->tutorials = $course->get_tutorials_details();
+        $course = Course::query()->selectRaw('course.*, AVG(review.stars) AS avg_rate')
+        ->where('course.id', '=', $course)
+        ->with([
+            'thumbnail' => fn($q) => $q->select('file_link.*'),
+            'owner_details' => fn($q) => $q->select('users.*'),
+            'introduction' => fn($q) => $q->select('file_link.*')
+        ])
+        ->Review()
+        ->first();
+        $course->tutorials = $course->getTutorialDetails();
         return view('pages/course/Show', ['course' => $course]);
     }
 
@@ -170,7 +177,7 @@ class CourseController extends Controller
     public function addTutorial(AddVideo $request, Course $course)
     {
 
-        $course_tutorials = collect($course->get_tutorials_details());
+        $course_tutorials = collect($course->getTutorialDetails());
         $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
         $title = 'please provide your tutorial title';
@@ -248,7 +255,7 @@ class CourseController extends Controller
         //positioning
         //going up
         if ($request->position < $tutorial->order) {
-            $all_tutorials = $course->get_tutorials_details()->whereBetween('order', [$request->position, $tutorial->order - 1])->pluck('id');
+            $all_tutorials = $course->getTutorialDetails()->whereBetween('order', [$request->position, $tutorial->order - 1])->pluck('id');
             TutorialDetails::query()->whereIn('id', $all_tutorials)->increment('order', 1);
             $tutorial->order = $request->position;
             $tutorial->save();
@@ -256,7 +263,7 @@ class CourseController extends Controller
         }
         //going down
         if ($request->position > $tutorial->order) {
-            $all_tutorials = $course->get_tutorials_details();
+            $all_tutorials = $course->getTutorialDetails();
             $last_order = $all_tutorials->max('order');
             $in_between = $all_tutorials->whereBetween('order', [$tutorial->order + 1, $request->position])->pluck('id');
             TutorialDetails::query()->whereIn('id', $in_between)->decrement('order', 1);
@@ -271,7 +278,7 @@ class CourseController extends Controller
         if ($request->user()->cannot('update', $course)) {
             return abort(401, 'you are not authorized to edit this tutorial');
         }
-        $course->tutorials = collect($course->get_tutorials_details());
+        $course->tutorials = collect($course->getTutorialDetails());
         $course->catagory;
         return view('pages/course/EditTutorial', ['tutorial' => $tutorial, 'course' => $course]);
     }
@@ -279,7 +286,7 @@ class CourseController extends Controller
     {
         try {
             $file = $tutorial->tutorial_video;
-            $all_tutorials = $course->get_tutorials_details()->where('order', '>', $tutorial->order)->pluck('id');
+            $all_tutorials = $course->getTutorialDetails()->where('order', '>', $tutorial->order)->pluck('id');
             Log::channel('event')->info('outside conut', [$all_tutorials]);
             if ($all_tutorials->count() > 0) {
                 Log::channel('event')->info('inside conut', [$all_tutorials]);
@@ -303,7 +310,7 @@ class CourseController extends Controller
         //tutorials delete
         $tutorials = $course->tutorial_files;
         if ($tutorials) {
-            $tutorial_ids = $course->get_tutorials_details()->pluck('id');
+            $tutorial_ids = $course->getTutorialDetails()->pluck('id');
             foreach ($tutorials as $key => $value) {
                 Storage::delete($value->file_link);
             }

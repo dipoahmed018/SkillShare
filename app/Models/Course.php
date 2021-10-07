@@ -98,7 +98,7 @@ class Course extends Model
 
 
     //get all the tutorial details for a specific course
-    public function get_tutorials_details()
+    public function getTutorialDetails()
     {
         $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type', '=', 'course');
         $tutorial_details = DB::table('tutorial_details')

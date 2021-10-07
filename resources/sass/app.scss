@@ -218,12 +218,40 @@ $glass_green : #B8E9D3;
         min-width: 50%;
     }
 }
+//rating style
+.rate {
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    align-items: center;
 
-//header stype
+    // max-width: ;
+    span {
+        display: inline-block;
+    }
 
+    .rate-overlay {
+        display: inline-block;
+        position: relative;
+        background: no-repeat top left url('assets/transparent_stars.png');
+        background-size: 6em 1em;
+        width: 6em;
+        height: 1em;
+        margin: auto;
 
-//mobile design
+        .rate-image {
+            background: no-repeat top left url('assets/colored_stars.png');
+            background-size: 6em 1em;
+            height: 100%;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+        }
+    }
+}
 
+//heade style for mobile
 .header {
     width: 100%;
     display: block;
@@ -526,11 +554,12 @@ $glass_green : #B8E9D3;
     }
 }
 
+//headeer spacing so the content always sty down header
 .header-spacing {
     height: clamp(25px, 10vw, 100px)
 }
 
-
+//header styling for desktop
 @media screen and (min-width: 768px) {
 
     .header {
