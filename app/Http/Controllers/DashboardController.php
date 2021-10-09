@@ -11,7 +11,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $bestSellersCourses = Course::with([
-            'owner_details' => fn ($q) => $q->select('users.*')->with('profilePicture'),
+            'ownerDetails' => fn ($q) => $q->select('users.*')->with('profilePicture'),
             'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
             ->selectRaw('AVG(review.stars) AS avg_rate, course.*, COUNT(course_students.id) AS sales')
@@ -23,7 +23,7 @@ class DashboardController extends Controller
 
         //recomended courses
         $recommendedCourse = Course::with([
-            'owner_details' => fn ($q) => $q->select('users.*'),
+            'ownerDetails' => fn ($q) => $q->select('users.*'),
             'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
             ->selectRaw('AVG(review.stars) as avg_rate, course.*');
@@ -42,10 +42,10 @@ class DashboardController extends Controller
             $recommendedCourse = $recommendedCourse->count() < 1 ? null : $recommendedCourse;
         }
         $recommendedCourse = $recommendedCourse ?: $bestSellersCourses;
-        // dump($bestSellersCourses->pluck('owner_details'));
+        // dump($bestSellersCourses->pluck('ownerDetails'));
         return view('pages.Dashboard', [
             'courses' => $recommendedCourse,
-            'best_sellers' => $bestSellersCourses->pluck('owner_details'),
+            'best_sellers' => $bestSellersCourses->pluck('ownerDetails'),
         ]);
     }
 }

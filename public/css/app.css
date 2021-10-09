@@ -13370,7 +13370,7 @@ fieldset:disabled .btn {
 
 .rate {
   overflow: hidden;
-  display: flex;
+  display: inline;
   flex-wrap: nowrap;
   overflow: hidden;
   align-items: center;
@@ -13852,6 +13852,32 @@ fieldset:disabled .btn {
     order: 2;
     position: relative;
   }
+}
+
+.links-wrapper {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.links-wrapper nav {
+  margin: auto;
+}
+
+.links-wrapper nav ul .page-item .page-link {
+  background-color: #B8E9D3;
+  color: #0FA958;
+  outline: none;
+  text-decoration: none;
+  border: 1px solid gray;
+}
+
+.links-wrapper nav ul .disabled .page-link {
+  color: gray;
+}
+
+.links-wrapper nav ul .active > .page-link {
+  border: 1px solid #0FA958;
+  outline: none;
 }
 
 .footer {

@@ -47,13 +47,13 @@ class ReviewController extends Controller
             }
             if ($review->reviewable_type == 'review_reply') {
                 $parent = $review->review_parent;
-                $parent->review_replys()->create([
+                $parent->reviewReplies()->create([
                     'content' => $request->content,
                     'stars' => 0,
                     'owner' => $request->user()->id,
                 ]);
             } else {
-                $review->review_replys()->create([
+                $review->reviewReplies()->create([
                     'content' => $request->content,
                     'stars' => 0,
                     'owner' => $request->user()->id,
@@ -82,7 +82,7 @@ class ReviewController extends Controller
         }
         $parent = $review->base_parent();
         $table = $parent->getTable();
-        $review->review_replys()->delete();
+        $review->reviewReplies()->delete();
         $review = $review->delete();
         // if ($request->acceptsJson()) {
         //     return response($review, 200);

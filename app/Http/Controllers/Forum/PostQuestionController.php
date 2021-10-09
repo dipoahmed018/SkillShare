@@ -96,7 +96,7 @@ class PostQuestionController extends Controller
         if ($question->post_type == 'post') {
             return abort(422, 'question not available');
         }
-        $question->owner_details;
+        $question->ownerDetails;
         $question->voted = $question->voted($request->user()->id);
         return view('pages/forum/Question', ['question' => $question, 'answers' => $question->answers]);
     }

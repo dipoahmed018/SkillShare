@@ -37,8 +37,8 @@
             <div class="details">
                 <span>
                     Create By:
-                    <a href="/user/{{ $course->owner_details->id }}/profile">
-                        {{ $course->owner_details->name }}
+                    <a href="/user/{{ $course->ownerDetails->id }}/profile">
+                        {{ $course->ownerDetails->name }}
                     </a>
                 </span>
                 <span>Create at: {{ $course->created_at->diffForHumans() }}</span>
@@ -199,11 +199,13 @@
 
             </form>
         @endcan --}}
-        @foreach ($course->review as $item)
-            <x-course.review :review="$item" :reviewable="$course"></x-course.review>
+        @foreach ($course->reviews as $item)
+            <x-course.review :review-data="$item" :course="$course" class="review"/>
         @endforeach
+        <div class="links-wrapper">
+            {{$course->reviews->links()}}
+        </div>
     </div>
-
     </div>
 @endsection
 @section('scripts')

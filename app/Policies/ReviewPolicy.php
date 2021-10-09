@@ -12,14 +12,14 @@ class ReviewPolicy
 
     public function update(User $user, Review $review)
     {
-        return $user->id == $review->owner_details->id;
+        return $user->id == $review->ownerDetails->id;
     }
     public function reply(User $user, Review $review)
     {
-        return ($user->id == $review->owner_details->id || $review->base_parent()->owner_details->id == $user->id);
+        return ($user->id == $review->ownerDetails->id || $review->base_parent()->ownerDetails->id == $user->id);
     }
     public function delete(User $user, Review $review)
     {
-        return $user->id == $review->owner_details->id;
+        return $user->id == $review->ownerDetails->id;
     }
 }

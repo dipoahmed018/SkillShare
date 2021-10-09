@@ -22,7 +22,7 @@ class CoursePolicy
     }
     public function update(User $user, Course $course)
     {
-        return $user->id === $course->owner_details->id;
+        return $user->id === $course->ownerDetails->id;
     }
     public function delete(User $user, Course $course)
     {

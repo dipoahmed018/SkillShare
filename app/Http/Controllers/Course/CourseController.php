@@ -21,6 +21,7 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
+use App\Models\Review;
 use App\Services\VideoStream;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +38,7 @@ class CourseController extends Controller
             return $data;
         }
         $builder = Course::query()->selectRaw('AVG(review.stars) AS avg_rate, course.*')
-        ->with(['thumbnail' => fn($q) => $q->select('file_link.*'), 'owner_details' => fn($q) => $q->select('users.*')]);
+            ->with(['thumbnail' => fn ($q) => $q->select('file_link.*'), 'ownerDetails' => fn ($q) => $q->select('users.*')]);
         // price filter
         if ($request->min_price && $request->max_price) {
             $builder->Price($request->min_price, $request->max_price);
@@ -145,18 +146,29 @@ class CourseController extends Controller
     public function showDetails($course)
     {
         $course = Course::query()->selectRaw('course.*, AVG(review.stars) AS avg_rate')
-        ->where('course.id', '=', $course)
-        ->with([
-            'thumbnail' => fn($q) => $q->select('file_link.*'),
-            'owner_details' => fn($q) => $q->select('users.*'),
-            'introduction' => fn($q) => $q->select('file_link.*')
-        ])
-        ->Review()
-        ->first();
+            ->where('course.id', '=', $course)
+            ->with([
+                'thumbnail' => fn ($q) => $q->select('file_link.*'),
+                'ownerDetails' => fn ($q) => $q->select('users.*'),
+                'introduction' => fn ($q) => $q->select('file_link.*'),
+            ])
+            ->Review()
+            ->first();
         $course->tutorials = $course->getTutorialDetails();
+
+        //loading 2 replies and it's owner from each review of this course
+        $course->reviews = $course->review()
+            ->with([
+                'reviewReplies' => fn ($q) => $q->limit(2),
+                'reviewReplies.ownerDetails'
+            ])
+            ->paginate(5, ['*'], 'reviews');
         return view('pages/course/Show', ['course' => $course]);
     }
-
+    public function getReviewReplies(Request $request, Review $review)
+    {
+        # code...
+    }
     public function updateDetails(UpdateDetails $request, Course $course)
     {
         Log::channel('event')->info('update-detais', [$request->all()]);

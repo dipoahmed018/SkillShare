@@ -1,18 +1,25 @@
-<div class="review">
+<div class="{{ $attributes['class'] }}">
     <div class="review-content">
-        <div class="owner-details">
-            @if ($review->owner_details->profilePicture)
-                
+        <a class="owner-details" href="/user/{{ $reviewData->ownerDetails->id }}/profile">
+            @if ($reviewData->ownerDetails->profilePicture)
+                <img class="profile-image" src="{{ $reviewData->ownerDetails->profilePicture->file_link }}" alt="avatar">
+            @else
+                <div class="profile-image"><span>{{ substr($reviewData->ownerDetails->name, 0, 1) }}</span></div>
             @endif
-            <span>{{$review->owner_details->name}}</span>
-        </div>
-        <p class="content">{{$review->content}}</p>
+            <span class="owner-name">{{ $reviewData->ownerDetails->name }}</span>
+        </a>
+        <p class="content">{{ $reviewData->content }}</p>
     </div>
     <div class="review-control">
-        <span>reply</span>
-        <span>{{$review->created_at->diffForHumans()}}</span>
+            <span class="create-reply">reply</span>
+        <span>{{ $reviewData->created_at->diffForHumans() }}</span>
+        <x-rating :rating="$reviewData->stars"></x-rating>
     </div>
-    <div class="replies">
-
-    </div>
+    @if ($reviewData->reviewable_type == 'course' && $reviewData->reviewReplies->count() > 0)
+        <div class="replies">
+            @foreach ($reviewData->reviewReplies as $reply)
+                <x-course.review :review-data="$reply" :course="$course" class="reply" />
+            @endforeach
+        </div>
+    @endif
 </div>

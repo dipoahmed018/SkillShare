@@ -23,7 +23,7 @@ class CommentController extends Controller
             return abort(401, 'unauthorized');
         }
         if ($type == 'reply') {
-            $content = '<a href="' . env('APP_URL') . '/user//' . $commentable->owner . '/profile">@' . $commentable->owner_details->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
+            $content = '<a href="' . env('APP_URL') . '/user//' . $commentable->owner . '/profile">@' . $commentable->ownerDetails->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
             $commentable = $commentable->commentable_type == 'reply' ? $commentable->parent : $commentable;
         }
         $comment = Comment::create([
@@ -46,7 +46,7 @@ class CommentController extends Controller
         ]);
         if ($comment->comment_type == 'reply') {
             $commentable = $comment->parent;
-            $comment->content = "<a href=" . env('APP_URL') . "/user/$commentable->owner/profile>@$commentable->owner_details->name</a> <div class='reply-content'>$request->content</div>";
+            $comment->content = "<a href=" . env('APP_URL') . "/user/$commentable->owner/profile>@$commentable->ownerDetails->name</a> <div class='reply-content'>$request->content</div>";
             $comment->save();
             return response()->json($comment,200);
         }

@@ -12,8 +12,8 @@
             {{ $course->created_at->diffForHumans() }}</span>
 
         {{-- on javscript there will be a event on click for owner-link which will send usert to it's profile --}}
-        <span class="owner-link owner-name" data-user-id="{{ $course->owner_details->id }}">
-            Author:{{ $course->owner_details->name }}
+        <span class="owner-link owner-name" data-user-id="{{ $course->ownerDetails->id }}">
+            Author:{{ $course->ownerDetails->name }}
         </span>
         <span class="price">Price: {{ $course->price }} usd</span>
 

@@ -20,7 +20,7 @@ class Post extends Model
         'answer'
     ];
 
-    public function owner_details()
+    public function ownerDetails()
     {
         return $this->belongsTo(User::class, 'owner');
     }

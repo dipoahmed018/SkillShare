@@ -17,7 +17,7 @@ class Review extends Model
         'reviewable_type',
         'reviewable_id',
     ];
-    public function owner_details()
+    public function ownerDetails()
     {
         return $this->belongsTo(User::class, 'owner');
     }
@@ -25,7 +25,7 @@ class Review extends Model
     {
         return $this->morphTo('reviewable');
     }
-    public function review_replys()
+    public function reviewReplies()
     {
         return $this->morphMany(Review::class, 'reviewable', 'reviewable_type', 'reviewable_id');
     }

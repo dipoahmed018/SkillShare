@@ -21,7 +21,7 @@ class TuitionPolicy
 
     public function update(User $user, Tuition $tuition)
     {
-        return $user->id == $tuition->owner_details->id;
+        return $user->id == $tuition->ownerDetails->id;
     }
     public function watch(User $user, Tuition $tuition)
     {
@@ -29,10 +29,10 @@ class TuitionPolicy
     }
     public function delete(User $user, Tuition $tuition)
     {
-        return ($tuition->students->count() < 1 && $user->id == $tuition->owner_details->id);
+        return ($tuition->students->count() < 1 && $user->id == $tuition->ownerDetails->id);
     }
     public function review(User $user, Tuition $tuition)
     {
-        return $tuition->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0 && $tuition->review()->where('owner', '=', $user->id)->count() < 1 && $user->id !== $tuition->owner_details;
+        return $tuition->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0 && $tuition->review()->where('owner', '=', $user->id)->count() < 1 && $user->id !== $tuition->ownerDetails;
     }
 }

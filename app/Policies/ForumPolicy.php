@@ -28,7 +28,7 @@ class ForumPolicy
     }
     public function update(User $user, Forum $forum)
     {
-        // Log::channel('event')->info($user->id == $forum->owner_details->id, ['i was here']);
-        return $forum->owner_details->id == $user->id;
+        // Log::channel('event')->info($user->id == $forum->ownerDetails->id, ['i was here']);
+        return $forum->ownerDetails->id == $user->id;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\course;
 
 use Illuminate\View\Component;
 
@@ -11,12 +11,14 @@ class Review extends Component
      *
      * @return void
      */
-    public $review;
-    public $reviewable;
-    public function __construct($review, $reviewable)
+    public $reviewData;
+    public $parent;
+    public $course;
+    public function __construct($reviewData, $course, $parent = null)
     {
-        $this->review = $review;
-        $this->reviewable = $reviewable;
+        $this->reviewData = $reviewData;
+        $this->parent = $parent;
+        $this->course = $course;
     }
 
     /**
@@ -26,6 +28,10 @@ class Review extends Component
      */
     public function render()
     {
-        return view('Components.course.review');
+        return view('components.course.review');
+    }
+    public function hello()
+    {
+        return 'hello';
     }
 }
