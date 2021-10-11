@@ -136,6 +136,9 @@
 
 .reviews-box .review,
 .reviews-box .reply {
+  display: flex;
+  min-height: 200px;
+  flex-direction: column;
   border-left: 1px solid gray;
   border-top: 1px solid white;
   border-bottom: 1px solid white;
@@ -151,6 +154,8 @@
 .reviews-box .reply .review-content .owner-details {
   text-decoration: none;
   display: flex;
+  gap: 5px;
+  margin: 5px;
 }
 
 .reviews-box .review .review-content .owner-details .profile-image,
@@ -160,7 +165,6 @@
   height: 2em;
   border-radius: 50%;
   background-color: #6ACC9A;
-  margin: 5px;
 }
 
 .reviews-box .review .review-content .owner-details .profile-image span,
@@ -172,7 +176,6 @@
 .reviews-box .review .review-content .owner-details .owner-name,
 .reviews-box .reply .review-content .owner-details .owner-name {
   font-size: 0.8em;
-  margin: 5px;
   margin: auto 0px;
   color: #0FA958;
 }
@@ -186,10 +189,58 @@
 .reviews-box .review .review-control,
 .reviews-box .reply .review-control {
   color: gray;
-  margin: 5px;
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
+  margin: 5px;
+}
+
+.reviews-box .review .reply-create,
+.reviews-box .reply .reply-create {
+  position: relative;
+  margin: 10px;
+  max-width: 15em;
+  display: none;
+}
+
+.reviews-box .review .reply-create input,
+.reviews-box .reply .reply-create input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid #0FA958;
+  border-radius: 15px;
+  outline: none;
+  padding-left: 0.5em;
+  padding-right: 2em;
+}
+
+.reviews-box .review .reply-create button,
+.reviews-box .reply .reply-create button {
+  border: none;
+  display: block;
+  position: absolute;
+  background-color: transparent;
+  background-image: url(/images/send.png?d78e21281297cbec3ddb9cb932cfe119);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 1.2em;
+  height: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 3%;
+}
+
+.reviews-box .review .more-replies,
+.reviews-box .reply .more-replies {
+  cursor: pointer;
+  color: #0FA958;
+  margin: 10px;
+}
+
+.reviews-box .review .more-replies i,
+.reviews-box .reply .more-replies i {
+  display: inline-block;
+  transform: rotate(180deg);
 }
 
 .reviews-box .reply {

@@ -11670,8 +11670,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
- // console.log(Tooltip)
-//trigger bootstrap tooltip element
+ //trigger bootstrap tooltip element
 
 document.querySelectorAll('[data-toogle="tooltip"]').forEach(function (el) {
   new bootstrap__WEBPACK_IMPORTED_MODULE_4__.Tooltip(el);

@@ -141,57 +141,115 @@ $glass_green : #B8E9D3;
 //course review
 .reviews-box {
     display: flex;
+    flex-direction: column;
+    padding: 10px;
+
     h5 {
         margin: 0px auto;
         color: $deep_green;
     }
-    flex-direction: column;
-    padding: 10px;
-    .review, .reply {
+
+    .review,
+    .reply {
+        display: flex;
+        min-height: 200px;
+        flex-direction: column;
         border-left: 1px solid gray;
         border-top: 1px solid white;
         border-bottom: 1px solid white;
         background-color: $glass_green;
+
         .review-content {
             display: inline-block;
+
             .owner-details {
                 text-decoration: none;
                 display: flex;
+                gap: 5px;
+                margin: 5px;
+
                 .profile-image {
                     display: flex;
                     width: 2em;
                     height: 2em;
                     border-radius: 50%;
                     background-color: $shallow_green;
-                    margin: 5px;
+
                     span {
                         margin: auto;
                         color: $deep_green;
                     }
                 }
+
                 .owner-name {
                     font-size: 0.8em;
-                    margin: 5px;
                     margin: auto 0px;
                     color: $deep_green;
                 }
             }
+
             .content {
                 color: $deep_green;
                 margin: 5px;
             }
         }
+
         .review-control {
             color: gray;
-            margin: 5px;
             display: flex;
             flex-wrap: wrap;
             gap: 1em;
+            margin: 5px;
+        }
+
+        .reply-create {
+            position: relative;
+            margin: 10px;
+            max-width: 15em;
+            display: none;
+
+            input {
+                width: 100%;
+                background: transparent;
+                border: 1px solid $deep_green;
+                border-radius: 15px;
+                outline: none;
+                padding-left: 0.5em;
+                padding-right: 2em;
+            }
+
+            button {
+                border: none;
+                display: block;
+                position: absolute;
+                background-color: transparent;
+                background-image: url('assets/send.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                width: 1.2em;
+                height: 1em;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 3%;
+            }
+        }
+
+        .more-replies {
+            cursor: pointer;
+            color: $deep_green;
+            margin: 10px;
+
+            i {
+                display: inline-block;
+                transform: rotate(180deg);
+            }
         }
     }
+
     .reply {
         margin-left: 10px;
         position: relative;
+
         &::before {
             content: '';
             display: block;
@@ -201,7 +259,7 @@ $glass_green : #B8E9D3;
             border-top: 1px solid gray;
             width: 12px;
             height: 20px;
-            
+
         }
     }
 }

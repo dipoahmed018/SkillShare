@@ -2,7 +2,6 @@ import ErrorHandler from '../asset/LaravelErrorParser'
 import Chunker from "../asset/ChunkUpload";
 import PopupHandler from "../asset/PopupHandler";
 import { Modal, Tooltip } from 'bootstrap';
-// console.log(Tooltip)
 
 //trigger bootstrap tooltip element
 document.querySelectorAll('[data-toogle="tooltip"]').forEach(el => {

@@ -200,7 +200,7 @@
             </form>
         @endcan --}}
         @foreach ($course->reviews as $item)
-            <x-course.review :review-data="$item" :course="$course" class="review"/>
+            <x-course.review :review-data="$item" :course="$course" :user="$user" class="review"/>
         @endforeach
         <div class="links-wrapper">
             {{$course->reviews->links()}}
@@ -210,13 +210,11 @@
 @endsection
 @section('scripts')
 
-    {{-- variable injection --}}
-    {{-- @if ($course) --}}
-    <script>
+<script>
         let csrf = document.head.querySelector("meta[name='_token']").content;
-        let user = @json(Auth::user());
+        let user = @json($user);
         let course = @json($course);
     </script>
-    {{-- @endif --}}
     <script src={{ asset('js/course_show.js') }}></script>
+    @stack('component-script')
 @endsection

@@ -160,7 +160,7 @@ class CourseController extends Controller
         $course->reviews = $course->review()
             ->with([
                 'reviewReplies' => fn ($q) => $q->limit(2),
-                'reviewReplies.ownerDetails'
+                'reviewReplies.ownerDetails.profilePicture',
             ])
             ->paginate(5, ['*'], 'reviews');
         return view('pages/course/Show', ['course' => $course]);
