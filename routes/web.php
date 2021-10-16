@@ -98,7 +98,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/delete/course/{course}', [CourseController::class, 'deleteCourse'])->name('delete.course');
 
         //review course
-        Route::post('/create/{name}/review/{id}', [ReviewController::class, 'createReview'])->name('create.review');
+        Route::post('/create/review', [ReviewController::class, 'createReview'])->name('create.review');
         Route::delete('/delete/{review}', [ReviewController::class, 'deleteReview'])->name('delete.review');
         Route::put('/update/{review}', [ReviewController::class, 'editReview'])->name('update.review');
 
@@ -140,3 +140,6 @@ Route::middleware(['auth:web'])->group(function () {
 
 //get course
 Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
+
+//get review replies
+Route::get('/review/{review}/replies', [ReviewController::class, 'getReplies'])->name('get.review.replies');

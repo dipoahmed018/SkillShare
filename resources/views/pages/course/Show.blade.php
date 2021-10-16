@@ -5,6 +5,29 @@
     <link rel="stylesheet" href={{ asset('css/course.css') }}>
 @endsection
 
+@section('tamplates')
+    {{-- componetent data --}}
+
+    <template id="review-template">
+        <div class="review-content">
+            <a class="owner-details" href="/user/template/profile">
+                <div class="profile-image"><span></span></div>
+                <span class="owner-name"></span>
+            </a>
+            <p class="content">content<p>
+        </div>
+        <div class="review-control">
+            <span class="reply-creator-show" data-review-id="template" style="cursor: pointer">reply</span>
+            <span>created at</span>
+            <x-rating :rating="0"></x-rating>
+        </div>
+        {{-- add replies here form javascript --}}
+        <div class="replies">
+        </div>
+    </template>
+
+@endsection
+
 @section('body')
 
     <div class="modal fade" id="tutorial-video" tabindex="-1" aria-hidden="true">
@@ -45,22 +68,24 @@
                 <x-rating :rating="$course->avg_rate"> </x-rating>
             </div>
             @can('update', $course)
-            <div class="details-update tools">
-                <a class="tool" href="/update/course/{{$course->id}}" data-toogle="tooltip" title="Edit Course">
-                    <i class="bi bi-pencil-square tool tool-icon"></i>
-                </a>
-                <div class="introduction-upload tool" data-toogle="tooltip" title="Update Introduction">
-                    <input accept=".mp4" required class="add-introduction one-click-upload" type="file" name="introduction" id="introduction-upload">
-                    <label for="introduction-upload">
-                        <i class="bi bi-file-earmark-play-fill tool-icon"></i>
-                    </label>
+                <div class="details-update tools">
+                    <a class="tool" href="/update/course/{{ $course->id }}" data-toogle="tooltip"
+                        title="Edit Course">
+                        <i class="bi bi-pencil-square tool tool-icon"></i>
+                    </a>
+                    <div class="introduction-upload tool" data-toogle="tooltip" title="Update Introduction">
+                        <input accept=".mp4" required class="add-introduction one-click-upload" type="file" name="introduction"
+                            id="introduction-upload">
+                        <label for="introduction-upload">
+                            <i class="bi bi-file-earmark-play-fill tool-icon"></i>
+                        </label>
+                    </div>
+                    <div class="thumbnail-upload tool" data-toogle="tooltip" title="Update Thumbnail">
+                        <label for="introduction-upload">
+                            <i class="bi bi-card-image tool-icon"></i>
+                        </label>
+                    </div>
                 </div>
-                <div class="thumbnail-upload tool" data-toogle="tooltip" title="Update Thumbnail">
-                    <label for="introduction-upload">
-                        <i class="bi bi-card-image tool-icon"></i>
-                    </label>
-                </div>
-            </div>
             @endcan
         </div>
 
@@ -200,21 +225,23 @@
             </form>
         @endcan --}}
         @foreach ($course->reviews as $item)
-            <x-course.review :review-data="$item" :course="$course" :user="$user" class="review"/>
+            <x-course.review :review-data="$item" :course="$course" :user="$user" class="review" />
         @endforeach
         <div class="links-wrapper">
-            {{$course->reviews->links()}}
+            {{ $course->reviews->links() }}
         </div>
     </div>
     </div>
 @endsection
 @section('scripts')
-
-<script>
+    {{-- php data assign to javascript variable --}}
+    <script>
         let csrf = document.head.querySelector("meta[name='_token']").content;
         let user = @json($user);
         let course = @json($course);
     </script>
+
+    {{-- pagescripts --}}
     <script src={{ asset('js/course_show.js') }}></script>
     @stack('component-script')
 @endsection

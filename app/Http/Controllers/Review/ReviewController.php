@@ -12,56 +12,52 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
+
+    public function getReplies(Review $review)
+    {
+       $replies = $review->reviewReplies()->simplePaginate(10);
+       return response()->json(['data' => $replies, 'error' => false, 'success' => true]);
+    }
     public function createReview(CreateReview $request)
     {
-        $reviewable_type = $request->route('name');
-        $reviewable_id = $request->route('id');
+        $reviewable_type = $request->reviewable_type;
+        $reviewable_id = $request->reviewable_id;
+        $newReview = null;
         if ($reviewable_type == 'course') {
             $course = Course::findOrFail($reviewable_id);
             if ($request->user()->cannot('review', $course)) {
                 return abort(403, 'you are not autorized to review this course');
             }
-            $course->review()->create([
+            $newReview = $course->review()->create([
                 'content' => $request->content,
-                'stars' => $request->stars,
-                'owner' => $request->user()->id,
-            ]);
-        }
-        if ($reviewable_type == 'tuition') {
-            $tuition = Tuition::findOrFail($reviewable_id);
-            if ($request->user()->cannot('review', $tuition)) {
-                return abort(403, 'you are not autorized to review this tuition');
-            }
-            $tuition->review()->create([
-                'content' => $request->content,
-                'stars' => $request->stars,
+                'stars' => $request->stars ?: 0,
                 'owner' => $request->user()->id,
             ]);
         }
         if ($reviewable_type == 'review_reply') {
             $review = Review::findOrFail($reviewable_id);
-            $baseparent = $review->base_parent();
-            $parent = null;
             if ($request->user()->cannot('reply', $review)) {
                 return abort(403, 'you are not autorized to make reply to this review');
             }
             if ($review->reviewable_type == 'review_reply') {
-                $parent = $review->review_parent;
-                $parent->reviewReplies()->create([
+                $parent = $review->reviewParent;
+                $newReview = $parent->reviewReplies()->create([
                     'content' => $request->content,
                     'stars' => 0,
                     'owner' => $request->user()->id,
                 ]);
             } else {
-                $review->reviewReplies()->create([
+                $newReview = $review->reviewReplies()->create([
                     'content' => $request->content,
                     'stars' => 0,
                     'owner' => $request->user()->id,
                 ]);
             }
-            return redirect("/show/" . $baseparent->getTable() . "/$baseparent->id");
         }
-        return redirect("/show/$reviewable_type/$reviewable_id");
+        if ($request->header('Accept') == 'application/json') {
+            return response()->json(['data' => $newReview, 'error' => false, 'success' => true],200);
+        }
+        return redirect()->back();
     }
     public function editReview(EditReview $request, Review $review)
     {

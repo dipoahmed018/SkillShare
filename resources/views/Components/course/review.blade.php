@@ -18,42 +18,23 @@
             <span class="reply-creator-show" data-review-id="{{ $reviewData->id }}"
                 style="cursor: pointer">reply</span>
         @endif
-        <span>{{ $reviewData->created_at->diffForHumans() }}</span>
+        <span class="created_at">{{ $reviewData->created_at->diffForHumans() }}</span>
         @if (!$parent)
             <x-rating :rating="$reviewData->stars"></x-rating>
         @endif
     </div>
-    @if (!$parent && $reviewData->reviewReplies->count() > 0)
-        <div class="replies">
-            @foreach ($reviewData->reviewReplies as $reply)
-                <x-course.review :review-data="$reply" :parent="$reviewData" :course="$course" :user="$user"
-                    class="reply" />
-            @endforeach
-        </div>
-    @endif
-    <form class="reply-create" id="reply-create-{{ $reviewData->id }}">
-        <input type="text">
+    {{-- add replies here form javascript --}}
+    <div class="replies">
+    </div>
+    <form class="reply-create" id="reply-create-{{ $reviewData->id }}" data-review-id="{{ $reviewData->id }}">
+        <input type="text" name="content">
+        @csrf
         <button type="submit"></button>
     </form>
-    <span class="more-replies" data-review-id="{{ $reviewData->id }}"> <i class="bi bi-reply-all"></i> more
-        replies</span>
+    @if ($reviewData->repliesCount > 0)
+        <span class="more-replies" data-review-id="{{ $reviewData->id }}">
+            <i class="bi bi-reply-all"></i> more replies
+        </span>
+    @endif
 </div>
 
-
-@once
-    {{-- component script --}}
-    @push('component-script')
-        <script>
-            const more_replies_btn = document.querySelectorAll('.more-replies') //load more replies buttons
-            const reply_creator_btn = document.querySelectorAll('.reply-creator-show') //reply creator shower button
-            //reply creater form shower on reply_creator_btn click
-            reply_creator_btn.forEach(el => {
-                el.addEventListener('click', e => {
-                    const form = document.getElementById(`reply-create-${e.target.getAttribute('data-review-id')}`)
-                    form.style.display = 'block'
-                })
-            })
-        </script>
-    @endpush
-
-@endonce

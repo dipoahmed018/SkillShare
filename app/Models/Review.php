@@ -21,7 +21,7 @@ class Review extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
-    public function review_parent()
+    public function reviewParent()
     {
         return $this->morphTo('reviewable');
     }
@@ -32,8 +32,8 @@ class Review extends Model
 
     public function base_parent()
     {
-        $base_parent = $this->review_parent;
+        $base_parent = $this->reviewParent;
 
-        return $base_parent->reviewable_type ? $base_parent->review_parent : $base_parent;
+        return $base_parent->reviewable_type ? $base_parent->reviewParent : $base_parent;
     }
 }

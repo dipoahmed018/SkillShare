@@ -51,4 +51,9 @@ class Review extends Component
         }
         return false;
     }
+
+//     public function hasReplies()
+//     {
+//         return $this->reviewData->revieable_type === 'course' && 
+//     }
 }

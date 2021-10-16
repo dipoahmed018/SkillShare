@@ -20,6 +20,7 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/pagescript/forum_edit.js','public/js')
     .js('resources/js/pagescript/post_edit.js','public/js')
     .js('resources/js/pagescript/transaction.js','public/js')
+
     .postCss('resources/css/app.css', 'public/css', [
         //
     ])

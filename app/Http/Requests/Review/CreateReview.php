@@ -3,8 +3,10 @@
 namespace App\Http\Requests\Review;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class CreateReview extends FormRequest
 {
@@ -15,11 +17,7 @@ class CreateReview extends FormRequest
      */
     public function authorize()
     {
-        $whitelist = ['course', 'tuition','review_reply'];
-        if (!in_array($this->route('name'), $whitelist)) {
-            return false;
-        }
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -30,8 +28,10 @@ class CreateReview extends FormRequest
     public function rules()
     {
         return [
+            'reviewable_id' => 'required|integer',
+            'reviewable_type' => ['required', Rule::in(['course', 'review_reply'])],
             'content' => 'required|string|min:5|max:200',
-            'stars' => 'required|integer|min:1|max:10',
+            'stars' => 'integer|min:1|max:10',
         ];
     }
 }

@@ -158,16 +158,10 @@ class CourseController extends Controller
 
         //loading 2 replies and it's owner from each review of this course
         $course->reviews = $course->review()
-            ->with([
-                'reviewReplies' => fn ($q) => $q->limit(2),
-                'reviewReplies.ownerDetails.profilePicture',
-            ])
+            ->with('ownerDetails')
+            ->withCount('reviewReplies as repliesCount')
             ->paginate(5, ['*'], 'reviews');
         return view('pages/course/Show', ['course' => $course]);
-    }
-    public function getReviewReplies(Request $request, Review $review)
-    {
-        # code...
     }
     public function updateDetails(UpdateDetails $request, Course $course)
     {
