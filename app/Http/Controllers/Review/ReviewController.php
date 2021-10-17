@@ -54,7 +54,7 @@ class ReviewController extends Controller
                 ]);
             }
         }
-        $newReview->load('ownerDetaisl.profilePicture');
+        $newReview->load('ownerDetails.profilePicture');
         if ($request->header('Accept') == 'application/json') {
             return response()->json(['data' => $newReview, 'error' => false, 'success' => true],200);
         }

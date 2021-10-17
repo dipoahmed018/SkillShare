@@ -5656,6 +5656,8 @@ var PopupHandler = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "show_reply_form": () => (/* binding */ show_reply_form),
+/* harmony export */   "create_reply": () => (/* binding */ create_reply),
 /* harmony export */   "add_review_element": () => (/* binding */ add_review_element)
 /* harmony export */ });
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
@@ -5673,40 +5675,11 @@ var reply_creator_btn = document.querySelectorAll('.reply-creator-show'); //repl
 //reply creater form shower on reply_creator_btn click
 
 reply_creator_btn.forEach(function (el) {
-  el.addEventListener('click', function (e) {
-    //selecting reply creator form by first selecting the grandparent of reply creator shower button then selecting the form from there
-    el.parentElement.parentElement.querySelector('.reply-create').style.display = 'block';
-  });
+  el.addEventListener('click', show_reply_form);
 }); //reply creaator form submit handling
 
 reply_forms.forEach(function (el) {
-  el.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var form = e.target;
-    var comment = form.querySelector('[name="content"]').value;
-    var commentable_id = form.getAttribute('data-review-id');
-    var parent = form.parentElement.classList.contains('reply') ? form.parentElement : form.querySelector('.replies');
-    add_review_element(parent, 'hello');
-    fetch('/create/review', {
-      method: 'post',
-      body: JSON.stringify({
-        'reviewable_id': commentable_id,
-        'reviewable_type': 'review_reply',
-        'content': comment
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': window.csrf
-      }
-    }).then(function (res) {
-      return res.ok ? res.json() : Promise.reject(res);
-    }).then(function (res) {
-      console.log(res.data);
-    })["catch"](function (res) {
-      return console.log(res);
-    });
-  });
+  el.addEventListener('submit', create_reply);
 }); //more replies on click send request fo more replies 
 
 more_replies_btn.forEach(function (el) {
@@ -5735,8 +5708,44 @@ more_replies_btn.forEach(function (el) {
       return console.log(res);
     });
   });
-});
+}); //show reply_creator form 
+
+function show_reply_form(e) {
+  console.log(e.target);
+  var reply_creator_forms = e.target.parentElement.parentElement.querySelectorAll('.reply-create');
+  reply_creator_forms[reply_creator_forms.length - 1].style.display = 'block';
+} //request to create a review on server
+
+function create_reply(e) {
+  e.preventDefault();
+  var form = e.target;
+  var comment = form.querySelector('[name="content"]').value;
+  var commentable_id = form.getAttribute('data-review-id');
+  var reply_box = form.parentElement.classList.contains('.reply') ? form.parentElement.parentElement : form.parentElement.querySelector('.replies');
+  fetch('/create/review', {
+    method: 'post',
+    body: JSON.stringify({
+      'reviewable_id': commentable_id,
+      'reviewable_type': 'review_reply',
+      'content': comment
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }).then(function (res) {
+    res.success ? add_review_element(reply_box, res.data, 'reply') : console.log(res.data);
+  })["catch"](function (res) {
+    return console.log(res);
+  });
+} //add review element to dom
+
 function add_review_element(parent, review) {
+  var _review$owner_details;
+
   var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'review';
   //create wrapper based on type
   var reply_elm = document.createElement('div');
@@ -5748,24 +5757,25 @@ function add_review_element(parent, review) {
   review_tamplate.querySelector('.created-at').innerText = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(review.created_at).fromNow();
   review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name;
   review_tamplate.querySelector('.owner-details').href = "/user/".concat(review.owner_details.id, "/profile");
-  review_tamplate.querySelector('.reply-create').setAttribute('data-review-id', review.id);
+  var reply_create_form = review_tamplate.querySelector('.reply-create');
   var profile_text = review_tamplate.querySelector('.profile-text');
   var profile_image = review_tamplate.querySelector('.profile-image');
 
-  if (review.owner_details.profile_picture) {
+  if ((_review$owner_details = review.owner_details) !== null && _review$owner_details !== void 0 && _review$owner_details.profile_picture) {
     profile_text.revome();
     profile_image.src = review.owner_details.profile_picture.file_link;
   } else {
+    var _review$owner_details2;
+
     profile_image.remove();
-    profile_text.firstElementChild.innerText = review.owner_details.name.substr(0, 1);
+    profile_text.firstElementChild.innerText = (_review$owner_details2 = review.owner_details) === null || _review$owner_details2 === void 0 ? void 0 : _review$owner_details2.name.substr(0, 1);
   } //controling the behavior of button clicks and event listener of review template
 
 
-  review_tamplate.querySelector('.reply-creator-show').addEventListener('click', function (e) {
-    /** first slect the grandparent of reply creator shower button which is the review box and
-    then select it's .reply-create form to change style */
-    e.target.parentElement.parentElement.querySelector('.reply-create').style.display = 'block';
-  });
+  review_tamplate.querySelector('.reply-creator-show').addEventListener('click', show_reply_form); //reply creator form handeler 
+
+  reply_create_form.setAttribute('data-review-id', review.id);
+  reply_create_form.addEventListener('submit', create_reply);
   reply_elm.appendChild(review_tamplate);
   parent.appendChild(reply_elm);
 }

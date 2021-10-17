@@ -8,41 +8,13 @@ const reply_creator_btn = document.querySelectorAll('.reply-creator-show') //rep
 
 //reply creater form shower on reply_creator_btn click
 reply_creator_btn.forEach(el => {
-    el.addEventListener('click', e => {
-        //selecting reply creator form by first selecting the grandparent of reply creator shower button then selecting the form from there
-        el.parentElement.parentElement.querySelector('.reply-create').style.display = 'block'
-    })
+    el.addEventListener('click', show_reply_form)
 })
 
 
 //reply creaator form submit handling
 reply_forms.forEach(el => {
-    el.addEventListener('submit', e => {
-        e.preventDefault()
-        const form = e.target
-        const comment = form.querySelector('[name="content"]').value
-        const commentable_id = form.getAttribute('data-review-id')
-        const parent = form.parentElement.classList.contains('reply') ? form.parentElement : form.querySelector('.replies')
-        add_review_element(parent, 'hello')
-        fetch('/create/review', {
-            method: 'post',
-            body: JSON.stringify({
-                'reviewable_id': commentable_id,
-                'reviewable_type': 'review_reply',
-                'content': comment
-            }),
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': window.csrf,
-            }
-        })
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(res => {
-                console.log(res.data)
-            })
-            .catch(res => console.log(res))
-    })
+    el.addEventListener('submit', create_reply)
 })
 
 //more replies on click send request fo more replies 
@@ -75,6 +47,43 @@ more_replies_btn.forEach(el => {
     })
 })
 
+//show reply_creator form 
+export function show_reply_form(e) {
+    console.log(e.target)
+    const reply_creator_forms = e.target.parentElement.parentElement.querySelectorAll('.reply-create')
+    reply_creator_forms[reply_creator_forms.length - 1].style.display = 'block'
+}
+
+//request to create a review on server
+
+export function create_reply(e) {
+    e.preventDefault()
+    const form = e.target
+    const comment = form.querySelector('[name="content"]').value
+    const commentable_id = form.getAttribute('data-review-id')
+    const reply_box = form.parentElement.classList.contains('.reply') ? form.parentElement.parentElement : form.parentElement.querySelector('.replies')
+
+    fetch('/create/review', {
+        method: 'post',
+        body: JSON.stringify({
+            'reviewable_id': commentable_id,
+            'reviewable_type': 'review_reply',
+            'content': comment
+        }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': window.csrf,
+        }
+    })
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(res => {
+            res.success ? add_review_element(reply_box, res.data, 'reply') : console.log(res.data)
+        })
+        .catch(res => console.log(res))
+}
+
+//add review element to dom
 
 export function add_review_element(parent, review, type = 'review') {
 
@@ -90,25 +99,23 @@ export function add_review_element(parent, review, type = 'review') {
     review_tamplate.querySelector('.created-at').innerText = Dayjs(review.created_at).fromNow()
     review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name
     review_tamplate.querySelector('.owner-details').href = `/user/${review.owner_details.id}/profile`
-    review_tamplate.querySelector('.reply-create').setAttribute('data-review-id', review.id)
 
+    const reply_create_form = review_tamplate.querySelector('.reply-create')
     const profile_text = review_tamplate.querySelector('.profile-text')
     const profile_image = review_tamplate.querySelector('.profile-image')
-    if (review.owner_details.profile_picture) {
+    if (review.owner_details?.profile_picture) {
         profile_text.revome()
         profile_image.src = review.owner_details.profile_picture.file_link
     } else {
         profile_image.remove()
-        profile_text.firstElementChild.innerText = review.owner_details.name.substr(0, 1)
+        profile_text.firstElementChild.innerText = review.owner_details?.name.substr(0, 1)
     }
 
     //controling the behavior of button clicks and event listener of review template
-    review_tamplate.querySelector('.reply-creator-show').addEventListener('click', e => {
-
-        /** first slect the grandparent of reply creator shower button which is the review box and
-        then select it's .reply-create form to change style */
-        e.target.parentElement.parentElement.querySelector('.reply-create').style.display = 'block'
-    })
+    review_tamplate.querySelector('.reply-creator-show').addEventListener('click', show_reply_form)
+    //reply creator form handeler 
+    reply_create_form.setAttribute('data-review-id', review.id)
+    reply_create_form.addEventListener('submit', create_reply)
 
     reply_elm.appendChild(review_tamplate)
 
