@@ -11,16 +11,25 @@
     <template id="review-template">
         <div class="review-content">
             <a class="owner-details" href="/user/template/profile">
-                <div class="profile-image"><span></span></div>
+                <img class="profile-image">
+                <div class="profile-text"><span></span></div>
                 <span class="owner-name"></span>
             </a>
             <p class="content">content<p>
         </div>
         <div class="review-control">
-            <span class="reply-creator-show" data-review-id="template" style="cursor: pointer">reply</span>
-            <span>created at</span>
+            <span class="reply-creator-show" style="cursor: pointer">reply</span>
+            <span class="created-at">required</span>
             <x-rating :rating="0"></x-rating>
         </div>
+
+        {{-- reply creator --}}
+        <form class="reply-create" data-review-id="required">
+            <input type="text" name="content">
+            @csrf
+            <button type="submit"></button>
+        </form>
+
         {{-- add replies here form javascript --}}
         <div class="replies">
         </div>

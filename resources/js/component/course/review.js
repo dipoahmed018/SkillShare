@@ -1,4 +1,4 @@
-import  Dayjs  from "dayjs"
+import Dayjs from "dayjs"
 let reletiveTime = require('dayjs/plugin/relativeTime')
 Dayjs.extend(reletiveTime)
 const reply_forms = document.querySelectorAll('.reply-create') //reply creator forms
@@ -9,9 +9,8 @@ const reply_creator_btn = document.querySelectorAll('.reply-creator-show') //rep
 //reply creater form shower on reply_creator_btn click
 reply_creator_btn.forEach(el => {
     el.addEventListener('click', e => {
-        const form = document.getElementById(
-            `reply-create-${e.target.getAttribute('data-review-id')}`)
-        form.style.display = 'block'
+        //selecting reply creator form by first selecting the grandparent of reply creator shower button then selecting the form from there
+        el.parentElement.parentElement.querySelector('.reply-create').style.display = 'block'
     })
 })
 
@@ -25,23 +24,22 @@ reply_forms.forEach(el => {
         const commentable_id = form.getAttribute('data-review-id')
         const parent = form.parentElement.classList.contains('reply') ? form.parentElement : form.querySelector('.replies')
         add_review_element(parent, 'hello')
-        return true
         fetch('/create/review', {
-                method: 'post',
-                body: JSON.stringify({
-                    'reviewable_id': commentable_id,
-                    'reviewable_type': 'review_reply',
-                    'content': comment
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': window.csrf,
-                }
-            })
+            method: 'post',
+            body: JSON.stringify({
+                'reviewable_id': commentable_id,
+                'reviewable_type': 'review_reply',
+                'content': comment
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window.csrf,
+            }
+        })
             .then(res => res.ok ? res.json() : Promise.reject(res))
             .then(res => {
-                // console.log(fo)
+                console.log(res.data)
             })
             .catch(res => console.log(res))
     })
@@ -49,7 +47,7 @@ reply_forms.forEach(el => {
 
 //more replies on click send request fo more replies 
 more_replies_btn.forEach(el => {
- 
+
     el.addEventListener('click', (e) => {
         const replies_box = el.parentElement.querySelector('.replies')
         let review_id = el.getAttribute('data-review-id')
@@ -61,33 +59,60 @@ more_replies_btn.forEach(el => {
         fetch(url, {
             method: 'get',
             headers: {
-                'Accept' : 'application/json',
+                'Accept': 'application/json',
             },
         })
-        .then(res => res.ok? res.json() : Promise.reject(res))
-        .then(res => {
-            const {next_page, data} = res.data
-            next_page ? el.setAttribute('data-url-next_page', paginated_data.next_page) : el.style.display = 'none'
-            data.forEach(review => {
-                add_review_element(replies_box, review)
-            })
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(res => {
+                const { next_page, data } = res.data
+                next_page ? el.setAttribute('data-url-next_page', paginated_data.next_page) : el.style.display = 'none'
+                data.forEach(review => {
+                    add_review_element(replies_box, review, 'reply')
+                })
 
-        })
-        .catch(res => console.log(res))
+            })
+            .catch(res => console.log(res))
     })
 })
 
 
-function add_review_element(parent, review) {
-    const reply_elm = document.createElement('div')
-    reply_elm.classList.add('reply')
+export function add_review_element(parent, review, type = 'review') {
 
-    const review_tamplate = document.getElementById('review-template').cloneNode(true)
+    //create wrapper based on type
+    const reply_elm = document.createElement('div')
+    reply_elm.classList.add(type)
+
+    const review_tamplate = document.getElementById('review-template').content.cloneNode(true)
+
+    // adding review content in the review tamplate
+    review_tamplate.querySelector('.content').innerText = review.content
+    review_tamplate.querySelector('.rate-image').style.width = `${review.stars * 10}%`
+    review_tamplate.querySelector('.created-at').innerText = Dayjs(review.created_at).fromNow()
+    review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name
+    review_tamplate.querySelector('.owner-details').href = `/user/${review.owner_details.id}/profile`
+    review_tamplate.querySelector('.reply-create').setAttribute('data-review-id', review.id)
+
+    const profile_text = review_tamplate.querySelector('.profile-text')
+    const profile_image = review_tamplate.querySelector('.profile-image')
+    if (review.owner_details.profile_picture) {
+        profile_text.revome()
+        profile_image.src = review.owner_details.profile_picture.file_link
+    } else {
+        profile_image.remove()
+        profile_text.firstElementChild.innerText = review.owner_details.name.substr(0, 1)
+    }
+
+    //controling the behavior of button clicks and event listener of review template
+    review_tamplate.querySelector('.reply-creator-show').addEventListener('click', e => {
+
+        /** first slect the grandparent of reply creator shower button which is the review box and
+        then select it's .reply-create form to change style */
+        e.target.parentElement.parentElement.querySelector('.reply-create').style.display = 'block'
+    })
+
     reply_elm.appendChild(review_tamplate)
 
-    console.log(parent)
-    console.log(review)
-    console.log(reply_elm)
+    parent.appendChild(reply_elm)
 }
 
 

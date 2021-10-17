@@ -5655,6 +5655,9 @@ var PopupHandler = /*#__PURE__*/function () {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "add_review_element": () => (/* binding */ add_review_element)
+/* harmony export */ });
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -5671,8 +5674,8 @@ var reply_creator_btn = document.querySelectorAll('.reply-creator-show'); //repl
 
 reply_creator_btn.forEach(function (el) {
   el.addEventListener('click', function (e) {
-    var form = document.getElementById("reply-create-".concat(e.target.getAttribute('data-review-id')));
-    form.style.display = 'block';
+    //selecting reply creator form by first selecting the grandparent of reply creator shower button then selecting the form from there
+    el.parentElement.parentElement.querySelector('.reply-create').style.display = 'block';
   });
 }); //reply creaator form submit handling
 
@@ -5684,7 +5687,6 @@ reply_forms.forEach(function (el) {
     var commentable_id = form.getAttribute('data-review-id');
     var parent = form.parentElement.classList.contains('reply') ? form.parentElement : form.querySelector('.replies');
     add_review_element(parent, 'hello');
-    return true;
     fetch('/create/review', {
       method: 'post',
       body: JSON.stringify({
@@ -5699,7 +5701,8 @@ reply_forms.forEach(function (el) {
       }
     }).then(function (res) {
       return res.ok ? res.json() : Promise.reject(res);
-    }).then(function (res) {// console.log(fo)
+    }).then(function (res) {
+      console.log(res.data);
     })["catch"](function (res) {
       return console.log(res);
     });
@@ -5726,22 +5729,45 @@ more_replies_btn.forEach(function (el) {
           data = _res$data.data;
       next_page ? el.setAttribute('data-url-next_page', paginated_data.next_page) : el.style.display = 'none';
       data.forEach(function (review) {
-        add_review_element(replies_box, review);
+        add_review_element(replies_box, review, 'reply');
       });
     })["catch"](function (res) {
       return console.log(res);
     });
   });
 });
-
 function add_review_element(parent, review) {
+  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'review';
+  //create wrapper based on type
   var reply_elm = document.createElement('div');
-  reply_elm.classList.add('reply');
-  var review_tamplate = document.getElementById('review-template').cloneNode(true);
+  reply_elm.classList.add(type);
+  var review_tamplate = document.getElementById('review-template').content.cloneNode(true); // adding review content in the review tamplate
+
+  review_tamplate.querySelector('.content').innerText = review.content;
+  review_tamplate.querySelector('.rate-image').style.width = "".concat(review.stars * 10, "%");
+  review_tamplate.querySelector('.created-at').innerText = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(review.created_at).fromNow();
+  review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name;
+  review_tamplate.querySelector('.owner-details').href = "/user/".concat(review.owner_details.id, "/profile");
+  review_tamplate.querySelector('.reply-create').setAttribute('data-review-id', review.id);
+  var profile_text = review_tamplate.querySelector('.profile-text');
+  var profile_image = review_tamplate.querySelector('.profile-image');
+
+  if (review.owner_details.profile_picture) {
+    profile_text.revome();
+    profile_image.src = review.owner_details.profile_picture.file_link;
+  } else {
+    profile_image.remove();
+    profile_text.firstElementChild.innerText = review.owner_details.name.substr(0, 1);
+  } //controling the behavior of button clicks and event listener of review template
+
+
+  review_tamplate.querySelector('.reply-creator-show').addEventListener('click', function (e) {
+    /** first slect the grandparent of reply creator shower button which is the review box and
+    then select it's .reply-create form to change style */
+    e.target.parentElement.parentElement.querySelector('.reply-create').style.display = 'block';
+  });
   reply_elm.appendChild(review_tamplate);
-  console.log(parent);
-  console.log(review);
-  console.log(reply_elm);
+  parent.appendChild(reply_elm);
 }
 
 /***/ }),

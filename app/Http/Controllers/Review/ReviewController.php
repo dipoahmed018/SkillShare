@@ -15,7 +15,7 @@ class ReviewController extends Controller
 
     public function getReplies(Review $review)
     {
-       $replies = $review->reviewReplies()->simplePaginate(10);
+       $replies = $review->reviewReplies()->with(['ownerDetails.profilePicture'])->simplePaginate(10);
        return response()->json(['data' => $replies, 'error' => false, 'success' => true]);
     }
     public function createReview(CreateReview $request)
@@ -54,6 +54,7 @@ class ReviewController extends Controller
                 ]);
             }
         }
+        $newReview->load('ownerDetaisl.profilePicture');
         if ($request->header('Accept') == 'application/json') {
             return response()->json(['data' => $newReview, 'error' => false, 'success' => true],200);
         }

@@ -159,7 +159,9 @@
 }
 
 .reviews-box .review .review-content .owner-details .profile-image,
-.reviews-box .reply .review-content .owner-details .profile-image {
+.reviews-box .review .review-content .owner-details .profile-text,
+.reviews-box .reply .review-content .owner-details .profile-image,
+.reviews-box .reply .review-content .owner-details .profile-text {
   display: flex;
   width: 2em;
   height: 2em;
@@ -168,7 +170,9 @@
 }
 
 .reviews-box .review .review-content .owner-details .profile-image span,
-.reviews-box .reply .review-content .owner-details .profile-image span {
+.reviews-box .review .review-content .owner-details .profile-text span,
+.reviews-box .reply .review-content .owner-details .profile-image span,
+.reviews-box .reply .review-content .owner-details .profile-text span {
   margin: auto;
   color: #0FA958;
 }
