@@ -5656,12 +5656,23 @@ var PopupHandler = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "show_reply_form": () => (/* binding */ show_reply_form),
 /* harmony export */   "create_reply": () => (/* binding */ create_reply),
 /* harmony export */   "add_review_element": () => (/* binding */ add_review_element)
 /* harmony export */ });
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 var reletiveTime = __webpack_require__(/*! dayjs/plugin/relativeTime */ "./node_modules/dayjs/plugin/relativeTime.js");
@@ -5669,25 +5680,100 @@ var reletiveTime = __webpack_require__(/*! dayjs/plugin/relativeTime */ "./node_
 dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend(reletiveTime);
 var reply_forms = document.querySelectorAll('.reply-create'); //reply creator forms
 
+var review_form = document.querySelector('.review-create');
 var more_replies_btn = document.querySelectorAll('.more-replies'); //load more replies buttons
 
 var reply_creator_btn = document.querySelectorAll('.reply-creator-show'); //reply creator shower button
 //reply creater form shower on reply_creator_btn click
 
-reply_creator_btn.forEach(function (el) {
-  el.addEventListener('click', show_reply_form);
+reply_creator_btn === null || reply_creator_btn === void 0 ? void 0 : reply_creator_btn.forEach(function (element) {
+  element.addEventListener('click', show_reply_create_form);
 }); //reply creaator form submit handling
 
-reply_forms.forEach(function (el) {
-  el.addEventListener('submit', create_reply);
-}); //more replies on click send request fo more replies 
+reply_forms === null || reply_forms === void 0 ? void 0 : reply_forms.forEach(function (element) {
+  element.addEventListener('submit', create_reply);
+});
+review_form === null || review_form === void 0 ? void 0 : review_form.addEventListener('submit', create_reply); //rating input handel
 
-more_replies_btn.forEach(function (el) {
-  el.addEventListener('click', function (e) {
-    var replies_box = el.parentElement.querySelector('.replies');
-    var review_id = el.getAttribute('data-review-id'); //next_page attribute will be set after the fetch of more replies is done based on pagination dynamically
+var rating_input_box = document.querySelector('.rating');
+var rating_stars = rating_input_box === null || rating_input_box === void 0 ? void 0 : rating_input_box.childNodes;
+var active_star = "bi bi-star-fill";
+var inactive_star = "bi bi-star";
 
-    var next_page = el.getAttribute('data-url-next_page');
+var active_on_hover = function active_on_hover() {
+  rating_stars === null || rating_stars === void 0 ? void 0 : rating_stars.forEach(function (element) {
+    if (element instanceof HTMLElement) {
+      element.className = active_star;
+    }
+  });
+};
+
+var inactive_on_hover = function inactive_on_hover() {
+  rating_stars === null || rating_stars === void 0 ? void 0 : rating_stars.forEach(function (element) {
+    if (element instanceof HTMLElement) {
+      if (element.getAttribute('data-style-active') == 'false') {
+        element.className = inactive_star;
+      }
+    }
+  });
+};
+
+var star_hover_effect = function star_hover_effect(element) {
+  if (element instanceof HTMLElement) {
+    element.addEventListener('mouseover', function (e) {
+      e.stopPropagation();
+      element.className = active_star;
+      var next_child = element.nextElementSibling;
+
+      while (next_child) {
+        next_child.className = inactive_star;
+        next_child = next_child.nextElementSibling;
+      }
+
+      var prev_child = element.previousElementSibling;
+
+      while (prev_child) {
+        prev_child.className = active_star;
+        prev_child = prev_child.previousElementSibling;
+      }
+    });
+    element.addEventListener('click', function () {
+      element.parentElement.parentElement.querySelector('[name="stars"]').value = element.getAttribute('data-input-value');
+      element.setAttribute('data-style-active', 'true');
+      var prev_child = element.previousElementSibling;
+
+      while (prev_child) {
+        prev_child.setAttribute('data-style-active', 'true');
+        prev_child = prev_child.previousElementSibling;
+      }
+
+      var next_child = element.nextElementSibling;
+
+      while (next_child) {
+        next_child.setAttribute('data-style-active', 'false');
+        next_child = next_child.nextElementSibling;
+      }
+    });
+  }
+};
+
+rating_input_box === null || rating_input_box === void 0 ? void 0 : rating_input_box.addEventListener('mouseover', active_on_hover, {
+  once: true
+});
+rating_input_box === null || rating_input_box === void 0 ? void 0 : rating_input_box.addEventListener('mouseleave', function (e) {
+  inactive_on_hover();
+  rating_input_box === null || rating_input_box === void 0 ? void 0 : rating_input_box.addEventListener('mouseover', active_on_hover, {
+    once: true
+  });
+});
+rating_stars === null || rating_stars === void 0 ? void 0 : rating_stars.forEach(star_hover_effect); //more replies on click send request for more replies 
+
+more_replies_btn === null || more_replies_btn === void 0 ? void 0 : more_replies_btn.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var replies_box = element.parentElement.querySelector('.replies');
+    var review_id = element.getAttribute('data-review-id'); //next_page attribute will be set after the fetch of more replies is done based on pagination dynamically
+
+    var next_page = element.getAttribute('data-url-next_page');
     var url = next_page ? next_page : "/review/".concat(review_id, "/replies");
     fetch(url, {
       method: 'get',
@@ -5700,7 +5786,7 @@ more_replies_btn.forEach(function (el) {
       var _res$data = res.data,
           next_page = _res$data.next_page,
           data = _res$data.data;
-      next_page ? el.setAttribute('data-url-next_page', paginated_data.next_page) : el.style.display = 'none';
+      next_page ? element.setAttribute('data-url-next_page', paginated_data.next_page) : element.style.display = 'none';
       data.forEach(function (review) {
         add_review_element(replies_box, review, 'reply');
       });
@@ -5710,24 +5796,57 @@ more_replies_btn.forEach(function (el) {
   });
 }); //show reply_creator form 
 
-function show_reply_form(e) {
-  console.log(e.target);
-  var reply_creator_forms = e.target.parentElement.parentElement.querySelectorAll('.reply-create');
-  reply_creator_forms[reply_creator_forms.length - 1].style.display = 'block';
-} //request to create a review on server
+function show_reply_create_form(e) {
+  //selectign the repy creator form and making it visible
+  var reply_creator_forms = e.target.parentElement.parentElement.querySelector('.reply-create').parentElement;
+  reply_creator_forms.style.display = 'flex';
+} // show review_editor form
+
+
+function show_review_edit_form(e) {
+  var reply_creator_forms = e.target.parentElement.parentElement.querySelector('.review-edit').parentElement;
+  reply_creator_forms.style.display = 'flex';
+}
+
+function cancel_reply_form(e) {
+  e.target.parentElement.parentElement.style.display = 'none';
+} //toogel review creation box visibility
+
+
+var review_cancel = _toConsumableArray(document.getElementsByClassName('review-cancel')); //giving initial 
+
+
+review_cancel === null || review_cancel === void 0 ? void 0 : review_cancel.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var review_form_box = e.target.parentElement.parentElement;
+    review_form_box.style.display = 'none';
+  });
+}); //request to create a review on server
 
 function create_reply(e) {
+  var _form$querySelector, _form$querySelector2, _form$parentElement, _form$parentElement$p;
+
   e.preventDefault();
   var form = e.target;
-  var comment = form.querySelector('[name="content"]').value;
-  var commentable_id = form.getAttribute('data-review-id');
-  var reply_box = form.parentElement.classList.contains('.reply') ? form.parentElement.parentElement : form.parentElement.querySelector('.replies');
+  var comment = (_form$querySelector = form.querySelector('[name="content"]')) === null || _form$querySelector === void 0 ? void 0 : _form$querySelector.value;
+  var stars = (_form$querySelector2 = form.querySelector('[name="stars"]')) === null || _form$querySelector2 === void 0 ? void 0 : _form$querySelector2.value;
+  var commentable_id = form.getAttribute('data-reviewable-id');
+  var comment_type = form.getAttribute('data-review-type');
+  var reply_box = form.parentElement.parentElement.classList.contains('reply') ? (_form$parentElement = form.parentElement) === null || _form$parentElement === void 0 ? void 0 : _form$parentElement.parentElement.parentElement : (_form$parentElement$p = form.parentElement.parentElement) === null || _form$parentElement$p === void 0 ? void 0 : _form$parentElement$p.querySelector('.replies');
+  var review_box = document.querySelector('.reviews');
+  var parent = comment_type == 'review_reply' ? reply_box : review_box;
+
+  if (comment.length < 5) {
+    return false;
+  }
+
   fetch('/create/review', {
     method: 'post',
     body: JSON.stringify({
       'reviewable_id': commentable_id,
-      'reviewable_type': 'review_reply',
-      'content': comment
+      'reviewable_type': comment_type,
+      'content': comment,
+      'stars': stars || 1
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -5737,29 +5856,36 @@ function create_reply(e) {
   }).then(function (res) {
     return res.ok ? res.json() : Promise.reject(res);
   }).then(function (res) {
-    res.success ? add_review_element(reply_box, res.data, 'reply') : console.log(res.data);
+    res.success ? add_review_element(parent, res.data) : console.log(res.data);
   })["catch"](function (res) {
     return console.log(res);
   });
 } //add review element to dom
 
 function add_review_element(parent, review) {
-  var _review$owner_details;
+  var _review$owner_details, _user, _user2, _user3;
 
-  var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'review';
   //create wrapper based on type
-  var reply_elm = document.createElement('div');
-  reply_elm.classList.add(type);
-  var review_tamplate = document.getElementById('review-template').content.cloneNode(true); // adding review content in the review tamplate
+  var review_elm = document.createElement('div');
+  review_elm.classList.add(review.reviewable_type == 'course' ? 'review' : 'reply');
+  review_elm.id = "review-".concat(review.id);
+  var review_tamplate = document.getElementById('review-template').content.cloneNode(true);
+  var review_creator_btn = review_tamplate.querySelector('.reply-creator-show');
+  var reply_create_form = review_tamplate.querySelector('.reply-create');
+  var input_cancel_btn = review_tamplate.querySelectorAll('.review-cancel');
+  var review_editor_form = review_tamplate.querySelector('.review-edit');
+  var review_delete_btn = review_tamplate.querySelector('.review-delete');
+  var review_edit_btn = review_tamplate.querySelector('.review-editor-btn');
+  var profile_text = review_tamplate.querySelector('.profile-text');
+  var profile_image = review_tamplate.querySelector('.profile-image'); // adding review content in the review tamplate
 
   review_tamplate.querySelector('.content').innerText = review.content;
-  review_tamplate.querySelector('.rate-image').style.width = "".concat(review.stars * 10, "%");
   review_tamplate.querySelector('.created-at').innerText = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(review.created_at).fromNow();
   review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name;
   review_tamplate.querySelector('.owner-details').href = "/user/".concat(review.owner_details.id, "/profile");
-  var reply_create_form = review_tamplate.querySelector('.reply-create');
-  var profile_text = review_tamplate.querySelector('.profile-text');
-  var profile_image = review_tamplate.querySelector('.profile-image');
+  input_cancel_btn.forEach(function (element) {
+    return element.addEventListener('click', cancel_reply_form);
+  });
 
   if ((_review$owner_details = review.owner_details) !== null && _review$owner_details !== void 0 && _review$owner_details.profile_picture) {
     profile_text.revome();
@@ -5769,16 +5895,131 @@ function add_review_element(parent, review) {
 
     profile_image.remove();
     profile_text.firstElementChild.innerText = (_review$owner_details2 = review.owner_details) === null || _review$owner_details2 === void 0 ? void 0 : _review$owner_details2.name.substr(0, 1);
-  } //controling the behavior of button clicks and event listener of review template
+  } //remove or add reply creator based on user permission
 
 
-  review_tamplate.querySelector('.reply-creator-show').addEventListener('click', show_reply_form); //reply creator form handeler 
+  if (((_user = user) === null || _user === void 0 ? void 0 : _user.id) == review.owner_details.id || ((_user2 = user) === null || _user2 === void 0 ? void 0 : _user2.id) !== course.owner_details.id) {
+    var review_create_box = reply_create_form.parentElement;
+    review_create_box.remove();
+    review_creator_btn.remove();
+  }
 
-  reply_create_form.setAttribute('data-review-id', review.id);
-  reply_create_form.addEventListener('submit', create_reply);
-  reply_elm.appendChild(review_tamplate);
-  parent.appendChild(reply_elm);
-}
+  if (((_user3 = user) === null || _user3 === void 0 ? void 0 : _user3.id) == review.owner_details.id) {
+    review_delete_btn.setAttribute('data-review-id', review.id);
+    review_edit_btn.setAttribute('data-review-id', review.id);
+    review_delete_btn.addEventListener('click', delete_review);
+    review_edit_btn.addEventListener('click', show_review_edit_form);
+    review_editor_form.setAttribute('data-reviewable-id', review.id);
+    review_editor_form.setAttribute('data-review-type', review.reviewable_type);
+    review_editor_form.addEventListener('submit', edit_review);
+  } else {
+    review_delete_btn.remove();
+    review_edit_btn.remove(); //controling the behavior of button clicks and event listener of review template
+
+    review_creator_btn.addEventListener('click', show_reply_create_form); //reply creator form handeler 
+
+    reply_create_form.setAttribute('data-reviewable-id', review.id);
+    reply_create_form.setAttribute('data-review-type', 'review_reply');
+    reply_create_form.addEventListener('submit', create_reply);
+  }
+
+  if (review.reviewable_type == 'review_reply') {
+    var _review_tamplate$quer, _review_tamplate$quer2;
+
+    (_review_tamplate$quer = review_tamplate.querySelector('.rate')) === null || _review_tamplate$quer === void 0 ? void 0 : _review_tamplate$quer.remove();
+    (_review_tamplate$quer2 = review_tamplate.querySelector('.rating')) === null || _review_tamplate$quer2 === void 0 ? void 0 : _review_tamplate$quer2.remove();
+    review_elm.appendChild(review_tamplate);
+    parent.appendChild(review_elm);
+  }
+
+  if (review.reviewable_type == 'course') {
+    //rating editor event listener star
+    var rating_selector = review_tamplate.querySelector('.rating');
+    var rating_editor_stars = rating_selector.childNodes;
+    rating_selector === null || rating_selector === void 0 ? void 0 : rating_selector.addEventListener('mouseover', active_on_hover, {
+      once: true
+    });
+    rating_selector === null || rating_selector === void 0 ? void 0 : rating_selector.addEventListener('mouseleave', function (e) {
+      inactive_on_hover();
+      rating_selector === null || rating_selector === void 0 ? void 0 : rating_selector.addEventListener('mouseover', active_on_hover, {
+        once: true
+      });
+    });
+    rating_editor_stars === null || rating_editor_stars === void 0 ? void 0 : rating_editor_stars.forEach(star_hover_effect); //rating editor event listener finished
+
+    review_tamplate.querySelector('.rate-image').style.width = "".concat(review.stars * 10, "%");
+    review_elm.appendChild(review_tamplate);
+    parent.prepend(review_elm);
+    document.querySelector('.review-create-box').style.display = 'none';
+  }
+} //delete review
+
+var delete_review = function delete_review(e) {
+  var review_id = e.target.getAttribute("data-review-id");
+  fetch("/delete/review/".concat(review_id), {
+    method: 'delete',
+    headers: {
+      "Accept": 'application/json',
+      "X-CSRF-TOKEN": window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.target(res);
+  }).then(function (res) {
+    var _document$getElementB;
+
+    res.success ? (_document$getElementB = document.getElementById("review-".concat(res.data.id))) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.remove() : null;
+    document.querySelector('.review-create-box').style.display = 'flex';
+  })["catch"](function (res) {
+    return console.log(res);
+  });
+};
+
+_toConsumableArray(document.getElementsByClassName('review-delete')).forEach(function (element) {
+  element.addEventListener('click', delete_review);
+}); //edit review
+
+
+var review_editor_btn = _toConsumableArray(document.getElementsByClassName('review-editor-btn'));
+
+review_editor_btn.forEach(function (element) {
+  element.addEventListener('click', show_review_edit_form);
+});
+
+var edit_review = function edit_review(e) {
+  e.preventDefault();
+  var review_element = e.target.parentElement.parentElement.parentElement;
+  var comment = e.target.querySelector('[name="content"]').value;
+  var stars = e.target.querySelector('[name="stars"]').value;
+  var comment_id = e.target.getAttribute('data-reviewable-id');
+  var rating = review_element.querySelector('.rate-image');
+  fetch("/update/review/".concat(comment_id), {
+    method: 'put',
+    body: JSON.stringify({
+      'content': comment,
+      'stars': stars
+    }),
+    headers: {
+      "Accept": 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }).then(function (res) {
+    review_element.querySelector('.review-create-box').style.display = 'none';
+    review_element.querySelector('.content').innerText = comment;
+    console.log(stars * 10);
+    rating.style.width = "".concat(stars * 10, "%");
+  })["catch"](function (res) {
+    return console.log(res, 'error');
+  });
+};
+
+var review_editor_form = _toConsumableArray(document.getElementsByClassName('review-edit'));
+
+review_editor_form === null || review_editor_form === void 0 ? void 0 : review_editor_form.forEach(function (element) {
+  element.addEventListener('submit', edit_review);
+});
 
 /***/ }),
 

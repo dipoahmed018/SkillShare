@@ -67,9 +67,9 @@ class ReviewController extends Controller
         $review->content = $request->content ? $request->content : $review->content;
         $review->stars = $request->stars ? $request->stars : $review->stars;
         $review =  $review->save();
-        // if ($request->acceptsJson()) {
-        //     return response()->json($review, 200);
-        // }
+        if ($request->acceptsJson()) {
+            return response()->json(['data' => $review, 'error' => false, 'success' => true], 200);
+        }
         return redirect("/show/$table/$parent->id");
     }
     public function deleteReview(Request $request, Review $review)
@@ -78,12 +78,11 @@ class ReviewController extends Controller
             return abort(403, 'you are not autorized to delete this review');
         }
         $parent = $review->base_parent();
-        $table = $parent->getTable();
         $review->reviewReplies()->delete();
-        $review = $review->delete();
-        // if ($request->acceptsJson()) {
-        //     return response($review, 200);
-        // }
-        return redirect("/show/$table/$parent->id");
+        $review->delete();
+        if ($request->acceptsJson()) {
+            return response()->json(['data' => $review, 'error' => false, 'success' => true], 200);
+        }
+        return redirect("/show/course/$parent->id");
     }
 }

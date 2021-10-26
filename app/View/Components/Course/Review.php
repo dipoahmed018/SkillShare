@@ -38,6 +38,10 @@ class Review extends Component
     {
         return view('components.course.review');
     }
+    public function canModify()
+    {
+        return $this->reviewData->ownerDetails->id == $this->user->id;
+    }
     public function canReply()
     {
         //return true if user is the owner of this course so he can reply tho this review
@@ -51,9 +55,12 @@ class Review extends Component
         }
         return false;
     }
-
-//     public function hasReplies()
-//     {
-//         return $this->reviewData->revieable_type === 'course' && 
-//     }
+    public function isReply()
+    {
+        return $this->reviewData->reviewable_type == 'review_reply';
+    }
+    public function isReview()
+    {
+        return $this->reviewData->reviewable_type == 'course';
+    }
 }

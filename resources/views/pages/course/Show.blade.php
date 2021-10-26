@@ -15,20 +15,24 @@
                 <div class="profile-text"><span></span></div>
                 <span class="owner-name"></span>
             </a>
-            <p class="content">content<p>
+            <p class="content">content
+            <p>
+                <x-course.create class="review-edit" data-reviewable-id="0" data-review-type="review_reply"
+                    cancelable="true">
+                    <x-course.rating />
+                </x-course.create>
         </div>
         <div class="review-control">
+            <span class="review-delete" style="cursor: pointer">Delete</span>
+            <span class="review-editor-btn" style="cursor: pointer">Edit</span>
             <span class="reply-creator-show" style="cursor: pointer">reply</span>
             <span class="created-at">required</span>
             <x-rating :rating="0"></x-rating>
         </div>
 
         {{-- reply creator --}}
-        <form class="reply-create" data-review-id="required">
-            <input type="text" name="content">
-            @csrf
-            <button type="submit"></button>
-        </form>
+        <x-course.create class="reply-create" data-reviewable-id="0" data-review-type="review_reply" cancelable="true">
+        </x-course.create>
 
         {{-- add replies here form javascript --}}
         <div class="replies">
@@ -83,17 +87,29 @@
                         <i class="bi bi-pencil-square tool tool-icon"></i>
                     </a>
                     <div class="introduction-upload tool" data-toogle="tooltip" title="Update Introduction">
-                        <input accept=".mp4" required class="add-introduction one-click-upload" type="file" name="introduction"
-                            id="introduction-upload">
-                        <label for="introduction-upload">
+                        <input accept=".mp4" required class="add-introduction" type="file" name="introduction" id="introduction"
+                            style="width: 0px; visibility:hidden;">
+                        <label for="introduction">
                             <i class="bi bi-file-earmark-play-fill tool-icon"></i>
                         </label>
                     </div>
                     <div class="thumbnail-upload tool" data-toogle="tooltip" title="Update Thumbnail">
-                        <label for="introduction-upload">
+                        <input type="file" accept=".jpg, jpeg, .png" required style="width: 0px; visibility:hidden;"
+                            id="thumbnail">
+                        <label for="thumbnail">
                             <i class="bi bi-card-image tool-icon"></i>
                         </label>
                     </div>
+                    {{-- @can('delete', $course) --}}
+                    <form class="course-delete tool" action="{{ route('delete.course', ['course' => $course->id]) }}"
+                        method="post">
+                        @method('delete')
+                        @csrf
+                        <button type="submit">
+                            <i class="bi bi-trash" style="color: black" data-toogle="tooltip" title="Delete Course"></i>
+                        </button>
+                    </form>
+                    {{-- @endcan --}}
                 </div>
             @endcan
         </div>
@@ -109,48 +125,29 @@
             @endif
         </div>
     </div>
-    <div class="introduction row justify-content-center">
-        <div class="introduction-video col col-12 col-md-6 ">
-            @if ($course->introduction)
-                <video id="introduction-video" width="100%" src="{{ $course->introduction }}"></video>
-            @endif
-        </div>
-        <div class="d-block"></div>
-        @can('update', $course)
-            <div class="edit col col-2">
-                <a class="btn btn-warning" href='/update/course/{{ $course->id }}'>Edit</a>
-            </div>
-        @endcan
-        @can('delete', $course)
-            <div class="edit col col-2">
-                <form action="{{ route('delete.course', ['course' => $course->id]) }}" method="post">
-                    @method('delete')
-                    @csrf
-                    <input class="btn btn-danger" type="submit" value="Delete">
-                </form>
-            </div>
-        @endcan
-        @can('purchase', $course)
+    {{-- <div class="introduction row justify-content-center"> --}}
+
+    {{-- @can('purchase', $course)
             <div class="purchase col col-2">
                 <a class="btn btn-success" href={{ route('purchase.product', ['product' => $course->id]) }}> purchase </a>
             </div>
-        @endcan
-        <div id="introduction-upload-box" class="col col-md-6">
+        @endcan --}}
+    {{-- <div id="introduction-upload-box" class="col col-md-6">
             @can('update', $course)
                 <label for="introduction"
                     class="add-button btn btn-primary mb-4">{{ $course->introduction ? 'Change Introduction' : 'Add Introduction' }}</label>
                 <div id="introduction-error"></div>
             @endcan
-        </div>
-        <div id="introduction-progress-box" class="hide col col-md-5">
+        </div> --}}
+    {{-- <div id="introduction-progress-box" class="hide col col-md-5">
             <div class="progress">
                 <div id="introduction-progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"
                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
             <button id="introduction-up-cancel" class="btn btn-danger">cancel</button>
             <button class="pause" id="introduction-up-pause" class="btn btn-primary">pause</button>
-        </div>
-    </div>
+        </div> --}}
+    {{-- </div> --}}
     <div class="tutorial-upload row justify-content-center mb-2">
 
         @can('update', $course)
@@ -206,36 +203,17 @@
 
     <div class="reviews-box">
         <h5>Reviews</h5>
-        {{-- @can('review', $course)
-            <form class="form-group row justify-content-center mb-3"
-                action="{{ route('create.review', ['name' => $course->getTable(), 'id' => $course->id]) }}" method="post">
-                @csrf
-                <div class="col col-8">
-                    <label class="form-label" for="content">review</label><br>
-                    <input required class="form-control" type="text" name="content" id="review">
-                    @error('content')
-                        <div class="error-box">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                    <label class="form-label" for="stars">stars</label><br>
-                    <input required class="from-control" type="number" name="stars" id="stars" min="1" max="10">
-                    @error('stars')
-                        <div class="error-box">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-                <div class="d-block mb-3"></div>
-                <div class="col col-8">
-                    <input class="form-control" class="btn btn-success" type="submit" value="review">
-                </div>
-
-            </form>
-        @endcan --}}
-        @foreach ($course->reviews as $item)
-            <x-course.review :review-data="$item" :course="$course" :user="$user" class="review" />
-        @endforeach
+        @can('review', $course)
+            <x-course.create class="review-create" display="flex" data-reviewable-id="{{ $course->id }}"
+                data-review-type="course">
+                <x-course.rating></x-course.rating>
+            </x-course.create>
+        @endcan
+        <div class="reviews">
+            @foreach ($course->reviews as $item)
+                <x-course.review :review-data="$item" :course="$course" :user="$user" class="review" />
+            @endforeach
+        </div>
         <div class="links-wrapper">
             {{ $course->reviews->links() }}
         </div>
