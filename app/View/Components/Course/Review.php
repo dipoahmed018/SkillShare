@@ -40,17 +40,20 @@ class Review extends Component
     }
     public function canModify()
     {
-        return $this->reviewData->ownerDetails->id == $this->user->id;
+
+        return $this->user ? $this->reviewData->ownerDetails->id == $this->user->id : false;
     }
     public function canReply()
     {
         //return true if user is the owner of this course so he can reply tho this review
-        if ($this->course->ownerDetails->id == $this->user->id && $this->reviewData->ownerDetails->id !== $this->user->id) {
-            return true;
-        };
+        if ($this->user) {
+            if ($this->course->ownerDetails->id == $this->user->id && $this->reviewData->ownerDetails->id !== $this->user->id) {
+                return true;
+            };
+        }
 
         //return true if the user is owner of the base parent and current review is not replied by current user
-        if ($this->parent) {
+        if ($this->parent && $this->user) {
             return $this->parent->ownerDetails->id == $this->user->id && $this->reviewData->ownerDetails->id !== $this->user->id ;
         }
         return false;

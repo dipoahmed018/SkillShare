@@ -42,20 +42,6 @@
                     src="{{ asset('default/Default.jpeg') }}">
             </div>
 
-            <form class="form-group col-sm-4 col-md-2 order-md-1" action="{{ route('update.course.thumbnail', ['course' => $course->id]) }}"
-                method="post" enctype="multipart/form-data">
-                @csrf
-                @error('thumbnail')
-                    <div class="error-box">
-                        {{$message}}
-                    </div>
-                @enderror
-                <input class="one-click-upload" accept="image/*" type="file" name="thumbnail" id="thumbnail">
-                <label style="max-width: 100%; min-width: 50%" class="btn btn-primary form-control" for="thumbnail">Select Image</label><br>
-                <input style="max-width: 100%; min-width: 50%" class="btn btn-success form-control" type="submit"
-                    value="{{ $course->thumbnail ? 'Change thumbnail' : 'Add thumbnail' }}">
-            </form>
-
         </div>
         <div class="catagory-edit-box row">
 

@@ -60,6 +60,11 @@ class Course extends Model
         return $this->morphMany(FileLink::class, 'fileable', 'fileable_type', 'fileable_id')->where('file_type', '=', 'tutorial');
     }
 
+    public function tutorialDetails()
+    {
+        return $this->hasManyThrough(TutorialDetails::class, FileLink::class, 'fileable_id', 'tutorial_id')->where('file_link.fileable_type', 'course');
+    }
+
     //locale scope
     public function scopePrice($query, $from, $to)
     {
@@ -98,16 +103,16 @@ class Course extends Model
 
 
     //get all the tutorial details for a specific course
-    public function getTutorialDetails()
-    {
-        $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type', '=', 'course');
-        $tutorial_details = DB::table('tutorial_details')
-            ->joinSub($tutorial, 'tutorial', 'tutorial_details.tutorial_id', '=', 'tutorial.id')
-            ->select('tutorial_details.id', 'tutorial_details.title', 'tutorial_details.order')
-            ->orderBy('tutorial_details.order', 'asc')
-            ->get();
-        return $tutorial_details;
-    }
+    // public function getTutorialDetails()
+    // {
+    //     $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type', '=', 'course');
+    //     $tutorial_details = DB::table('tutorial_details')
+    //         ->joinSub($tutorial, 'tutorial', 'tutorial_details.tutorial_id', '=', 'tutorial.id')
+    //         ->select('tutorial_details.id', 'tutorial_details.title', 'tutorial_details.order')
+    //         ->orderBy('tutorial_details.order', 'asc')
+    //         ->get();
+    //     return $tutorial_details;
+    // }
 
     public function is_student($user)
     {

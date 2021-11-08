@@ -42,8 +42,10 @@
 @endsection
 
 @section('body')
+    {{-- modals stars --}}
 
-    <div class="modal fade" id="tutorial-video" tabindex="-1" aria-hidden="true">
+    {{-- tutorial video streamer modal --}}
+    <div class="modal fade" id="tutorial-video-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -66,6 +68,12 @@
             </div>
         </div>
     </div>
+    <x-course.modal.thumbnail-updt :course="$course" />
+    <x-course.modal.delete :course="$course" />
+    <x-course.modal.introduction-updt :course="$course" />
+    <x-tutorial.tutorial-delete />
+    {{-- modals end --}}
+
     {{-- course-introduction is for the title created at and other deitals --}}
     <div class="course-introduction">
         <div class="course-details">
@@ -82,33 +90,23 @@
             </div>
             @can('update', $course)
                 <div class="details-update tools">
-                    <a class="tool" href="/update/course/{{ $course->id }}" data-toogle="tooltip"
+                    <a class="tool" href="/update/course/{{ $course->id }}" data-bs-hover="tooltip"
                         title="Edit Course">
                         <i class="bi bi-pencil-square tool tool-icon"></i>
                     </a>
-                    <div class="introduction-upload tool" data-toogle="tooltip" title="Update Introduction">
-                        <input accept=".mp4" required class="add-introduction" type="file" name="introduction" id="introduction"
-                            style="width: 0px; visibility:hidden;">
-                        <label for="introduction">
-                            <i class="bi bi-file-earmark-play-fill tool-icon"></i>
-                        </label>
+                    <div class=" tool" data-bs-hover="tooltip" title="Update Introduction">
+                        <i class="bi bi-file-earmark-play-fill tool-icon" id="introduction-updater-btn"></i>
                     </div>
-                    <div class="thumbnail-upload tool" data-toogle="tooltip" title="Update Thumbnail">
-                        <input type="file" accept=".jpg, jpeg, .png" required style="width: 0px; visibility:hidden;"
-                            id="thumbnail">
-                        <label for="thumbnail">
-                            <i class="bi bi-card-image tool-icon"></i>
-                        </label>
+                    <div class="tool" data-bs-hover="tooltip" title="Update Thumbnail">
+                        <i class="bi bi-card-image tool-icon" id="thumbnail-updater-btn" data-bs-toogle="modal"
+                            data-bs-target="#thumbnail-update-modal"></i>
                     </div>
                     {{-- @can('delete', $course) --}}
-                    <form class="course-delete tool" action="{{ route('delete.course', ['course' => $course->id]) }}"
-                        method="post">
-                        @method('delete')
-                        @csrf
-                        <button type="submit">
-                            <i class="bi bi-trash" style="color: black" data-toogle="tooltip" title="Delete Course"></i>
-                        </button>
-                    </form>
+
+                    <div class="tool" data-bs-hover="tooltip" title="Delete Course">
+                        <i class="bi bi-trash tool-icon" style="color: black" id="course-deleter-btn" data-bs-toogle="modal"
+                            data-bs-target="#course-delete-modal"></i>
+                    </div>
                     {{-- @endcan --}}
                 </div>
             @endcan
@@ -125,30 +123,20 @@
             @endif
         </div>
     </div>
-    {{-- <div class="introduction row justify-content-center"> --}}
-
+    <div class="description-box">
+        <div class="description" style="display: block">
+                {{ Str::limit($course->description, 60, '......') }}
+        </div>
+        @if (strlen($course->description) > 60)
+            <button class="deep-green-btn">See more</button>
+        @endif
+    </div>
     {{-- @can('purchase', $course)
             <div class="purchase col col-2">
                 <a class="btn btn-success" href={{ route('purchase.product', ['product' => $course->id]) }}> purchase </a>
             </div>
         @endcan --}}
-    {{-- <div id="introduction-upload-box" class="col col-md-6">
-            @can('update', $course)
-                <label for="introduction"
-                    class="add-button btn btn-primary mb-4">{{ $course->introduction ? 'Change Introduction' : 'Add Introduction' }}</label>
-                <div id="introduction-error"></div>
-            @endcan
-        </div> --}}
-    {{-- <div id="introduction-progress-box" class="hide col col-md-5">
-            <div class="progress">
-                <div id="introduction-progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"
-                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <button id="introduction-up-cancel" class="btn btn-danger">cancel</button>
-            <button class="pause" id="introduction-up-pause" class="btn btn-primary">pause</button>
-        </div> --}}
-    {{-- </div> --}}
-    <div class="tutorial-upload row justify-content-center mb-2">
+    {{-- <div class="tutorial-upload row justify-content-center mb-2">
 
         @can('update', $course)
             <div id="tutorial-upload-box" class="upload-tutorial col col-md-2 mt-2">
@@ -165,42 +153,23 @@
                 <button class="pause" id="tutorial-up-pause" class="btn btn-danger">pause</button>
             </div>
         @endcan
+    </div> --}}
+    <div class="tutorial-videos">
+        <form class="add-tutorial">
+            <x-progress-bar />
+            <input type="file" accept=".mp4" name="tutorial" id="tutorial-upload">
+            <label for="tutorial-upload">
+                    <span>Drop You file or click to select a file</span>
+                    <i class="bi bi-file-plus"></i>
+                    <span>Add a new tutorial</span>
+            </label>
+        </form>
+        <div class="tutorials">
+            @foreach ($course->tutorialDetails as $tutorial)
+                <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user"/>
+            @endforeach
+        </div>
     </div>
-    <div class="tutorial-videos container col-md-12">
-        @if (count($course->tutorials) < 1)
-            <h1> course does not have any tutorial</h1>
-        @endif
-        @foreach ($course->tutorials as $tutorial)
-            <div draggable="true" class="tutorial-card row">
-                <div class="details col-sm-10">
-                    <h3 id="title">{{ $tutorial->title }}</h3>
-                    <span>created_at</span>
-                </div>
-
-                <div class="edit col">
-                    @can('delete', $course)
-                        <form
-                            action={{ route('delete.course.tutorial', ['course' => $course->id, 'tutorial' => $tutorial->id]) }}
-                            method="post">
-                            @method('delete')
-                            @csrf
-                            <input class="btn btn-danger" type="submit" value="Delete">
-                        </form>
-                    @endcan
-                    @can('update', $course)
-                        <a class="btn btn-warning" href="/course/{{ $course->id }}/tutorial/{{ $tutorial->id }}">Edit</a>
-                    @endcan
-                    @canany(['update', 'tutorial'], $course)
-                        <div class="watch">
-                            <button tutorial={{ $tutorial->id }} class="btn btn-primary watch-tutorial"
-                                id='open-tutorial'>Watch</button>
-                        </div>
-                    @endcanany
-                </div>
-            </div>
-        @endforeach
-    </div>
-
     <div class="reviews-box">
         <h5>Reviews</h5>
         @can('review', $course)

@@ -35,8 +35,8 @@ class ForumTest extends TestCase
      */
     public function test_example()
     {
-        $response = Course::query()->Price(300, 5000)->Catagory(5);
+        // $response = Course::query()->Price(300, 5000)->Catagory(5);
         // $response->selectRaw('select stars from reviews')
-        dump($response->get());
+        // dump($response->get());
     }
 }

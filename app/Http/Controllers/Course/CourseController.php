@@ -78,10 +78,8 @@ class CourseController extends Controller
     }
     public function setThumbnail(setThumbnail $request, Course $course)
     {
-
         $user = $request->user();
         if ($user->cannot('update', $course)) {
-            return 'hello';
             return back()->withErrors(['auth' => 'you are not the owner of this course']);
         };
         if ($course->thumbnail) {
@@ -94,13 +92,16 @@ class CourseController extends Controller
         $image->resize(600, null, function ($constraint) {
             $constraint->aspectRatio();
         })->save(storage_path('app/public/course/thumbnail/' . $file_name));
-        FileLink::create([
+        $new_thumbnail = FileLink::create([
             'file_name' => $file_name,
             'file_link' => asset('/storage/course/thumbnail/' . $file_name),
             'file_type' => 'thumbnail',
             'fileable_id' => $course->id,
         ]);
-        return redirect('/show/course/' . $course->id);
+        if ($request->acceptsJson()) {
+            return response()->json(['data' => $new_thumbnail, 'success' => true, 'error' => false ]);
+        }
+        return redirect()->back();
     }
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
@@ -145,22 +146,23 @@ class CourseController extends Controller
     }
     public function showDetails($course)
     {
+        $user = request()->user();
         $course = Course::query()->selectRaw('course.*, AVG(review.stars) AS avg_rate')
-            ->where('course.id', '=', $course)
-            ->with([
-                'thumbnail' => fn ($q) => $q->select('file_link.*'),
-                'ownerDetails' => fn ($q) => $q->select('users.*'),
-                'introduction' => fn ($q) => $q->select('file_link.*'),
+        ->where('course.id', '=', $course)
+        ->with([
+            'thumbnail' => fn ($q) => $q->select('file_link.*'),
+            'ownerDetails' => fn ($q) => $q->select('users.*'),
+            'introduction' => fn ($q) => $q->select('file_link.*'),
+            'tutorialDetails',
             ])
             ->Review()
             ->first();
-        $course->tutorials = $course->getTutorialDetails();
-
         //loading 2 replies and it's owner from each review of this course
         $course->reviews = $course->review()
             ->with('ownerDetails')
             ->withCount('reviewReplies as repliesCount')
             ->paginate(5, ['*'], 'reviews');
+        $course->isStudent = $user ? ( $user->courses()->wherePivot('course_id', $course->id)->first() ? true : false ) : false;
         return view('pages/course/Show', ['course' => $course]);
     }
     public function updateDetails(UpdateDetails $request, Course $course)
@@ -179,53 +181,6 @@ class CourseController extends Controller
             $course->save();
         }
         return redirect('/show/course/' . $course->id);
-    }
-    public function addTutorial(AddVideo $request, Course $course)
-    {
-
-        $course_tutorials = collect($course->getTutorialDetails());
-        $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
-        $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
-        $title = 'please provide your tutorial title';
-        $directory = '/' . $directory_name;
-
-        if ($request->header('x-cancel')) {
-            $chunk = chunkUpload($directory, 'no data');
-            return $chunk->status == 200 ?  $chunk->message : 'something went wrong';
-        }
-        if ($request->header('x-resumeable')) {
-            $chunk = chunkUpload($directory, 'no data');
-            return $chunk->status == 200 ? $chunk->file_name : abort($chunk->status, $chunk->message);
-        }
-
-
-        if ($request->header('x-last') == true) {
-            //chunk upload
-            $chunk = chunkUpload($directory, $data, 'private/course/tutorial/');
-            if ($chunk->status == 422) {
-                return abort(422, $chunk->message);
-            }
-
-
-            $file = FileLink::create([
-                'file_name' => $chunk->file_name,
-                'file_link' => 'private/course/tutorial/' . $chunk->file_name,
-                'file_type' => 'tutorial',
-                'security' => 'private',
-                'fileable_type' => 'course',
-                'fileable_id' => $course->id,
-            ]);
-            $tutorial_details = TutorialDetails::create([
-                'tutorial_id' => $file->id,
-                'title' => $title,
-                'order' => $course_tutorials->count() + 1,
-            ]);
-            return $tutorial_details;
-        }
-
-        $chunk = chunkUpload($directory, $data);
-
-        return $chunk->status == 200 ? response($chunk->file_name, 200) : abort(422, $chunk->message);
     }
 
     public function attachCatagory(Request $request, Course $course)
@@ -250,62 +205,7 @@ class CourseController extends Controller
         };
         return $course->catagory()->detach($request->catagory);
     }
-    public function setTutorialDetails(UpdateDetails $request, Course $course, TutorialDetails $tutorial)
-    {
-        if (!$request->title && ($request->position == $tutorial->order || !$request->position)) {
-            return back()->withErrors(['invalid' => 'Provided data is invalid']);
-        }
-        // save title
-        $tutorial->title = $request->title;
-        $tutorial->save();
-        //positioning
-        //going up
-        if ($request->position < $tutorial->order) {
-            $all_tutorials = $course->getTutorialDetails()->whereBetween('order', [$request->position, $tutorial->order - 1])->pluck('id');
-            TutorialDetails::query()->whereIn('id', $all_tutorials)->increment('order', 1);
-            $tutorial->order = $request->position;
-            $tutorial->save();
-            return redirect('/show/course/' . $course->id);
-        }
-        //going down
-        if ($request->position > $tutorial->order) {
-            $all_tutorials = $course->getTutorialDetails();
-            $last_order = $all_tutorials->max('order');
-            $in_between = $all_tutorials->whereBetween('order', [$tutorial->order + 1, $request->position])->pluck('id');
-            TutorialDetails::query()->whereIn('id', $in_between)->decrement('order', 1);
-            $tutorial->order = $request->position > $last_order ? $last_order : $request->position;
-            $tutorial->save();
-            return redirect('/show/course/' . $course->id);
-        }
-        return redirect('/show/course/' . $course->id);
-    }
-    public function showTutorialEdit(Request $request, Course $course, TutorialDetails $tutorial)
-    {
-        if ($request->user()->cannot('update', $course)) {
-            return abort(401, 'you are not authorized to edit this tutorial');
-        }
-        $course->tutorials = collect($course->getTutorialDetails());
-        $course->catagory;
-        return view('pages/course/EditTutorial', ['tutorial' => $tutorial, 'course' => $course]);
-    }
-    public function deleteVideo(DeleteVideo $request, Course $course, TutorialDetails $tutorial)
-    {
-        try {
-            $file = $tutorial->tutorial_video;
-            $all_tutorials = $course->getTutorialDetails()->where('order', '>', $tutorial->order)->pluck('id');
-            Log::channel('event')->info('outside conut', [$all_tutorials]);
-            if ($all_tutorials->count() > 0) {
-                Log::channel('event')->info('inside conut', [$all_tutorials]);
-                TutorialDetails::query()->whereIn('id', $all_tutorials)->decrement('order', 1);
-            }
-            Storage::delete($file->file_link);
-            $file->delete();
-            $tutorial->delete();
-            return redirect('/show/course/' . $course->id);
-        } catch (\Throwable $th) {
-            return $th;
-        }
-    }
+ 
     public function deleteCourse(DeleteCourse $request, Course $course)
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
@@ -326,13 +226,5 @@ class CourseController extends Controller
         $course->delete();
         return redirect('/');
     }
-    public function streamTutorial(Request $request, TutorialDetails $tutorial, Course $course)
-    {
-        if ($request->user()->cannot('tutorial', $course) && $request->user()->cannot('update', $course)) {
-            return abort(401, 'you are not autorized to access this course tutorial');
-        }
-        $file_details = FileLink::findOrFail($tutorial->tutorial_id);
-        $stream = new VideoStream(storage_path('/app//' . $file_details->file_link));
-        $stream->start();
-    }
+
 }

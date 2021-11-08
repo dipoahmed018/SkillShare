@@ -11,6 +11,7 @@ use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostQuestionController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Http\Controllers\Transaction\BuycourseController;
+use App\Http\Controllers\Tutorial\TutorialController;
 use App\Models\Forum;
 use Illuminate\Http\Request;
 
@@ -89,12 +90,12 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/delete/course/{course}/catagory', [CourseController::class, 'detachCatagory'])->name('delete.course.catagory');
 
         //course tutorial
-        Route::post('/course/{course}/tutorial', [CourseController::class, 'addTutorial'])->name('course.tutorial.add');
-        Route::get('/course/{course}/tutorial/{tutorial}', [CourseController::class, 'showTutorialEdit']);
-        Route::put('/course/{course}/tutorial/{tutorial}', [CourseController::class, 'setTutorialDetails'])->name('tutorial.title.edit');
+        Route::get('/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'showTutorialEdit']);
+        Route::post('/course/{course}/tutorial', [TutorialController::class, 'addTutorial'])->name('course.tutorial.add');
+        Route::put('/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'setTutorialDetails'])->name('tutorial.title.edit');
+        Route::delete('/delete/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'deleteTutorial'])->name('delete.course.tutorial');
 
         //delete course
-        Route::delete('/delete/course/{course}/tutorial/{tutorial}', [CourseController::class, 'deleteVideo'])->name('delete.course.tutorial');
         Route::delete('/delete/course/{course}', [CourseController::class, 'deleteCourse'])->name('delete.course');
 
         //review course

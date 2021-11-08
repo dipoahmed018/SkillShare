@@ -72,17 +72,19 @@ class ChunkUpload {
         }
     }
     pauseUpload() {
-        this.cancel.cancel('paused')
+        this.cancel?.cancel('paused')
     }
     async cancelUpload() {
-        this.cancel.cancel('canceled')
-        try {
-            const res = await this._uploadFile(this._url, this._inputs, {
-                'x-cancel': true,
-            })
-            return res
-        } catch (error) {
-            return error.response
+        this.cancel?.cancel('canceled')
+        if (this.cancel) {
+            try {
+                const res = await this._uploadFile(this._url, this._inputs, {
+                    'x-cancel': true,
+                })
+                return res
+            } catch (error) {
+                return error.response
+            }
         }
     }
 

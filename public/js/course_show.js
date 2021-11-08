@@ -5224,39 +5224,49 @@ var ChunkUpload = /*#__PURE__*/function () {
   }, {
     key: "pauseUpload",
     value: function pauseUpload() {
-      this.cancel.cancel('paused');
+      var _this$cancel;
+
+      (_this$cancel = this.cancel) === null || _this$cancel === void 0 ? void 0 : _this$cancel.cancel('paused');
     }
   }, {
     key: "cancelUpload",
     value: function () {
       var _cancelUpload = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var _this$cancel2;
+
         var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                this.cancel.cancel('canceled');
-                _context4.prev = 1;
-                _context4.next = 4;
+                (_this$cancel2 = this.cancel) === null || _this$cancel2 === void 0 ? void 0 : _this$cancel2.cancel('canceled');
+
+                if (!this.cancel) {
+                  _context4.next = 12;
+                  break;
+                }
+
+                _context4.prev = 2;
+                _context4.next = 5;
                 return this._uploadFile(this._url, this._inputs, {
                   'x-cancel': true
                 });
 
-              case 4:
+              case 5:
                 res = _context4.sent;
                 return _context4.abrupt("return", res);
 
-              case 8:
-                _context4.prev = 8;
-                _context4.t0 = _context4["catch"](1);
+              case 9:
+                _context4.prev = 9;
+                _context4.t0 = _context4["catch"](2);
                 return _context4.abrupt("return", _context4.t0.response);
 
-              case 11:
+              case 12:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee3, this, [[1, 8]]);
+        }, _callee3, this, [[2, 9]]);
       }));
 
       function cancelUpload() {
@@ -5363,145 +5373,6 @@ var ChunkUpload = /*#__PURE__*/function () {
 }();
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ChunkUpload);
-
-/***/ }),
-
-/***/ "./resources/js/asset/LaravelErrorParser.js":
-/*!**************************************************!*\
-  !*** ./resources/js/asset/LaravelErrorParser.js ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ErrorHandler = /*#__PURE__*/function () {
-  function ErrorHandler() {
-    var popup = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-    _classCallCheck(this, ErrorHandler);
-
-    this.popup = popup;
-  }
-
-  _createClass(ErrorHandler, [{
-    key: "simpleError",
-    value: function simpleError(message) {
-      var box = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var pop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-      if (box == null && pop == false) {
-        return;
-      }
-
-      if (box == null && pop == true && this.popup) {
-        this.popup.addPopup(message);
-        return;
-      }
-
-      var input_box = document.getElementById(box);
-
-      if (!input_box) {
-        console.log(new DOMException("".concat(box, " not found")));
-        return;
-      }
-
-      if (input_box && message) {
-        this.setInputMessageHtml(message, input_box);
-        return;
-      }
-    }
-  }, {
-    key: "inputHandle",
-    value: function inputHandle(error) {
-      var error_box = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-      var pop = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-      if (this.popup && error.message && pop == true) {
-        this.popup.addPopup(error.message);
-      }
-
-      if (!error.errors) {
-        return;
-      }
-
-      if (!error_box || Object.keys(error_box).length < 1) {
-        var errors = error.errors;
-
-        for (var name in errors) {
-          var box = document.getElementById(name);
-
-          if (box) {
-            this.setInputMessageHtml(errors[name], box);
-          } else if (pop == true && this.popup) {
-            this.popup.addPopup(errors[name]);
-          }
-        }
-
-        return;
-      }
-
-      if (error_box && Object.keys(error_box).length > 0) {
-        var _errors = error.errors;
-
-        for (var name in _errors) {
-          if (error_box[name]) {
-            var _box = document.getElementById(error_box[name]);
-
-            var res_box = document.getElementById(name);
-
-            if (_box) {
-              this.setInputMessageHtml(_errors[name], _box);
-            } else if (res_box) {
-              this.setInputMessageHtml(_errors[name], res_box);
-            } else if (pop == true && this.popup) {
-              this.popup.addPopup(_errors[name]);
-            }
-          }
-        }
-
-        return;
-      }
-    }
-  }, {
-    key: "setInputMessageHtml",
-    value: function setInputMessageHtml(message, append_to) {
-      var _this = this;
-
-      var element_type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'p';
-      var error_box = document.createElement('div');
-      error_box.setAttribute('class', 'error-box');
-      var message_element = document.createElement(element_type);
-      var close_element = document.createElement('i');
-      close_element.setAttribute('class', 'bi bi-x-lg');
-      message_element.innerText = message;
-      error_box.append(close_element);
-      error_box.append(message_element);
-      append_to.append(error_box);
-      close_element.addEventListener('click', function () {
-        return _this.remove_element(message_element, close_element);
-      });
-    }
-  }, {
-    key: "remove_element",
-    value: function remove_element(sibling, self) {
-      sibling.remove();
-      self.remove();
-    }
-  }]);
-
-  return ErrorHandler;
-}();
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ErrorHandler);
 
 /***/ }),
 
@@ -12053,15 +11924,26 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/LaravelErrorParser */ "./resources/js/asset/LaravelErrorParser.js");
-/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
-/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+/* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
+/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
+/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 // compotnent scripts //
 __webpack_require__(/*! ../component/course/review */ "./resources/js/component/course/review.js"); // neccessery modules 
@@ -12070,237 +11952,121 @@ __webpack_require__(/*! ../component/course/review */ "./resources/js/component/
 
 
 
- //trigger bootstrap tooltip element
+var one_mb = 1024 * 1028;
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__.default(); //trigger bootstrap tooltip element
 
-document.querySelectorAll('[data-toogle="tooltip"]').forEach(function (el) {
-  new bootstrap__WEBPACK_IMPORTED_MODULE_4__.Tooltip(el);
-}); //tutorial upload
+document.querySelectorAll('[data-bs-hover="tooltip"]').forEach(function (el) {
+  new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Tooltip(el);
+}); //tutorial streaming
 
-var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_3__.default();
-var error = new _asset_LaravelErrorParser__WEBPACK_IMPORTED_MODULE_1__.default(popup);
-var tutorial_input_element = document.getElementById("tutorial");
-var tutorial_upload_box = document.getElementById('tutorial-upload-box');
-var tutorial_progress_box = document.getElementById('tutorial-progress-box');
-var tutorial_progress_bar = document.getElementById('tutorial-progress-bar');
-var tutorial_progress_cancel = document.getElementById('tutorial-up-cancel');
-var tutorial_progress_pause = document.getElementById('tutorial-up-pause');
+var tutorial_links = _toConsumableArray(document.getElementsByClassName('watch-tutorial'));
 
-if (tutorial_input_element) {
-  tutorial_input_element.addEventListener("change", function (e) {
-    var file = e.target.files[0];
-    var url = "/course/".concat(course.id, "/tutorial");
-
-    if (file.typ == 'video/mp4') {
-      popup.addPopup('file must be a mp4 type');
-      return;
-    }
-
-    if (file.size > 1024 * 1024 * 200) {
-      popup.addPopup('file must not be bigger then 200 mb');
-      return;
-    }
-
-    var data = {
-      tutorial_name: (Date.now() + Math.random()).toString(36),
-      tutorial_type: file.type
-    };
-    var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_2__.default(file);
-    uploader.startUpload(url, data);
-    tutorial_upload_box.classList.add('hide');
-    tutorial_progress_box.classList.remove('hide'); //canceler and pauser
-
-    var pause_or_resume = function pause_or_resume() {
-      if (tutorial_progress_pause.classList.contains('pause')) {
-        tutorial_progress_pause.innerText = 'resume';
-        tutorial_progress_pause.classList.remove('pause');
-        tutorial_progress_pause.classList.add('resume');
-        uploader.pauseUpload();
-      } else {
-        tutorial_progress_pause.innerText = 'pause';
-        tutorial_progress_pause.classList.remove('resume');
-        tutorial_progress_pause.classList.add('pause');
-        uploader.resumeUpload();
-      }
-    };
-
-    tutorial_progress_cancel.addEventListener('click', function (e) {
-      e.preventDefault();
-      clearBox();
-      uploader.cancelUpload();
-    }, {
-      once: true
-    });
-    tutorial_progress_pause.addEventListener('click', pause_or_resume); //show progrews
-
-    uploader.showProgress = function (progress) {
-      progress = progress > 100 ? 100 : progress;
-      tutorial_progress_bar.innerHTML = "".concat(progress, " %");
-      tutorial_progress_bar.setAttribute('aria-valuenow', progress);
-      tutorial_progress_bar.setAttribute('style', "width:".concat(progress, "%"));
-    };
-
-    function clearBox() {
-      tutorial_progress_pause.removeEventListener('click', pause_or_resume);
-      tutorial_input_element.value = null;
-      tutorial_progress_pause.classList.add('pause');
-      tutorial_progress_pause.classList.remove('resume');
-      tutorial_progress_pause.innerText = 'pause';
-      tutorial_upload_box.classList.remove('hide');
-      tutorial_progress_box.classList.add('hide');
-    }
-
-    uploader.showResponse = function (res, err) {
-      if (err !== null) {
-        clearBox();
-
-        if (err.status == 422) {
-          error.inputHandle(err.data, null, true);
-        } else {
-          error.simpleError(err.data.message);
-        }
-      }
-
-      if (res !== null) {
-        clearBox();
-        popup.addPopup('tutorial upload complete');
-        location.reload();
-      }
-    };
-  });
-} //introduction upload
-
-
-var introduction_input_lement = document.getElementById('introduction-upload');
-var introduction_upload_box = document.getElementById('introduction-upload-box');
-var introduction_progress_box = document.getElementById('introduction-progress-box');
-var introduction_progress_bar = document.getElementById('introduction-progress-bar');
-var introduction_progress_cancel = document.getElementById('introduction-up-cancel');
-var introduction_progress_pause = document.getElementById('introduction-up-pause');
-var video_box = document.getElementById('introduction-video'); // if (introduction_input_lement) {
-//   introduction_input_lement.addEventListener("change", (e) => {
-//     e.preventDefault()
-//     let file = e.target.files[0];
-//     let url = `/update/course/${course.id}/introduction`;
-//     if (file.typ == 'video/mp4') {
-//       popup.addPopup('file must be a mp4 type')
-//       return
-//     }
-//     if (file.size > 1024 * 1024 * 200) {
-//       popup.addPopup('file must not be bigger then 200 mb')
-//       return
-//     }
-//     let input_data = {
-//       introduction_name: (Date.now() + Math.random()).toString(36),
-//       introduction_type: file.type,
-//     };
-//     //upload file
-//     let uploader = new Chunker(file)
-//     uploader.startUpload(url, input_data, csrf)
-//     //show uploader
-//     introduction_progress_box.classList.remove('hide')
-//     introduction_upload_box.classList.add('hide')
-//     //canceler and pauser
-//     const pause_or_resume = () => {
-//       if (introduction_progress_pause.classList.contains('pause')) {
-//         introduction_progress_pause.innerText = 'resume'
-//         introduction_progress_pause.classList.remove('pause')
-//         introduction_progress_pause.classList.add('resume')
-//         uploader.pauseUpload()
-//       } else {
-//         introduction_progress_pause.innerText = 'pause'
-//         introduction_progress_pause.classList.remove('resume')
-//         introduction_progress_pause.classList.add('pause')
-//         uploader.resumeUpload()
-//       }
-//     }
-//     introduction_progress_cancel.addEventListener('click', (e) => {
-//       e.preventDefault()
-//       clearBox()
-//       uploader.cancelUpload()
-//     }, { once: true })
-//     introduction_progress_pause.addEventListener('click', pause_or_resume)
-//     //show progrews
-//     uploader.showProgress = progress => {
-//       progress = progress > 100 ? 100 : progress
-//       introduction_progress_bar.innerHTML = `${progress} %`
-//       introduction_progress_bar.setAttribute('aria-valuenow', progress)
-//       introduction_progress_bar.setAttribute('style', `width:${progress}%`)
-//     }
-//     //clear box 
-//     function clearBox() {
-//       introduction_progress_pause.removeEventListener('click', pause_or_resume)
-//       introduction_input_lement.value = null;
-//       introduction_progress_pause.classList.remove('resume')
-//       introduction_progress_pause.classList.add('pause')
-//       introduction_progress_pause.innerText = 'pause'
-//       introduction_upload_box.classList.remove('hide')
-//       introduction_progress_box.classList.add('hide')
-//     }
-//     uploader.showResponse = (res, err) => {
-//       if (err !== null) {
-//         console.log(err)
-//         clearBox()
-//         if (err.status == 422) {
-//           error.inputHandle(err.data, null, true)
-//         } else {
-//           error.simpleError(err.data.message)
-//         }
-//       }
-//       if (res !== null) {
-//         clearBox()
-//         popup.addPopup('introduction upload complete')
-//         video_box ? video_box.src = res.data.file_link : location.reload()
-//       }
-//     }
-//   });
-// }
-//tutorial streaming
-
-var tutorial_links = document.querySelectorAll('.watch-tutorial');
-var video_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_4__.Modal(document.getElementById('tutorial-video'), {
+var tutorial_modal_element = document.getElementById('tutorial-video-modal');
+var tutorial_watcher_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal(tutorial_modal_element, {
   backdrop: 'static',
   keyboard: false
 });
+tutorial_links === null || tutorial_links === void 0 ? void 0 : tutorial_links.forEach(function (element) {
+  element.addEventListener('click', showTutorial);
+});
 
-if (tutorial_links.length > 0) {
-  tutorial_links.forEach(function (node) {
-    node.addEventListener('click', function (e) {
-      return showTutorial(e);
-    });
+function showTutorial(e) {
+  var tutorial_id = e.currentTarget.getAttribute('data-tutorial-id');
+  var video_frame = tutorial_modal_element.querySelector('#video-frame');
+  var close_modal = tutorial_modal_element.querySelector('#close-modal');
+  video_frame.src = "/show/tutorial/".concat(tutorial_id, "/").concat(course.id);
+  close_modal.addEventListener('click', function () {
+    video_frame.src = '';
+    tutorial_watcher_modal.hide();
+  }, {
+    once: true
   });
-}
+  tutorial_watcher_modal.show();
+} //course delete
 
-var showTutorial = /*#__PURE__*/function () {
+
+var course_deleter_btn = document.getElementById('course-deleter-btn');
+var course_deleter_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal('#course-delete-modal');
+course_deleter_btn === null || course_deleter_btn === void 0 ? void 0 : course_deleter_btn.addEventListener('click', function (e) {
+  course_deleter_modal.show();
+}); //thumbnail update
+
+var thumbnail_update_btn = document.getElementById('thumbnail-updater-btn');
+var thumbnail_update_form = document.getElementById('thumbnail-update-form');
+var thumbnail_input = thumbnail_update_form.querySelector('[name="thumbnail"]');
+var thumbnail_error = thumbnail_update_form.querySelector('.error-box');
+var thumbnail_update_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal('#thumbnail-update-modal');
+thumbnail_update_btn === null || thumbnail_update_btn === void 0 ? void 0 : thumbnail_update_btn.addEventListener('click', function () {
+  thumbnail_update_modal.show();
+});
+thumbnail_input === null || thumbnail_input === void 0 ? void 0 : thumbnail_input.addEventListener('change', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(e) {
-    var id, video_frame, close_modal;
+    var image, form_data, error, res, _res_data$errors, _res_data$errors$thum, res_data, _res_data$data, _res_data, file_link;
+
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            id = e.target.getAttribute('tutorial');
-            video_frame = document.getElementById('video-frame');
-            close_modal = document.getElementById('close-modal');
+            //resetign the thumbnial error box
+            thumbnail_error.innerHTML = ''; //selecting the input image
 
-            try {
-              // const res = await fetch(`/show/tutorial/${id}/${course.id}`, {
-              //   method: 'get',
-              // })
-              // res.blob().then(blob => {
-              //   const src = URL.createObjectURL(blob)
-              // })
-              video_modal.show();
-              video_frame.src = "".concat(window.location.origin, "/show/tutorial/").concat(id, "/").concat(course.id);
-              close_modal.addEventListener('click', function () {
-                video_frame.src = '';
-                video_modal.hide();
-              }, {
-                once: true
-              });
-            } catch (error) {
-              console.log('err', error);
+            image = e.target.files[0]; //creating multipart form data and inserting the image as thumnail
+
+            form_data = new FormData();
+            form_data.append('thumbnail', image); //filter image 
+
+            if (image.size > one_mb * 10) {
+              error = document.createElement('p');
+              error.innerText = 'image must be shorter then 10 mb';
+              thumbnail_error.append(error);
             }
 
-          case 4:
+            _context.next = 7;
+            return fetch("/update/course/".concat(course.id, "/thumbnail"), {
+              method: 'post',
+              body: form_data,
+              headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window.csrf
+              }
+            });
+
+          case 7:
+            res = _context.sent;
+
+            if (!(res.status == 422)) {
+              _context.next = 13;
+              break;
+            }
+
+            _context.next = 11;
+            return res.json();
+
+          case 11:
+            res_data = _context.sent;
+            res_data === null || res_data === void 0 ? void 0 : (_res_data$errors = res_data.errors) === null || _res_data$errors === void 0 ? void 0 : (_res_data$errors$thum = _res_data$errors.thumbnail) === null || _res_data$errors$thum === void 0 ? void 0 : _res_data$errors$thum.forEach(function (element) {
+              var error = document.createElement('p');
+              error.innerText = element;
+              thumbnail_error.append(error);
+            });
+
+          case 13:
+            if (!(res.status == 200)) {
+              _context.next = 21;
+              break;
+            }
+
+            _context.next = 16;
+            return res.json();
+
+          case 16:
+            _res_data = _context.sent;
+            file_link = _res_data === null || _res_data === void 0 ? void 0 : (_res_data$data = _res_data.data) === null || _res_data$data === void 0 ? void 0 : _res_data$data.file_link;
+            course.thumbnail = res.data;
+            add_thumbnail(file_link);
+            thumbnail_update_modal.hide();
+
+          case 21:
           case "end":
             return _context.stop();
         }
@@ -12308,10 +12074,262 @@ var showTutorial = /*#__PURE__*/function () {
     }, _callee);
   }));
 
-  return function showTutorial(_x) {
+  return function (_x) {
     return _ref.apply(this, arguments);
   };
-}();
+}()); //add new thumbnail 
+
+function add_thumbnail(file_link) {
+  var thumbnail_parent = document.querySelector('.thumbnail-video');
+
+  if (course.introduction) {
+    thumbnail_parent.querySelector('video').poster = file_link;
+    return true;
+  }
+
+  thumbnail_parent.innerHTML = '';
+  var image_element = document.createElement('img');
+  image_element.scr = file_link;
+  thumbnail_parent.append(image_element);
+} //introduction update
+
+
+var introduction_update_btn = document.getElementById('introduction-updater-btn');
+var introduction_update_box = document.getElementById('introduction-update-modal');
+var introduction_update_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal(introduction_update_box);
+introduction_update_btn === null || introduction_update_btn === void 0 ? void 0 : introduction_update_btn.addEventListener('click', function () {
+  introduction_update_modal.show();
+}); //introduction upload
+
+var introduction_input_lement = introduction_update_box.querySelector('[name="introduction"]');
+var introduction_upload_control = introduction_update_box.querySelector('.upload-control');
+var introduction_progress_bar = introduction_upload_control.querySelector('.progress-bar');
+var introduction_progress_value = introduction_upload_control.querySelector('.progress-value');
+var introduction_progress_cancel = introduction_upload_control.querySelector('.cancel-upload'); //handele introduction video uploading
+
+introduction_input_lement === null || introduction_input_lement === void 0 ? void 0 : introduction_input_lement.addEventListener('change', function (e) {
+  //select introduction video file
+  var file = e.target.files[0];
+  var url = "/update/course/".concat(course.id, "/introduction"); //video size filter
+
+  if (file.size > 1024 * 1024 * 200) {
+    popup.addPopup('file must not be bigger then 200 mb');
+    return;
+  } // additional data for chunk upload 
+
+
+  var form_data = {
+    introduction_name: (Date.now() + Math.random()).toString(36),
+    introduction_type: file.type
+  }; //create a instace of chunk uploader with given file
+
+  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file); // start uploading
+
+  uploader.startUpload(url, form_data, window.csrf); //show upload progress
+
+  introduction_upload_control.style.display = 'flex';
+
+  uploader.showProgress = function (progress) {
+    console.log(progress);
+    progress = progress > 100 ? 100 : progress;
+    introduction_progress_value.innerText = "".concat(progress, "%");
+    introduction_progress_bar.style.width = "".concat(progress, "%");
+  }; //cancel upload
+
+
+  introduction_progress_cancel.addEventListener('click', function (e) {
+    //cancel upload will send a last request to server for deleting the file
+    uploader.cancelUpload(); //reset form and uploading progress
+
+    reset_introduction_upload(); //hide the introduction uploader modal
+
+    introduction_update_modal.hide();
+  }, {
+    once: true
+  }); //handel response
+
+  uploader.showResponse = function (res, err) {
+    if (res !== null && res !== void 0 && res.data) {
+      course.introduction = res.data;
+      reset_introduction_upload();
+      add_introduction(res.data.file_link);
+      introduction_update_modal.hide();
+      popup.addPopup('introduction upload complete');
+    }
+  };
+}); //reset uploading actions
+
+function reset_introduction_upload() {
+  //reset introduction upload form 
+  introduction_update_box.querySelector('form').reset(); //progress reset
+
+  introduction_upload_control.style.display = 'none';
+  introduction_progress_value.innerText = "0%";
+  introduction_progress_bar.style.width = "0%";
+}
+
+function add_introduction(file_link) {
+  var thumbnail_parent = document.querySelector('.thumbnail-video');
+  thumbnail_parent.innerHTML = '';
+  var video = document.createElement('video');
+  video.src = file_link;
+  course.thumbnail ? video.poster = course.thumbnail.file_link : null;
+  video.style.width = '100%';
+  video.controls = true;
+  thumbnail_parent.append(video);
+} //description box
+
+
+var description_box = document.querySelector('.description-box');
+var description_expand = description_box.querySelector('button');
+var description = description_box.querySelector('.description');
+description_expand === null || description_expand === void 0 ? void 0 : description_expand.addEventListener('click', function () {
+  description.innerText = course.description;
+  description_expand.style.display = 'none';
+}); //tutorai upload box
+
+var tutorial_upload_form = document.querySelector('.add-tutorial');
+var tutorial_upload_dropbox = document.querySelector('[for="tutorial-upload"]');
+var tutorial_input = document.getElementById('tutorial-upload');
+var tutorial_upload_control = tutorial_upload_form.querySelector('.upload-control');
+var tutorial_progress_bar = tutorial_upload_form.querySelector('.progress-bar');
+var tutorial_progress_cancel = tutorial_upload_form.querySelector('.cancel-upload');
+var tutorial_progress_value = tutorial_upload_form.querySelector('.progress-value'); //preventinf browser from opening the file
+
+document.addEventListener('dragover', function (e) {
+  e.preventDefault();
+});
+tutorial_upload_dropbox.addEventListener('drop', function (e) {
+  e.preventDefault();
+  var file = e.dataTransfer.files[0];
+  upload_tutorial(file);
+});
+tutorial_input.addEventListener('change', function (e) {
+  var file = e.target.files[0];
+  upload_tutorial(file);
+});
+
+function upload_tutorial(file) {
+  var type = file.type,
+      size = file.size;
+  var acceptable_type = ['video/mp4'];
+  var url = "/course/".concat(course.id, "/tutorial"); //file filter
+
+  if (!acceptable_type.includes(type)) {
+    popup.addPopup('file type must be mp4');
+    tutorial_upload_form.reset();
+    return true;
+  }
+
+  if (size > one_mb * 200) {
+    popup.addPopup('file must not be bigger then 200 mb');
+    tutorial_upload_form.reset();
+    return true;
+  }
+
+  var form_data = {
+    tutorial_name: (Date.now() + Math.random()).toString(36),
+    tutorial_type: type
+  }; //create a instace of chunk uploader with given file
+
+  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file); // start uploading
+
+  uploader.startUpload(url, form_data, window.csrf); //show upload progress
+
+  tutorial_upload_control.style.display = 'flex';
+
+  uploader.showProgress = function (progress) {
+    progress = progress > 100 ? 100 : progress;
+    tutorial_progress_bar.style.width = "".concat(progress, "%");
+    tutorial_progress_value.innerText = "".concat(progress, "%");
+  }; //cancel upload
+
+
+  tutorial_progress_cancel.addEventListener('click', function (e) {
+    //cancel upload will send a last request to server for deleting the file
+    uploader.cancelUpload();
+    reset_tutorial_upload();
+  }, {
+    once: true
+  }); //handel response
+
+  uploader.showResponse = function (res, err) {
+    if (res !== null && res !== void 0 && res.data) {
+      course.tutorials.push(res.data.data);
+      console.log(res);
+      add_tutorial_element(res.data.data);
+      reset_tutorial_upload();
+      popup.addPopup('tutorial upload complete');
+    }
+  };
+}
+
+function reset_tutorial_upload() {
+  //progress box reset
+  tutorial_upload_control.style.display = 'none';
+  tutorial_progress_bar.style.width = "0";
+  tutorial_progress_value.innerText = "0"; //reset form and uploading progress
+
+  tutorial_upload_form.reset();
+}
+
+function add_tutorial_element(tutorial_details) {
+  console.log(tutorial_details, ['data']);
+  var tutorial_template = "\n  <div draggable=\"true\" class=\"tutorial-card row\">\n    <div class=\"details col-sm-10\">\n        <h3 id=\"title\">".concat(tutorial_details.title, "</h3>\n        <span>created_at</span>\n    </div>\n\n    <div class=\"edit col\">\n        <a class=\"btn btn-warning\" href=\"/course/").concat(course.id, "/tutorial/").concat(tutorial_details.id, "\">Edit</a>\n        <div class=\"watch\">\n          <button tutorial=").concat(tutorial_details.id, " class=\"btn btn-primary watch-tutorial\" id='open-tutorial'>Watch</button>\n        </div>\n    </div>\n  </div> \n");
+  document.querySelector('.tutorials').insertAdjacentHTML('beforebegin', tutorial_template);
+} //tutorial delete 
+
+
+var tutorial_deleter_modal = document.getElementById('tutorial-delete-modal');
+var tutorial_delete_yes = tutorial_deleter_modal.querySelector('.yes');
+var tutorial_id;
+
+var tutorial_delete = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+    var res;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return fetch("/delete/course/".concat(course.id, "/tutorial/").concat(tutorial_id), {
+              method: 'delete',
+              headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window.csrf
+              }
+            });
+
+          case 2:
+            res = _context2.sent;
+
+            if (res.status == 200) {
+              document.getElementById("tutorial-".concat(tutorial_id)).remove();
+              bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal.getInstance(tutorial_deleter_modal).hide();
+            }
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function tutorial_delete(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}(); //handel modal shown event
+
+
+tutorial_deleter_modal === null || tutorial_deleter_modal === void 0 ? void 0 : tutorial_deleter_modal.addEventListener('shown.bs.modal', function (e) {
+  //changing the global tutorial_id variable each time the target changes
+  tutorial_id = e.relatedTarget.getAttribute('data-tutorial-id');
+  tutorial_delete_yes.removeEventListener('click', tutorial_delete);
+  tutorial_delete_yes.addEventListener('click', tutorial_delete, {
+    once: true
+  });
+});
 })();
 
 /******/ })()
