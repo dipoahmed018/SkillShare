@@ -9,16 +9,16 @@
             <div class="modal-body">
                 <div class="yes-no-confirm">
                     <p>Are you sure you want to delete this course</p>
-                    <div class="butttons">
-                        <button>No</button>
+                    <div class="buttons">
                         <form class="tool" action="{{ route('delete.course', ['course' => $course->id]) }}"
                             method="post" id="course-delete">
                             @method('delete')
                             @csrf
-                            <button type="submit">
+                            <button class="yes" type="submit">
                                 Yes
                             </button>
                         </form>
+                        <button class="no" data-bs-dismiss="modal">No</button>
                     </div>
                 </div>
             </div>

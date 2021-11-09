@@ -155,6 +155,7 @@
         @endcan
     </div> --}}
     <div class="tutorial-videos">
+        @if ($course->owner == $user?->id)
         <form class="add-tutorial">
             <x-progress-bar />
             <input type="file" accept=".mp4" name="tutorial" id="tutorial-upload">
@@ -164,6 +165,7 @@
                     <span>Add a new tutorial</span>
             </label>
         </form>
+        @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)
                 <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user"/>

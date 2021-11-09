@@ -209,8 +209,31 @@ $pink_red : rgb(255, 71, 71);
     font-size: 0.8em;
     color: white;
 }
-.yes-bo-confirm {
-    background-color: black;
+.yes-no-confirm {
+    p {
+        color: $deep_green;
+    }
+    .buttons {
+        display: flex;
+        justify-content: end;
+        gap: 1em;
+        button {
+            display: inline-block;
+            min-width: 5em;
+            padding: 0.2em;
+            font-size: 0.9em;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    
+        .yes {
+            background-color: $shallow_green;
+        }
+        .no {
+            background-color: rgb(221, 65, 65);
+        }
+    }
 }
 
 //upload prgoress bar

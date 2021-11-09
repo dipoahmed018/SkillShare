@@ -13355,6 +13355,34 @@ fieldset:disabled .btn {
   color: white;
 }
 
+.yes-no-confirm p {
+  color: #0FA958;
+}
+
+.yes-no-confirm .buttons {
+  display: flex;
+  justify-content: end;
+  gap: 1em;
+}
+
+.yes-no-confirm .buttons button {
+  display: inline-block;
+  min-width: 5em;
+  padding: 0.2em;
+  font-size: 0.9em;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.yes-no-confirm .buttons .yes {
+  background-color: #6ACC9A;
+}
+
+.yes-no-confirm .buttons .no {
+  background-color: #dd4141;
+}
+
 .upload-control {
   display: none;
   flex-direction: column;
