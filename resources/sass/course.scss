@@ -124,6 +124,15 @@ $pink_red : rgb(255, 71, 71);
                 }
             }
         }
+        .course-purchase {
+            a {
+                width: 5em;
+            }
+            display: flex;
+            h4 {
+                color: $deep_green;
+            }
+        }
     }
 
     @media screen and (min-width: 700px) {

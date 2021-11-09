@@ -38,6 +38,7 @@ class CoursePolicy
     }
     public function purchase(User $user, Course $course)
     {
-        return $course->owner !== $user->id && $user->email_verified_at !== null && !$course->is_student($user);
+        Log::channel('event')->info('purchase',['i am purchasing']);
+        return $course->owner !== $user?->id && !$course->is_student($user);
     }
 }

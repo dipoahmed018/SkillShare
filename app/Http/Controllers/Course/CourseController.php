@@ -157,12 +157,16 @@ class CourseController extends Controller
             ])
             ->Review()
             ->first();
-        //loading 2 replies and it's owner from each review of this course
+
         $course->reviews = $course->review()
             ->with('ownerDetails')
             ->withCount('reviewReplies as repliesCount')
             ->paginate(5, ['*'], 'reviews');
-        $course->isStudent = $user ? ( $user->courses()->wherePivot('course_id', $course->id)->first() ? true : false ) : false;
+
+        //permissions
+        $course->isStudent =  $user?->courses()->wherePivot('course_id', $course->id)->first() ? true : false;
+        $course->isPurchasable = !$course->isStudent && $course->owner !== $user?->id ? true : false; 
+
         return view('pages/course/Show', ['course' => $course]);
     }
     public function updateDetails(UpdateDetails $request, Course $course)

@@ -3,10 +3,6 @@
   max-width: 100% !important;
 }
 
-.header {
-  background-color: rgba(0, 0, 0, 0.09) !important;
-}
-
 .cover {
   position: relative;
   display: flex;

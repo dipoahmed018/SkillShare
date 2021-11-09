@@ -78,38 +78,53 @@
     <div class="course-introduction">
         <div class="course-details">
             <h5>{{ $course->title }}</h5>
+
             <div class="details">
+
                 <span>
                     Create By:
                     <a href="/user/{{ $course->ownerDetails->id }}/profile">
                         {{ $course->ownerDetails->name }}
                     </a>
                 </span>
+
                 <span>Create at: {{ $course->created_at->diffForHumans() }}</span>
+
                 <x-rating :rating="$course->avg_rate"> </x-rating>
             </div>
             @can('update', $course)
                 <div class="details-update tools">
+
                     <a class="tool" href="/update/course/{{ $course->id }}" data-bs-hover="tooltip"
                         title="Edit Course">
                         <i class="bi bi-pencil-square tool tool-icon"></i>
                     </a>
+
                     <div class=" tool" data-bs-hover="tooltip" title="Update Introduction">
                         <i class="bi bi-file-earmark-play-fill tool-icon" id="introduction-updater-btn"></i>
                     </div>
+
                     <div class="tool" data-bs-hover="tooltip" title="Update Thumbnail">
                         <i class="bi bi-card-image tool-icon" id="thumbnail-updater-btn" data-bs-toogle="modal"
                             data-bs-target="#thumbnail-update-modal"></i>
                     </div>
-                    {{-- @can('delete', $course) --}}
 
-                    <div class="tool" data-bs-hover="tooltip" title="Delete Course">
-                        <i class="bi bi-trash tool-icon" style="color: black" id="course-deleter-btn" data-bs-toogle="modal"
-                            data-bs-target="#course-delete-modal"></i>
-                    </div>
-                    {{-- @endcan --}}
+                    @can('delete', $course)
+                        <div class="tool" data-bs-hover="tooltip" title="Delete Course">
+                            <i class="bi bi-trash tool-icon" style="color: black" id="course-deleter-btn" data-bs-toogle="modal"
+                                data-bs-target="#course-delete-modal"></i>
+                        </div>
+                    @endcan
                 </div>
             @endcan
+            @if ($course->isPurchasable)
+                <div class="course-purchase">
+                    <a class="btn btn-success" href={{ route('purchase.product', ['product' => $course->id]) }}>
+                        Buy
+                    </a>
+                    <h4>${{$course->price}}</h4>
+                </div>
+            @endif
         </div>
 
         {{-- thumbnail is for the introduction video or course thumbnail --}}
@@ -125,50 +140,27 @@
     </div>
     <div class="description-box">
         <div class="description" style="display: block">
-                {{ Str::limit($course->description, 60, '......') }}
+            {{ Str::limit($course->description, 60, '......') }}
         </div>
         @if (strlen($course->description) > 60)
             <button class="deep-green-btn">See more</button>
         @endif
     </div>
-    {{-- @can('purchase', $course)
-            <div class="purchase col col-2">
-                <a class="btn btn-success" href={{ route('purchase.product', ['product' => $course->id]) }}> purchase </a>
-            </div>
-        @endcan --}}
-    {{-- <div class="tutorial-upload row justify-content-center mb-2">
-
-        @can('update', $course)
-            <div id="tutorial-upload-box" class="upload-tutorial col col-md-2 mt-2">
-                <input required accept=".mp4" type="file" name="tutorial" class="add-vide one-click-upload" id="tutorial">
-                <label class="add-button btn btn-primary" for="tutorial">Add Tutorial</label>
-                <div id="tutorial-error"></div>
-            </div>
-            <div id="tutorial-progress-box" class="hide col col-md-5">
-                <div class="progress">
-                    <div id="tutorial-progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;"
-                        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <button id="tutorial-up-cancel" class="btn btn-danger">cancel</button>
-                <button class="pause" id="tutorial-up-pause" class="btn btn-danger">pause</button>
-            </div>
-        @endcan
-    </div> --}}
     <div class="tutorial-videos">
         @if ($course->owner == $user?->id)
-        <form class="add-tutorial">
-            <x-progress-bar />
-            <input type="file" accept=".mp4" name="tutorial" id="tutorial-upload">
-            <label for="tutorial-upload">
+            <form class="add-tutorial">
+                <x-progress-bar />
+                <input type="file" accept=".mp4" name="tutorial" id="tutorial-upload">
+                <label for="tutorial-upload">
                     <span>Drop You file or click to select a file</span>
                     <i class="bi bi-file-plus"></i>
                     <span>Add a new tutorial</span>
-            </label>
-        </form>
+                </label>
+            </form>
         @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)
-                <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user"/>
+                <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user" />
             @endforeach
         </div>
     </div>

@@ -111,6 +111,18 @@
   transform: scale(1.2);
 }
 
+.course-introduction .course-details .course-purchase {
+  display: flex;
+}
+
+.course-introduction .course-details .course-purchase a {
+  width: 5em;
+}
+
+.course-introduction .course-details .course-purchase h4 {
+  color: #0FA958;
+}
+
 @media screen and (min-width: 700px) {
   .course-introduction {
     flex-direction: row;

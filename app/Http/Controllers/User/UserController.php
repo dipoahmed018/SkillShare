@@ -29,7 +29,7 @@ class UserController extends Controller
 {
     public function getUser(Request $request, User $user)
     {
-        return view('pages/user/show', ['user' => $user]);
+        return view('pages/user/show');
     }
     public function ShowRegisterForm()
     {
@@ -47,12 +47,12 @@ class UserController extends Controller
         ]);
         event(new Registered($user));
         Auth::login($user, true);
-        return redirect('/', 302);
+        return redirect()->intended('/');
     }
 
     public function ShowLoginForm()
     {
-        return Auth::check() ? redirect('/', 302) : view('/pages/user/LoginForm');
+        return Auth::check() ? redirect('/') : view('/pages/user/LoginForm');
     }
     public function Login(LoginRequest $request)
     {
@@ -61,14 +61,14 @@ class UserController extends Controller
         } else {
             if (Auth::attempt($request->only('email', 'password'), true)) {
                 $request->session()->regenerate();
-                return redirect('/dashboard', '302');
+                return redirect()->intended('/');
             } else {
                 return redirect('/login', 302)->withErrors(['email' => 'please provide a valid email address']);
             }
         }
     }
 
-    public function Logout(Request $request)
+    public function Logout()
     {
         Auth::logout();
         return redirect('/login');
@@ -144,7 +144,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $user->sendEmailVerificationNotification();
-        return back()->with('sent', 'verification_mail');
+        return redirect()->intended('/dashboard');
     }
     public function verifyEmail(EmailVerificationRequest $request)
     {

@@ -215,7 +215,7 @@ $pink_red : rgb(255, 71, 71);
     }
     .buttons {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         gap: 1em;
         button {
             display: inline-block;
@@ -288,6 +288,43 @@ $pink_red : rgb(255, 71, 71);
 }
 
 
+//laravel bootstrap default link coloring and positioning
+
+.links-wrapper {
+    display: flex;
+    margin-top: 2rem;
+
+    nav {
+        margin: auto;
+
+        ul {
+
+            .page-item {
+                .page-link {
+                    background-color: $glass_green;
+                    color: $deep_green;
+                    outline: none;
+                    text-decoration: none;
+                    border: 1px solid gray;
+                }
+            }
+
+            .disabled {
+                .page-link {
+                    color: gray;
+                }
+            }
+
+            .active>.page-link {
+                border: 1px solid $deep_green;
+                outline: none;
+                // background: $shallow_green;
+            }
+        }
+    }
+}
+
+
 //rating style
 .rate {
     overflow: hidden;
@@ -319,6 +356,12 @@ $pink_red : rgb(255, 71, 71);
             left: 0%;
         }
     }
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 //heade style for mobile
@@ -795,42 +838,6 @@ $pink_red : rgb(255, 71, 71);
     }
 }
 
-//laravel bootstrap default link coloring and positioning
-
-.links-wrapper {
-    display: flex;
-    margin-top: 2rem;
-
-    nav {
-        margin: auto;
-
-        ul {
-
-            .page-item {
-                .page-link {
-                    background-color: $glass_green;
-                    color: $deep_green;
-                    outline: none;
-                    text-decoration: none;
-                    border: 1px solid gray;
-                }
-            }
-
-            .disabled {
-                .page-link {
-                    color: gray;
-                }
-            }
-
-            .active>.page-link {
-                border: 1px solid $deep_green;
-                outline: none;
-                // background: $shallow_green;
-            }
-        }
-    }
-}
-
 
 //footer styles
 .footer {
@@ -839,7 +846,7 @@ $pink_red : rgb(255, 71, 71);
     background: $glass_green;
     justify-content: space-around;
     min-height: clamp(10px, 20vh, 100px);
-    margin-top: 10px;
+    margin-top: auto;
 
     .links {
         display: flex;

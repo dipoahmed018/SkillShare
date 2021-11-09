@@ -12,13 +12,16 @@
 </head>
 <body>
     @yield('tamplates')
-    @include('Layout.Header')
+    <div class="wrapper">
+        {{-- popup box --}}
+        <div id="popup_box" class="hide"></div>
+        @include('Layout.Header')
+        @yield('body')
+        
+        
     
-    {{-- popup box --}}
-    <div id="popup_box" class="hide"></div>
-    @yield('body')
-
-    @include('Layout.Footer')
+        @include('Layout.Footer')
+    </div>
 
     {{-- menu stack is the script for header  --}}
     @stack('menu')

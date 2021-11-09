@@ -13361,7 +13361,7 @@ fieldset:disabled .btn {
 
 .yes-no-confirm .buttons {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 1em;
 }
 
@@ -13438,6 +13438,32 @@ fieldset:disabled .btn {
   background-color: gray;
 }
 
+.links-wrapper {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.links-wrapper nav {
+  margin: auto;
+}
+
+.links-wrapper nav ul .page-item .page-link {
+  background-color: #B8E9D3;
+  color: #0FA958;
+  outline: none;
+  text-decoration: none;
+  border: 1px solid gray;
+}
+
+.links-wrapper nav ul .disabled .page-link {
+  color: gray;
+}
+
+.links-wrapper nav ul .active > .page-link {
+  border: 1px solid #0FA958;
+  outline: none;
+}
+
 .rate {
   overflow: hidden;
   display: inline;
@@ -13467,6 +13493,12 @@ fieldset:disabled .btn {
   position: absolute;
   top: 0%;
   left: 0%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .header {
@@ -13924,39 +13956,13 @@ fieldset:disabled .btn {
   }
 }
 
-.links-wrapper {
-  display: flex;
-  margin-top: 2rem;
-}
-
-.links-wrapper nav {
-  margin: auto;
-}
-
-.links-wrapper nav ul .page-item .page-link {
-  background-color: #B8E9D3;
-  color: #0FA958;
-  outline: none;
-  text-decoration: none;
-  border: 1px solid gray;
-}
-
-.links-wrapper nav ul .disabled .page-link {
-  color: gray;
-}
-
-.links-wrapper nav ul .active > .page-link {
-  border: 1px solid #0FA958;
-  outline: none;
-}
-
 .footer {
   display: flex;
   flex-direction: column;
   background: #B8E9D3;
   justify-content: space-around;
   min-height: clamp(10px, 20vh, 100px);
-  margin-top: 10px;
+  margin-top: auto;
 }
 
 .footer .links {
