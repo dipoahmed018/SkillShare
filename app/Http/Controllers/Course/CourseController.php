@@ -220,7 +220,7 @@ class CourseController extends Controller
         //tutorials delete
         $tutorials = $course->tutorial_files;
         if ($tutorials) {
-            $tutorial_ids = $course->getTutorialDetails()->pluck('id');
+            $tutorial_ids = $course->tutorialDetails->pluck('id');
             foreach ($tutorials as $key => $value) {
                 Storage::delete($value->file_link);
             }

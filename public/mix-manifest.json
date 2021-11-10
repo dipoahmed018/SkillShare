@@ -9,5 +9,6 @@
     "/js/transaction.js": "/js/transaction.js",
     "/css/app.css": "/css/app.css",
     "/css/dashboard.css": "/css/dashboard.css",
+    "/css/auth.css": "/css/auth.css",
     "/css/course.css": "/css/course.css"
 }

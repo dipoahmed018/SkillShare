@@ -21,7 +21,7 @@ class TutorialController extends Controller
     public function addTutorial(AddVideo $request, Course $course)
     {
 
-        $course_tutorials = collect($course->getTutorialDetails());
+        $course_tutorials = $course->tutorialDetails;
         $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
         $directory_name = str_replace([' ', '.', 'mp4', '/'], '', $request->tutorial_name) . $course->id;
         $title = 'please provide your tutorial title';
@@ -80,15 +80,14 @@ class TutorialController extends Controller
         //positioning
         //going up
         if ($request->position < $tutorial->order) {
-            $all_tutorials = $course->getTutorialDetails()->whereBetween('order', [$request->position, $tutorial->order - 1])->pluck('id');
-            TutorialDetails::query()->whereIn('id', $all_tutorials)->increment('order', 1);
+            $all_tutorials = $course->tutorialDetails()->whereBetween('order', [$request->position, $tutorial->order - 1])->increment('order', 1);
             $tutorial->order = $request->position;
             $tutorial->save();
             return redirect('/show/course/' . $course->id);
         }
         //going down
         if ($request->position > $tutorial->order) {
-            $all_tutorials = $course->getTutorialDetails();
+            $all_tutorials = $course->tutorialDetails;
             $last_order = $all_tutorials->max('order');
             $in_between = $all_tutorials->whereBetween('order', [$tutorial->order + 1, $request->position])->pluck('id');
             TutorialDetails::query()->whereIn('id', $in_between)->decrement('order', 1);
@@ -104,7 +103,7 @@ class TutorialController extends Controller
         if ($request->user()->cannot('update', $course)) {
             return abort(401, 'you are not authorized to edit this tutorial');
         }
-        $course->tutorials = collect($course->getTutorialDetails());
+        $course->tutorials = $course->tutorialDetails;
         $course->catagory;
         return view('pages/course/EditTutorial', ['tutorial' => $tutorial, 'course' => $course]);
     }

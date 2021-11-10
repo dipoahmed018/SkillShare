@@ -1,20 +1,21 @@
 @extends('../Layout/Layout')
 @section('title', 'forgot-password')
 
+@section('headers')
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+@endsection
+
 @section('body')
-    <form action={{ route('forgot.password') }} method="post">
+<div class="forgot-password">
+    <h6>Enter you email and we will send you a password reset link</h6>
+    <form class="forgot-pass-form" action={{ route('forgot.password') }} method="post">
         @csrf
-        <fieldset>
-            <legend>send password reset link</legend>
-            <label for="email">email</label>
-            <input type="email" name="email" id="email"><br>
-            @error('email')
-                {{$message}}
-            @enderror
-            <input type="submit" value="send link">
-        </fieldset>
-        @if (session('email'))
-            @dump(session('email'))
-        @endif
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Type your email">
+        @error('email')
+            {{ $message }}
+        @enderror
+        <input type="submit" value="send link">
     </form>
+</div>
 @endsection

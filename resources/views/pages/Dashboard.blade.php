@@ -18,6 +18,7 @@
     <div class="cover">
         <h1>hello world</h1>
     </div>
+    @dump($courses)
     <div class="bestsellers">
         <h4>best sellers</h4>
         <div class="slider-lane">

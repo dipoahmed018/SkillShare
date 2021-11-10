@@ -100,20 +100,6 @@ class Course extends Model
             ->havingRaw('sales >= ?', [$sales]);
     }
 
-
-
-    //get all the tutorial details for a specific course
-    // public function getTutorialDetails()
-    // {
-    //     $tutorial = DB::table('file_link')->where('file_link.fileable_id', '=', $this->id)->where('file_link.fileable_type', '=', 'course');
-    //     $tutorial_details = DB::table('tutorial_details')
-    //         ->joinSub($tutorial, 'tutorial', 'tutorial_details.tutorial_id', '=', 'tutorial.id')
-    //         ->select('tutorial_details.id', 'tutorial_details.title', 'tutorial_details.order')
-    //         ->orderBy('tutorial_details.order', 'asc')
-    //         ->get();
-    //     return $tutorial_details;
-    // }
-
     public function is_student($user)
     {
         return $this->students()->wherePivot('student_id', '=', $user->id)->get()->count() > 0;

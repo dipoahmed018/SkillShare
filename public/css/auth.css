@@ -1,0 +1,88 @@
+.login-form,
+.register-form,
+.forgot-pass-form {
+  display: flex;
+  flex-direction: column;
+  background-color: #B8E9D3;
+  margin: 2em auto 2em auto;
+  width: clamp(15em, 90%, 25em);
+  padding: 1.5em;
+}
+
+.login-form label,
+.register-form label,
+.forgot-pass-form label {
+  color: #0FA958;
+  margin-top: 1em;
+}
+
+.login-form input,
+.register-form input,
+.forgot-pass-form input {
+  background-color: #6ACC9A;
+  border: none;
+  color: #352b2b;
+  outline: none;
+  height: 2.5em;
+  padding: 10px;
+  outline: 1px solid #0FA958;
+}
+
+.login-form a,
+.register-form a,
+.forgot-pass-form a {
+  text-decoration: none;
+  color: #0FA958;
+  margin-left: auto;
+}
+
+.login-form a:hover,
+.register-form a:hover,
+.forgot-pass-form a:hover {
+  text-decoration: underline;
+}
+
+.login-form input[type=submit],
+.register-form input[type=submit],
+.forgot-pass-form input[type=submit] {
+  width: clamp(3em, 30%, 7em);
+  margin: 0.8em auto 0px auto;
+  background-color: #6ACC9A;
+  border: none;
+  border-radius: 5px;
+  padding: 0px;
+  color: #352b2b;
+}
+
+.register-form select {
+  margin-top: 1em;
+  color: #352b2b;
+  border: none;
+  outline: 1px solid #0FA958;
+  background-color: #6ACC9A;
+}
+
+.register-form select option:default {
+  display: none;
+}
+
+.register-form select option:hover {
+  background-color: #0FA958;
+}
+
+.forgot-password {
+  display: flex;
+  flex-direction: column;
+  color: #0FA958;
+}
+
+.forgot-password h6 {
+  color: #0FA958;
+  margin: auto;
+}
+
+.forgot-password form {
+  margin-top: 1em;
+}
+
+

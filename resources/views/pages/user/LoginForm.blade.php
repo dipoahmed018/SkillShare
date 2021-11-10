@@ -2,16 +2,21 @@
 
 @section('title', 'Login')
 
+@section('headers')
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+@endsection
+
 @section('body')
-    <form action="{{ route('login') }}" method="post">
+    <form class="login-form" action="{{ route('login') }}" method="post">
         @csrf
-        <label for="email">email</label>
-        <input type="text" name="email" id="email" placeholder="type your email" required><br>
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" placeholder="Type your email" required>
         @error('email')
             <p>{{ $message }}</p>
         @enderror
-        <label for="password">password</label>
-        <input type="password" name="password" id="password" placeholder="type your password" required><br>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Type your password" required>
+        <a href={{ route('forgot.password.form') }}> Forgot password </a>
         @error('limit')
             <p>{{ $message }}</p>
         @enderror
@@ -20,5 +25,4 @@
     @if (session('status'))
         {{session('status')}}
     @endif
-    <a href={{ route('forgot.password.form') }}> forgot password </a>
 @endsection
