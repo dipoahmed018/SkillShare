@@ -33,7 +33,7 @@ class ForumTest extends TestCase
      *
      * @return void
      */
-    public function test_example()
+    public function test_()
     {
         // $response = Course::query()->Price(300, 5000)->Catagory(5);
         // $response->selectRaw('select stars from reviews')

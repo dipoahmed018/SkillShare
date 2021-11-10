@@ -5,44 +5,42 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
     public function __invoke()
     {
+
         $bestSellersCourses = Course::with([
             'ownerDetails' => fn ($q) => $q->select('users.*')->with('profilePicture'),
             'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
-            ->selectRaw('AVG(review.stars) AS avg_rate, course.*, COUNT(course_students.id) AS sales')
             ->MonthlySales()
-            ->Review()
+            ->AvarageRating()
             ->orderBy('sales', 'asc')
             ->limit(10)
             ->get();
 
         //recomended courses
-        $recommendedCourse = Course::with([
-            'ownerDetails' => fn ($q) => $q->select('users.*'),
-            'thumbnail' => fn ($q) => $q->select('file_link.*'),
-        ])
-            ->selectRaw('AVG(review.stars) as avg_rate, course.*');
-
-        $recommendedCourse->Review();
-
+        $recommendedCourse = null;
         //add owned course catagory filter if logged in
         if ($user = Auth::user()) {
+            $recommendedCourse = Course::with([
+                'ownerDetails',
+                'thumbnail',
+            ])
+                ->AvarageRating();
+
             $myCourse = Course::query()
                 ->MyCourse($user->id)
                 ->with('catagory')
                 ->get();
+
             $catagories = $myCourse->pluck('catagory')->flatten()->unique('id')->pluck('id');
-            $catagories->count() < 1 ?: $recommendedCourse->whereHas('catagory', fn ($q) => $q->whereIn('catagory.id', $catagories));
-            $recommendedCourse = $recommendedCourse->get();
-            $recommendedCourse = $recommendedCourse->count() < 1 ? null : $recommendedCourse;
+            $recommendedCourse = $catagories->count() < 1 ? null : $recommendedCourse->whereHas('catagory', fn ($q) => $q->whereIn('catagory.id', $catagories))->get();
         }
-        $recommendedCourse = $recommendedCourse ?: $bestSellersCourses;
-        // dump($bestSellersCourses->pluck('ownerDetails'));
+        $recommendedCourse = $recommendedCourse ?? $bestSellersCourses;
         return view('pages.Dashboard', [
             'courses' => $recommendedCourse,
             'best_sellers' => $bestSellersCourses->pluck('ownerDetails'),

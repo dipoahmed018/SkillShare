@@ -13,16 +13,12 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
-use App\Http\Requests\Course\AddVideo;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\Course\DeleteVideo;
 use App\Http\Requests\Course\SetThumbnail;
 use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
-use App\Models\Review;
-use App\Services\VideoStream;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -35,27 +31,29 @@ class CourseController extends Controller
             if ($request->suggestion) {
                 return response()->json(['data' => $data->map->only('title', 'id'), 'success' => 'true']);
             }
-            return $data;
+            return response()->json(['data' => $data], 200);
         }
-        $builder = Course::query()->selectRaw('AVG(review.stars) AS avg_rate, course.*')
-            ->with(['thumbnail' => fn ($q) => $q->select('file_link.*'), 'ownerDetails' => fn ($q) => $q->select('users.*')]);
-        // price filter
-        if ($request->min_price && $request->max_price) {
-            $builder->Price($request->min_price, $request->max_price);
-        }
+        $builder = Course::query()->with([
+            'thumbnail',
+            'ownerDetails',
+        ]);
+
+        $builder->Price($request->min_price?? 5, $request->max_price ?? 10000);
+
         //catagory filter
         if ($request->catagory && $request->catagory !== 'default') {
             $builder->Catagory($request->catagory);
         }
 
-        $builder->Review($request->review ?: 10);
-        // $builder->where('course.id', '=', '6');
+        $builder->AvarageRating($request->review ?? 1);
         //order and paginate
         $builder->orderBy($request->order_by ?: 'price', 'asc');
         $data = $builder->paginate($request->per_page ?: 5, ['*'], 'course_page');
 
         return view('pages.course.index', ['data' => $data]);
     }
+
+
     public function createCourse(createCourse $request)
     {
         $user = Auth::user();
@@ -76,6 +74,8 @@ class CourseController extends Controller
         $course->save();
         return redirect()->back()->with('course', $course);
     }
+
+
     public function setThumbnail(setThumbnail $request, Course $course)
     {
         $user = $request->user();
@@ -99,10 +99,12 @@ class CourseController extends Controller
             'fileable_id' => $course->id,
         ]);
         if ($request->acceptsJson()) {
-            return response()->json(['data' => $new_thumbnail, 'success' => true, 'error' => false ]);
+            return response()->json(['data' => $new_thumbnail, 'success' => true, 'error' => false]);
         }
         return redirect()->back();
     }
+
+
     public function setIntroduction(SetIntroduction $request, Course $course)
     {
         $data = $request->chunk_file ? blobConvert($request->chunk_file) : null;
@@ -144,18 +146,20 @@ class CourseController extends Controller
             return $chunk->file_name;
         }
     }
+
+
     public function showDetails($course)
     {
         $user = request()->user();
         $course = Course::query()->selectRaw('course.*, AVG(review.stars) AS avg_rate')
-        ->where('course.id', '=', $course)
-        ->with([
-            'thumbnail' => fn ($q) => $q->select('file_link.*'),
-            'ownerDetails' => fn ($q) => $q->select('users.*'),
-            'introduction' => fn ($q) => $q->select('file_link.*'),
-            'tutorialDetails',
+            ->where('course.id', '=', $course)
+            ->with([
+                'thumbnail' => fn ($q) => $q->select('file_link.*'),
+                'ownerDetails',
+                'introduction' => fn ($q) => $q->select('file_link.*'),
+                'tutorialDetails',
             ])
-            ->Review()
+            ->AvarageRating()
             ->first();
 
         $course->reviews = $course->review()
@@ -165,10 +169,12 @@ class CourseController extends Controller
 
         //permissions
         $course->isStudent =  $user?->courses()->wherePivot('course_id', $course->id)->first() ? true : false;
-        $course->isPurchasable = !$course->isStudent && $course->owner !== $user?->id ? true : false; 
+        $course->isPurchasable = !$course->isStudent && $course->owner !== $user?->id ? true : false;
 
         return view('pages/course/Show', ['course' => $course]);
     }
+
+
     public function updateDetails(UpdateDetails $request, Course $course)
     {
         Log::channel('event')->info('update-detais', [$request->all()]);
@@ -187,6 +193,7 @@ class CourseController extends Controller
         return redirect('/show/course/' . $course->id);
     }
 
+
     public function attachCatagory(Request $request, Course $course)
     {
         $rules = [
@@ -198,6 +205,8 @@ class CourseController extends Controller
         };
         return $course->catagory()->syncWithoutDetaching($request->catagory);
     }
+
+
     public function detachCatagory(Request $request, Course $course)
     {
         $rules = [
@@ -209,7 +218,8 @@ class CourseController extends Controller
         };
         return $course->catagory()->detach($request->catagory);
     }
- 
+
+
     public function deleteCourse(DeleteCourse $request, Course $course)
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
@@ -230,5 +240,4 @@ class CourseController extends Controller
         $course->delete();
         return redirect('/');
     }
-
 }
