@@ -148,19 +148,18 @@ class CourseController extends Controller
     }
 
 
-    public function showDetails($course)
+    public function showDetails(Course $course)
     {
         $user = request()->user();
-        $course = Course::query()->selectRaw('course.*, AVG(review.stars) AS avg_rate')
-            ->where('course.id', '=', $course)
-            ->with([
-                'thumbnail' => fn ($q) => $q->select('file_link.*'),
-                'ownerDetails',
-                'introduction' => fn ($q) => $q->select('file_link.*'),
-                'tutorialDetails',
-            ])
-            ->AvarageRating()
-            ->first();
+        $course->load([
+            'thumbnail',
+            'ownerDetails',
+            'introduction',
+            'tutorialDetails',
+          //  'review.ownerDetails',
+        ])
+        ->loadAvg('review as avg_rate', 'stars');
+        // ->loadCount('review')
 
         $course->reviews = $course->review()
             ->with('ownerDetails')

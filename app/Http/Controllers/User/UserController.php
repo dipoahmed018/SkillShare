@@ -161,7 +161,7 @@ class UserController extends Controller
         $user = $request->user();
         $random_code = rand(1000, 9000);
 
-        $redis_code = $redis->get('verify:' . $user->email . ':code');
+        $redis_code = $redis->get("verify:$user->email:code");
         $code = $request->code;
         if ($request->email && !$user->email_verified_at) {
             $user->email = $request->email;
@@ -214,7 +214,7 @@ class UserController extends Controller
             event(new EventsPasswordReset($user));
         });
         return $status === Password::PASSWORD_RESET
-            ? redirect('/')->with('status',__($status))
+            ? redirect('/login')->with('status',__($status))
             : back()->withErrors(['email' => __($status)]);
     }
 }

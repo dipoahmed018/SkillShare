@@ -231,23 +231,23 @@ description_expand?.addEventListener('click', () => {
 const tutorial_upload_form = document.querySelector('.add-tutorial')
 const tutorial_upload_dropbox = document.querySelector('[for="tutorial-upload"]')
 const tutorial_input = document.getElementById('tutorial-upload')
-const tutorial_upload_control = tutorial_upload_form.querySelector('.upload-control')
-const tutorial_progress_bar = tutorial_upload_form.querySelector('.progress-bar')
-const tutorial_progress_cancel = tutorial_upload_form.querySelector('.cancel-upload')
-const tutorial_progress_value = tutorial_upload_form.querySelector('.progress-value')
+const tutorial_upload_control = tutorial_upload_form?.querySelector('.upload-control')
+const tutorial_progress_bar = tutorial_upload_form?.querySelector('.progress-bar')
+const tutorial_progress_cancel = tutorial_upload_form?.querySelector('.cancel-upload')
+const tutorial_progress_value = tutorial_upload_form?.querySelector('.progress-value')
 
 //preventinf browser from opening the file
 document.addEventListener('dragover', (e) => {
   e.preventDefault()
 })
 
-tutorial_upload_dropbox.addEventListener('drop', (e) => {
+tutorial_upload_dropbox?.addEventListener('drop', (e) => {
   e.preventDefault()
   const file = e.dataTransfer.files[0]
   upload_tutorial(file)
 })
 
-tutorial_input.addEventListener('change', (e) => {
+tutorial_input?.addEventListener('change', (e) => {
   const file = e.target.files[0]
   upload_tutorial(file)
 })

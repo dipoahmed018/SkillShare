@@ -12191,20 +12191,20 @@ description_expand === null || description_expand === void 0 ? void 0 : descript
 var tutorial_upload_form = document.querySelector('.add-tutorial');
 var tutorial_upload_dropbox = document.querySelector('[for="tutorial-upload"]');
 var tutorial_input = document.getElementById('tutorial-upload');
-var tutorial_upload_control = tutorial_upload_form.querySelector('.upload-control');
-var tutorial_progress_bar = tutorial_upload_form.querySelector('.progress-bar');
-var tutorial_progress_cancel = tutorial_upload_form.querySelector('.cancel-upload');
-var tutorial_progress_value = tutorial_upload_form.querySelector('.progress-value'); //preventinf browser from opening the file
+var tutorial_upload_control = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.upload-control');
+var tutorial_progress_bar = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-bar');
+var tutorial_progress_cancel = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.cancel-upload');
+var tutorial_progress_value = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-value'); //preventinf browser from opening the file
 
 document.addEventListener('dragover', function (e) {
   e.preventDefault();
 });
-tutorial_upload_dropbox.addEventListener('drop', function (e) {
+tutorial_upload_dropbox === null || tutorial_upload_dropbox === void 0 ? void 0 : tutorial_upload_dropbox.addEventListener('drop', function (e) {
   e.preventDefault();
   var file = e.dataTransfer.files[0];
   upload_tutorial(file);
 });
-tutorial_input.addEventListener('change', function (e) {
+tutorial_input === null || tutorial_input === void 0 ? void 0 : tutorial_input.addEventListener('change', function (e) {
   var file = e.target.files[0];
   upload_tutorial(file);
 });

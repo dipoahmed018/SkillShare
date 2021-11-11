@@ -8,7 +8,8 @@ $pink_red : rgb(255, 71, 71);
 
 .login-form,
 .register-form,
-.forgot-pass-form {
+.forgot-pass-form,
+.password-reset-form {
     display: flex;
     flex-direction: column;
     background-color: $glass_green;
@@ -42,7 +43,7 @@ $pink_red : rgb(255, 71, 71);
     }
 
     input[type="submit"] {
-        width: clamp(3em, 30%, 7em);
+        width: clamp(3em, 40%, 10em);
         margin: 0.8em auto 0px auto;
         background-color: $shallow_green;
         border: none;
