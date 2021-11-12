@@ -25,7 +25,7 @@ tutorial_links?.forEach(element => {
   element.addEventListener('click', showTutorial)
 });
 
-function showTutorial(e){
+function showTutorial(e) {
   const tutorial_id = e.currentTarget.getAttribute('data-tutorial-id')
   const video_frame = tutorial_modal_element.querySelector('#video-frame')
   const close_modal = tutorial_modal_element.querySelector('#close-modal')
@@ -242,9 +242,10 @@ document.addEventListener('dragover', (e) => {
 })
 
 tutorial_upload_dropbox?.addEventListener('drop', (e) => {
-  e.preventDefault()
   const file = e.dataTransfer.files[0]
-  upload_tutorial(file)
+  if (file) {
+    upload_tutorial(file)
+  }
 })
 
 tutorial_input?.addEventListener('change', (e) => {
@@ -340,6 +341,91 @@ function add_tutorial_element(tutorial_details) {
   document.querySelector('.tutorials').insertAdjacentHTML('beforebegin', tutorial_template)
 }
 
+//tutorial edit 
+
+const tutorial_container = document.querySelector('.tutorials')
+const tutorial_cards = [...document.getElementsByClassName('tutorial-card')]
+const edit_initiator_btn = [...document.getElementsByClassName('tutorial-title-editor')]
+
+edit_initiator_btn?.forEach(element => {
+  element.addEventListener('click', (e) => {
+    const tutorial_id = e.target.getAttribute('data-tutorial-id')
+    const tutorial_card = document.getElementById(`tutorial-${tutorial_id}`)
+    const details_box = tutorial_card.querySelector('.details')
+    //hide edit buttton
+    e.target.style.display = 'none'
+
+    //show save button
+    tutorial_card.querySelector('.tutorial-title-save').style.display = 'inline-block'
+
+    //show title edit form 
+    console.log(details_box.firstElementChild)
+    details_box.lastElementChild.style.display = 'block'
+
+    //hide title
+    details_box.firstElementChild.style.display = 'none'
+  })
+})
+
+
+//tutorial card position changer
+tutorial_cards.forEach(element => {
+
+  element.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('id', e.target.getAttribute('data-tutorial-id'))
+    e.target.style.opacity = '.5'
+  })
+
+  element.addEventListener('dragend', e => {
+    e.target.style.opacity = '1'
+  })
+
+  element.addEventListener('drop', e => {
+    e.preventDefault()
+
+    const tutorial_id = e.dataTransfer.getData('id')
+    const self_element = e.currentTarget
+    const droped_element = document.getElementById(`tutorial-${tutorial_id}`)
+    const child_elements = [...tutorial_container.children]
+
+    if (self_element == droped_element) { return }
+
+    if (!child_elements.includes(droped_element)) { true }
+
+    /** if dropped tutorial cards order is bigger(lower) then where it dropped,
+     *  then insert it before the tareget element else insert it after
+     */
+
+    if (child_elements.indexOf(self_element) > child_elements.indexOf(droped_element)) {
+      //going down
+      self_element.insertAdjacentElement('afterend', droped_element)
+      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1)
+    } else {
+      //going up
+      self_element.insertAdjacentElement('beforebegin', droped_element)
+      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1)
+    }
+
+  })
+
+})
+
+function updateTutorialOrder(tutorial_id, order) {
+  fetch(`/update/course/tutorial/${tutorial_id}/order`, {
+    method: 'put',
+    body: JSON.stringify({ 'order': order }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.csrf,
+    }
+  })
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(res => console.log(res, 'success'))
+    // .catch(err => console.log(err))
+}
+
+
 //tutorial delete 
 
 
@@ -365,5 +451,5 @@ tutorial_deleter_modal?.addEventListener('shown.bs.modal', (e) => {
   //changing the global tutorial_id variable each time the target changes
   tutorial_id = e.relatedTarget.getAttribute('data-tutorial-id')
   tutorial_delete_yes.removeEventListener('click', tutorial_delete)
-  tutorial_delete_yes.addEventListener('click', tutorial_delete, {once: true})
+  tutorial_delete_yes.addEventListener('click', tutorial_delete, { once: true })
 })

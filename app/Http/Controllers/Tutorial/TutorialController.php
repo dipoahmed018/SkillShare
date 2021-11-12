@@ -69,45 +69,45 @@ class TutorialController extends Controller
         return $chunk->status == 200 ? response($chunk->file_name, 200) : abort(422, $chunk->message);
     }
 
-    public function setTutorialDetails(UpdateDetails $request, Course $course, TutorialDetails $tutorial)
+
+    public function updateTitle(Request $request, TutorialDetails $tutorial)
     {
-        if (!$request->title && ($request->position == $tutorial->order || !$request->position)) {
-            return back()->withErrors(['invalid' => 'Provided data is invalid']);
+        $request->validate(['title' => 'required|string|min:10|max:100'], $request->all());
+        $tutorial->save([
+            'title' => $request->title,
+        ]);
+        if ($request->acceptsJson()) {
+            return response()->json($tutorial, 200);
         }
-        // save title
-        $tutorial->title = $request->title;
-        $tutorial->save();
-        //positioning
-        //going up
-        if ($request->position < $tutorial->order) {
-            $all_tutorials = $course->tutorialDetails()->whereBetween('order', [$request->position, $tutorial->order - 1])->increment('order', 1);
-            $tutorial->order = $request->position;
-            $tutorial->save();
-            return redirect('/show/course/' . $course->id);
-        }
-        //going down
-        if ($request->position > $tutorial->order) {
-            $all_tutorials = $course->tutorialDetails;
-            $last_order = $all_tutorials->max('order');
-            $in_between = $all_tutorials->whereBetween('order', [$tutorial->order + 1, $request->position])->pluck('id');
-            TutorialDetails::query()->whereIn('id', $in_between)->decrement('order', 1);
-            $tutorial->order = $request->position > $last_order ? $last_order : $request->position;
-            $tutorial->save();
-            return redirect('/show/course/' . $course->id);
-        }
-        return redirect('/show/course/' . $course->id);
+        return redirect()->back();
     }
 
-    public function showTutorialEdit(Request $request, Course $course, TutorialDetails $tutorial)
-    {
-        if ($request->user()->cannot('update', $course)) {
-            return abort(401, 'you are not authorized to edit this tutorial');
-        }
-        $course->tutorials = $course->tutorialDetails;
-        $course->catagory;
-        return view('pages/course/EditTutorial', ['tutorial' => $tutorial, 'course' => $course]);
-    }
 
+    public function updateTutorialOrder(Request $request, TutorialDetails $tutorial)
+    {
+        try {
+            $request->validate(['order' => 'required|integer|min:1']);
+            $course = $tutorial->course;
+            if ($request->user()->cannot('update', $course)) {
+                throw new AuthorizationException("you don't have to change order of this course");
+            }
+            if ($request->order < $tutorial->order) {
+                $course->tutorialDetails()->whereBetween('order', [$request->order, $tutorial->order - 1])->increment('order', 1);
+                
+                $tutorial->update(['order' => $request->order]);
+            }
+            if ($request->order > $tutorial->order) {
+                $course->tutorialDetails()->whereBetween('order', [$request->order, $tutorial->order + 1])->decrement('order', 1);
+                $tutorial->update(['order' => $request->order]);
+            }
+            if ($request->acceptsJson()) {
+                return response()->json($tutorial);
+            }
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
     public function deleteTutorial(Request $request, Course $course, TutorialDetails $tutorial)
     {
         try {

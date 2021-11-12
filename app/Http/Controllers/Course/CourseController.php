@@ -155,11 +155,9 @@ class CourseController extends Controller
             'thumbnail',
             'ownerDetails',
             'introduction',
-            'tutorialDetails',
-          //  'review.ownerDetails',
+            'tutorialDetails' => fn($q) => $q->orderBy('order'),
         ])
         ->loadAvg('review as avg_rate', 'stars');
-        // ->loadCount('review')
 
         $course->reviews = $course->review()
             ->with('ownerDetails')

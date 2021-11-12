@@ -90,9 +90,9 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/delete/course/{course}/catagory', [CourseController::class, 'detachCatagory'])->name('delete.course.catagory');
 
         //course tutorial
-        Route::get('/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'showTutorialEdit']);
         Route::post('/course/{course}/tutorial', [TutorialController::class, 'addTutorial'])->name('course.tutorial.add');
-        Route::put('/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'setTutorialDetails'])->name('tutorial.title.edit');
+        Route::put('/update/course/tutorial/{tutorial}/order',[TutorialController::class, 'updateTutorialOrder'])->name('tutorial.order.edit');
+        Route::put('/update/course/tutorial/{tutorial}/title', [TutorialController::class, 'updateTitle'])->name('tutorial.title.edit');
         Route::delete('/delete/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'deleteTutorial'])->name('delete.course.tutorial');
 
         //delete course

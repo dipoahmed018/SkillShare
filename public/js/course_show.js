@@ -12200,9 +12200,11 @@ document.addEventListener('dragover', function (e) {
   e.preventDefault();
 });
 tutorial_upload_dropbox === null || tutorial_upload_dropbox === void 0 ? void 0 : tutorial_upload_dropbox.addEventListener('drop', function (e) {
-  e.preventDefault();
   var file = e.dataTransfer.files[0];
-  upload_tutorial(file);
+
+  if (file) {
+    upload_tutorial(file);
+  }
 });
 tutorial_input === null || tutorial_input === void 0 ? void 0 : tutorial_input.addEventListener('change', function (e) {
   var file = e.target.files[0];
@@ -12277,6 +12279,88 @@ function add_tutorial_element(tutorial_details) {
   console.log(tutorial_details, ['data']);
   var tutorial_template = "\n  <div draggable=\"true\" class=\"tutorial-card row\">\n    <div class=\"details col-sm-10\">\n        <h3 id=\"title\">".concat(tutorial_details.title, "</h3>\n        <span>created_at</span>\n    </div>\n\n    <div class=\"edit col\">\n        <a class=\"btn btn-warning\" href=\"/course/").concat(course.id, "/tutorial/").concat(tutorial_details.id, "\">Edit</a>\n        <div class=\"watch\">\n          <button tutorial=").concat(tutorial_details.id, " class=\"btn btn-primary watch-tutorial\" id='open-tutorial'>Watch</button>\n        </div>\n    </div>\n  </div> \n");
   document.querySelector('.tutorials').insertAdjacentHTML('beforebegin', tutorial_template);
+} //tutorial edit 
+
+
+var tutorial_container = document.querySelector('.tutorials');
+
+var tutorial_cards = _toConsumableArray(document.getElementsByClassName('tutorial-card'));
+
+var edit_initiator_btn = _toConsumableArray(document.getElementsByClassName('tutorial-title-editor'));
+
+edit_initiator_btn === null || edit_initiator_btn === void 0 ? void 0 : edit_initiator_btn.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var tutorial_id = e.target.getAttribute('data-tutorial-id');
+    var tutorial_card = document.getElementById("tutorial-".concat(tutorial_id));
+    var details_box = tutorial_card.querySelector('.details'); //hide edit buttton
+
+    e.target.style.display = 'none'; //show save button
+
+    tutorial_card.querySelector('.tutorial-title-save').style.display = 'inline-block'; //show title edit form 
+
+    console.log(details_box.firstElementChild);
+    details_box.lastElementChild.style.display = 'block'; //hide title
+
+    details_box.firstElementChild.style.display = 'none';
+  });
+}); //tutorial card position changer
+
+tutorial_cards.forEach(function (element) {
+  element.addEventListener('dragstart', function (e) {
+    e.dataTransfer.setData('id', e.target.getAttribute('data-tutorial-id'));
+    e.target.style.opacity = '.5';
+  });
+  element.addEventListener('dragend', function (e) {
+    e.target.style.opacity = '1';
+  });
+  element.addEventListener('drop', function (e) {
+    e.preventDefault();
+    var tutorial_id = e.dataTransfer.getData('id');
+    var self_element = e.currentTarget;
+    var droped_element = document.getElementById("tutorial-".concat(tutorial_id));
+
+    var child_elements = _toConsumableArray(tutorial_container.children);
+
+    if (self_element == droped_element) {
+      return;
+    }
+
+    if (!child_elements.includes(droped_element)) {
+      true;
+    }
+    /** if dropped tutorial cards order is bigger(lower) then where it dropped,
+     *  then insert it before the tareget element else insert it after
+     */
+
+
+    if (child_elements.indexOf(self_element) > child_elements.indexOf(droped_element)) {
+      //going down
+      self_element.insertAdjacentElement('afterend', droped_element);
+      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1);
+    } else {
+      //going up
+      self_element.insertAdjacentElement('beforebegin', droped_element);
+      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1);
+    }
+  });
+});
+
+function updateTutorialOrder(tutorial_id, order) {
+  fetch("/update/course/tutorial/".concat(tutorial_id, "/order"), {
+    method: 'put',
+    body: JSON.stringify({
+      'order': order
+    }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }).then(function (res) {
+    return console.log(res, 'success');
+  }); // .catch(err => console.log(err))
 } //tutorial delete 
 
 

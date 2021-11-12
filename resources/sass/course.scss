@@ -257,6 +257,7 @@ $pink_red : rgb(255, 71, 71);
             flex-direction: column;
             border: 1px solid white;
             background-color: $glass_green;
+            cursor: pointer;
 
             .thumbnail {
                 width: 100%;
@@ -277,9 +278,19 @@ $pink_red : rgb(255, 71, 71);
                 }
             }
             .details {
+                display: block;
+                justify-self: flex-start;
+                width: 100%;
                 padding: 5px;
                 font-size: 1em;
                 color: $deep_green;
+
+                input[type=text] {
+                    background-color: $shallow_green;
+                    border: none;
+                    outline: none;
+                    width: 100%;
+                }
             }
 
             .control {
@@ -287,15 +298,29 @@ $pink_red : rgb(255, 71, 71);
                 min-width: 3em;
                 margin: auto;
                 font-size: 1.5em;
+                justify-content: space-between;
                 .tutorial-deleter {
-                    margin: 0px auto;
                     color: rgb(220, 111, 111);
 
                 }
 
-                .tutorial-editor {
-                    margin: 0px auto;
+                .tutorial-title-editor {
                     color: rgb(181, 181, 34);
+                }
+            }
+            
+            .position {
+                display: flex;
+                min-width: 3em;
+                justify-content: space-between;
+                margin: auto;
+                font-size: 1.5em;
+                i {
+                    color: rgb(189, 189, 189);
+                    cursor: pointer;
+                    &:hover {
+                        color: $deep_green;
+                    }
                 }
             }
         }
@@ -328,6 +353,10 @@ $pink_red : rgb(255, 71, 71);
                     i {
                         cursor: pointer;
                     }
+                }
+                .position {
+                    flex-direction: column;
+                    margin: 0px;
                 }
             }
         }

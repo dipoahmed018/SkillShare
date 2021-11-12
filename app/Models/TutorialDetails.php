@@ -15,6 +15,10 @@ class TutorialDetails extends Model
         'title',
     ];
 
+    public function course()
+    {
+        return $this->hasOneThrough(Course::class, FileLink::class,'id', 'id', 'tutorial_id', 'fileable_id');
+    }
     public function tutorial_video()
     {
         return $this->belongsTo(FileLink::class, 'tutorial_id');
