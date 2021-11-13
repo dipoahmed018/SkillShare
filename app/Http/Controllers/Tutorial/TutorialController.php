@@ -72,8 +72,8 @@ class TutorialController extends Controller
 
     public function updateTitle(Request $request, TutorialDetails $tutorial)
     {
-        $request->validate(['title' => 'required|string|min:10|max:100'], $request->all());
-        $tutorial->save([
+        $request->validate(['title' => 'required|string|min:10|max:150'], $request->all());
+        $tutorial->update([
             'title' => $request->title,
         ]);
         if ($request->acceptsJson()) {

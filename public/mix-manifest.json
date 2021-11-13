@@ -3,6 +3,7 @@
     "/js/profile_update.js": "/js/profile_update.js",
     "/js/dashboard.js": "/js/dashboard.js",
     "/js/course_show.js": "/js/course_show.js",
+    "/js/course_edit.js": "/js/course_edit.js",
     "/js/forum_show.js": "/js/forum_show.js",
     "/js/forum_edit.js": "/js/forum_edit.js",
     "/js/post_edit.js": "/js/post_edit.js",
@@ -10,5 +11,6 @@
     "/css/app.css": "/css/app.css",
     "/css/dashboard.css": "/css/dashboard.css",
     "/css/auth.css": "/css/auth.css",
+    "/css/course_edit.css": "/css/course_edit.css",
     "/css/course.css": "/css/course.css"
 }

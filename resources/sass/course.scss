@@ -124,11 +124,14 @@ $pink_red : rgb(255, 71, 71);
                 }
             }
         }
+
         .course-purchase {
             a {
                 width: 5em;
             }
+
             display: flex;
+
             h4 {
                 color: $deep_green;
             }
@@ -242,6 +245,13 @@ $pink_red : rgb(255, 71, 71);
         }
     }
 
+    .position-update-note {
+        display: inline-block;
+        margin: auto;
+        font-size: 0.8em;
+        color: $deep_green;
+    }
+
     .tutorials {
         width: clamp(200px, 100%, 700px);
         display: flex;
@@ -266,31 +276,40 @@ $pink_red : rgb(255, 71, 71);
                 background-color: black;
                 cursor: pointer;
                 background-size: 100% 100%;
+
                 i {
                     margin: auto;
                     color: rgb(153, 153, 153);
                     font-size: 2em;
                 }
+
                 &:hover {
                     i {
                         color: white;
                     }
                 }
             }
+
             .details {
                 display: block;
-                justify-self: flex-start;
-                width: 100%;
+                flex: 1;
                 padding: 5px;
                 font-size: 1em;
                 color: $deep_green;
 
                 input[type=text] {
+                    display: none;
+                    margin: 5px;
                     background-color: $shallow_green;
+                    padding-left: 0.5em;
+                    color: $deep_green;
                     border: none;
                     outline: none;
-                    width: 100%;
+                    width: 90%;
+                    height: 2em;
+                    z-index: 101000;
                 }
+
             }
 
             .control {
@@ -299,6 +318,7 @@ $pink_red : rgb(255, 71, 71);
                 margin: auto;
                 font-size: 1.5em;
                 justify-content: space-between;
+
                 .tutorial-deleter {
                     color: rgb(220, 111, 111);
 
@@ -308,16 +328,18 @@ $pink_red : rgb(255, 71, 71);
                     color: rgb(181, 181, 34);
                 }
             }
-            
+
             .position {
                 display: flex;
                 min-width: 3em;
                 justify-content: space-between;
                 margin: auto;
                 font-size: 1.5em;
+
                 i {
                     color: rgb(189, 189, 189);
                     cursor: pointer;
+
                     &:hover {
                         color: $deep_green;
                     }
@@ -337,6 +359,7 @@ $pink_red : rgb(255, 71, 71);
             .tutorial-card {
                 flex-direction: row;
                 width: 100%;
+
                 .thumbnail {
                     width: 8em;
                     height: 5em;
@@ -354,6 +377,7 @@ $pink_red : rgb(255, 71, 71);
                         cursor: pointer;
                     }
                 }
+
                 .position {
                     flex-direction: column;
                     margin: 0px;

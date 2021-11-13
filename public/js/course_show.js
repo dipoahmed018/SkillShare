@@ -12290,20 +12290,62 @@ var edit_initiator_btn = _toConsumableArray(document.getElementsByClassName('tut
 
 edit_initiator_btn === null || edit_initiator_btn === void 0 ? void 0 : edit_initiator_btn.forEach(function (element) {
   element.addEventListener('click', function (e) {
+    e.stopPropagation();
     var tutorial_id = e.target.getAttribute('data-tutorial-id');
     var tutorial_card = document.getElementById("tutorial-".concat(tutorial_id));
-    var details_box = tutorial_card.querySelector('.details'); //hide edit buttton
+    var title = tutorial_card.querySelector('.title');
+    var title_input = tutorial_card.querySelector('input[name="title"]');
+    var save_button = tutorial_card.querySelector('.tutorial-title-save'); //hide edit buttton
 
     e.target.style.display = 'none'; //show save button
 
-    tutorial_card.querySelector('.tutorial-title-save').style.display = 'inline-block'; //show title edit form 
+    save_button.style.display = 'inline-block'; //show title edit form 
 
-    console.log(details_box.firstElementChild);
-    details_box.lastElementChild.style.display = 'block'; //hide title
+    title_input.style.display = 'block'; //hide title
 
-    details_box.firstElementChild.style.display = 'none';
+    title.style.display = 'none';
+    save_button.addEventListener('click', function () {
+      update_tutorial_title(tutorial_id, title_input.value);
+    });
   });
-}); //tutorial card position changer
+});
+
+function update_tutorial_title(tutorial_id, title) {
+  if (title.length < 10) {
+    popup.addPopup('The title must be of minimum 10 character');
+    return;
+  }
+
+  fetch("/update/course/tutorial/".concat(tutorial_id, "/title"), {
+    method: 'put',
+    body: JSON.stringify({
+      'title': title
+    }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }).then(function (data) {
+    var tutorial_card = document.getElementById("tutorial-".concat(tutorial_id));
+    var title = tutorial_card.querySelector('.title');
+    var title_input = tutorial_card.querySelector('input[name="title"]');
+    var save_button = tutorial_card.querySelector('.tutorial-title-save');
+    var edit_button = tutorial_card.querySelector('.tutorial-title-editor'); //updating the tutorial card
+
+    title.innerText = data.title;
+    title_input.value = data.title;
+    title.style.display = 'block';
+    title_input.style.display = 'none';
+    save_button.style.display = 'none';
+    edit_button.style.display = 'inline-block';
+  })["catch"](function (err) {
+    return console.log(err);
+  });
+} //tutorial card position changer
+
 
 tutorial_cards.forEach(function (element) {
   element.addEventListener('dragstart', function (e) {
@@ -12336,16 +12378,16 @@ tutorial_cards.forEach(function (element) {
     if (child_elements.indexOf(self_element) > child_elements.indexOf(droped_element)) {
       //going down
       self_element.insertAdjacentElement('afterend', droped_element);
-      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1);
+      update_tutorial_order(tutorial_id, child_elements.indexOf(self_element) + 1);
     } else {
       //going up
       self_element.insertAdjacentElement('beforebegin', droped_element);
-      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1);
+      update_tutorial_order(tutorial_id, child_elements.indexOf(self_element) + 1);
     }
   });
 });
 
-function updateTutorialOrder(tutorial_id, order) {
+function update_tutorial_order(tutorial_id, order) {
   fetch("/update/course/tutorial/".concat(tutorial_id, "/order"), {
     method: 'put',
     body: JSON.stringify({
@@ -12359,8 +12401,10 @@ function updateTutorialOrder(tutorial_id, order) {
   }).then(function (res) {
     return res.ok ? res.json() : Promise.reject(res);
   }).then(function (res) {
-    return console.log(res, 'success');
-  }); // .catch(err => console.log(err))
+    return console.log('position changed');
+  })["catch"](function (err) {
+    return console.log('something went wrong');
+  });
 } //tutorial delete 
 
 

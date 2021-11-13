@@ -122,7 +122,7 @@
                     <a class="btn btn-success" href={{ route('purchase.product', ['product' => $course->id]) }}>
                         Buy
                     </a>
-                    <h4>${{$course->price}}</h4>
+                    <h4>${{ $course->price }}</h4>
                 </div>
             @endif
         </div>
@@ -157,6 +157,9 @@
                     <span>Add a new tutorial</span>
                 </label>
             </form>
+        @endif
+        @if ($course->owner == $user?->id)
+            <p class="position-update-note">Note: Double click to grab the tutorial card and move it around to change the position</p>
         @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)

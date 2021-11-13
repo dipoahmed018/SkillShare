@@ -349,23 +349,61 @@ const edit_initiator_btn = [...document.getElementsByClassName('tutorial-title-e
 
 edit_initiator_btn?.forEach(element => {
   element.addEventListener('click', (e) => {
+    e.stopPropagation()
     const tutorial_id = e.target.getAttribute('data-tutorial-id')
     const tutorial_card = document.getElementById(`tutorial-${tutorial_id}`)
-    const details_box = tutorial_card.querySelector('.details')
+    const title = tutorial_card.querySelector('.title')
+    const title_input = tutorial_card.querySelector('input[name="title"]')
+    const save_button = tutorial_card.querySelector('.tutorial-title-save')
+
     //hide edit buttton
     e.target.style.display = 'none'
 
     //show save button
-    tutorial_card.querySelector('.tutorial-title-save').style.display = 'inline-block'
+    save_button.style.display = 'inline-block'
 
     //show title edit form 
-    console.log(details_box.firstElementChild)
-    details_box.lastElementChild.style.display = 'block'
+    title_input.style.display = 'block'
 
     //hide title
-    details_box.firstElementChild.style.display = 'none'
+    title.style.display = 'none'
+
+    save_button.addEventListener('click', () => {
+      update_tutorial_title(tutorial_id, title_input.value)
+    })
   })
 })
+
+function update_tutorial_title(tutorial_id, title) {
+  if (title.length < 10) { popup.addPopup('The title must be of minimum 10 character'); return }
+
+  fetch(`/update/course/tutorial/${tutorial_id}/title`, {
+    method: 'put',
+    body: JSON.stringify({ 'title': title }),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': window.csrf,
+    }
+  })
+    .then(res => res.ok ? res.json() : Promise.reject(res))
+    .then(data => {
+      const tutorial_card = document.getElementById(`tutorial-${tutorial_id}`)
+      const title = tutorial_card.querySelector('.title')
+      const title_input = tutorial_card.querySelector('input[name="title"]')
+      const save_button = tutorial_card.querySelector('.tutorial-title-save')
+      const edit_button = tutorial_card.querySelector('.tutorial-title-editor')
+
+      //updating the tutorial card
+      title.innerText = data.title
+      title_input.value = data.title
+      title.style.display = 'block'
+      title_input.style.display = 'none'
+      save_button.style.display = 'none'
+      edit_button.style.display = 'inline-block'
+    })
+    .catch(err => console.log(err))
+}
 
 
 //tutorial card position changer
@@ -399,18 +437,18 @@ tutorial_cards.forEach(element => {
     if (child_elements.indexOf(self_element) > child_elements.indexOf(droped_element)) {
       //going down
       self_element.insertAdjacentElement('afterend', droped_element)
-      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1)
+      update_tutorial_order(tutorial_id, child_elements.indexOf(self_element) + 1)
     } else {
       //going up
       self_element.insertAdjacentElement('beforebegin', droped_element)
-      updateTutorialOrder(tutorial_id, child_elements.indexOf(self_element) + 1)
+      update_tutorial_order(tutorial_id, child_elements.indexOf(self_element) + 1)
     }
 
   })
 
 })
 
-function updateTutorialOrder(tutorial_id, order) {
+function update_tutorial_order(tutorial_id, order) {
   fetch(`/update/course/tutorial/${tutorial_id}/order`, {
     method: 'put',
     body: JSON.stringify({ 'order': order }),
@@ -421,8 +459,8 @@ function updateTutorialOrder(tutorial_id, order) {
     }
   })
     .then(res => res.ok ? res.json() : Promise.reject(res))
-    .then(res => console.log(res, 'success'))
-    // .catch(err => console.log(err))
+    .then(res => console.log('position changed'))
+    .catch(err => console.log('something went wrong'))
 }
 
 

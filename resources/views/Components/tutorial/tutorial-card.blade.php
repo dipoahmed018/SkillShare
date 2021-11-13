@@ -1,4 +1,5 @@
-<div class="tutorial-card" id="tutorial-{{ $tutorial->id }}" draggable="true" data-tutorial-id="{{$tutorial->id}}">
+<div class="tutorial-card" id="tutorial-{{ $tutorial->id }}" draggable="true"
+    data-tutorial-id="{{ $tutorial->id }}">
     <div class="thumbnail {{ $isStreamable }}" data-tutorial-id="{{ $tutorial->id }}">
         @if ($isStreamable == '')
             <i class="bi bi-lock-fill"></i>
@@ -8,8 +9,8 @@
         @endif
     </div>
     <div class="details">
-        <p>{{ $tutorial->title }}</p>
-        <input value="{{ $tutorial->title }}" style="display: none" type="text" name="title" id="title">
+        <p class="title">{{ $tutorial->title }}</p>
+        <input value="{{ $tutorial->title }}" type="text" name="title" id="title">
     </div>
     @if ($canModify())
         <div class="control">

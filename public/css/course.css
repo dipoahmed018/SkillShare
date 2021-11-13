@@ -226,6 +226,13 @@
   color: #0FA958;
 }
 
+.tutorial-videos .position-update-note {
+  display: inline-block;
+  margin: auto;
+  font-size: 0.8em;
+  color: #0FA958;
+}
+
 .tutorial-videos .tutorials {
   width: clamp(200px, 100%, 700px);
   display: flex;
@@ -266,18 +273,23 @@
 
 .tutorial-videos .tutorials .tutorial-card .details {
   display: block;
-  justify-self: flex-start;
-  width: 100%;
+  flex: 1;
   padding: 5px;
   font-size: 1em;
   color: #0FA958;
 }
 
 .tutorial-videos .tutorials .tutorial-card .details input[type=text] {
+  display: none;
+  margin: 5px;
   background-color: #6ACC9A;
+  padding-left: 0.5em;
+  color: #0FA958;
   border: none;
   outline: none;
-  width: 100%;
+  width: 90%;
+  height: 2em;
+  z-index: 101000;
 }
 
 .tutorial-videos .tutorials .tutorial-card .control {
