@@ -37,10 +37,10 @@ class CourseController extends Controller
             'ownerDetails',
         ]);
 
-        $builder->Price($request->min_price?? 5, $request->max_price ?? 10000);
+        $builder->Price($request->min_price ?? 5, $request->max_price ?? 10000);
 
         //catagory filter
-        if ($request->catagory && $request->catagory !== 'default') {
+        if ($request->catagory) {
             $builder->Catagory($request->catagory);
         }
 
@@ -154,9 +154,9 @@ class CourseController extends Controller
             'thumbnail',
             'ownerDetails',
             'introduction',
-            'tutorialDetails' => fn($q) => $q->orderBy('order'),
+            'tutorialDetails' => fn ($q) => $q->orderBy('order'),
         ])
-        ->loadAvg('review as avg_rate', 'stars');
+            ->loadAvg('review as avg_rate', 'stars');
 
         $course->reviews = $course->review()
             ->with('ownerDetails')

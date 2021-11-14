@@ -11,7 +11,7 @@
             <button class="filter-button"></button>
 
             <div class="filters filters-hidden">
-                <form id="filter-form" method="GET">
+                <form id="filter-form" method="GET" action="/courses">
 
                     <input type="hidden" name="review">
 

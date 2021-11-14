@@ -864,7 +864,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var Editor;
 var description_input = document.getElementById('description');
 ClassicEditor.create(description_input, {
-  toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
+  toolbar: {
+    items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', '|', 'bulletedList', 'numberedList', 'blockQuote'],
+    shouldNotGroupWhenFull: true
+  }
 }).then(function (CKeditor) {
   var _course;
 

@@ -51,6 +51,12 @@ Route::middleware('guest')->group(function () {
 //public
 Route::get('/courses', [CourseController::class, 'index'])->name('index.courses');
 
+//get course
+Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
+
+//get review replies
+Route::get('/review/{review}/replies', [ReviewController::class, 'getReplies'])->name('get.review.replies');
+
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/{user}/profile', [UserController::class, 'getUser'])->name('show.user');
@@ -91,7 +97,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         //course tutorial
         Route::post('/course/{course}/tutorial', [TutorialController::class, 'addTutorial'])->name('course.tutorial.add');
-        Route::put('/update/course/tutorial/{tutorial}/order',[TutorialController::class, 'updateTutorialOrder'])->name('tutorial.order.edit');
+        Route::put('/update/course/tutorial/{tutorial}/order', [TutorialController::class, 'updateTutorialOrder'])->name('tutorial.order.edit');
         Route::put('/update/course/tutorial/{tutorial}/title', [TutorialController::class, 'updateTitle'])->name('tutorial.title.edit');
         Route::delete('/delete/course/{course}/tutorial/{tutorial}', [TutorialController::class, 'deleteTutorial'])->name('delete.course.tutorial');
 
@@ -126,7 +132,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/{comment}/comment/update', [CommentController::class, 'updateComment'])->name('comment.update');
         Route::delete('/{comment}/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
         Route::post('/{comment}/comment/update/vote', [CommentController::class, 'updateVote'])->name('comment.update.vote');
-        
+
         //transaction
 
         Route::get('/purchase/course/{product}', [BuycourseController::class, 'show_payment_methods'])->name('purchase.product');
@@ -134,13 +140,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 
         //images control
-        Route::post('/save/image', fn(Request $request) => saveImage($request->file('upload'), env('APP_URL')."/get/image"))->name('save.image');
-        Route::get('/get/image', fn(Request $request) => getImage($request->name))->name('get.image');
+        Route::post('/save/image', fn (Request $request) => saveImage($request->file('upload'), env('APP_URL') . "/get/image"))->name('save.image');
+        Route::get('/get/image', fn (Request $request) => getImage($request->name))->name('get.image');
     });
 });
-
-//get course
-Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
-
-//get review replies
-Route::get('/review/{review}/replies', [ReviewController::class, 'getReplies'])->name('get.review.replies');

@@ -89,6 +89,7 @@ $pink_red : rgb(255, 71, 71);
 .select-checkbox {
     display: flex;
     flex-direction: column;
+    width: 100%;
     color: $deep_green;
     background-color: $glass_green;
     padding: 0.5em;
@@ -99,21 +100,26 @@ $pink_red : rgb(255, 71, 71);
     .control {
         display: flex;
         padding: 0.2em 0.3em 0.2em 0.3em;
+        cursor: pointer;
+
+        h6 {
+            margin: auto;
+            padding: 0px;
+            font-size: 1em;
+            font-family:Verdana, Geneva, Tahoma, sans-serif ;
+            color: $deep_green;
+        }
+
+        i {
+            display: inline-block;
+            font-size: 1em;
+            margin: auto 0px auto auto;
+        }
 
         &:hover {
             box-shadow: 0px 0px 15px 1px $shallow_green;
         }
 
-        button {
-            background-color: transparent;
-            border: none;
-            color: $deep_green;
-            margin: auto;
-        }
-
-        i {
-            align-self: center;
-        }
     }
 
     .options {
@@ -159,7 +165,7 @@ $pink_red : rgb(255, 71, 71);
                     background-color: $deep_green;
                 }
 
-                input[type=checkbox]:checked ~ .checkmark {
+                input[type=checkbox]:checked~.checkmark {
                     display: block;
                 }
             }

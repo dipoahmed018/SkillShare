@@ -2,7 +2,7 @@
 
 <div class="select-checkbox closed" id="{{$id}}" style="max-height: {{$max_height}}">
     <div class="control">
-        <button>{{ $label }}</button>
+        <h6>{{$label}}</h6>
         <i class="bi bi-caret-down"></i>
     </div>
     <div class="options">

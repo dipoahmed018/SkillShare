@@ -26,11 +26,13 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('Layout.Header',function($view){
+        $viewsForCatagories = ['Layout.Header', 'pages.course.EditCourse'];
+
+        View::composer($viewsForCatagories, function ($view) {
             $view->with('catagories', Catagory::all());
         });
-        View::composer('*',function($view)
-        {
+        
+        View::composer('*', function ($view) {
             $view->with('user', Auth::user());
         });
     }
