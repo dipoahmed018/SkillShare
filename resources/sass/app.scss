@@ -86,6 +86,101 @@ $pink_red : rgb(255, 71, 71);
     }
 }
 
+.select-checkbox {
+    display: flex;
+    flex-direction: column;
+    color: $deep_green;
+    background-color: $glass_green;
+    padding: 0.5em;
+    overflow-y: auto;
+    border-radius: 5px;
+    border: 1px solid $deep_green;
+
+    .control {
+        display: flex;
+        padding: 0.2em 0.3em 0.2em 0.3em;
+
+        &:hover {
+            box-shadow: 0px 0px 15px 1px $shallow_green;
+        }
+
+        button {
+            background-color: transparent;
+            border: none;
+            color: $deep_green;
+            margin: auto;
+        }
+
+        i {
+            align-self: center;
+        }
+    }
+
+    .options {
+        display: none;
+        flex-direction: column;
+
+        .option {
+            padding: 0.2em 0.3em 0.2em 0.3em;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            align-items: center;
+            border-bottom: 2px solid white;
+            font-size: 0.8em;
+
+            &:hover {
+                box-shadow: 0px 0px 15px 1px $shallow_green;
+            }
+
+            .checkbox {
+                position: relative;
+                margin-left: auto;
+                border-radius: 50%;
+                border: 1px solid $deep_green;
+                width: 1em;
+                height: 1em;
+                cursor: pointer;
+                overflow: hidden;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+
+                input[type=checkbox] {
+                    opacity: 0;
+                    position: absolute;
+                }
+
+                .checkmark {
+                    display: none;
+                    position: absolute;
+                    width: 1em;
+                    height: 1em;
+                    background-color: $deep_green;
+                }
+
+                input[type=checkbox]:checked ~ .checkmark {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.checkbox-input {
+    display: block;
+    position: relative;
+    cursor: pointer;
+
+    input[type=checkbox] {
+        opacity: 0;
+        position: absolute;
+        width: 0;
+        height: 0;
+        // cursor: pointer;
+    }
+}
+
 .video-box {
     padding: 0px !important;
     border: 2px solid $primary;
@@ -147,6 +242,7 @@ $pink_red : rgb(255, 71, 71);
 }
 
 .tutorial-videos {
+
     // overflow: hidden;
     .tutorial-card {
         border-bottom: 2px solid white;
@@ -209,14 +305,17 @@ $pink_red : rgb(255, 71, 71);
     font-size: 0.8em;
     color: white;
 }
+
 .yes-no-confirm {
     p {
         color: $deep_green;
     }
+
     .buttons {
         display: flex;
         justify-content: flex-end;
         gap: 1em;
+
         button {
             display: inline-block;
             min-width: 5em;
@@ -226,10 +325,11 @@ $pink_red : rgb(255, 71, 71);
             border: none;
             border-radius: 5px;
         }
-    
+
         .yes {
             background-color: $shallow_green;
         }
+
         .no {
             background-color: rgb(221, 65, 65);
         }
@@ -242,28 +342,33 @@ $pink_red : rgb(255, 71, 71);
     display: none;
     flex-direction: column;
     gap: 5px;
-    .progress {  
+
+    .progress {
         width: 100%;
         height: 2em;
         border: 2px solid $shallow_green;
         position: relative;
         // padding: 5px;
         background-color: $glass_green;
+
         .progress-bar {
             height: 100%;
             background-color: $deep_green;
         }
+
         .progress-value {
             position: absolute;
             left: 50%;
             color: rgb(53, 73, 53);
             transform: translateX(-50%);
         }
-    }    
+    }
+
     .controls {
         display: flex;
         margin: auto;
         gap: 5px;
+
         button {
             letter-spacing: 2px;
             color: white;
@@ -274,13 +379,16 @@ $pink_red : rgb(255, 71, 71);
             text-align: center;
 
         }
+
         .cancel-upload {
             background-color: $pink_red;
         }
+
         .resume-upload {
             display: none;
             background-color: $deep_green;
         }
+
         .pause-upload {
             background-color: gray;
         }
@@ -530,16 +638,6 @@ $pink_red : rgb(255, 71, 71);
                 padding-left: 10px;
                 min-width: 250px;
                 right: 100%;
-
-                .catagories {
-                    background-color: $shallow_green;
-                    min-width: 100%;
-                    min-height: 2em;
-                    border: none;
-                    color: $deep_green;
-                    font-size: 1.1rem;
-                    padding: 5px;
-                }
 
                 //dual slider range
                 .price-range {

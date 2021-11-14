@@ -7,16 +7,16 @@
     <div class="sidebar sidebar-hidden">
         <i class="bi bi-x-lg sidebar-cls-icn"></i>
         <div class="header-items filter">
+
             <button class="filter-button"></button>
+
             <div class="filters filters-hidden">
                 <form id="filter-form" method="GET">
+
                     <input type="hidden" name="review">
-                    <select name="catagory" id="catagory" class="catagories">
-                        <option value="default" selected>select catagory</option>
-                        @foreach ($catagories as $catagory)
-                            <option value="{{ $catagory->id }}">{{ $catagory->name }}</option>
-                        @endforeach
-                    </select>
+
+                    <x-check-box id="catagory" name="catagory" :options="$catagories" label="Select catagories" />
+
                     <div class="price-range">
                         <span>price:</span>
                         <div class="multi-range">
@@ -30,6 +30,7 @@
                         <label for="max_price">max:</label>
                         <input type="text" name="max_price" id="max_price" type="number" value="10000">
                     </div>
+
                     <div class="review">
                         <p>review:</p>
                         <div data-stars="10" class="review-stars selected">
@@ -54,10 +55,12 @@
                             <i class="bi bi-star"></i>
                         </div>
                     </div>
+
                     <button class="submit-filter" type="submit">filter</button>
                 </form>
             </div>
         </div>
+
         <form action="" method="get" class="header-items search">
             <input type="text" name="search" id="search">
             <button type="submit" id="search_submit"></button>
@@ -83,6 +86,7 @@
                 <a href="#">hello world new course</a>
             </div>
         </form>
+
         @if ($user)
             <div class="header-items profile user-info">
                 <div class="profile-icon">d</div>
@@ -93,14 +97,12 @@
                 </div>
             </div>
         @else
-        <div class="authenticate user-info">
-            <a class="login" href="/login">Log in</a>
-            <a class="register" href="/register">Sign up</a>
-        </div>
+            <div class="authenticate user-info">
+                <a class="login" href="/login">Log in</a>
+                <a class="register" href="/register">Sign up</a>
+            </div>
         @endif
     </div>
-    {{-- <button class="header-items">Login</button>
-    <button class="header-items">Register</button> --}}
 </header>
 <div class="header-spacing"></div>
 

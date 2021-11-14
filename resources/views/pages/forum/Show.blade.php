@@ -1,11 +1,12 @@
 @extends('../Layout/Layout')
 
 @section('title', 'forum')
-@section('tamplates')
-    @include('Layout.Tamplate.comment-tamplate')
+@section('tamplates')`
+    {{-- @include('Layout.Tamplate.comment-tamplate') --}}
 @endsection
+
 @section('body')
-    <div id="popup_box" class="hide">
+<div id="popup_box" class="hide">
 
     </div>
 

@@ -25,7 +25,6 @@ class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        // return $request->all();
         if ($request->has('search')) {
             $data = Course::search($request->search)->get();
             if ($request->suggestion) {

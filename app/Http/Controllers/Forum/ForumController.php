@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Forum;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Forum\ForumUpdate;
+use App\Models\Catagory;
 use App\Models\Forum;
 use App\Models\Review;
 use Illuminate\Http\Request;

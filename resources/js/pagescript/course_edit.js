@@ -1,8 +1,29 @@
+
+
+//initialize ClassicEditor for course description editing
+let Editor;
+const description_input = document.getElementById('description')
+ClassicEditor.create(description_input, {
+    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote'],
+})
+    .then(CKeditor => {
+        CKeditor.setData(course?.description)
+        Editor = CKeditor
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
+
+
+
+
 //initial selection
 const add_catagories = document.querySelectorAll('.catagory-item-add');
 const remove_catagories = document.querySelectorAll('.catagory-item-remove');
 const add_catagory_box = document.getElementById('add-catagory-box');
 const remove_catagory_box = document.getElementById('remove-catagory-box');
+
 //add eventlistener
 remove_catagories.forEach((node, index) => {
     node.addEventListener('click', (e) => remove_catagory(e), {

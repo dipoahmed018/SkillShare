@@ -860,7 +860,20 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//initial selection
+//initialize ClassicEditor for course description editing
+var Editor;
+var description_input = document.getElementById('description');
+ClassicEditor.create(description_input, {
+  toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
+}).then(function (CKeditor) {
+  var _course;
+
+  CKeditor.setData((_course = course) === null || _course === void 0 ? void 0 : _course.description);
+  Editor = CKeditor;
+})["catch"](function (err) {
+  console.log(err);
+}); //initial selection
+
 var add_catagories = document.querySelectorAll('.catagory-item-add');
 var remove_catagories = document.querySelectorAll('.catagory-item-remove');
 var add_catagory_box = document.getElementById('add-catagory-box');
