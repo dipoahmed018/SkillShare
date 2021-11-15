@@ -5,6 +5,7 @@ $stars: #F2DD1F;
 $shallow_green : #6ACC9A;
 $deep_green : #0FA958;
 $glass_green : #B8E9D3;
+$text_red_gray : rgb(53, 43, 43);
 $pink_red : rgb(255, 71, 71);
 
 
@@ -88,12 +89,12 @@ $pink_red : rgb(255, 71, 71);
 
 .select-checkbox {
     display: flex;
+    position: relative;
     flex-direction: column;
     width: 100%;
     color: $deep_green;
     background-color: $glass_green;
     padding: 0.5em;
-    overflow-y: auto;
     border-radius: 5px;
     border: 1px solid $deep_green;
 
@@ -101,19 +102,19 @@ $pink_red : rgb(255, 71, 71);
         display: flex;
         padding: 0.2em 0.3em 0.2em 0.3em;
         cursor: pointer;
-
         h6 {
             margin: auto;
+            justify-self: center;
             padding: 0px;
             font-size: 1em;
-            font-family:Verdana, Geneva, Tahoma, sans-serif ;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
             color: $deep_green;
         }
 
         i {
             display: inline-block;
             font-size: 1em;
-            margin: auto 0px auto auto;
+            margin: 0px;
         }
 
         &:hover {
@@ -125,6 +126,8 @@ $pink_red : rgb(255, 71, 71);
     .options {
         display: none;
         flex-direction: column;
+        overflow-y: auto;
+
 
         .option {
             padding: 0.2em 0.3em 0.2em 0.3em;

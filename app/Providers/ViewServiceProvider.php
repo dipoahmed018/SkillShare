@@ -26,7 +26,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $viewsForCatagories = ['Layout.Header', 'pages.course.EditCourse'];
+        $viewsForCatagories = ['Layout.Header'];
 
         View::composer($viewsForCatagories, function ($view) {
             $view->with('catagories', Catagory::all());

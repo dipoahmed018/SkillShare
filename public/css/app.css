@@ -13236,12 +13236,12 @@ fieldset:disabled .btn {
 
 .select-checkbox {
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100%;
   color: #0FA958;
   background-color: #B8E9D3;
   padding: 0.5em;
-  overflow-y: auto;
   border-radius: 5px;
   border: 1px solid #0FA958;
 }
@@ -13255,6 +13255,7 @@ fieldset:disabled .btn {
 .select-checkbox .control h6,
 .select-checkbox .control .h6 {
   margin: auto;
+  justify-self: center;
   padding: 0px;
   font-size: 1em;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -13264,7 +13265,7 @@ fieldset:disabled .btn {
 .select-checkbox .control i {
   display: inline-block;
   font-size: 1em;
-  margin: auto 0px auto auto;
+  margin: 0px;
 }
 
 .select-checkbox .control:hover {
@@ -13274,6 +13275,7 @@ fieldset:disabled .btn {
 .select-checkbox .options {
   display: none;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .select-checkbox .options .option {

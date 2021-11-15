@@ -19,6 +19,7 @@ use App\Http\Requests\Course\createCourse;
 use App\Http\Requests\Course\DeleteCourse;
 use App\Http\Requests\Course\UpdateDetails;
 use App\Http\Requests\Course\SetIntroduction;
+use App\Models\Catagory;
 use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
@@ -170,7 +171,26 @@ class CourseController extends Controller
         return view('pages/course/Show', ['course' => $course]);
     }
 
+    public function showEditCourse(Request $request, Course $course)
+    {
+        $catagories = Catagory::all();
+        $course_catagories = $course->catagory->pluck('id');
 
+        // assserting a chacked key with bolean value to differntiate between
+        //  the catagories from the already assigned catogories from this course
+
+        $catagories = $catagories->map(function ($catagory) use ($course_catagories) {
+
+            if ($course_catagories->contains(fn ($catagory_id) => $catagory_id == $catagory->id)) {
+                $catagory->checked = true;
+            } else {
+                $catagory->checked = false;
+            }
+            return $catagory;
+        });
+
+        return view('pages.course.EditCourse', ['course' => $course, 'catagories' => $catagories]);
+    }
     public function updateDetails(UpdateDetails $request, Course $course)
     {
         Log::channel('event')->info('update-detais', [$request->all()]);

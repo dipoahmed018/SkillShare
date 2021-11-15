@@ -7,6 +7,7 @@
 
 .course-edit-form .title-wrapper,
 .course-edit-form .price-wrapper,
+.course-edit-form .description-wrapper,
 .course-edit-form .description-wrapper {
   display: flex;
   flex-direction: column;
@@ -19,23 +20,41 @@
 
 .course-edit-form .title-wrapper label,
 .course-edit-form .price-wrapper label,
+.course-edit-form .description-wrapper label,
 .course-edit-form .description-wrapper label {
   color: #0FA958;
 }
 
 .course-edit-form .title-wrapper input,
 .course-edit-form .price-wrapper input,
+.course-edit-form .description-wrapper input,
 .course-edit-form .description-wrapper input {
-  color: #0FA958;
+  color: #352b2b;
   width: 100%;
   background-color: #6ACC9A;
   outline: none;
   border: none;
 }
 
+.course-edit-form .price-wrapper {
+  width: 30%;
+  margin: 0px auto 1em auto;
+}
+
 .course-edit-form .catagories-wrapper {
-  width: 100%;
-  margin-top: 1em;
+  width: 60%;
+  margin: 0px auto 1em auto;
+}
+
+.course-edit-form input[type=submit] {
+  background-color: #6ACC9A;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+  padding: 0.5em;
+  height: 2.5em;
+  color: #352b2b;
+  margin: auto;
 }
 
 
