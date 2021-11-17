@@ -79,23 +79,19 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::middleware('verified')->group(function () {
         //show course
-        Route::get('/show/tutorial/{tutorial}/{course}', [CourseController::class, 'streamTutorial'])->name('show.tutorial');
-
+        
         //create course
         Route::post('/create/course', [CourseController::class, 'createCourse'])->name('create.course');
         Route::get('/create/course', fn () => view('pages/course/Create')->with('test', 'hello'));
-
+        
         //update course
         Route::get('/update/course/{course}', [CourseController::class, 'showEditCourse']);
         Route::put('/update/course/{course}', [CourseController::class, 'updateDetails'])->name('update.course');
         Route::post('/update/course/{course}/thumbnail', [CourseController::class, 'setThumbnail'])->name('update.course.thumbnail');
         Route::post('/update/course/{course}/introduction', [CourseController::class, 'setIntroduction'])->name('update.course.introduction');
-
-        //catagory
-        Route::put('/update/course/{course}/catagory', [CourseController::class, 'attachCatagory'])->name('update.course.catagory');
-        Route::delete('/delete/course/{course}/catagory', [CourseController::class, 'detachCatagory'])->name('delete.course.catagory');
-
+        
         //course tutorial
+        Route::get('/show/tutorial/{tutorial}/{course}', [TutorialController::class, 'streamTutorial'])->name('show.tutorial');
         Route::post('/course/{course}/tutorial', [TutorialController::class, 'addTutorial'])->name('course.tutorial.add');
         Route::put('/update/course/tutorial/{tutorial}/order', [TutorialController::class, 'updateTutorialOrder'])->name('tutorial.order.edit');
         Route::put('/update/course/tutorial/{tutorial}/title', [TutorialController::class, 'updateTitle'])->name('tutorial.title.edit');
@@ -135,8 +131,8 @@ Route::middleware(['auth:web'])->group(function () {
 
         //transaction
 
-        Route::get('/purchase/course/{product}', [BuycourseController::class, 'show_payment_methods'])->name('purchase.product');
         Route::post('/purchase/course/confirm', [BuycourseController::class, 'confirm_purchase'])->name('purchase.confirm');
+        Route::get('/purchase/course/{product}', [BuycourseController::class, 'show_payment_methods'])->name('purchase.product');
 
 
         //images control

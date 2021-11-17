@@ -7,21 +7,23 @@
 @endsection
 
 @section('body')
-    <form class="course-edit-form" action={{ route('update.course', ['course' => $course->id]) }}>
+    <form class="course-edit-form" method="POST" action={{ route('update.course', ['course' => $course->id]) }}>
+        @method('put')
+        @csrf
         <div class="title-wrapper">
             <label for="title">Title</label>
-            <input required min="10" max="200" type="text" name="title" id="title">
+            <input required min="10" max="200" type="text" name="title" id="title" value="{{$course->title}}">
+        </div>
+        <div class="price-wrapper">
+            <label for="price">Price</label>
+            <input required min="10" max="10000" type="number" name="price" id="price" value="{{$course->price}}">
+        </div>
+        <div class="catagories-wrapper">
+            <x-check-box id="catagory-form" name="catagories" label="Select catagories" :options="$catagories" />
         </div>
         <div class="description-wrapper">
             <label for="description">Description</label>
             <textarea name="description" id="description" cols="30" rows="10"></textarea>
-        </div>
-        <div class="price-wrapper">
-            <label for="price">Price</label>
-            <input required min="10" max="10000" type="number" name="price" id="price">
-        </div>
-        <div class="catagories-wrapper">
-            <x-check-box id="catagory-form" name="catagories" label="Select catagories" :options="$catagories" />
         </div>
 
         <input type="submit" value="Save changes">

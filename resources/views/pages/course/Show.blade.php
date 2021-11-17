@@ -55,13 +55,13 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row video-control-box">
-                            <div class="col video-box col-12">
+                            <div class="col col-12">
                                 <video controls id="video-frame" width="100%"></video>
                             </div>
-                            <div class="col control-box">
+                            {{-- <div class="col control-box">
                                 <button class="btn btn-primary"><i class="bi bi-arrow-left"></i></button>
                                 <button class="btn btn-primary"><i class="bi bi-arrow-right"></i></button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -140,11 +140,8 @@
     </div>
     <div class="description-box">
         <div class="description" style="display: block">
-            {{ Str::limit($course->description, 60, '......') }}
+            {!! $course->description !!}
         </div>
-        @if (strlen($course->description) > 60)
-            <button class="deep-green-btn">See more</button>
-        @endif
     </div>
     <div class="tutorial-videos">
         @if ($course->owner == $user?->id)

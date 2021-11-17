@@ -92,8 +92,8 @@
                 <div class="profile-icon">d</div>
                 <div class="profile-overlay"></div>
                 <div class="profile-links">
-                    <a href="/profile">my profile</a>
-                    <a href="/user/logout">logout</a>
+                    <a href="/profile/{{$user->id}}">My profile</a>
+                    <a href="/user/logout">Logout</a>
                 </div>
             </div>
         @else

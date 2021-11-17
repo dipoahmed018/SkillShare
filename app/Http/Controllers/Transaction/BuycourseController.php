@@ -25,7 +25,7 @@ class BuycourseController extends Controller
         try {
             $payment_intent = $this->stripeClient->paymentIntents->create([
                 'currency' => 'USD',
-                'amount' => 500,
+                'amount' => $product->price * 100,
             ]);
             OrderDetails::create([
                 'payment_intent' => $payment_intent->id,
@@ -37,7 +37,7 @@ class BuycourseController extends Controller
             ]);
             return view('pages.transaction.methods',['client_sc' => $payment_intent->client_secret, 'product' => $product]);
         } catch (\Throwable $th) {
-            return $th;
+            throw $th;
         }
     }
 

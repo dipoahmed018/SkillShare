@@ -12,5 +12,6 @@
     "/css/dashboard.css": "/css/dashboard.css",
     "/css/auth.css": "/css/auth.css",
     "/css/course_edit.css": "/css/course_edit.css",
-    "/css/course.css": "/css/course.css"
+    "/css/course.css": "/css/course.css",
+    "/css/payment.css": "/css/payment.css"
 }

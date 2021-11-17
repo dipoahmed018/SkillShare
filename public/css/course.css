@@ -22,9 +22,12 @@
 .course-card .thumbnail {
   width: 100%;
   overflow: hidden;
+  display: flex;
+  margin: auto;
 }
 
 .course-card .thumbnail img {
+  margin: auto;
   max-height: 100%;
   max-width: 100%;
 }

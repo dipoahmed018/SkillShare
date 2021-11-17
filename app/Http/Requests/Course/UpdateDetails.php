@@ -27,8 +27,8 @@ class UpdateDetails extends FormRequest
         Log::channel('event')->info('update-request',[$this->title]);
         return [
             'title' => 'string|min:10|max:200',
-            'position' => 'integer|min:1|max:999',
             'description' => 'string|min:10|max:500',
+            'catagories' => 'array',
             'price' => 'numeric|max:99999.00|min:1|regex:/^\d+(\.\d{1,2})?$/',
         ];
     }

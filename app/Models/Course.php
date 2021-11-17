@@ -114,7 +114,7 @@ class Course extends Model
     }
 
 
-    public function scopeMonthlySales($query, $sales = 1)
+    public function scopeMonthlySales($query, $sales = 0)
     {
         return $query->withCount([
             'students as sales' => fn ($q) => $q->where('course_students.created_at', '>', now()->subMonth()),

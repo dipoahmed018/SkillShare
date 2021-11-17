@@ -108,7 +108,7 @@ class TutorialController extends Controller
             throw $th;
         }
     }
-    public function deleteTutorial(Request $request, Course $course, TutorialDetails $tutorial)
+    public function deleteTutorial(Request $request, TutorialDetails $tutorial, Course $course)
     {
         try {
             if ($request->user()->id !== $course->owner) {

@@ -22,7 +22,7 @@ class ForumPolicy
     }
     public function access(User $user, Forum $forum)
     {
-        $parent = $forum->forum_type;
+        $parent = $forum->forumable;
         $students = $parent->students->where('id','=',$user->id)->pluck('id');
         return $students->count() > 0 || $forum->owner == $user->id;
     }

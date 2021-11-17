@@ -9,11 +9,15 @@ $pink_red : rgb(255, 71, 71);
 .course-edit-form {
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     padding: 0.2em;
 
-    .title-wrapper, .price-wrapper, .description-wrapper, .description-wrapper {
+    .title-wrapper,
+    .price-wrapper,
+    .description-wrapper,
+    .description-wrapper,
+    .catagories-wrapper {
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -25,6 +29,7 @@ $pink_red : rgb(255, 71, 71);
         label {
             color: $deep_green;
         }
+
         input {
             color: $text_red_gray;
             width: 100%;
@@ -33,14 +38,15 @@ $pink_red : rgb(255, 71, 71);
             border: none;
         }
     }
-    .price-wrapper {
-        width: 30%;
-        margin: 0px auto 1em auto;
-    }
-    .catagories-wrapper {
-        width: 60%;
-        margin: 0px auto 1em auto;
-    }
+
+    // .price-wrapper {
+    //     width: 30%;
+    //     margin: 0px auto 1em auto;
+    // }
+    // .catagories-wrapper {
+    //     width: 60%;
+    //     margin: 0px auto 1em auto;
+    // }
     input[type=submit] {
         background-color: $shallow_green;
         border: none;
@@ -50,5 +56,25 @@ $pink_red : rgb(255, 71, 71);
         height: 2.5em;
         color: $text_red_gray;
         margin: auto;
+        border-radius: 5px;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .course-edit-form {
+        padding: 5em;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .price-wrapper {
+            width: 30%;
+            max-height: 4em;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .catagories-wrapper {
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 }

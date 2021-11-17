@@ -1,6 +1,6 @@
 .course-edit-form {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   padding: 0.2em;
 }
@@ -8,7 +8,8 @@
 .course-edit-form .title-wrapper,
 .course-edit-form .price-wrapper,
 .course-edit-form .description-wrapper,
-.course-edit-form .description-wrapper {
+.course-edit-form .description-wrapper,
+.course-edit-form .catagories-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -21,29 +22,21 @@
 .course-edit-form .title-wrapper label,
 .course-edit-form .price-wrapper label,
 .course-edit-form .description-wrapper label,
-.course-edit-form .description-wrapper label {
+.course-edit-form .description-wrapper label,
+.course-edit-form .catagories-wrapper label {
   color: #0FA958;
 }
 
 .course-edit-form .title-wrapper input,
 .course-edit-form .price-wrapper input,
 .course-edit-form .description-wrapper input,
-.course-edit-form .description-wrapper input {
+.course-edit-form .description-wrapper input,
+.course-edit-form .catagories-wrapper input {
   color: #352b2b;
   width: 100%;
   background-color: #6ACC9A;
   outline: none;
   border: none;
-}
-
-.course-edit-form .price-wrapper {
-  width: 30%;
-  margin: 0px auto 1em auto;
-}
-
-.course-edit-form .catagories-wrapper {
-  width: 60%;
-  margin: 0px auto 1em auto;
 }
 
 .course-edit-form input[type=submit] {
@@ -55,6 +48,28 @@
   height: 2.5em;
   color: #352b2b;
   margin: auto;
+  border-radius: 5px;
+}
+
+@media screen and (min-width: 600px) {
+  .course-edit-form {
+    padding: 5em;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .course-edit-form .price-wrapper {
+    width: 30%;
+    max-height: 4em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .course-edit-form .catagories-wrapper {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 

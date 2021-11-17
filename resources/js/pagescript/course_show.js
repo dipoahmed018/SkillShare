@@ -216,17 +216,6 @@ function add_introduction(file_link) {
   thumbnail_parent.append(video)
 }
 
-//description box
-
-const description_box = document.querySelector('.description-box')
-const description_expand = description_box.querySelector('button')
-const description = description_box.querySelector('.description')
-
-description_expand?.addEventListener('click', () => {
-  description.innerText = course.description
-  description_expand.style.display = 'none'
-})
-
 //tutorai upload box
 const tutorial_upload_form = document.querySelector('.add-tutorial')
 const tutorial_upload_dropbox = document.querySelector('[for="tutorial-upload"]')
@@ -303,7 +292,6 @@ function upload_tutorial(file) {
   uploader.showResponse = (res, err) => {
     if (res?.data) {
       course.tutorials.push(res.data.data)
-      console.log(res)
       add_tutorial_element(res.data.data)
       reset_tutorial_upload()
       popup.addPopup('tutorial upload complete')
@@ -313,6 +301,7 @@ function upload_tutorial(file) {
 
 function reset_tutorial_upload() {
   //progress box reset
+  console.log(tutorial_upload_control)
   tutorial_upload_control.style.display = 'none'
   tutorial_progress_bar.style.width = `0`
   tutorial_progress_value.innerText = `0`

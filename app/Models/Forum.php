@@ -20,7 +20,7 @@ class Forum extends Model
     {
         return $this->belongsTo(User::class, 'owner','id');
     }
-    public function forum_type()
+    public function forumable()
     {
         return $this->morphTo('forumable');
     }

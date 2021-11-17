@@ -193,48 +193,22 @@ class CourseController extends Controller
     }
     public function updateDetails(UpdateDetails $request, Course $course)
     {
-        Log::channel('event')->info('update-detais', [$request->all()]);
+        // Log::channel('event')->info('update-detais', [$request->all()]);
         if ($request->title) {
             $course->title = $request->title;
-            $course->save();
         }
         if ($request->description) {
             $course->description = $request->description;
-            $course->save();
         }
         if ($request->price) {
             $course->price = $request->price;
-            $course->save();
         }
-        return redirect('/show/course/' . $course->id);
+        
+        empty($request->catagories) ? $course->catagory()->detach() : $course->catagory()->sync($request->catagories);
+        
+        $course->save();
+        return redirect('/update/course/' . $course->id);
     }
-
-
-    public function attachCatagory(Request $request, Course $course)
-    {
-        $rules = [
-            'catagory' => 'required|integer'
-        ];
-        $request->validate($rules, $request->all());
-        if ($request->user()->cannot('update', $course)) {
-            return abort(401, 'you are not authorized');
-        };
-        return $course->catagory()->syncWithoutDetaching($request->catagory);
-    }
-
-
-    public function detachCatagory(Request $request, Course $course)
-    {
-        $rules = [
-            'catagory' => 'required|integer'
-        ];
-        $request->validate($rules, $request->all());
-        if ($request->user()->cannot('update', $course)) {
-            return abort(401, 'you are not authorized');
-        };
-        return $course->catagory()->detach($request->catagory);
-    }
-
 
     public function deleteCourse(DeleteCourse $request, Course $course)
     {

@@ -1,16 +1,14 @@
 @extends('../Layout/Layout')
 
 @section('title', 'forum')
-@section('tamplates')`
+@section('tamplates')
     {{-- @include('Layout.Tamplate.comment-tamplate') --}}
 @endsection
 
 @section('body')
-<div id="popup_box" class="hide">
-
-    </div>
-
-    @include('Components.CommentCreate')
+<div id="popup_box" class="hide"></div>
+@dump($forum)
+    {{-- @include('Components.CommentCreate')
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -51,7 +49,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col col-md-6 col-sm-12  thumbnails">
-                <img src={{ $forum->forum_type->thumbnail ? $forum->forum_type->thumbnail->file_link : asset('default/Default.jpg') }}
+                <img src={{ $forum->forumable->thumbnail ? $forum->forumable->thumbnail->file_link : asset('default/Default.jpg') }}
                     alt="Forum thumbnail" style="max-width:100%">
             </div>
             <div class="d-block"></div>
@@ -97,7 +95,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('scripts')

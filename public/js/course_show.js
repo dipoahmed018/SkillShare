@@ -12177,16 +12177,8 @@ function add_introduction(file_link) {
   video.style.width = '100%';
   video.controls = true;
   thumbnail_parent.append(video);
-} //description box
+} //tutorai upload box
 
-
-var description_box = document.querySelector('.description-box');
-var description_expand = description_box.querySelector('button');
-var description = description_box.querySelector('.description');
-description_expand === null || description_expand === void 0 ? void 0 : description_expand.addEventListener('click', function () {
-  description.innerText = course.description;
-  description_expand.style.display = 'none';
-}); //tutorai upload box
 
 var tutorial_upload_form = document.querySelector('.add-tutorial');
 var tutorial_upload_dropbox = document.querySelector('[for="tutorial-upload"]');
@@ -12258,7 +12250,6 @@ function upload_tutorial(file) {
   uploader.showResponse = function (res, err) {
     if (res !== null && res !== void 0 && res.data) {
       course.tutorials.push(res.data.data);
-      console.log(res);
       add_tutorial_element(res.data.data);
       reset_tutorial_upload();
       popup.addPopup('tutorial upload complete');
@@ -12268,6 +12259,7 @@ function upload_tutorial(file) {
 
 function reset_tutorial_upload() {
   //progress box reset
+  console.log(tutorial_upload_control);
   tutorial_upload_control.style.display = 'none';
   tutorial_progress_bar.style.width = "0";
   tutorial_progress_value.innerText = "0"; //reset form and uploading progress

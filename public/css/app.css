@@ -13324,19 +13324,6 @@ fieldset:disabled .btn {
   display: block;
 }
 
-.checkbox-input {
-  display: block;
-  position: relative;
-  cursor: pointer;
-}
-
-.checkbox-input input[type=checkbox] {
-  opacity: 0;
-  position: absolute;
-  width: 0;
-  height: 0;
-}
-
 .video-box {
   padding: 0px !important;
   border: 2px solid #0d6efd;
@@ -13609,6 +13596,7 @@ fieldset:disabled .btn {
   display: block;
   position: fixed;
   z-index: 10;
+  background-color: #707070;
 }
 
 .header nav {

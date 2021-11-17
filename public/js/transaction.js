@@ -217,19 +217,10 @@ var bank;
 var bank_box = document.querySelector('.bank-pay-box');
 var card_box = document.querySelector('.card-pay-box');
 var error_box = document.querySelector('.error-box');
-var checkout_btn = document.querySelector('.checkout'); //initialize stripe
+var checkout_btn = document.getElementById('checkout'); //initialize stripe
 
 (0,_stripe_stripe_js__WEBPACK_IMPORTED_MODULE_0__.loadStripe)(window.stripe_publish_key).then(function (res) {
   initialize_elements(res);
-}); //toogle card payment bank payment
-
-document.querySelector('.card-payment').addEventListener('click', function () {
-  card_box.classList.remove('hide');
-  bank_box.classList.add('hide');
-});
-document.querySelector('.bank-payment').addEventListener('click', function () {
-  card_box.classList.add('hide');
-  bank_box.classList.remove('hide');
 });
 
 var initialize_elements = function initialize_elements(stripe_init) {
@@ -238,14 +229,11 @@ var initialize_elements = function initialize_elements(stripe_init) {
   stripe = stripe_init;
   elements = stripe.elements();
   card = (_elements = elements) === null || _elements === void 0 ? void 0 : _elements.create('card');
-
-  if (card) {
-    card.mount(card_box);
-    card.on('change', function (e) {
-      checkout_btn.disabled = e.empty;
-      error_box.textContent = e.error ? e.error.message : "";
-    });
-  }
+  card.mount(card_box);
+  card.on('change', function (e) {
+    checkout_btn.disabled = e.empty;
+    error_box.textContent = e.error ? e.error.message : "";
+  });
 };
 
 checkout_btn.addEventListener('click', function () {
@@ -275,6 +263,15 @@ checkout_btn.addEventListener('click', function () {
       }
     });
   } else {}
+}); //toogle card payment bank payment
+
+document.querySelector('.card-payment').addEventListener('click', function () {
+  card_box.classList.remove('hide');
+  bank_box.classList.add('hide');
+});
+document.querySelector('.bank-payment').addEventListener('click', function () {
+  card_box.classList.add('hide');
+  bank_box.classList.remove('hide');
 });
 })();
 

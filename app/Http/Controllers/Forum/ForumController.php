@@ -24,8 +24,8 @@ class ForumController extends Controller
         if (!$request->user()->canany(['access', 'update'], $forum)) {
             return abort(403, 'You are not authorized to access this forum');
         }
-        if (strstr($request->header('accept'), 'application/json')) {
-            return response($forum, 200);
+        if ($request->acceptsJson()) {
+            return response()->json($forum, 200);
         };
         return view('pages.forum.Show', ['forum' => $forum]);
     }
