@@ -32,7 +32,7 @@ class Forum extends Model
     {
         return $this->hasMany(Post::class, 'postable_id')->where('post_type','=','post');
     }
-    public function members()
+    public function students()
     {
         return $this->belongsToMany(User::class,'course_students','course_id','student_id','forumable_id');
     }

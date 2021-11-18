@@ -20,11 +20,20 @@
             <button>Ask question</button>
             <button>Students</button>
             <button>About</button>
+            @if ($forum->editable)
+                <button>Edit</button>
+            @endif
         </div>
         <div class="about">
-            
+            <h3>{{$forum->name}}</h3>
+            <div class="description">
+                {!! $forum->description !!}
+            </div>
         </div>
         <div class="questions">
+
+        </div>
+        <div class="students">
 
         </div>
 </div>

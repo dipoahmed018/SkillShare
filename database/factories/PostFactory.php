@@ -24,7 +24,7 @@ class PostFactory extends Factory
     public function definition()
     {
         $forum = Forum::all()->random();
-        $student = $forum->members->random();
+        $student = $forum->students->random();
         return [
             'title' => $this->faker->paragraph(1),
             'content' => $this->faker->paragraph(2),

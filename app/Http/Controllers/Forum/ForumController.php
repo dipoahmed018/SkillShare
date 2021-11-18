@@ -8,6 +8,8 @@ use App\Models\Catagory;
 use App\Models\Forum;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 use function PHPSTORM_META\type;
 
@@ -21,12 +23,21 @@ class ForumController extends Controller
     }
     public function getForumDetails(Request $request, Forum $forum)
     {
-        if (!$request->user()->canany(['access', 'update'], $forum)) {
+        $user = $request->user();
+        
+        if (!$user?->canany(['access', 'update'], $forum)) {
             return abort(403, 'You are not authorized to access this forum');
         };
+        //permissions
+        $forum->editable = $user?->id == $forum->owner;
+        $forum->students()->paginate(10);
+
+        return $forum;
+
         if ($request->header('accept') == 'application/json') {
             return response()->json($forum, 200);
         };
+
         return view('pages.forum.Show', ['forum' => $forum]);
     }
     public function updateForumDetails(ForumUpdate $request, Forum $forum)

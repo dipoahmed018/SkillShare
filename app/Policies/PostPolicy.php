@@ -28,7 +28,7 @@ class PostPolicy
     public function access(User $user, Post $post)
     {
         $forum = $post->getForum();
-        $student = $forum->members()->where('student_id',$user->id)->first();
+        $student = $forum->students()->where('student_id',$user->id)->first();
         return $forum->owner == $user->id || $student ? true : false;
     }
 }
