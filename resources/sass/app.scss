@@ -102,6 +102,7 @@ $pink_red : rgb(255, 71, 71);
         display: flex;
         padding: 0.2em 0.3em 0.2em 0.3em;
         cursor: pointer;
+
         h6 {
             margin: auto;
             justify-self: center;
@@ -470,6 +471,7 @@ $pink_red : rgb(255, 71, 71);
 //heade style for mobile
 .header {
     width: 100%;
+    height: clamp(40px, 6vw, 100px);
     display: block;
     position: fixed;
     z-index: 10;
@@ -763,7 +765,7 @@ $pink_red : rgb(255, 71, 71);
 
 //headeer spacing so the content always sty down header
 .header-spacing {
-    height: clamp(25px, 10vw, 100px)
+    height: clamp(40px, 6vw, 100px)
 }
 
 //header styling for desktop
@@ -773,12 +775,10 @@ $pink_red : rgb(255, 71, 71);
         display: flex;
         background-color: rgb(112, 112, 112);
         width: 100%;
-        height: 80px;
         z-index: 20;
 
         nav {
             display: flex;
-
             .link {
                 display: block;
                 align-self: center;

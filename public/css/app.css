@@ -13593,6 +13593,7 @@ fieldset:disabled .btn {
 
 .header {
   width: 100%;
+  height: clamp(40px, 6vw, 100px);
   display: block;
   position: fixed;
   z-index: 10;
@@ -13879,7 +13880,7 @@ fieldset:disabled .btn {
 }
 
 .header-spacing {
-  height: clamp(25px, 10vw, 100px);
+  height: clamp(40px, 6vw, 100px);
 }
 
 @media screen and (min-width: 768px) {
@@ -13887,7 +13888,6 @@ fieldset:disabled .btn {
     display: flex;
     background-color: #707070;
     width: 100%;
-    height: 80px;
     z-index: 20;
   }
 

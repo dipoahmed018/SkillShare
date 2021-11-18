@@ -1,13 +1,33 @@
 @extends('../Layout/Layout')
 
 @section('title', 'forum')
+
+@section('headers')
+    <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
+@endsection
 @section('tamplates')
     {{-- @include('Layout.Tamplate.comment-tamplate') --}}
 @endsection
 
 @section('body')
 <div id="popup_box" class="hide"></div>
-@dump($forum)
+<div class="forum">
+        <div class="banner">
+            <img src={{ $forum->thumbnail?->file_link  ?? asset('images/default_banner.jpg') }}
+            alt="Forum thumbnail" style="max-width:100%">
+        </div>
+        <div class="control">
+            <button>Ask question</button>
+            <button>Students</button>
+            <button>About</button>
+        </div>
+        <div class="about">
+            
+        </div>
+        <div class="questions">
+
+        </div>
+</div>
     {{-- @include('Components.CommentCreate')
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">

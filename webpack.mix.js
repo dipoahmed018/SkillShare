@@ -31,4 +31,5 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/dashboard.scss', 'public/css')
     .sass('resources/sass/auth.scss', 'public/css')
     .sass('resources/sass/payment.scss', 'public/css')
+    .sass('resources/sass/forum.scss', 'public/css')
 

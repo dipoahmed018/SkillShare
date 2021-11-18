@@ -1,0 +1,36 @@
+.forum .banner {
+  width: 100%;
+  background-color: #B8E9D3;
+  display: flex;
+}
+
+.forum .banner img {
+  margin: auto;
+  max-width: 100%;
+  max-height: 20em;
+  box-shadow: 0px -5px 15px black;
+}
+
+.forum .control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  height: 4em;
+  background-color: #0FA958;
+}
+
+.forum .control button {
+  background-color: #223b57;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 2em;
+}
+
+.forum .control button:hover {
+  transform: scale(1.1);
+  transition: transform 200ms linear;
+}
+
+
