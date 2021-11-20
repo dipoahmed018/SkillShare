@@ -115,7 +115,7 @@ class PostQuestionController extends Controller
                 $request->type == 'decrement' ? $vote->delete() : $vote;
                 return response()->json(['votes' => $post->voteCount(), 'type' => 'remove']);
             } else {
-                $request->type == 'decrement' ? abort(422, 'vote not found') : $post->allvote()->save(new Vote([
+                $request->type == 'decrement' ? abort(422, 'vote not found') : $post->allVotes()->save(new Vote([
                     'vote_type' => 'increment',
                     'voter_id' => $request->user()->id
                 ]));
@@ -133,12 +133,12 @@ class PostQuestionController extends Controller
             } else {
                 // return 'not found';
                 if ($request->type == 'decrement') {
-                    $post->allvote()->save(new Vote([
+                    $post->allVotes()->save(new Vote([
                         'vote_type' => 'decrement',
                         'voter_id' => $request->user()->id
                     ]));
                 } else {
-                    $post->allvote()->save(new Vote([
+                    $post->allVotes()->save(new Vote([
                         'vote_type' => 'increment',
                         'voter_id' => $request->user()->id
                     ]));
@@ -179,6 +179,9 @@ class PostQuestionController extends Controller
             return abort(401, 'unauthorized');
         }
         $post->delete();
+        if ($request->header('accept')== 'application/json') {
+            return response()->json($post, 200);
+        }
         return redirect()->back();
     }
 }

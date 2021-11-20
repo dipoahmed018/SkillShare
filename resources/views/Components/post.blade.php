@@ -8,7 +8,7 @@
         <div id="like-{{ $post->id }}"
             data-method={{ $post->voted(Auth::user()->id) ? 'decrement' : 'increment' }}>
             <i class="bi bi-hand-thumbs-up"></i>
-            <span>{{ $post->allVote->count() }}</span>
+            <span>{{ $post->allVotes->count() }}</span>
         </div>
         <button class="btn btn-success create-comment" type="button" data-bs-action='create' data-comment-type="parent" data-commentable-id={{$post->id}}>comment</button>
     </div>

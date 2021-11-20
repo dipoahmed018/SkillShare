@@ -43,7 +43,7 @@ class Post extends Model
     {
         return $this->morphedByMany(Catagory::class, 'catagoryable', 'catagoryable', 'catagoryable_id', 'catagory_id');
     }
-    public function allvote()
+    public function allVotes()
     {
         return $this->morphMany(Vote::class, 'voteable');
     }
@@ -53,11 +53,11 @@ class Post extends Model
     }
     public function voted($id)
     {
-        return $this->allvote()->where('voter_id', '=', $id)->first();
+        return $this->allVotes()->where('voter_id', '=', $id)->first();
     }
     public function voteCount()
     {
-        $votes = $this->allvote;
+        $votes = $this->allVotes;
         $increment = $votes->where('vote_type', 'increment')->count();
         $decrement = $votes->where('vote_type', 'decrement')->count();
         return $increment - $decrement;

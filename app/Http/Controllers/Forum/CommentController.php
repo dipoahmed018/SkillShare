@@ -71,7 +71,7 @@ class CommentController extends Controller
             if ($vote = $comment->voted($request->user()->id)) {
                 return $request->method == 'decrement' ? $vote->delete() : $vote;
             } else {
-                return $request->method == 'decrement' ? abort(404, 'vote not found') : $comment->allvote()->save(new Vote([
+                return $request->method == 'decrement' ? abort(404, 'vote not found') : $comment->allVotes()->save(new Vote([
                     'vote_type' => 'increment',
                     'voter_id' => $request->user()->id
                 ]));

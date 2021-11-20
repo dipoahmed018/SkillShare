@@ -10,13 +10,16 @@
 @endsection
 
 @section('body')
-<div id="popup_box" class="hide"></div>
-<div class="forum">
+
+    
+
+    <div id="popup_box" class="hide"></div>
+    <div class="forum">
         <div class="banner">
-            <img src={{ $forum->thumbnail?->file_link  ?? asset('images/default_banner.jpg') }}
-            alt="Forum thumbnail" style="max-width:100%">
+            <img src={{ $forum->thumbnail?->file_link ?? asset('images/default_banner.jpg') }} alt="Forum thumbnail"
+                style="max-width:100%">
         </div>
-        <div class="control">
+        <div class="forum-control">
             <button>Ask question</button>
             <button>Students</button>
             <button>About</button>
@@ -25,18 +28,23 @@
             @endif
         </div>
         <div class="about">
-            <h3>{{$forum->name}}</h3>
+            <h3>{{ $forum->name }}</h3>
             <div class="description">
                 {!! $forum->description !!}
             </div>
         </div>
         <div class="questions">
+            @foreach ($forum->questions as $question)
+                <x-forum.question.card :question="$question" />
+            @endforeach
 
         </div>
         <div class="students">
-
+            @foreach ($forum->students as $student)
+                <x-forum.studentCard :student="$student" />
+            @endforeach
         </div>
-</div>
+    </div>
     {{-- @include('Components.CommentCreate')
     <div class="modal fade" id="create" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg modal-dialog-centered">

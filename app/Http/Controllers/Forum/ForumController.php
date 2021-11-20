@@ -24,15 +24,16 @@ class ForumController extends Controller
     public function getForumDetails(Request $request, Forum $forum)
     {
         $user = $request->user();
-        
         if (!$user?->canany(['access', 'update'], $forum)) {
             return abort(403, 'You are not authorized to access this forum');
         };
+
+        //datas
+        $forum->students = $forum->students()->paginate(8,['*'],'students');
+        $forum->questions = $forum->questions()->with('allVotes','ownerDetails')->orderBy('created_at', 'desc')->paginate(10);
+
         //permissions
         $forum->editable = $user?->id == $forum->owner;
-        $forum->students()->paginate(10);
-
-        return $forum;
 
         if ($request->header('accept') == 'application/json') {
             return response()->json($forum, 200);

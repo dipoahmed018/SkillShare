@@ -11,7 +11,7 @@
   box-shadow: 0px -5px 15px black;
 }
 
-.forum .control {
+.forum .forum-control {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +20,7 @@
   background-color: #0FA958;
 }
 
-.forum .control button {
+.forum .forum-control button {
   background-color: #223b57;
   color: white;
   border: none;
@@ -28,9 +28,76 @@
   height: 2em;
 }
 
-.forum .control button:hover {
+.forum .forum-control button:hover {
   transform: scale(1.1);
   transition: transform 200ms linear;
+}
+
+.forum .questions {
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  margin: 5px;
+}
+
+.forum .questions .question-card {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0.2em;
+  background-color: #0FA958;
+}
+
+.forum .questions .question-card .status {
+  display: flex;
+  flex-direction: column;
+  padding: 0.2em;
+  gap: 1em;
+  max-width: 20%;
+  color: #B8E9D3;
+}
+
+.forum .questions .question-card .status div {
+  display: flex;
+  flex-direction: column;
+}
+
+.forum .questions .question-card .status div span {
+  margin: auto;
+}
+
+.forum .questions .question-card .contents {
+  padding: 0.2em;
+  max-width: 80%;
+}
+
+.forum .questions .question-card .contents a {
+  color: white;
+  text-decoration: none;
+}
+
+.forum .questions .question-card .info {
+  padding: 0.2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  width: 100%;
+  color: #B8E9D3;
+  font-size: 0.7em;
+}
+
+.forum .questions .question-card .info .question-control {
+  margin-left: auto;
+  display: flex;
+  gap: 1em;
+}
+
+.forum .questions .question-card .info .question-control button {
+  border: none;
+  background-color: #223b57;
+  color: white;
+  border-radius: 15px;
+  font-size: 0.8em;
 }
 
 

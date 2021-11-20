@@ -22,9 +22,8 @@ class ForumPolicy
     }
     public function access(User $user, Forum $forum)
     {
-        $parent = $forum->forumable;
-        $students = $parent->students->where('id','=',$user->id)->pluck('id');
-        return $students->count() > 0 || $forum->owner == $user->id;
+        $student = $forum->forumable()->students()->where('id','=',$user->id)->first();
+        return $student || $forum->owner == $user->id;
     }
     public function update(User $user, Forum $forum)
     {
