@@ -50,19 +50,16 @@ class ForumController extends Controller
     }
     public function updateForumDetails(ForumUpdate $request, Forum $forum)
     {
-        if ($request->name) {
-            $forum->name = $request->name;
-        }
-        if ($request->description) {
-            $forum->description = $request->description;
-        }
+        $forum->name = $request->name ?? $forum->name;
+        $forum->description = $request->description ?? $forum->description;
         $forum->save();
-        if ($cover = $request->file('cover')) {
-            $name = uniqid() . $cover->getExtension();
-            Storage::disk('public')->put("forum/cover/$name",$cover);
-            $forum->coverPhoto();
-            $forum->cover;
+
+        
+        if ($request->hasFile('cover')) {
+            $name = uniqid() .  $request->cover->extension();
+            Log::channel('event')->info('forum',[$name]);
+            $request->file('cover')?->storeAs('forum/cover', $name, 'public');
+            return $forum;
         }
-        return $forum;
     }
 }

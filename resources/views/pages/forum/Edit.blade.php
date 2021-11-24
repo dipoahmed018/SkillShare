@@ -8,19 +8,19 @@
     <form id="forum-edit" action="{{ route('update.forum', ['forum' => $forum->id]) }}" method="post">
         @method('put')
         @csrf
-        <div class="banner-wrapper">
-            <label for="banner">
-                <img src={{ $forum->banner?->file_link ?? asset('images/default_banner.jpg') }} alt="Forum banner">
+        <div class="cover-wrapper">
+            <label for="cover">
+                <img src={{ $forum->cover?->file_link ?? asset('images/default_cover.jpg') }} alt="Forum cover">
                 <div class="overlay">
                     <i class="bi bi-image-alt"></i>
-                    <p>Tap here to update your banner</p>
+                    <p>Tap here to update your cover</p>
                 </div>
             </label>
-            <input accept=".png, .jpg, .jpeg" type="file" name="banner" id="banner">
+            <input accept=".png, .jpg, .jpeg" type="file" name="cover" id="cover">
         </div>
         <div class="title-wrapper">
             <label for="name">Name</label>
-            <input type="text" name="name" id="name">
+            <input type="text" name="name" id="name" value="{{$forum->name}}">
             @error('name')
                 <div class="error-box">
                     {{ $message }}

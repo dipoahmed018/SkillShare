@@ -38,6 +38,6 @@ class Forum extends Model
     }
     public function coverPhoto()
     {
-        return $this->hasOne(FileLink::class, 'fileable_id')->where('fileable_type', '=', 'forum')->where('file_type', '=', 'cover');
+        return $this->morphOne(FileLink::class, 'fileable')->where('file_type', '=', 'cover');
     }
 }

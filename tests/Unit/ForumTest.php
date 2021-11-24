@@ -33,10 +33,13 @@ class ForumTest extends TestCase
      *
      * @return void
      */
-    public function test_()
+    public function test_reations()
     {
         // $response = Course::query()->Price(300, 5000)->Catagory(5);
         // $response->selectRaw('select stars from reviews')
         // dump($response->get());
+        $forum = Forum::find(4);
+        $response = $forum->coverPhoto()->delete();
+        dump($response);
     }
 }
