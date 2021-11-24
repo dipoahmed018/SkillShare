@@ -3124,24 +3124,38 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var _require = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js"),
-    Modal = _require.Modal;
+    Modal = _require.Modal; //question create
+
+
+var question_editor;
+var question_creator_forum = document.getElementById('create-question');
+var question_textarea = question_creator_forum.querySelector('[name="question"]');
+var question_create = question_creator_forum.getElementsByTagName('button');
+ClassicEditor.create(question_textarea, {
+  toolbar: {
+    items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
+  }
+}).then(function (CKeditor) {
+  question_editor = CKeditor;
+})["catch"](function (err) {
+  return console.log(err);
+}); //question delete
 
 var questions_delete_btns = _toConsumableArray(document.getElementsByClassName('delete-question'));
 
-var post_deleter = document.getElementById('post-delete-modal');
-var yes_button = post_deleter.querySelector('.yes');
-var question_delete_modal = new Modal(post_deleter);
-questions_delete_btns.forEach(function (element) {
+var question_deleter = document.getElementById('question-delete-modal');
+var question_delete_confirmed = question_deleter.querySelector('.yes');
+var question_delete_modal = new Modal(question_deleter);
+questions_delete_btns === null || questions_delete_btns === void 0 ? void 0 : questions_delete_btns.forEach(function (element) {
   element.addEventListener('click', function (e) {
-    var question_id = e.target.getAttribute('data-post-id'); // yes_button.setAttribute('data-post-id', question_id)
-
+    var question_id = e.target.getAttribute('data-question-id');
+    question_delete_confirmed === null || question_delete_confirmed === void 0 ? void 0 : question_delete_confirmed.setAttribute('data-question-id', question_id);
     question_delete_modal.show();
   });
 });
-yes_button === null || yes_button === void 0 ? void 0 : yes_button.addEventListener('click', function (e) {
-  var question_id = e.target.getAttribute('data-post-id'); // delete_post(question_id)
-
-  console.log(question_id);
+question_delete_confirmed === null || question_delete_confirmed === void 0 ? void 0 : question_delete_confirmed.addEventListener('click', function (e) {
+  var question_id = e.target.getAttribute('data-question-id');
+  delete_post(question_id);
 });
 
 function delete_post(question_id) {
@@ -3156,6 +3170,7 @@ function delete_post(question_id) {
   }).then(function (res) {
     console.log(res);
     document.getElementById("question-".concat(question_id)).remove();
+    question_delete_modal.hide();
   })["catch"](function (err) {
     console.log(err);
   });
@@ -8204,7 +8219,22 @@ __webpack_require__(/*! ../component/forum/question */ "./resources/js/component
 // import Popup from '../asset/PopupHandler'
 // import { Image_picker, Filter_length, Inject_images } from '../asset/CkEditorHelper'
 // require('../asset/CommentCreate')
-// const csrf = document.head.querySelector("meta[name='_token']").content;
+
+
+var forum_contents_showers = [document.getElementById('questions'), document.getElementById('students'), document.getElementById('about')];
+var forum_contents = [document.querySelector('.questions-wrapper'), document.querySelector('.students-wrapper'), document.querySelector('.about')];
+forum_contents_showers === null || forum_contents_showers === void 0 ? void 0 : forum_contents_showers.forEach(function (element) {
+  element === null || element === void 0 ? void 0 : element.addEventListener('click', function (e) {
+    forum_contents.forEach(function (element) {
+      if (element.classList.contains(e.target.getAttribute('data-event-target'))) {
+        element.classList.remove('hide');
+        return;
+      }
+
+      element.classList.add('hide');
+    });
+  });
+}); // const csrf = document.head.querySelector("meta[name='_token']").content;
 // const modal_element = document.getElementById('create')
 // const close_modal = document.getElementById('close-modal')
 // const create_post_button = document.getElementById('create-post-button')

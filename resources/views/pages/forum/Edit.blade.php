@@ -2,43 +2,40 @@
 
 @section('title', 'edit-forum')
 @section('headers')
+    <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
 @endsection
 @section('body')
-    @can('update', $forum)
-        <div class="container-fluid row justify-content-center">
-            <form id="forum" class="form-group col col-md-6" action="{{ route('update.forum', ['forum' => $forum->id]) }}"
-                method="post">
-                @method('put')
-                @csrf
-                <label class="form-label" for="name">Forum Name</label>
-                <input class="form-control" type="text" name="name" value="{{ $forum->name }}" id="name">
-                @error('name')
-                    <div class="error-box">
-                        {{ $message }}
-                    </div>
-                @enderror
-                <br>
-                @if ($forum->description)
-                    <label class="forum-control" for="description">Description</label>
-                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                    @error('description')
-                        <div class="error-box">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                @endif
-                <br>
-                <input type="submit" value="save">
-            </form>
+    <form id="forum-edit" action="{{ route('update.forum', ['forum' => $forum->id]) }}" method="post">
+        @method('put')
+        @csrf
+        <div class="banner-wrapper">
+            <label for="banner">
+                <img src={{ $forum->banner?->file_link ?? asset('images/default_banner.jpg') }} alt="Forum banner">
+                <div class="overlay">
+                    <i class="bi bi-image-alt"></i>
+                    <p>Tap here to update your banner</p>
+                </div>
+            </label>
+            <input accept=".png, .jpg, .jpeg" type="file" name="banner" id="banner">
         </div>
-    @endcan
-    @cannot('update', $forum)
-        <div>
-            <h1>
-                you are not allowed to edit this forum
-            </h1>
+        <div class="title-wrapper">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+            @error('name')
+                <div class="error-box">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
-    @endcannot
+        <div class="description-wrapper">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10">{!! $forum->description !!}</textarea>
+            @error('description')
+                {{ $message }}
+            @enderror
+        </div>
+        <button type="submit">Save</button>
+    </form>
 @endsection
 @section('scripts')
     <script>

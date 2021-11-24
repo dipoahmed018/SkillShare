@@ -36,4 +36,8 @@ class Forum extends Model
     {
         return $this->belongsToMany(User::class,'course_students','course_id','student_id','forumable_id');
     }
+    public function coverPhoto()
+    {
+        return $this->hasOne(FileLink::class, 'fileable_id')->where('fileable_type', '=', 'forum')->where('file_type', '=', 'cover');
+    }
 }

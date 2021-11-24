@@ -10,6 +10,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use function PHPSTORM_META\type;
 
@@ -29,8 +30,14 @@ class ForumController extends Controller
         };
 
         //datas
-        $forum->students = $forum->students()->paginate(8,['*'],'students');
-        $forum->questions = $forum->questions()->with('allVotes','ownerDetails')->orderBy('created_at', 'desc')->paginate(10);
+        $forum->students = $forum->students()
+            ->with('profilePicture')
+            ->paginate(4, ['*'], 'students');
+        
+        $forum->questions = $forum->questions()
+            ->with('allVotes', 'ownerDetails')
+            ->orderBy('created_at', 'desc')
+            ->paginate(1, ['*'], 'questions');
 
         //permissions
         $forum->editable = $user?->id == $forum->owner;
@@ -50,6 +57,12 @@ class ForumController extends Controller
             $forum->description = $request->description;
         }
         $forum->save();
+        if ($cover = $request->file('cover')) {
+            $name = uniqid() . $cover->getExtension();
+            Storage::disk('public')->put("forum/cover/$name",$cover);
+            $forum->coverPhoto();
+            $forum->cover;
+        }
         return $forum;
     }
 }

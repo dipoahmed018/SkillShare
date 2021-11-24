@@ -22,9 +22,9 @@
     <div class="info">
         <span class="created-at">Created at {{ $question->created_at->diffForHumans() }}</span>
         <span class="owner">by {{ $question->ownerDetails->name }}</span>
-        @if (!$question->editable)
+        @if ($question->editable)
             <div class="question-control">
-                <button class="delete-question" data-post-id="{{ $question->id }}">Delete</button>
+                <button class="delete-question" data-question-id="{{ $question->id }}">Delete</button>
                 <button class="edit">Edit<a href="#"></a></button>
             </div>
         @endif

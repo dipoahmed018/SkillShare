@@ -7,11 +7,24 @@ $text_red_gray : rgb(53, 43, 43);
 $dark_blue: rgb(34, 59, 87);
 $pink_red : rgb(255, 71, 71);
 
+.hide {
+    visibility: hidden;
+    pointer-events: none;
+    width: 0px;
+    height: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
 .forum {
+    display: flex;
+    flex-direction: column;
+
     .banner {
         width: 100%;
         background-color: $glass_green;
         display: flex;
+
         img {
             margin: auto;
             max-width: 100%;
@@ -19,13 +32,17 @@ $pink_red : rgb(255, 71, 71);
             box-shadow: 0px -5px 15px black;
         }
     }
+
     .forum-control {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: center;
         gap: 1em;
-        height: 4em;
+        min-height: 4em;
+        padding: 0.5em;
         background-color: $deep_green;
+
         button {
             background-color: $dark_blue;
             color: white;
@@ -37,19 +54,56 @@ $pink_red : rgb(255, 71, 71);
                 transform: scale(1.1);
                 transition: transform 200ms linear;
             }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
         }
     }
+
+    .questions-wrapper,
+    .students-wrapper {
+        display: flex;
+        flex-direction: column;
+
+        nav {
+            margin: auto;
+        }
+    }
+
+    .about {
+        display: flex;
+        margin: 0.5em;
+        background-color: $glass_green;
+        flex-direction: column;
+
+        .title {
+            text-align: center;
+            color: $dark_blue;
+        }
+
+        .description {
+            text-align: center;
+            color: $deep_green;
+            font-size: 1.1em;
+        }
+
+    }
+
     .questions {
         display: flex;
         gap: 1em;
         flex-direction: column;
         margin: 5px;
+
         .question-card {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             padding: 0.2em;
             background-color: $deep_green;
+
             // height: ;
             .status {
                 display: flex;
@@ -58,22 +112,27 @@ $pink_red : rgb(255, 71, 71);
                 gap: 1em;
                 max-width: 20%;
                 color: $glass_green;
+
                 div {
                     display: flex;
                     flex-direction: column;
+
                     span {
                         margin: auto;
                     }
                 }
             }
+
             .contents {
                 padding: 0.2em;
                 max-width: 80%;
+
                 a {
                     color: white;
                     text-decoration: none;
                 }
             }
+
             .info {
                 padding: 0.2em;
                 display: flex;
@@ -82,10 +141,12 @@ $pink_red : rgb(255, 71, 71);
                 width: 100%;
                 color: $glass_green;
                 font-size: 0.7em;
+
                 .question-control {
                     margin-left: auto;
                     display: flex;
                     gap: 1em;
+
                     button {
                         border: none;
                         background-color: $dark_blue;
@@ -96,5 +157,149 @@ $pink_red : rgb(255, 71, 71);
                 }
             }
         }
+    }
+
+    .students {
+        display: flex;
+        // flex-direction: column;
+        flex-wrap: wrap;
+        gap: clamp(1em, 10%, 3em);
+
+        // margin: auto;
+        .student-card {
+            margin: auto;
+            display: flex;
+            text-decoration: none;
+            color: $deep_green;
+            background-color: $glass_green;
+            gap: 1em;
+            width: 15em;
+            min-height: 70px;
+            border-radius: 10px;
+            box-sizing: border-box;
+
+            img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                margin: auto 0px auto 10px;
+            }
+
+            p {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                background-color: $shallow_green;
+                margin: auto 0px auto 10px;
+            }
+
+            h6 {
+                text-align: center;
+                margin: auto 0px;
+                padding: 5px;
+            }
+        }
+    }
+}
+
+#forum-edit {
+    display: flex;
+    flex-direction: column;
+    background-color: $shallow_green;
+
+    .banner-wrapper {
+        width: 100%;
+        display: flex;
+        background-color: $dark_blue;
+        label[for=banner] {
+            max-height: 20em;
+            margin: auto;
+            position: relative;
+            cursor: pointer;
+            img {
+                max-width: 100%;
+                max-height: 20em;
+                box-shadow: 0px -5px 15px black;
+            }
+            .overlay {
+                display: flex;
+                flex-direction: column;
+                justify-content: start;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                background-color: rgba(99, 99, 99, 0.46);
+                i {
+                    margin: auto;
+                    font-size: 4em;
+                    color: rgb(255, 255, 255);
+                }
+                p {
+                    display: inline-block;
+                    text-align: center;
+                    margin: 0px;
+                    color: white;
+                    padding: 0px;
+                }
+            }
+        }
+
+        input[name=banner] {
+            opacity: 0;
+            width: 0px;
+            height: 0px;
+        }
+    }
+
+    .description-wrapper,
+    .title-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin: 1em;
+
+        label {
+            margin: 0.5em 0px 0.5em 0px;
+            color: $dark_blue;
+            font-size: 1.2em;
+        }
+    }
+
+    input[name=name] {
+        border: none;
+        background-color: $deep_green;
+        color: $dark_blue;
+
+        &:focus {
+            // outline: none;
+            outline: 1px solid $dark_blue;
+        }
+    }
+
+    button[type=submit] {
+        border: none;
+        border-radius: 5px;
+        width: 6em;
+        background-color: $deep_green;
+        color: white;
+        margin: 1em auto;
+    }
+}
+
+#create-question {
+    display: flex;
+    flex-direction: column;
+
+    button[type=submit] {
+        margin: 1em auto;
+        width: 6em;
+        border: none;
+        background-color: $dark_blue;
+        color: white;
+        border-radius: 5px;
     }
 }

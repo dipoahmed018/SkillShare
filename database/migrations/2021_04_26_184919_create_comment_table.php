@@ -18,7 +18,7 @@ class CreateCommentTable extends Migration
             $table->string('content');
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('commentable_id');
-            $table->enum('comment_type',['reply','parent']);
+            $table->string('comment_type');
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');

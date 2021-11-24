@@ -6,6 +6,29 @@ require('../component/forum/question')
 // import { Image_picker, Filter_length, Inject_images } from '../asset/CkEditorHelper'
 // require('../asset/CommentCreate')
 
+
+const forum_contents_showers = [
+    document.getElementById('questions'),
+    document.getElementById('students'),
+    document.getElementById('about'),
+]
+const forum_contents = [
+    document.querySelector('.questions-wrapper'),
+    document.querySelector('.students-wrapper'),
+    document.querySelector('.about'),
+]
+
+forum_contents_showers?.forEach(element => {
+    element?.addEventListener('click', (e) => {
+        forum_contents.forEach(element => {
+            if (element.classList.contains(e.target.getAttribute('data-event-target'))) {
+                element.classList.remove('hide')
+                return
+            }
+            element.classList.add('hide')
+        })
+    })
+})
 // const csrf = document.head.querySelector("meta[name='_token']").content;
 // const modal_element = document.getElementById('create')
 // const close_modal = document.getElementById('close-modal')

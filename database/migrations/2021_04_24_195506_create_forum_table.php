@@ -21,7 +21,7 @@ class CreateForumTable extends Migration
             $table->string('description');
             $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('forumable_id');
-            $table->enum('forumable_type', ['tuition', 'course']);
+            $table->string('forumable_type');
             $table->timestamps();
 
             $table->foreign('owner')->references('id')->on('users');
