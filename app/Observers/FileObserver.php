@@ -38,7 +38,7 @@ class FileObserver
      */
     public function deleted(FileLink $fileLink)
     {
-        $public = ['thumbnail', 'introduction', 'profile_photo', 'profile_video'];
+        $public = ['thumbnail', 'introduction', 'profile_photo', 'profile_video', 'cover'];
         $private = ['tutorial', 'records', 'post', 'comment', 'message'];
         if (in_array($fileLink->file_type, $public)) {
             $path = strstr($fileLink->file_link, '/'.$fileLink->fileable_type.'/' . $fileLink->file_type);

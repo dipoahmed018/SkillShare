@@ -57,7 +57,7 @@
     <div id="popup_box" class="hide"></div>
     <div class="forum">
         <div class="cover">
-            <img src={{ $forum->thumbnail?->file_link ?? asset('images/default_cover.jpg') }} alt="Forum thumbnail"
+            <img src={{ $forum->coverPhoto?->file_link ?? asset('images/default_cover.jpg') }} alt="Forum thumbnail"
                 style="max-width:100%">
         </div>
         <div class="forum-control">

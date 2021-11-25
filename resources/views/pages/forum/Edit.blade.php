@@ -5,18 +5,18 @@
     <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
 @endsection
 @section('body')
-    <form id="forum-edit" action="{{ route('update.forum', ['forum' => $forum->id]) }}" method="post">
+    <form id="forum-edit" action="{{ route('update.forum', ['forum' => $forum->id]) }}" method="post" enctype="multipart/form-data">
         @method('put')
         @csrf
         <div class="cover-wrapper">
             <label for="cover">
-                <img src={{ $forum->cover?->file_link ?? asset('images/default_cover.jpg') }} alt="Forum cover">
+                <img src={{ $forum->coverPhoto?->file_link ?? asset('images/default_cover.jpg') }} alt="Forum cover">
                 <div class="overlay">
                     <i class="bi bi-image-alt"></i>
                     <p>Tap here to update your cover</p>
                 </div>
             </label>
-            <input accept=".png, .jpg, .jpeg" type="file" name="cover" id="cover">
+            <input accept=".png, .jpg, .jpeg" type="file" name="cover" id="cover" value="">
         </div>
         <div class="title-wrapper">
             <label for="name">Name</label>
@@ -35,6 +35,9 @@
             @enderror
         </div>
         <button type="submit">Save</button>
+        @error('cover')
+            @dump($message)
+        @enderror
     </form>
 @endsection
 @section('scripts')

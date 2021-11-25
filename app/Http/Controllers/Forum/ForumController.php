@@ -30,6 +30,7 @@ class ForumController extends Controller
         };
 
         //datas
+        $forum->load('coverPhoto');
         $forum->students = $forum->students()
             ->with('profilePicture')
             ->paginate(4, ['*'], 'students');
@@ -53,13 +54,21 @@ class ForumController extends Controller
         $forum->name = $request->name ?? $forum->name;
         $forum->description = $request->description ?? $forum->description;
         $forum->save();
-
+        
         
         if ($request->hasFile('cover')) {
             $name = uniqid() .  $request->cover->extension();
-            Log::channel('event')->info('forum',[$name]);
             $request->file('cover')?->storeAs('forum/cover', $name, 'public');
-            return $forum;
+            $forum->coverPhoto()->create([
+                'file_type' => 'cover',
+                'file_name' => $name,
+                'file_link' => asset("storage/forum/cover/$name"),
+            ]);
         }
+        $forum->load('coverPhoto');
+        if ($request->header('accept') == 'application/json') {
+            return response()->json($forum);
+        }
+        return redirect("/show/forum/$forum->id");
     }
 }

@@ -10,3 +10,11 @@ if (edit_box) {
         .catch(error => console.log(error))
     // const forum_submit = document.getElementById('forum')
 }
+
+const form = document.getElementById('forum-edit')
+
+// form.addEventListener('submit', (e) => {
+//     const cover_photo = e.target.querySelector('[name="cover"]')
+//     cover_photo.files[0] ?? cover_photo.remove()
+// })
+
