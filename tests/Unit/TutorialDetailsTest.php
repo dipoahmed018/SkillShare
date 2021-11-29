@@ -16,12 +16,12 @@ class TutorialDetailsTest extends TestCase
     public function test_get_tutorial_details()
     {
         $course = Course::where('id',4)->first();
-        $tutorialDetials = $course->tutorialDetails;
-        $this->assertTrue($tutorialDetials->count() > 0 ? true : false, 'no tutorial found');
+        $tutorialDetials = $course?->tutorialDetails;
+        $this->assertTrue($tutorialDetials?->count() > 0 ? true : false, 'no tutorial found');
     }
     public function test_get_course()
     {
         $tutorial_detail = TutorialDetails::find(11);
-        $this->assertTrue($tutorial_detail->course ? true : false, 'no course found');
+        $this->assertTrue($tutorial_detail?->course ? true : false, 'no course found');
     }
 }

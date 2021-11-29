@@ -5,6 +5,7 @@
     "/js/course_show.js": "/js/course_show.js",
     "/js/course_edit.js": "/js/course_edit.js",
     "/js/forum_show.js": "/js/forum_show.js",
+    "/js/question_show.js": "/js/question_show.js",
     "/js/forum_edit.js": "/js/forum_edit.js",
     "/js/post_edit.js": "/js/post_edit.js",
     "/js/transaction.js": "/js/transaction.js",
@@ -13,6 +14,7 @@
     "/css/auth.css": "/css/auth.css",
     "/css/course_edit.css": "/css/course_edit.css",
     "/css/course.css": "/css/course.css",
+    "/css/question.css": "/css/question.css",
     "/css/forum.css": "/css/forum.css",
     "/css/payment.css": "/css/payment.css"
 }

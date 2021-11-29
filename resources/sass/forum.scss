@@ -102,7 +102,7 @@ $pink_red : rgb(255, 71, 71);
             flex-direction: row;
             flex-wrap: wrap;
             padding: 0.2em;
-            background-color: $deep_green;
+            background-color: $dark_blue;
 
             // height: ;
             .status {
@@ -156,6 +156,9 @@ $pink_red : rgb(255, 71, 71);
                     }
                 }
             }
+        }
+        .answered {
+            background-color: $deep_green;
         }
     }
 

@@ -16,14 +16,7 @@
         </div>
     @else
         <div class="col align-self-center col-1 control" style="font-size: 20px">
-            <i class="vote increment bi bi-arrow-up-square{{ $post->voted ? ($post->voted->vote_type == 'increment' ? '-fill' : '') : '' }}  arrow-hover"
-                data-vote-type="increment" data-post-id="{{ $post->id }}"></i><br>
-
-            <p class="vote-counter" style="display: inline">{{ $post->voteCount() }}</p><br>
-
-            <i class="vote dicrement bi bi-arrow-down-square{{ $post->voted ? ($post->voted->vote_type == 'decrement' ? '-fill' : '') : '' }}  arrow-hover"
-                data-vote-type="decrement" data-post-id="{{ $post->id }}"></i><br>
-
+         
             @if ($post->post_type == 'answer' && $post->parent->owner == Auth::user()->id)
                 <i style="font-size: 30px"
                     class="accept-anwser bi bi-check2{{ $post->answerdByMe() ? ' text-success answered' : '' }}"

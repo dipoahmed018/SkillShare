@@ -4,19 +4,26 @@ const { Modal } = require("bootstrap")
 
 let question_editor;
 const question_creator_forum = document.getElementById('create-question')
-const question_textarea = question_creator_forum.querySelector('[name="question"]')
-const question_create = question_creator_forum.getElementsByTagName('button')
+const question_textarea = document.getElementById('question-input');
+// const question_create = question_creator_forum.getElementsByTagName('button')
 
 ClassicEditor.create(question_textarea, {
     toolbar: {
-        items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote'],
-    }
+        items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
+    },
+    simpleUpload: {
+        uploadUrl: `/save/image`,
+        withCredentials: true,
+        headers: {
+            'X-CSRF-TOKEN': window.csrf,
+        },
+    },
 })
     .then(CKeditor => {
         question_editor = CKeditor
     })
     .catch(err => console.log(err))
-    
+
 //question delete
 const questions_delete_btns = [...document.getElementsByClassName('delete-question')]
 const question_deleter = document.getElementById('question-delete-modal')

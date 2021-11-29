@@ -8,7 +8,7 @@ use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Forum\CommentController;
 use App\Http\Controllers\Forum\ForumController;
-use App\Http\Controllers\Forum\PostQuestionController;
+use App\Http\Controllers\Forum\PostController;
 use App\Http\Controllers\Review\ReviewController;
 use App\Http\Controllers\Transaction\BuycourseController;
 use App\Http\Controllers\Tutorial\TutorialController;
@@ -111,17 +111,17 @@ Route::middleware(['auth:web'])->group(function () {
         Route::put('/edit/forum/{forum}', [ForumController::class, 'updateForumDetails'])->name('update.forum');
 
         //post
-        Route::post('/{postable}/{type}/create', [PostQuestionController::class, 'postCreate'])->name('post.create');
-        Route::put('/post/edit/{post}', [PostQuestionController::class, 'postUpdate'])->name('post.edit');
-        Route::post('/save/post/image', [PostQuestionController::class, 'saveImage'])->name('forum.save.image');
-        Route::get('/get/post/image/{name}/{post?}', [PostQuestionController::class, 'getImage'])->name('forum.get.image');
+        Route::post('/{postable}/{type}/create', [PostController::class, 'postCreate'])->name('post.create');
+        Route::put('/post/edit/{post}', [PostController::class, 'postUpdate'])->name('post.edit');
+        Route::post('/save/post/image', [PostController::class, 'saveImage'])->name('forum.save.image');
+        Route::get('/get/post/image/{name}/{post?}', [PostController::class, 'getImage'])->name('forum.get.image');
 
-        Route::get('/show/question/{question}', [PostQuestionController::class, 'getQuestion'])->name('show.question');
-        Route::get('/show/post/{post}', [PostQuestionController::class, 'getPost'])->name('show.post');
+        Route::get('/show/question/{question}', [PostController::class, 'getQuestion'])->name('show.question');
+        Route::get('/show/post/{post}', [PostController::class, 'getPost'])->name('show.post');
 
-        Route::put('/{post}/post/vote', [PostQuestionController::class, 'updateVote'])->name('post.update.vote');
-        Route::put('/{post}/post/answer', [PostQuestionController::class, 'acceptAnswer'])->name('post.update.answer');
-        Route::delete('/{post}/post/delete', [PostQuestionController::class, 'deletePost'])->name('post.delete');
+        Route::put('/{post}/post/vote', [PostController::class, 'updateVote'])->name('post.update.vote');
+        Route::put('/{post}/post/answer', [PostController::class, 'acceptAnswer'])->name('post.update.answer');
+        Route::delete('/{post}/post/delete', [PostController::class, 'deletePost'])->name('post.delete');
 
         //comment
         Route::post('/comment/create', [CommentController::class, 'commentCreate'])->name('comment.create');

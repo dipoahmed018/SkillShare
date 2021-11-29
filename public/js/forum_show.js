@@ -3105,10 +3105,10 @@ function within(min, value, max) {
 
 /***/ }),
 
-/***/ "./resources/js/component/forum/question.js":
-/*!**************************************************!*\
-  !*** ./resources/js/component/forum/question.js ***!
-  \**************************************************/
+/***/ "./resources/js/component/forum/questionCard.js":
+/*!******************************************************!*\
+  !*** ./resources/js/component/forum/questionCard.js ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -3129,11 +3129,18 @@ var _require = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/di
 
 var question_editor;
 var question_creator_forum = document.getElementById('create-question');
-var question_textarea = question_creator_forum.querySelector('[name="question"]');
-var question_create = question_creator_forum.getElementsByTagName('button');
+var question_textarea = document.getElementById('question-input'); // const question_create = question_creator_forum.getElementsByTagName('button')
+
 ClassicEditor.create(question_textarea, {
   toolbar: {
-    items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote']
+    items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload']
+  },
+  simpleUpload: {
+    uploadUrl: "/save/image",
+    withCredentials: true,
+    headers: {
+      'X-CSRF-TOKEN': window.csrf
+    }
   }
 }).then(function (CKeditor) {
   question_editor = CKeditor;
@@ -8214,12 +8221,7 @@ var __webpack_exports__ = {};
 /*!***********************************************!*\
   !*** ./resources/js/pagescript/forum_show.js ***!
   \***********************************************/
-__webpack_require__(/*! ../component/forum/question */ "./resources/js/component/forum/question.js"); // import axios from "axios";
-// import { Modal } from "bootstrap";
-// import Popup from '../asset/PopupHandler'
-// import { Image_picker, Filter_length, Inject_images } from '../asset/CkEditorHelper'
-// require('../asset/CommentCreate')
-
+__webpack_require__(/*! ../component/forum/questionCard */ "./resources/js/component/forum/questionCard.js");
 
 var forum_contents_showers = [document.getElementById('questions'), document.getElementById('students'), document.getElementById('about')];
 var forum_contents = [document.querySelector('.questions-wrapper'), document.querySelector('.students-wrapper'), document.querySelector('.about')];
@@ -8346,15 +8348,6 @@ forum_contents_showers === null || forum_contents_showers === void 0 ? void 0 : 
 //         document.getElementById('create-post').append(srclist)
 //         images = {}
 //     }
-// })
-// //show 
-// show_posts.addEventListener('click', (e) => {
-//     posts_box.classList.remove('hide')
-//     questions_box.classList.add('hide')
-// })
-// show_questions.addEventListener('click', (e) => {
-//     posts_box.classList.add('hide')
-//     questions_box.classList.remove('hide')
 // })
 })();
 

@@ -26,7 +26,7 @@
                 @csrf
                 <label for="title">Title</label>
                 <input class="form-control" type="text" name="title" id="title" required min="10"><br>
-                <textarea name="question" id="question" cols="30" rows="10"></textarea>
+                <textarea name="content" id="question-input" cols="30" rows="10"></textarea>
                 <button type="submit">Create</button>
             </form>
         @endslot

@@ -1,0 +1,130 @@
+.answers-wrapper {
+  margin-top: 1em;
+}
+
+.question,
+.answer {
+  display: flex;
+  flex-direction: column;
+  margin: 0.2em;
+  padding: 0.2em;
+  background-color: #223b57;
+}
+
+.question .details,
+.answer .details {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+  border: 1px solid #0FA958;
+  border-radius: 5px;
+  color: #0FA958;
+}
+
+.question .details .info,
+.answer .details .info {
+  display: flex;
+  flex-direction: column;
+}
+
+.question .details .info .title,
+.answer .details .info .title {
+  margin-top: 0.2em;
+}
+
+.question .details .info .additional-info,
+.answer .details .info .additional-info {
+  color: #B8E9D3;
+  font-size: 0.9em;
+  margin-top: auto;
+  margin-bottom: 0.2em;
+}
+
+.question .details .control,
+.answer .details .control {
+  margin: auto 1% auto auto;
+  display: flex;
+  gap: 0.2em;
+}
+
+.question .details .control i,
+.answer .details .control i {
+  cursor: pointer;
+  color: #F2DD1F;
+}
+
+.question .details .control button,
+.answer .details .control button {
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.question .details .control .update,
+.answer .details .control .update {
+  color: #c2c44c;
+}
+
+.question .details .control .delete,
+.answer .details .control .delete {
+  color: #c43838;
+}
+
+.question .content-wrapper,
+.answer .content-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1em;
+}
+
+.question .content-wrapper .vote,
+.answer .content-wrapper .vote {
+  align-items: flex-start;
+  margin: auto 1% auto 1%;
+  align-items: center;
+  text-align: center;
+}
+
+.question .content-wrapper .vote i,
+.answer .content-wrapper .vote i {
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #0FA958;
+}
+
+.question .content-wrapper .vote .votes,
+.answer .content-wrapper .vote .votes {
+  color: #B8E9D3;
+  text-align: center;
+}
+
+.question .content-wrapper .content,
+.answer .content-wrapper .content {
+  width: 100%;
+  margin-left: auto;
+  max-height: 90vh;
+  overflow-x: auto;
+  justify-self: stretch;
+  color: #B8E9D3;
+}
+
+.question .content-wrapper .content img,
+.answer .content-wrapper .content img {
+  max-width: 100%;
+  max-height: 1000px;
+}
+
+.question .comments,
+.answer .comments {
+  display: flex;
+  padding: 1em;
+}
+
+.question .comments p,
+.answer .comments p {
+  width: 100%;
+  background-color: #B8E9D3;
+}
+
+

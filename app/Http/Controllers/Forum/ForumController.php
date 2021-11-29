@@ -34,11 +34,19 @@ class ForumController extends Controller
         $forum->students = $forum->students()
             ->with('profilePicture')
             ->paginate(4, ['*'], 'students');
-        
+
         $forum->questions = $forum->questions()
-            ->with('allVotes', 'ownerDetails')
+            ->with([
+                'ownerDetails',
+                'voted'
+            ])
+            ->withCount([
+                'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
+                'votes as decrementVotes' => fn ($q) => $q->where('vote_type', 'decrement'),
+            ])
+            ->withCount('answers')
             ->orderBy('created_at', 'desc')
-            ->paginate(1, ['*'], 'questions');
+            ->paginate(8, ['*'], 'questions');
 
         //permissions
         $forum->editable = $user?->id == $forum->owner;

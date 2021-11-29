@@ -1,11 +1,4 @@
-require('../component/forum/question')
-
-// import axios from "axios";
-// import { Modal } from "bootstrap";
-// import Popup from '../asset/PopupHandler'
-// import { Image_picker, Filter_length, Inject_images } from '../asset/CkEditorHelper'
-// require('../asset/CommentCreate')
-
+require('../component/forum/questionCard')
 
 const forum_contents_showers = [
     document.getElementById('questions'),
@@ -148,17 +141,3 @@ forum_contents_showers?.forEach(element => {
 //         images = {}
 //     }
 // })
-
-// //show 
-
-// show_posts.addEventListener('click', (e) => {
-//     posts_box.classList.remove('hide')
-//     questions_box.classList.add('hide')
-// })
-
-// show_questions.addEventListener('click', (e) => {
-//     posts_box.classList.add('hide')
-//     questions_box.classList.remove('hide')
-
-// })
-

@@ -95,7 +95,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   padding: 0.2em;
-  background-color: #0FA958;
+  background-color: #223b57;
 }
 
 .forum .questions .question-card .status {
@@ -148,6 +148,10 @@
   color: white;
   border-radius: 15px;
   font-size: 0.8em;
+}
+
+.forum .questions .answered {
+  background-color: #0FA958;
 }
 
 .forum .students {

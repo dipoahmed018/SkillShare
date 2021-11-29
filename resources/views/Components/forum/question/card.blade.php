@@ -1,14 +1,14 @@
 @props(['question'])
 
-<div class="question-card" id="question-{{ $question->id }}">
-
+<div class="question-card {{ $question->answer ? 'answered' : ''}}" id="question-{{ $question->id }}">
     <div class="status">
         <div class="votes-count">
-            <span>{{ $question->allVotes->count() }}</span>
+            {{-- <span>0</span> --}}
+            <span>{{$question->incrementVotes - $question->decrementVotes }}</span>
             <span>votes</span>
         </div>
         <div class="answers-count">
-            <span>0</span>
+            <span>{{$question->answers_count}}</span>
             <span>answers</span>
         </div>
     </div>

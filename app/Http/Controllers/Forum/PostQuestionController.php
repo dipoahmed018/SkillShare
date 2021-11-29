@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
-class PostQuestionController extends Controller
+class PostController extends Controller
 {
     public function postCreate(Request $request, $postable, $type)
     {
@@ -67,6 +67,7 @@ class PostQuestionController extends Controller
         }
         return redirect()->back();
     }
+
     public function postUpdate(Request $request, Post $post)
     {
         if ($request->user()->cannot('update', $post)) {
@@ -90,61 +91,78 @@ class PostQuestionController extends Controller
 
     public function getQuestion(Request $request, Post $question)
     {
-        if ($request->user()->cannot('access', $question->parent)) {
+        $user =  $request->user();
+        if ($user->cannot('access', $question->parent)) {
             return abort(401, 'You are unauthorized');
         }
-        if ($question->post_type == 'post') {
+        if ($question->post_type !== 'question') {
             return abort(422, 'question not available');
         }
-        $question->ownerDetails;
-        $question->voted = $question->voted($request->user()->id);
-        return view('pages/forum/Question', ['question' => $question, 'answers' => $question->answers]);
+
+        $question->load('ownerDetails', 'acceptedAnswer')->loadCount([
+            'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
+            'votes as decrementVotes' => fn ($q) => $q->where('vote_type', 'decrement'),
+        ]);
+
+        $question->voted = $user ? $question->votes()->where('voter_id', $user?->id)->first() : null;
+
+        $question->answers = $question->answers()
+            ->with([
+                'ownerDetails',
+                'voted',
+                'comments' => fn ($q) => $q->limit(10),
+            ])
+            ->withCount([
+                'votes as increments' => fn ($q) => $q->where('vote_type', 'increment'),
+                'votes as decrements' => fn ($q) => $q->where('vote_type', 'decrement'),
+            ])
+            ->paginate('10', ['*'], 'answers');
+
+        return view('pages/forum/Question', ['question' => $question]);
     }
     public function getPost(Request $request, Post $post)
     {
     }
     public function updateVote(Request $request, Post $post)
     {
-        if ($request->user()->cannot('access', $post)) {
+        $user = $request->user();
+        if ($user->cannot('access', $post)) {
             return abort(401, 'unautorized');
         }
 
         $request->validate(['type' => 'required|in:increment,decrement']);
+
+        $voted = $post->votes()->where('voted_id', $user->id)->first();
+
         if ($post->post_type == 'post') {
-            if ($vote = $post->voted($request->user()->id)) {
-                $request->type == 'decrement' ? $vote->delete() : $vote;
-                return response()->json(['votes' => $post->voteCount(), 'type' => 'remove']);
+
+            if ($voted) {
+                $voted->delete();
+                return response()->json(['votes' => $post->votes->count(), 'type' => 'remove']);
             } else {
-                $request->type == 'decrement' ? abort(422, 'vote not found') : $post->allVotes()->save(new Vote([
+                $post->votes()->create([
                     'vote_type' => 'increment',
-                    'voter_id' => $request->user()->id
-                ]));
+                    'voter_id' => $user->id,
+                ]);
             };
         }
+
         if ($post->post_type !== 'post') {
-            if ($vote = $post->voted($request->user()->id)) {
-                //need workd
-                if ($vote->vote_type == $request->type) {
-                    $vote->delete();
-                    return response()->json(['votes' => $post->voteCount(), 'type' => 'remove']);
-                }
-                $request->type == 'decrement' ? $vote->vote_type = 'decrement' : $vote->vote_type = 'increment';
-                $vote->save();
+
+            //unvote post if previous vote and the new request vote type is same other wise make a new vote
+            if ($voted?->vote_type == $request->type) {
+                $voted->delete();
+                return response()->json(['vote' => null]);
             } else {
-                // return 'not found';
-                if ($request->type == 'decrement') {
-                    $post->allVotes()->save(new Vote([
-                        'vote_type' => 'decrement',
-                        'voter_id' => $request->user()->id
-                    ]));
-                } else {
-                    $post->allVotes()->save(new Vote([
-                        'vote_type' => 'increment',
-                        'voter_id' => $request->user()->id
-                    ]));
-                }
-            };
+                $post->votes()->where('voter_id', $user->id)->delete();
+                $vote = $post->votes()->create([
+                    'vote_type' => $request->type,
+                    'voter_id' => $user->id,
+                ]);
+                return response()->json($vote);
+            }
         }
+
         return response()->json(['votes' => $post->voteCount(), 'type' => $request->type]);
     }
 
@@ -164,8 +182,8 @@ class PostQuestionController extends Controller
         if ($postable->answer == $post->id) {
             $postable->answer = null;
             $post->save();
-        
-        //change post answer
+
+            //change post answer
         } else {
             $postable->answer = $post->id;
             $postable->save();
@@ -179,7 +197,7 @@ class PostQuestionController extends Controller
             return abort(401, 'unauthorized');
         }
         $post->delete();
-        if ($request->header('accept')== 'application/json') {
+        if ($request->header('accept') == 'application/json') {
             return response()->json($post, 200);
         }
         return redirect()->back();

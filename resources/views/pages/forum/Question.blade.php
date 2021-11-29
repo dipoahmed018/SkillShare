@@ -1,23 +1,48 @@
 @extends('../Layout/Layout')
 @section('title', 'show question')
+
+@section('headers')
+    <link rel="stylesheet" href="{{ asset('css/question.css') }}">
+@endsection
 @section('body')
-    <div class="modal fade" id="answer-editor" tabindex="-1" aria-hidden="true" data-bs-keyboard="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="editor-type" class="modal-title">create answer</h5>
-                </div>
-                <div class="modal-body">
-                    <form id="edit-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}" method="post">
-                        @csrf
-                        <textarea name="content" id="answer-editor-box" cols="30" rows="10"></textarea>
-                        <input id="answer-submit" type="submit" value="create answer">
-                    </form>
-                </div>
+
+    <x-modal title="Edit" id="edit-post-modal" size="modal-lg">
+        @slot('body')
+            <form id="edit-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
+                method="post">
+                @csrf
+                <textarea name="content" id="answer-editor-box" cols="30" rows="10"></textarea>
+                <input id="answer-submit" type="submit" value="create answer">
+            </form>
+        @endslot
+    </x-modal>
+
+    <x-modal title="Create answer" id="create-question-modal" size="modal-lg">
+        @slot('body')
+            <form action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}" id="create-answer"
+                method="post">
+                @csrf
+                <label for="title">Title</label>
+                <input class="form-control" type="text" name="title" id="title" required min="10"><br>
+                <textarea name="content" id="answer-input" cols="30" rows="10"></textarea>
+                <button type="submit">Create</button>
+            </form>
+        @endslot
+    </x-modal>
+
+    <main>
+        <section class="question-wrapper">
+                <x-qna.index :post="$question" :user="$user" editModalTarget="post-edit-modal" />
+        </section>
+        <section class="answers-wrapper">
+            <div class="answers">
+                @foreach ($question->answers as $answer)
+                    <x-qna.index :post="$answer" :user="$user" editModalTarget="post-edit-modal" />
+                @endforeach
             </div>
-        </div>
-    </div>
-    <div class="container row">
+        </section>
+    </main>
+    {{-- <div class="container row">
         <div>
             <form class="form-group hide" action="{{ route('post.edit', ['post' => $question->id]) }}" method="post"
                 id="edit-question">
@@ -33,7 +58,7 @@
         <div class="col col-12" id="question-box">
             <x-QNA-show :post="$question"></x-question-show>
         </div>
-        {{-- answer editor modal show button--}}
+        answer editor modal show button
         <button id="answer-create" data-bs-type="create-answer" class="btn btn-success">create answer</button>
 
         <div class="col col-12 answers-box">
@@ -41,7 +66,7 @@
                 <x-QNA-show :post="$answer"></x-answer-show>
             @endforeach
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('scripts')
@@ -50,5 +75,6 @@
         const answers = @json($question->answers);
     </script>
     <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/question_show.js') }}"></script>
     <script src="{{ asset('js/post_edit.js') }}"></script>
 @endsection

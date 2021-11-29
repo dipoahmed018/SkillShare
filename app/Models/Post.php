@@ -10,7 +10,9 @@ use Laravel\Scout\Searchable;
 class Post extends Model
 {
     use HasFactory, Searchable;
+
     protected $table = 'post';
+
     protected $fillable = [
         'title',
         'content',
@@ -24,6 +26,7 @@ class Post extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
+
     public function parent()
     {
         if ($this->post_type == 'answer') {
@@ -31,36 +34,39 @@ class Post extends Model
         }
         return $this->belongsTo(Forum::class, 'postable_id');
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class, 'commentable_id')->where('comment_type', '=', 'parent');
+    }
+
+    public function acceptedAnswer()
+    {
+        return $this->hasOne(Post::class, 'answer');
     }
     public function answers()
     {
         return $this->hasMany(Post::class, 'postable_id')->where('post_type', '=', 'answer');
     }
+
     public function catagory()
     {
         return $this->morphedByMany(Catagory::class, 'catagoryable', 'catagoryable', 'catagoryable_id', 'catagory_id');
     }
-    public function allVotes()
+
+    public function votes()
     {
         return $this->morphMany(Vote::class, 'voteable');
     }
+
+    public function voted()
+    {
+        return $this->hasOne(Vote::class, 'id', 'voteable_id');
+    }
+    
     public function images()
     {
         return $this->morphMany(FileLink::class, 'fileable');
-    }
-    public function voted($id)
-    {
-        return $this->allVotes()->where('voter_id', '=', $id)->first();
-    }
-    public function voteCount()
-    {
-        $votes = $this->allVotes;
-        $increment = $votes->where('vote_type', 'increment')->count();
-        $decrement = $votes->where('vote_type', 'decrement')->count();
-        return $increment - $decrement;
     }
 
     public function getForum()
@@ -72,12 +78,12 @@ class Post extends Model
         }
     }
 
-    public function answerdByMe()
-    {
-        if ($this->post_type == 'answer') {
-            $postable = Post::find($this->postable_id);
-            return $postable->answer == $this->id;
-        }
-        return false;
-    }
+    // public function answerdByMe()
+    // {
+    //     if ($this->post_type == 'answer') {
+    //         $postable = Post::find($this->postable_id);
+    //         return $postable->answer == $this->id;
+    //     }
+    //     return false;
+    // }
 }
