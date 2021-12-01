@@ -10,9 +10,6 @@ $delete : rgb(196, 56, 56);
 $edit : rgb(194, 196, 76);
 
 
-.answers-wrapper {
-    margin-top: 1em;
-}
 .question, .answer {
     display: flex;
     flex-direction: column;
@@ -104,5 +101,28 @@ $edit : rgb(194, 196, 76);
             width: 100%;
             background-color: $glass_green;
         }
+    }
+}
+.answers-wrapper {
+    margin-top: 5em;
+    padding: 1em;
+    
+    #create-answer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: $deep_green;
+        padding: 0.5em;
+        button[type=submit] {
+            width: 10em;
+            margin: 0.5em auto 0.5em auto;
+            border: none;
+            border-radius: 5px;
+            background-color: $dark_blue;
+            color: white;
+        }
+    }
+    .answers-label {
+        margin-top: 2em;
     }
 }

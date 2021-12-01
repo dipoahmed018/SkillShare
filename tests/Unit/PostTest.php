@@ -7,7 +7,7 @@ use function PHPUnit\Framework\assertTrue;
 
 class PostTest extends TestCase
 {
-    function test_simple()
+    function testVoteCreate()
     {
         $post= Post::find(81);
         $vote = $post->votes()->create([
@@ -15,5 +15,13 @@ class PostTest extends TestCase
             'voter_id' => 7,
         ]);
         assertTrue($vote ? true : false, 'vote created');
+        $vote->delete();
+    }
+
+    public function testVoteCont()
+    {
+        $post = Post::find(81);
+        dump($post->vote_count);
+        $this->assertTrue(true);
     }
 }

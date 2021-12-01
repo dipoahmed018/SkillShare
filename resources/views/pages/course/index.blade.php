@@ -8,7 +8,7 @@
     {{-- @dump($data) --}}
     <div class="courses">
         @foreach ($data as $item)
-            <x-course.card :course="$item"> </x-course.card>
+            <x-course.card :course="$item" />
         @endforeach
     </div>
     <div class="links-wrapper">

@@ -19,22 +19,29 @@
 
     <x-modal title="Create answer" id="create-question-modal" size="modal-lg">
         @slot('body')
-            <form action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}" id="create-answer"
-                method="post">
-                @csrf
-                <label for="title">Title</label>
-                <input class="form-control" type="text" name="title" id="title" required min="10"><br>
-                <textarea name="content" id="answer-input" cols="30" rows="10"></textarea>
-                <button type="submit">Create</button>
-            </form>
+        {{-- <form action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
+            id="create-answer" method="post">
+            @csrf
+            <label for="title">Title</label>
+            <input class="form-control" type="text" name="title" id="title" required min="10"><br>
+            <textarea name="content" id="question-input" cols="30" rows="10"></textarea>
+            <button type="submit">Create</button>
+        </form> --}}
         @endslot
     </x-modal>
 
     <main>
         <section class="question-wrapper">
-                <x-qna.index :post="$question" :user="$user" editModalTarget="post-edit-modal" />
+            <x-qna.index :post="$question" :user="$user" editModalTarget="post-edit-modal" />
         </section>
         <section class="answers-wrapper">
+            <form  id="create-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
+                id="create-answer" method="post">
+                @csrf
+                <textarea name="content" id="answer-input" cols="30" rows="10"></textarea>
+                <button type="submit">Create answer</button>
+            </form>
+            <h6 class="answers-label">Answers</h6>
             <div class="answers">
                 @foreach ($question->answers as $answer)
                     <x-qna.index :post="$answer" :user="$user" editModalTarget="post-edit-modal" />

@@ -17,10 +17,10 @@
             </a>
             <p class="content">content
             <p>
-                <x-course.create class="review-edit" data-reviewable-id="0" data-review-type="review_reply"
+                <x-course.review.create class="review-edit" data-reviewable-id="0" data-review-type="review_reply"
                     cancelable="true">
                     <x-course.rating />
-                </x-course.create>
+                </x-course.review.create>
         </div>
         <div class="review-control">
             <span class="review-delete" style="cursor: pointer">Delete</span>
@@ -31,8 +31,8 @@
         </div>
 
         {{-- reply creator --}}
-        <x-course.create class="reply-create" data-reviewable-id="0" data-review-type="review_reply" cancelable="true">
-        </x-course.create>
+        <x-course.review.create class="reply-create" data-reviewable-id="0" data-review-type="review_reply" cancelable="true">
+        </x-course.review.create>
 
         {{-- add replies here form javascript --}}
         <div class="replies">
@@ -167,14 +167,14 @@
     <div class="reviews-box">
         <h5>Reviews</h5>
         @can('review', $course)
-            <x-course.create class="review-create" display="flex" data-reviewable-id="{{ $course->id }}"
+            <x-course.review.create class="review-create" display="flex" data-reviewable-id="{{ $course->id }}"
                 data-review-type="course">
                 <x-course.rating></x-course.rating>
-            </x-course.create>
+            </x-course.review.create>
         @endcan
         <div class="reviews">
             @foreach ($course->reviews as $item)
-                <x-course.review :review-data="$item" :course="$course" :user="$user" class="review" />
+                <x-course.review.card :review-data="$item" :course="$course" :user="$user" class="review" />
             @endforeach
         </div>
         <div class="links-wrapper">

@@ -20,7 +20,7 @@ $votes = $post->incrementVotes - $post->decrementVotes;
 
     </div>
     <div class="content-wrapper">
-        <x-qna.vote :votes="$votes" :voted="$post->voted" />
+        <x-qna.vote :votes="$votes" :voted="$post->voted" :post="$post"/>
         <div class="content">
             {!! $post->content !!}
         </div>
@@ -28,7 +28,7 @@ $votes = $post->incrementVotes - $post->decrementVotes;
 
     <div class="comments">
         @foreach ($post->comments as $comments)
-            
+                
         @endforeach
     </div>
 </div>

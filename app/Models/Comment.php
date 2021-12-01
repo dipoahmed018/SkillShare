@@ -33,13 +33,9 @@ class Comment extends Model
             return $this->belongsTo(Post::class, 'commentable_id');
         }
     }
-    public function allVotes()
+    public function votes()
     {
         return $this->morphMany(Vote::class, 'voteable');
-    }
-    public function voted($id)
-    {
-        return $this->allVotes()->where('voter_id', '=', $id)->first();
     }
     public function getPost()
     {

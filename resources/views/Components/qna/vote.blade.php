@@ -1,14 +1,16 @@
-@props(['votes', 'voted'])
+@props(['votes', 'voted', 'post'])
 
 <div class="vote">
 
-    <i class="bi bi-arrow-up-square{{ $voted?->vote_type == 'increment' ? '-fill' : ' increment' }} vote-control"></i>
+    <i class="bi bi-arrow-up-square{{ $voted?->vote_type == 'increment' ? '-fill' : '' }} vote-control"
+        data-vote-type="increment" data-post-id={{ $post->id }}></i>
 
     <div class="votes">
-        <span>{{ $votes }}</span><br>
+        <span class="vote-count">{{ $votes }}</span><br>
         <span>votes</span>
     </div>
 
-    <i class="bi bi-arrow-down-square{{ $voted?->vote_type == 'decrement' ? '-fill' : ' decrement' }} vote-control"></i>
+    <i class="bi bi-arrow-down-square{{ $voted?->vote_type == 'decrement' ? '-fill' : '' }} vote-control"
+        data-vote-type="decrement" data-post-id="{{ $post->id }}"></i>
 
 </div>

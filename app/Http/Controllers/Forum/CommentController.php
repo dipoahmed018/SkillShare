@@ -48,11 +48,11 @@ class CommentController extends Controller
             $commentable = $comment->parent;
             $comment->content = "<a href=" . env('APP_URL') . "/user/$commentable->owner/profile>@$commentable->ownerDetails->name</a> <div class='reply-content'>$request->content</div>";
             $comment->save();
-            return response()->json($comment,200);
+            return response()->json($comment, 200);
         }
         $comment->content = $request->content;
         $comment->save();
-        return response()->json($comment,200);
+        return response()->json($comment, 200);
     }
     public function deleteComment(Request $request, Comment $comment)
     {
@@ -63,22 +63,21 @@ class CommentController extends Controller
     }
     public function updateVote(Request $request, Comment $comment)
     {
-        if ($request->user()->cannot('update', $comment)) {
+        $user = $request->user();
+        if ($user->cannot('update', $comment)) {
             return abort(401, 'unautorized');
         }
         $request->validate(['method' => 'required|in:increment,decrement']);
-        if ($comment) {
-            if ($vote = $comment->voted($request->user()->id)) {
-                return $request->method == 'decrement' ? $vote->delete() : $vote;
-            } else {
-                return $request->method == 'decrement' ? abort(404, 'vote not found') : $comment->allVotes()->save(new Vote([
-                    'vote_type' => 'increment',
-                    'voter_id' => $request->user()->id
-                ]));
-            };
-        }
-        return response('something went wrong', 500);
+        $voted = $comment->votes()->where('voter_id', $user->id)->first();
+        if ($voted) {
+            $voted->delete();
+            return response()->json(['vote' => null]);
+        } else {
+            $vote = $comment->votes()->create([
+                'vote_type' => 'increment',
+                'voter_id' => $user->id
+            ]);
+            return response()->json($vote);
+        };
     }
-
-
 }

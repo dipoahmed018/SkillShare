@@ -1,10 +1,10 @@
 <?php
 
-namespace App\View\Components\course;
+namespace App\View\Components\Course\Review;
 
 use Illuminate\View\Component;
 
-class Review extends Component
+class Card extends Component
 {
     /**
      * Create a new component instance.
@@ -36,7 +36,7 @@ class Review extends Component
      */
     public function render()
     {
-        return view('components.course.review');
+        return view('components.course.review.card');
     }
     public function canModify()
     {

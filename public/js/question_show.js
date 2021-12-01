@@ -872,33 +872,95 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+var answer_input_box = document.getElementById('answer-input');
+console.log(answer_input_box);
+var answer_editor;
+ClassicEditor.create(answer_input_box, {
+  toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'image'],
+  simpleUpload: {
+    uploadUrl: "/save/image",
+    withCredentials: true,
+    headers: {
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }
+}).then(function (ckeditor) {
+  return answer_editor = ckeditor;
+})["catch"](function (error) {
+  return console.log(error);
+}); // vote control
+
 var vote_buttons = _toConsumableArray(document.getElementsByClassName('vote-control'));
 
-var arrow_up = "bi bi-arrow-up-square";
-var arrow_down = "bi bi-arrow-down-square";
+var arrow_up = "bi bi-arrow-up-square",
+    arrow_down = "bi bi-arrow-down-square",
+    arrow_up_fill = "bi bi-arrow-up-square-fill",
+    arrow_down_fill = "bi bi-arrow-down-square-fill";
 vote_buttons.forEach(function (element) {
   element.addEventListener('click', function (e) {
-    var vote_type = e.target.classList.contains('increment') ? 'increment' : e.target.classList.contains('decrement') ? 'decrement' : false;
-    vote_control(e.target.parentElement, vote_type);
+    var vote_type = e.target.getAttribute('data-vote-type');
+    var post_id = e.target.getAttribute('data-post-id');
+    vote_control(e.target.parentElement, vote_type, post_id);
   });
 });
 
-function vote_control(_x, _x2) {
+function vote_control(_x, _x2, _x3) {
   return _vote_control.apply(this, arguments);
 }
 
 function _vote_control() {
-  _vote_control = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(vote_box, vote_type) {
-    var increment, decrement;
+  _vote_control = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(vote_box, vote_type, post_id) {
+    var _ref, increment_btn, decrement_btn, vote_count_box, vote_count;
+
     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            //vote control
-            increment = vote_box.querySelector(".".concat(arrow_up)), decrement = vote_box.querySelector(".".concat(arrow_down));
-            console.log(increment); //reset vote controls
+            _ref = _toConsumableArray(vote_box.getElementsByClassName('vote-control')), increment_btn = _ref[0], decrement_btn = _ref[1];
+            vote_count_box = vote_box.querySelector('.vote-count');
+            vote_count = parseInt(vote_count_box.innerText); //update vote
 
-          case 2:
+            fetch("/".concat(post_id, "/post/vote"), {
+              method: 'put',
+              body: JSON.stringify({
+                'type': vote_type
+              }),
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.csrf
+              }
+            }).then(function (res) {
+              return res.ok ? res.json() : Promise.reject(res.json());
+            }).then(function (data) {
+              var _data$vote;
+
+              switch (data === null || data === void 0 ? void 0 : (_data$vote = data.vote) === null || _data$vote === void 0 ? void 0 : _data$vote.vote_type) {
+                case 'increment':
+                  increment_btn.className = increment_btn.className.replace(arrow_up, arrow_up_fill);
+                  decrement_btn.className = decrement_btn.className.replace(arrow_down_fill, arrow_down);
+                  break;
+
+                case 'decrement':
+                  decrement_btn.className = decrement_btn.className.replace(arrow_down, arrow_down_fill);
+                  increment_btn.className = increment_btn.className.replace(arrow_up_fill, arrow_up);
+                  break;
+
+                case undefined:
+                  increment_btn.className = increment_btn.className.replace(arrow_up_fill, arrow_up);
+                  decrement_btn.className = decrement_btn.className.replace(arrow_down_fill, arrow_down);
+                  break;
+
+                default:
+                  break;
+              }
+
+              vote_count_box.innerText = data === null || data === void 0 ? void 0 : data.vote_count;
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+
+          case 4:
           case "end":
             return _context.stop();
         }

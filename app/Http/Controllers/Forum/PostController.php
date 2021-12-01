@@ -126,19 +126,16 @@ class PostController extends Controller
     public function updateVote(Request $request, Post $post)
     {
         $user = $request->user();
-        if ($user->cannot('access', $post)) {
-            return abort(401, 'unautorized');
-        }
 
         $request->validate(['type' => 'required|in:increment,decrement']);
 
-        $voted = $post->votes()->where('voted_id', $user->id)->first();
+        $voted = $post->votes()->where('voter_id', $user->id)->first();
 
         if ($post->post_type == 'post') {
 
             if ($voted) {
                 $voted->delete();
-                return response()->json(['votes' => $post->votes->count(), 'type' => 'remove']);
+                return response()->json(['votes' => $post->vote_count, 'type' => 'remove']);
             } else {
                 $post->votes()->create([
                     'vote_type' => 'increment',
@@ -150,20 +147,20 @@ class PostController extends Controller
         if ($post->post_type !== 'post') {
 
             //unvote post if previous vote and the new request vote type is same other wise make a new vote
+            $voted?->delete();
             if ($voted?->vote_type == $request->type) {
-                $voted->delete();
-                return response()->json(['vote' => null]);
+                return response()->json(['vote' => null, 'vote_count' => $post->vote_count]);
             } else {
-                $post->votes()->where('voter_id', $user->id)->delete();
                 $vote = $post->votes()->create([
                     'vote_type' => $request->type,
                     'voter_id' => $user->id,
                 ]);
-                return response()->json($vote);
+
+                return response()->json(['vote' => $vote, 'vote_count' => $post->vote_count]);
             }
         }
 
-        return response()->json(['votes' => $post->voteCount(), 'type' => $request->type]);
+        return response()->json(['votes' => $post->vote_count, 'type' => $request->type]);
     }
 
     public function acceptAnswer(Request $request, Post $post)

@@ -78,6 +78,13 @@ class Post extends Model
         }
     }
 
+    public function getVoteCountAttribute()
+    {
+        $increments = $this->votes()->where('vote_type', 'increment')->count();
+        $decrements = $this->votes()->where('vote_type', 'decrement')->count();
+        return $increments - $decrements;
+    }
+
     // public function answerdByMe()
     // {
     //     if ($this->post_type == 'answer') {

@@ -13,12 +13,12 @@
         </a>
         <p class="content">{{ $reviewData->content }}</p>
         @if ($canModify())
-            <x-course.create class="review-edit" cancelable="true" data-reviewable-id="{{ $reviewData->id }}"
+            <x-course.review.create class="review-edit" cancelable="true" data-reviewable-id="{{ $reviewData->id }}"
                 data-review-type="{{ $reviewData->reviewable_type }}">
                 @if ($isReview)
                     <x-course.rating />
                 @endif
-            </x-course.create>
+            </x-course.ewview.create>
         @endif
 
     </div>
@@ -38,7 +38,7 @@
         @endif
     </div>
     {{-- add replies here form javascript --}}
-    <x-course.create class="reply-create" cancelable="true" data-reviewable-id="{{ $reviewData->id }}"
+    <x-course.review.create class="reply-create" cancelable="true" data-reviewable-id="{{ $reviewData->id }}"
         data-review-type="review_reply" />
     <div class="replies">
     </div>

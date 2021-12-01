@@ -79,17 +79,17 @@ Route::middleware(['auth:web'])->group(function () {
 
     Route::middleware('verified')->group(function () {
         //show course
-        
+
         //create course
         Route::post('/create/course', [CourseController::class, 'createCourse'])->name('create.course');
         Route::get('/create/course', fn () => view('pages/course/Create')->with('test', 'hello'));
-        
+
         //update course
         Route::get('/update/course/{course}', [CourseController::class, 'showEditCourse']);
         Route::put('/update/course/{course}', [CourseController::class, 'updateDetails'])->name('update.course');
         Route::post('/update/course/{course}/thumbnail', [CourseController::class, 'setThumbnail'])->name('update.course.thumbnail');
         Route::post('/update/course/{course}/introduction', [CourseController::class, 'setIntroduction'])->name('update.course.introduction');
-        
+
         //course tutorial
         Route::get('/show/tutorial/{tutorial}/{course}', [TutorialController::class, 'streamTutorial'])->name('show.tutorial');
         Route::post('/course/{course}/tutorial', [TutorialController::class, 'addTutorial'])->name('course.tutorial.add');
@@ -119,7 +119,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/show/question/{question}', [PostController::class, 'getQuestion'])->name('show.question');
         Route::get('/show/post/{post}', [PostController::class, 'getPost'])->name('show.post');
 
-        Route::put('/{post}/post/vote', [PostController::class, 'updateVote'])->name('post.update.vote');
+        Route::put('/{post}/post/vote', [PostController::class, 'updateVote'])->name('post.update.vote')->middleware(['can:access,post']);
         Route::put('/{post}/post/answer', [PostController::class, 'acceptAnswer'])->name('post.update.answer');
         Route::delete('/{post}/post/delete', [PostController::class, 'deletePost'])->name('post.delete');
 
