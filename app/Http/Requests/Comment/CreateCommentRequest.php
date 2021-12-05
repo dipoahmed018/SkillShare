@@ -29,6 +29,7 @@ class CreateCommentRequest extends FormRequest
             'content' => 'required|min:1|max:1000',
             'type' => ['required', Rule::in(['parent', 'reply'])],
             'commentable' => 'required|integer|min:0',
+            'references' => 'array',
         ];
     }
 }

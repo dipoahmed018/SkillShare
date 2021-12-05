@@ -26,16 +26,24 @@ class CommentController extends Controller
         if ($type == 'reply') {
             $commentable = $commentable->commentable_type == 'reply' ? $commentable->parent : $commentable;
         }
-        
+
         $comment = Comment::create([
             'content' => $content,
             'owner' => $request->user()->id,
             'vote' => 0,
             'commentable_id' => $commentable->id,
             'commentable_type' => $type,
-            'references_id' => $request->references,
         ]);
-        
+
+        //handel references 
+        if ($request->filled('references')) {
+
+            $references = [];
+            $request->references->each(fn ($user) => $reference[] = ['user_id' => $user]);
+            Log::channel('event')->info('references', [$references]);
+            $comment->references()->saveMany($references);
+        }
+
         return response()->json($comment, 200);
     }
 

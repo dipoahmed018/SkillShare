@@ -36,6 +36,14 @@ class Comment extends Model
             return $this->belongsTo(Post::class, 'commentable_id');
         }
     }
+    public function referenceUsers()
+    {
+        $this->hasManyThrough(User::class, 'comment_references', 'comment_id','id', 'id', 'user_id');
+    }
+    public function references()
+    {
+        $this->hasMany(CommentReferences::class, 'comment_id');
+    }
     public function votes()
     {
         return $this->morphMany(Vote::class, 'voteable');

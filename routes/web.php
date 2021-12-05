@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Forum\CommentController;
+use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\Forum\ForumController;
 use App\Http\Controllers\Forum\PostController;
 use App\Http\Controllers\Review\ReviewController;
