@@ -15,7 +15,10 @@ class Comment extends Model
         'vote',
         'commentable_id',
         'comment_type',
-
+        'reference_ids',
+    ];
+    protected $casts = [
+        'reference_ids' => 'array'
     ];
     public function ownerDetails()
     {
