@@ -7,7 +7,7 @@ use function PHPUnit\Framework\assertTrue;
 
 class PostTest extends TestCase
 {
-    function testVoteCreate()
+    function test_vote_create()
     {
         $post= Post::find(81);
         $vote = $post->votes()->create([

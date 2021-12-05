@@ -103,7 +103,7 @@ class PostController extends Controller
             'ownerDetails',
             'acceptedAnswer',
             'comments' => fn ($q) => $q->limit(5),
-            'comments.ownerDetails'
+            'comments.ownerDetails.profilePicture'
         ])
             ->loadCount([
                 'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
@@ -117,14 +117,16 @@ class PostController extends Controller
                 'ownerDetails',
                 'voted',
                 'comments' => fn ($q) => $q->limit(5),
-                'ownerDetails',
+                'comments.ownerDetails.profilePicture',
             ])
             ->withCount([
                 'votes as increments' => fn ($q) => $q->where('vote_type', 'increment'),
                 'votes as decrements' => fn ($q) => $q->where('vote_type', 'decrement'),
             ])
             ->paginate('10', ['*'], 'answers');
-
+        
+            //load references
+            
         return view('pages/forum/Question', ['question' => $question]);
     }
     public function getPost(Request $request, Post $post)

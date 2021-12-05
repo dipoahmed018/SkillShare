@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Forum;
+namespace App\Http\Controllers\Comment;
 
 use App\Models\Post;
 use App\Models\Vote;
@@ -22,17 +22,20 @@ class CommentController extends Controller
         if ($request->user()->cannot('access', $commentable)) {
             return abort(401, 'unauthorized');
         }
+        // if comment type is reply makes sure that parent is not a reply so that there can no mulitilevel nested reply
         if ($type == 'reply') {
-            $content = '<a href="' . env('APP_URL') . '/user//' . $commentable->owner . '/profile">@' . $commentable->ownerDetails->name . '</a> <div class="reply-content"> ' . $request->content . '</div>';
             $commentable = $commentable->commentable_type == 'reply' ? $commentable->parent : $commentable;
         }
+        
         $comment = Comment::create([
             'content' => $content,
             'owner' => $request->user()->id,
             'vote' => 0,
             'commentable_id' => $commentable->id,
             'commentable_type' => $type,
+            'references_id' => $request->references,
         ]);
+        
         return response()->json($comment, 200);
     }
 

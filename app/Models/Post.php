@@ -84,13 +84,4 @@ class Post extends Model
         $decrements = $this->votes()->where('vote_type', 'decrement')->count();
         return $increments - $decrements;
     }
-
-    // public function answerdByMe()
-    // {
-    //     if ($this->post_type == 'answer') {
-    //         $postable = Post::find($this->postable_id);
-    //         return $postable->answer == $this->id;
-    //     }
-    //     return false;
-    // }
 }
