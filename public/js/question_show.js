@@ -12,6 +12,48 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
+/***/ "./resources/js/component/comment/editor.js":
+/*!**************************************************!*\
+  !*** ./resources/js/component/comment/editor.js ***!
+  \**************************************************/
+/***/ (() => {
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//show comment editor form
+var comment_editor_btns = _toConsumableArray(document.getElementsByClassName('comment-editor-show'));
+
+comment_editor_btns.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var comment_id = e.target.getAttribute("data-comment-id");
+    var form = document.getElementById("comment-edit-".concat(comment_id));
+    form.classList.remove('hide');
+  });
+}); //hide comment form btns
+
+var comment_hider_btns = _toConsumableArray(document.getElementsByClassName('comment-form-cancel'));
+
+comment_hider_btns === null || comment_hider_btns === void 0 ? void 0 : comment_hider_btns.forEach(function (element) {
+  return element.addEventListener('click', hideCommentForm);
+}); //hide form
+
+function hideCommentForm(e) {
+  var form = e.target.parentElement;
+  form.target.classList.add('hide');
+}
+
+/***/ }),
+
 /***/ "./node_modules/regenerator-runtime/runtime.js":
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
@@ -871,6 +913,8 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+__webpack_require__(/*! ../component/comment/editor */ "./resources/js/component/comment/editor.js");
 
 var answer_input_box = document.getElementById('answer-input');
 console.log(answer_input_box);

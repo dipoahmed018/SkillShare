@@ -15,20 +15,30 @@ $votes = $post->incrementVotes - $post->decrementVotes;
 
 
         {{-- @if ($user?->id == $post->ownerDetails->id) --}}
-            <x-qna.control :id="$post->id" :modal-target="$editModalTarget" />
+        <x-qna.control :id="$post->id" :modal-target="$editModalTarget" />
         {{-- @endif --}}
 
     </div>
     <div class="content-wrapper">
-        <x-qna.vote :votes="$votes" :voted="$post->voted" :post="$post"/>
+        <x-qna.vote :votes="$votes" :voted="$post->voted" :post="$post" />
         <div class="content">
             {!! $post->content !!}
         </div>
     </div>
 
-    <div class="comments">
-        @foreach ($post->comments as $comments)
-                
-        @endforeach
+    <div class="comments-wrapper">
+        <div class="comments">
+            @foreach ($post->comments as $comment)
+                <x-comment.card :comment="$comment" />
+                <x-comment.card :comment="$comment" />
+                <x-comment.card :comment="$comment" />
+                <x-comment.card :comment="$comment" />
+                <x-comment.card :comment="$comment" />
+            @endforeach
+        </div>
+        <div class="create-comment">
+            <x-comment.form placeholder="type your comment here" :cancelable="false"/>
+        </div>
+        <button>Load more</button>
     </div>
 </div>

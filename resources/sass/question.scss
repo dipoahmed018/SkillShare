@@ -10,13 +10,15 @@ $delete : rgb(196, 56, 56);
 $edit : rgb(194, 196, 76);
 
 
-.question, .answer {
+.question,
+.answer {
     display: flex;
     flex-direction: column;
     margin: 0.2em;
     padding: 0.2em;
     // background-color: rgb(196, 196, 196);
     background-color: $dark_blue;
+
     .details {
         display: flex;
         flex-direction: row;
@@ -24,12 +26,15 @@ $edit : rgb(194, 196, 76);
         border: 1px solid $deep_green;
         border-radius: 5px;
         color: $deep_green;
+
         .info {
             display: flex;
             flex-direction: column;
+
             .title {
                 margin-top: 0.2em;
             }
+
             .additional-info {
                 color: $glass_green;
                 font-size: 0.9em;
@@ -37,14 +42,17 @@ $edit : rgb(194, 196, 76);
                 margin-bottom: 0.2em;
             }
         }
+
         .control {
             margin: auto 1% auto auto;
             display: flex;
             gap: 0.2em;
+
             i {
                 cursor: pointer;
                 color: $stars;
             }
+
             button {
                 padding: 0px;
                 background-color: transparent;
@@ -55,11 +63,13 @@ $edit : rgb(194, 196, 76);
             .update {
                 color: $edit;
             }
+
             .delete {
                 color: $delete
             }
         }
     }
+
     .content-wrapper {
         display: flex;
         flex-direction: row;
@@ -70,16 +80,19 @@ $edit : rgb(194, 196, 76);
             margin: auto 1% auto 1%;
             align-items: center;
             text-align: center;
+
             i {
                 font-size: 1.2em;
                 cursor: pointer;
                 color: $deep_green;
             }
+
             .votes {
                 color: $glass_green;
                 text-align: center;
             }
         }
+
         .content {
             width: 100%;
             margin-left: auto;
@@ -88,31 +101,37 @@ $edit : rgb(194, 196, 76);
             // background-color: ;
             justify-self: stretch;
             color: $glass_green;
+
             img {
                 max-width: 100%;
                 max-height: 1000px;
             }
         }
     }
-    .comments {
+
+    .comments-wrapper {
         display: flex;
-        padding: 1em;
-        p {
-            width: 100%;
-            background-color: $glass_green;
+        flex-direction: column;
+        margin-left: 1em;
+
+        .comments {
+            display: flex;
+            flex-direction: column;
         }
     }
 }
+
 .answers-wrapper {
     margin-top: 5em;
     padding: 1em;
-    
+
     #create-answer {
         display: flex;
         flex-direction: column;
         justify-content: center;
         background-color: $deep_green;
         padding: 0.5em;
+
         button[type=submit] {
             width: 10em;
             margin: 0.5em auto 0.5em auto;
@@ -122,7 +141,112 @@ $edit : rgb(194, 196, 76);
             color: white;
         }
     }
+
     .answers-label {
         margin-top: 2em;
+    }
+}
+
+//comment card
+.comment-card,
+.reply-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // border-left: 1px solid gray;
+    // border-top: 1px solid white;
+    // border-bottom: 1px solid white;
+
+    .comment-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        column-gap: 0.3em;
+
+        .owner-details {
+            text-decoration: none;
+            display: flex;
+            gap: 5px;
+            margin: 5px;
+
+            .profile-image,
+            .profile-text {
+                display: flex;
+                width: 1.9em;
+                height: 1.9em;
+                font-size: 0.8em;
+                border-radius: 50%;
+                background-color: $shallow_green;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .content {
+            color: $deep_green;
+            margin: 0px;
+            padding: 0px;
+            // margin: 5px;
+            font-size: 0.8em;
+        }
+    }
+
+    .comment-control {
+        color: gray;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        margin: 5px;
+    }
+
+    .more-replies {
+        color: $deep_green;
+        margin: 10px;
+    }
+}
+
+//comment form
+.comment-edit,
+.reply-create,
+.comment-form {
+    position: relative;
+    margin: 10px;
+    width: 70%;
+
+    input {
+        width: 100%;
+        background: transparent;
+        border: 1px solid $deep_green;
+        border-radius: 15px;
+        outline: none;
+        padding-left: 0.5em;
+        padding-right: 2em;
+    }
+
+    .comment-submit {
+        position: absolute;
+        display: block;
+        background-color: transparent;
+        background-image: url('assets/send.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        width: 1.2em;
+        height: 1em;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 3%;
+        border: none;
+    }
+
+    .comment-form-cancel {
+        position: absolute;
+        right: -1.5em;
+        top: 50%;
+        color: $shallow_green;
+        transform: translateY(-50%);
+
+        &:hover {
+            color: $deep_green;
+        }
     }
 }

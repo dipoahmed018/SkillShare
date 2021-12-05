@@ -1,3 +1,5 @@
+require('../component/comment/editor')
+
 
 const answer_input_box = document.getElementById('answer-input')
 console.log(answer_input_box)

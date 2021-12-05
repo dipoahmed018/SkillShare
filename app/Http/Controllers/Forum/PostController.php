@@ -99,10 +99,16 @@ class PostController extends Controller
             return abort(422, 'question not available');
         }
 
-        $question->load('ownerDetails', 'acceptedAnswer')->loadCount([
-            'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
-            'votes as decrementVotes' => fn ($q) => $q->where('vote_type', 'decrement'),
-        ]);
+        $question->load([
+            'ownerDetails',
+            'acceptedAnswer',
+            'comments' => fn ($q) => $q->limit(5),
+            'comments.ownerDetails'
+        ])
+            ->loadCount([
+                'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
+                'votes as decrementVotes' => fn ($q) => $q->where('vote_type', 'decrement'),
+            ]);
 
         $question->voted = $user ? $question->votes()->where('voter_id', $user?->id)->first() : null;
 
@@ -110,7 +116,8 @@ class PostController extends Controller
             ->with([
                 'ownerDetails',
                 'voted',
-                'comments' => fn ($q) => $q->limit(10),
+                'comments' => fn ($q) => $q->limit(5),
+                'ownerDetails',
             ])
             ->withCount([
                 'votes as increments' => fn ($q) => $q->where('vote_type', 'increment'),
