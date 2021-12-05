@@ -26,7 +26,7 @@ class UpdateCommentTableAddReferencesColumn extends Migration
     public function down()
     {
         Schema::table('comment', function (Blueprint $table) {
-            //
+            $table->dropColumn('reference_ids');
         });
     }
 }
