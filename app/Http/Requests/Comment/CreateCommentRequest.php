@@ -4,6 +4,7 @@ namespace App\Http\Requests\Comment;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class CreateCommentRequest extends FormRequest
@@ -25,11 +26,14 @@ class CreateCommentRequest extends FormRequest
      */
     public function rules()
     {
+        Log::channel('event')->info('iam er',[]);
+
         return [
             'content' => 'required|min:1|max:1000',
             'type' => ['required', Rule::in(['parent', 'reply'])],
             'commentable' => 'required|integer|min:0',
             'references' => 'array',
+            'references.*' => 'integer',
         ];
     }
 }

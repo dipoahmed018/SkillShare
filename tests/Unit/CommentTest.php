@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Comment;
+use App\Models\User;
 use Tests\TestCase;
 
 class CommentTest extends TestCase
@@ -12,15 +13,16 @@ class CommentTest extends TestCase
      *
      * @return void
      */
-    public function test_create_comment()
+    public function test_create_comment_method()
     {
-        Comment::create([
-            'content' => 'hello worlasldflsadfjlsdafkj',
-            'owner' => 7,
-            'comment_type' => 'parent',
-            'commentable_id' => 10,
-            'commentable_type' => 'question',
-            'reference_ids' => [2, 4, 5, 6, 7, 8],
-        ]);
+        $user = User::find(3);
+        $response = $this->actingAs($user)
+            ->postJson('/comment/create', [
+                'content' => 'hello world',
+                'commentable' => 4,
+                'type' => 'reply',
+                'references' => [1, 2, 3, 4],
+            ]);
+        $response->assertStatus(200);
     }
 }

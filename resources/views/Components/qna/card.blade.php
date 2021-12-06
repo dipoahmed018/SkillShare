@@ -29,16 +29,17 @@ $votes = $post->incrementVotes - $post->decrementVotes;
     <div class="comments-wrapper">
         <div class="comments">
             @foreach ($post->comments as $comment)
-                <x-comment.card :comment="$comment" />
-                <x-comment.card :comment="$comment" />
-                <x-comment.card :comment="$comment" />
-                <x-comment.card :comment="$comment" />
-                <x-comment.card :comment="$comment" />
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
             @endforeach
         </div>
         <div class="create-comment">
-            <x-comment.form placeholder="type your comment here" :cancelable="false"/>
+            <x-comment.form id="comment-create-{{$post->id}}" data-commentable-id="{{$post->id}}" placeholder="type your comment here" :cancelable="true"/>
         </div>
+        <button class="comment-create-btn">Comment</button>
         <button>Load more</button>
     </div>
 </div>

@@ -11,7 +11,7 @@ class CommentReferences extends Model
     use HasFactory;
     
     protected $table = 'comment_references';
-    protected $filable = [
+    protected $fillable = [
         'user_id',
         'comment_id',
     ];

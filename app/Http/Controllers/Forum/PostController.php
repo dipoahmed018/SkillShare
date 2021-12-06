@@ -103,7 +103,8 @@ class PostController extends Controller
             'ownerDetails',
             'acceptedAnswer',
             'comments' => fn ($q) => $q->limit(5),
-            'comments.ownerDetails.profilePicture'
+            'comments.ownerDetails.profilePicture',
+            'comments.referenceUsers',
         ])
             ->loadCount([
                 'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
@@ -118,6 +119,7 @@ class PostController extends Controller
                 'voted',
                 'comments' => fn ($q) => $q->limit(5),
                 'comments.ownerDetails.profilePicture',
+                'comments.referenceUsers',
             ])
             ->withCount([
                 'votes as increments' => fn ($q) => $q->where('vote_type', 'increment'),

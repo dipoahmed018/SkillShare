@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Comment\CreateCommentRequest;
+use App\Models\CommentReferences;
 use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
@@ -18,33 +19,32 @@ class CommentController extends Controller
     {
         $type = $request->type;
         $content = $request->content;
+        $user = $request->user();
         $commentable = $type == 'parent' ? Post::findOrFail($request->commentable) : Comment::findOrFail($request->commentable);
-        if ($request->user()->cannot('access', $commentable)) {
+        if ($user->cannot('access', $commentable)) {
             return abort(401, 'unauthorized');
         }
+        Log::channel('event')->info('iam erer', []);
         // if comment type is reply makes sure that parent is not a reply so that there can no mulitilevel nested reply
         if ($type == 'reply') {
             $commentable = $commentable->commentable_type == 'reply' ? $commentable->parent : $commentable;
         }
-
+        //handel references 
         $comment = Comment::create([
             'content' => $content,
-            'owner' => $request->user()->id,
-            'vote' => 0,
+            'owner' => $user->id,
             'commentable_id' => $commentable->id,
-            'commentable_type' => $type,
+            'comment_type' => $type,
         ]);
 
-        //handel references 
+        $references = null;
         if ($request->filled('references')) {
-
-            $references = [];
-            $request->references->each(fn ($user) => $reference[] = ['user_id' => $user]);
-            Log::channel('event')->info('references', [$references]);
+            $references = collect($request->references);
+            $references = $references->map(fn ($user) => new CommentReferences(['user_id' => $user]));
             $comment->references()->saveMany($references);
         }
 
-        return response()->json($comment, 200);
+        return response()->json($comment, 201);
     }
 
     public function updateComment(Request $request, Comment $comment)
@@ -55,15 +55,9 @@ class CommentController extends Controller
         $request->validate([
             'content' => 'required|string|min:5',
         ]);
-        if ($comment->comment_type == 'reply') {
-            $commentable = $comment->parent;
-            $comment->content = "<a href=" . env('APP_URL') . "/user/$commentable->owner/profile>@$commentable->ownerDetails->name</a> <div class='reply-content'>$request->content</div>";
-            $comment->save();
-            return response()->json($comment, 200);
-        }
         $comment->content = $request->content;
         $comment->save();
-        return response()->json($comment, 200);
+        return response()->json($comment, 204);
     }
     public function deleteComment(Request $request, Comment $comment)
     {

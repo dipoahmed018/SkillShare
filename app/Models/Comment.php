@@ -38,11 +38,11 @@ class Comment extends Model
     }
     public function referenceUsers()
     {
-        $this->hasManyThrough(User::class, 'comment_references', 'comment_id','id', 'id', 'user_id');
+       return  $this->hasManyThrough(User::class, CommentReferences::class, 'comment_id','id', 'id', 'user_id');
     }
     public function references()
     {
-        $this->hasMany(CommentReferences::class, 'comment_id');
+        return $this->hasMany(CommentReferences::class, 'comment_id');
     }
     public function votes()
     {

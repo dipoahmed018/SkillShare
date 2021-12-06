@@ -32,7 +32,7 @@
 
     <main>
         <section class="question-wrapper">
-            <x-qna.index :post="$question" :user="$user" editModalTarget="post-edit-modal" />
+            <x-qna.card :post="$question" :user="$user" editModalTarget="post-edit-modal" />
         </section>
         <section class="answers-wrapper">
             <form  id="create-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
@@ -44,7 +44,7 @@
             <h6 class="answers-label">Answers</h6>
             <div class="answers">
                 @foreach ($question->answers as $answer)
-                    <x-qna.index :post="$answer" :user="$user" editModalTarget="post-edit-modal" />
+                    <x-qna.card :post="$answer" :user="$user" editModalTarget="post-edit-modal" />
                 @endforeach
             </div>
         </section>
