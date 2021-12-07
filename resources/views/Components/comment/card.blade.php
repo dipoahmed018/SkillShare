@@ -30,7 +30,7 @@
         @if ($canModify)
             <span class="comment-delete" style="cursor: pointer" data-comment-id="{{ $comment->id }}">Delete</span>
             <span class="comment-editor-show" data-comment-id="{{ $comment->id }}" style="cursor: pointer"">Edit</span>
-            @endif
+        @endif
                 <span class="reply-creator-show" data-comment-id="{{ $comment->id }}"
                     data-reference-id={{ $comment->owner }} data-reference-name="{{ $comment->ownerDetails->name }}"
                     style="cursor: pointer">reply</span>

@@ -124,6 +124,35 @@
   flex-direction: column;
 }
 
+.question .comments-wrapper .comment-create-btn,
+.answer .comments-wrapper .comment-create-btn {
+  width: 10em;
+  font-size: 0.8em;
+  border: 1px solid #0FA958;
+  border-radius: 20px;
+  background-color: #223b57;
+  color: #0FA958;
+  margin: auto 0px 1em 40%;
+  padding: 0.4em;
+}
+
+.question .comments-wrapper .comment-create-btn:hover,
+.answer .comments-wrapper .comment-create-btn:hover {
+  border: 1px solid white;
+  color: white;
+}
+
+.question .load-more,
+.answer .load-more {
+  width: 10em;
+  margin: 0.2em 0% 0.2em 40%;
+  background-color: #223b57;
+  border: 1px solid white;
+  padding: 0px;
+  border-radius: 20px;
+  font-size: 0.8em;
+}
+
 .answers-wrapper {
   margin-top: 5em;
   padding: 1em;
@@ -212,6 +241,12 @@
   font-size: 0.8em;
 }
 
+.comment-card > .comment-content > .hide,
+.reply-card > .comment-content > .hide {
+  display: none;
+  pointer-events: none;
+}
+
 .comment-card .comment-control,
 .reply-card .comment-control {
   color: gray;
@@ -248,6 +283,13 @@
   outline: none;
   padding-left: 0.5em;
   padding-right: 2em;
+  color: white;
+}
+
+.comment-edit input:focus,
+.reply-create input:focus,
+.comment-form input:focus {
+  border: 1px solid white;
 }
 
 .comment-edit .comment-submit,

@@ -1,9 +1,10 @@
 @props(['post', 'user', 'editModalTarget' => 'edit-post-modal'])
 @php
 $votes = $post->incrementVotes - $post->decrementVotes;
+$commentsAvailable = $post->comments?->count()
 @endphp
 
-<div class={{ $post->post_type }} id={{ "$post->post_type - $post->id" }}>
+<div class="{{ $post->post_type }} post-{{$post->id}}" id={{ "$post->post_type - $post->id" }}>
     <div class="details">
 
         @if ($post->post_type == 'question')
@@ -29,17 +30,16 @@ $votes = $post->incrementVotes - $post->decrementVotes;
     <div class="comments-wrapper">
         <div class="comments">
             @foreach ($post->comments as $comment)
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false"/>  
+                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false" />
             @endforeach
         </div>
         <div class="create-comment">
-            <x-comment.form id="comment-create-{{$post->id}}" data-commentable-id="{{$post->id}}" placeholder="type your comment here" :cancelable="true"/>
+            <x-comment.form id="comment-create-{{ $post->id }}" data-commentable-id="{{ $post->id }}"
+                placeholder="type your comment here" :cancelable="true" />
         </div>
         <button class="comment-create-btn">Comment</button>
-        <button>Load more</button>
+        @if ($post->comments_count > 5)
+            <button class="load-more" data-offset="{{$commentsAvailable}}" data-post-id="{{$post->id}}">Load more</button>
+        @endif
     </div>
 </div>

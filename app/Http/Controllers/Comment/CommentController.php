@@ -15,6 +15,34 @@ use Illuminate\Support\Facades\Log;
 
 class CommentController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $request->validate([
+            'offset' => 'integer',
+            'limit' => 'integer',
+        ]);
+        
+        if ($request->post) {
+            $post = Post::findOrFail($request->post);
+            $data = [];
+
+            $comments = $post->comments()->with([
+                'ownerDetails.profilePicture',
+                'referenceUsers',
+            ])
+                ->oldest()->offset($request->offset ?? 0)->limit($request->limit ?? 5)->get();
+
+            //check if more comments available after this request
+            $nextoffset = ($request->offset ?? 0) + ($request->limit ?? 5);
+            $data['has_more'] = $post->comments()->offset($nextoffset)->limit($request->limit ?? 5)->get()->count() > 0 ? true : false;
+
+            $data['comments'] = $comments;
+            return response()->json($data, 200);
+        }
+        $comments = Comment::with(['ownerDetails.profilePicture', 'referenceUsers'])->paginate(10);
+        return response()->json($comments);
+    }
     public function commentCreate(CreateCommentRequest $request)
     {
         $type = $request->type;
@@ -43,7 +71,10 @@ class CommentController extends Controller
             $references = $references->map(fn ($user) => new CommentReferences(['user_id' => $user]));
             $comment->references()->saveMany($references);
         }
-
+        $comment->load([
+            'ownerDetails.profilePicture',
+            'referenceUsers',
+        ]);
         return response()->json($comment, 201);
     }
 

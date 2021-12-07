@@ -109,6 +109,7 @@ class PostController extends Controller
             ->loadCount([
                 'votes as incrementVotes' => fn ($q) => $q->where('vote_type', 'increment'),
                 'votes as decrementVotes' => fn ($q) => $q->where('vote_type', 'decrement'),
+                'comments'
             ]);
 
         $question->voted = $user ? $question->votes()->where('voter_id', $user?->id)->first() : null;
@@ -124,6 +125,7 @@ class PostController extends Controller
             ->withCount([
                 'votes as increments' => fn ($q) => $q->where('vote_type', 'increment'),
                 'votes as decrements' => fn ($q) => $q->where('vote_type', 'decrement'),
+                'comments',
             ])
             ->paginate('10', ['*'], 'answers');
         

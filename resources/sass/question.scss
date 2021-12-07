@@ -118,6 +118,29 @@ $edit : rgb(194, 196, 76);
             display: flex;
             flex-direction: column;
         }
+        .comment-create-btn {
+            width: 10em;
+            font-size: 0.8em;
+            border: 1px solid $deep_green;
+            border-radius: 20px;
+            background-color: $dark_blue;
+            color: $deep_green;
+            margin: auto 0px 1em 40%;
+            padding: 0.4em;
+            &:hover {
+                border: 1px solid white;
+                color: white;
+            }
+        }
+    }
+    .load-more {
+        width: 10em;
+        margin: 0.2em 0% 0.2em 40%;
+        background-color: $dark_blue;
+        border: 1px solid white;
+        padding: 0px;
+        border-radius: 20px;
+        font-size: 0.8em;
     }
 }
 
@@ -198,6 +221,10 @@ $edit : rgb(194, 196, 76);
                 font-size: 0.8em;
             }
         }
+        >.hide {
+            display: none;
+            pointer-events: none;
+        }
     }
 
     .comment-control {
@@ -232,6 +259,10 @@ $edit : rgb(194, 196, 76);
         outline: none;
         padding-left: 0.5em;
         padding-right: 2em;
+        color: white;
+        &:focus {
+            border: 1px solid white;
+        }
     }
 
     .comment-submit {

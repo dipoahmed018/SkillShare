@@ -124,6 +124,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::delete('/{post}/post/delete', [PostController::class, 'deletePost'])->name('post.delete');
 
         //comment
+        Route::get('/comments/index/{post?}', [CommentController::class, 'index'])->name('commets');
         Route::post('/comment/create', [CommentController::class, 'commentCreate'])->name('comment.create');
         Route::put('/{comment}/comment/update', [CommentController::class, 'updateComment'])->name('comment.update');
         Route::delete('/{comment}/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
