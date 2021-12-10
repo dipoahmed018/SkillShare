@@ -233,6 +233,12 @@ $edit : rgb(194, 196, 76);
         flex-wrap: wrap;
         gap: 1em;
         margin: 5px;
+        font-size: 0.7em;
+        button {
+            background-color: transparent;
+            border: 0px;
+            color: gray;
+        }
     }
 
     .more-replies {

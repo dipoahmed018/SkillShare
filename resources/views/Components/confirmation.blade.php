@@ -3,7 +3,7 @@
 <div class="yes-no-confirm">
     <p>{{$title}}</p>
     <div class="buttons">
-        <button class="yes" {{{$attributes['yes']}}}>Yes</button>
-        <button class="no" {{$attributes['no']}}>No</button>
+        <button class="yes" {{$attributes['yes']}} data-bs-dismiss="modal">Yes</button>
+        <button class="no" {{$attributes['no']}} data-bs-dismiss="modal">No</button>
     </div>
 </div>

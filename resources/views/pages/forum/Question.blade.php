@@ -6,74 +6,55 @@
 @endsection
 @section('body')
 
-    <x-modal title="Edit" id="edit-post-modal" size="modal-lg">
+    <x-modal title="Delete comment" id="delete-comment-confirmation" size="modal-sm">
         @slot('body')
-            <form id="edit-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
+            <x-confirmation title="Are you sure you want to delete this comment?"/>
+        @endslot
+    </x-modal>
+
+    <x-modal title="Edit Question" id="question-edit-modal" size="modal-lg">
+        @slot('body')
+            <form id="edit-answer" action="{{ route('post.update', ['post' => $question->id]) }}"
                 method="post">
                 @csrf
-                <textarea name="content" id="answer-editor-box" cols="30" rows="10"></textarea>
+                <label for="question-title">Title</label>
+                <input type="text" name="title" id="question-title">
+                <label for="question-edit-box">Question</label>
+                <textarea name="content" id="question-edit-box" cols="30" rows="10"></textarea>
                 <input id="answer-submit" type="submit" value="create answer">
             </form>
         @endslot
     </x-modal>
 
-    <x-modal title="Create answer" id="create-question-modal" size="modal-lg">
+    <x-modal title="Edit Answer" id="answer-edit-modal" size="modal-lg">
         @slot('body')
-        {{-- <form action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
-            id="create-answer" method="post">
-            @csrf
-            <label for="title">Title</label>
-            <input class="form-control" type="text" name="title" id="title" required min="10"><br>
-            <textarea name="content" id="question-input" cols="30" rows="10"></textarea>
-            <button type="submit">Create</button>
-        </form> --}}
+            <form id="edit-answer" method="post">
+                @csrf
+                <textarea name="content" id="answer-edit-box" cols="30" rows="10"></textarea>
+                <input id="answer-submit" type="submit" value="create answer">
+            </form>
         @endslot
     </x-modal>
 
     <main>
         <section class="question-wrapper">
-            <x-qna.card :post="$question" :user="$user" editModalTarget="post-edit-modal" />
+            <x-qna.card :post="$question" :user="$user" editModalTarget="question-edit-modal" />
         </section>
         <section class="answers-wrapper">
-            <form  id="create-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}"
-                id="create-answer" method="post">
+            <form  id="create-answer" action="{{ route('post.create', ['postable' => $question->id, 'type' => 'answer']) }}" method="post">
                 @csrf
-                <textarea name="content" id="answer-input" cols="30" rows="10"></textarea>
+                <textarea name="content" id="answer-create-box" cols="30" rows="10"></textarea>
                 <button type="submit">Create answer</button>
             </form>
             <h6 class="answers-label">Answers</h6>
             <div class="answers">
                 @foreach ($question->answers as $answer)
-                    <x-qna.card :post="$answer" :user="$user" editModalTarget="post-edit-modal" />
+                    <x-qna.card :post="$answer" :user="$user" editModalTarget="answer-edit-modal" />
                 @endforeach
             </div>
         </section>
     </main>
-    {{-- <div class="container row">
-        <div>
-            <form class="form-group hide" action="{{ route('post.edit', ['post' => $question->id]) }}" method="post"
-                id="edit-question">
-                @csrf
-                @method('put')
-                <label for="question-title">title</label><br>
-                <input class="form-control" type="text" name="title" id="question-title" value="{{ $question->title }}"><br>
-                <textarea name="content" id="question-editor-box" cols="30" rows="10"></textarea>
-                <input type="submit" value="update">
-                <button id="preview-question-button">preview</button>
-            </form>
-        </div>
-        <div class="col col-12" id="question-box">
-            <x-QNA-show :post="$question"></x-question-show>
-        </div>
-        answer editor modal show button
-        <button id="answer-create" data-bs-type="create-answer" class="btn btn-success">create answer</button>
 
-        <div class="col col-12 answers-box">
-            @foreach ($question->answers as $answer)
-                <x-QNA-show :post="$answer"></x-answer-show>
-            @endforeach
-        </div>
-    </div> --}}
 @endsection
 
 @section('scripts')

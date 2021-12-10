@@ -38,7 +38,7 @@ class Comment extends Model
     }
     public function referenceUsers()
     {
-       return  $this->hasManyThrough(User::class, CommentReferences::class, 'comment_id','id', 'id', 'user_id');
+       return  $this->belongsToMany(User::class, 'comment_references', 'comment_id', 'user_id');
     }
     public function references()
     {

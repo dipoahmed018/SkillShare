@@ -112,7 +112,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         //post
         Route::post('/{postable}/{type}/create', [PostController::class, 'postCreate'])->name('post.create');
-        Route::put('/post/edit/{post}', [PostController::class, 'postUpdate'])->name('post.edit');
+        Route::put('/post/edit/{post}', [PostController::class, 'postUpdate'])->name('post.update');
         Route::post('/save/post/image', [PostController::class, 'saveImage'])->name('forum.save.image');
         Route::get('/get/post/image/{name}/{post?}', [PostController::class, 'getImage'])->name('forum.get.image');
 

@@ -8,6 +8,7 @@ use App\Models\Forum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\FileLink;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -18,19 +19,18 @@ class PostController extends Controller
     {
         $request->validate([
             'title' => 'string|max:250|min:5',
-            'content' => 'string|max:2500|min:5'
+            'content' => 'string|max:2500|min:5',
+            'type' => Rule::in('question', 'answer', 'post'),
         ]);
         $postable = $type == 'answer' ? Post::findOrFail($postable) : Forum::findOrFail($postable);
         if ($request->user()->cannot('access', $postable)) {
             return abort(401, 'you are Unautorized');
         }
-        $types = ['question', 'answer', 'post'];
-        if (!in_array($type, $types)) {
-            return  abort(404);
-        }
+
         if (!$request->title && !$request->content) {
             return abort(422, ['error' => 'You must provide title or content']);
         }
+
         $post = Post::create([
             'title' => $request->title ? $request->title : null,
             'content' => $request->content ?: ($request->images && $type == 'post' ? $request->images : null),
@@ -39,19 +39,29 @@ class PostController extends Controller
             'post_type' => $type,
             'answer' => 0,
         ]);
-        if ($images = json_decode($request->images, true)) {
-            if (count($images) > 3) {
-                return abort(422, 'You can not upload more than 4 image');
+
+        if ($request->images) {
+            if (is_string($request->images)) {
+                try {
+                    $request->images = json_decode($request->images, true, 512, JSON_THROW_ON_ERROR);
+                } catch (\Throwable $th) {
+                    $post->delete();
+                    throw $th;
+                }
             }
-            foreach ($images as $key => $url) {
+            if (count($request->images) > 4) {
+                return abort(422, 'You can not upload more than 4 image');
+                $post->delete();
+            }
+            foreach ($request->images as $key => $url) {
                 //move the image to new file and convert it
-                $name = preg_replace('#.*name=#', '', $url, 1);
-                $path = storage_path("app/private/post/$name");
-                $image = Image::make(storage_path("app/temp/$name"));
+                $name = preg_replace('/.*name=/', '', $url, 1);
+                $image = Image::make(Storage::path("temp/$name"));
+                $path = Storage::path("private/post/$name");
                 $image->resize(800, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($path, 80);
-                Storage::delete('temp/' . $name);
+                Storage::delete("temp/$name");
 
                 // make a FileLink
                 FileLink::create([
@@ -63,12 +73,11 @@ class PostController extends Controller
                     'secutity' => 'private',
                 ]);
             };
-            $post->save();
         }
         return redirect()->back();
     }
 
-    public function postUpdate(Request $request, Post $post)
+    public function  postUpdate(Request $request, Post $post)
     {
         if ($request->user()->cannot('update', $post)) {
             return abort(401, 'you are Unautorized');

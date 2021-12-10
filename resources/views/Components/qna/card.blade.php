@@ -30,14 +30,13 @@ $commentsAvailable = $post->comments?->count()
     <div class="comments-wrapper">
         <div class="comments">
             @foreach ($post->comments as $comment)
-                <x-comment.card :can-modify="true" :comment="$comment" :can-reply="false" />
+                <x-comment.card :can-modify="true" :comment="$comment" :reply-form="false"/>
             @endforeach
         </div>
-        <div class="create-comment">
-            <x-comment.form id="comment-create-{{ $post->id }}" data-commentable-id="{{ $post->id }}"
-                placeholder="type your comment here" :cancelable="true" />
-        </div>
-        <button class="comment-create-btn">Comment</button>
+            <x-comment.form class="comment-create" id="comment-create-{{ $post->id }}" data-commentable-id="{{ $post->id }}"
+                placeholder="type your comment here" :cancelable="false" />
+
+        <button class="comment-create-btn" data-post-id="{{$post->id}}">Comment</button>
         @if ($post->comments_count > 5)
             <button class="load-more" data-offset="{{$commentsAvailable}}" data-post-id="{{$post->id}}">Load more</button>
         @endif

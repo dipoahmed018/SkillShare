@@ -99,6 +99,14 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -115,13 +123,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var reletiveTime = __webpack_require__(/*! dayjs/plugin/relativeTime */ "./node_modules/dayjs/plugin/relativeTime.js");
 
-dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend(reletiveTime);
-var answer_input_box = document.getElementById('answer-input');
-var answer_editor;
+dayjs__WEBPACK_IMPORTED_MODULE_0___default().extend(reletiveTime); //question and answer edit
 
-if (answer_input_box) {
-  ClassicEditor.create(answer_input_box, {
-    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'image'],
+var answer_edit_box = document.getElementById('answer-edit-box');
+var question_edit_box = document.getElementById('question-edit-box');
+var answer_create_box = document.getElementById('answer-create-box');
+var answer_editor, question_editor, answer_create_editor;
+
+if (answer_edit_box) {
+  ClassicEditor.create(answer_edit_box, {
+    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
     simpleUpload: {
       uploadUrl: "/save/image",
       withCredentials: true,
@@ -134,6 +145,66 @@ if (answer_input_box) {
   })["catch"](function (error) {
     return console.log(error);
   });
+}
+
+if (question_edit_box) {
+  ClassicEditor.create(question_edit_box, {
+    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
+    simpleUpload: {
+      uploadUrl: "/save/image",
+      withCredentials: true,
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }
+  }).then(function (ckeditor) {
+    return question_editor = ckeditor;
+  })["catch"](function (error) {
+    return console.log(error);
+  });
+}
+
+if (answer_create_box) {
+  ClassicEditor.create(answer_create_box, {
+    toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
+    simpleUpload: {
+      uploadUrl: "/save/image",
+      withCredentials: true,
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }
+  }).then(function (ckeditor) {
+    return answer_create_editor = ckeditor;
+  })["catch"](function (error) {
+    return console.log(error);
+  });
+}
+
+var answer_create_form = document.getElementById('create-answer');
+answer_create_form.addEventListener('submit', createAnswer);
+
+function createAnswer(e) {
+  var data = answer_editor.getData();
+  console.log(data);
+  var images = Image_picker(data, 4);
+  var filter = Filter_length(data);
+  var image_add = Inject_images(images, 'images', e.target);
+
+  if (images instanceof Error) {
+    e.preventDefault();
+    return popup.addPopup(images.message);
+  }
+
+  if (filter instanceof Error) {
+    e.preventDefault();
+    return popup.addPopup(filter.message);
+  }
+
+  if (image_add instanceof Error) {
+    e.preventDefault();
+    return popup.addPopup(image_add.message);
+  }
 } // vote control
 
 
@@ -203,35 +274,51 @@ function vote_control(vote_box, vote_type, post_id) {
 
 var reply_form_show_btns = _toConsumableArray(document.getElementsByClassName('reply-creator-show'));
 
-var comment_creator_form = document.getElementById("comment-create-".concat(question.id)),
-    comment_input = comment_creator_form.querySelector('[name="content"]'); //reply creator
+var comment_creator_forms = _toConsumableArray(document.getElementsByClassName('comment-create')); //reply creator
+
 
 reply_form_show_btns === null || reply_form_show_btns === void 0 ? void 0 : reply_form_show_btns.forEach(function (element) {
   element.addEventListener('click', scrollToCommentCreateForm);
 });
 
 function scrollToCommentCreateForm(e) {
+  var post_id = e.target.getAttribute('data-commentable-id');
   var reference_id = e.target.getAttribute('data-reference-id');
   var reference_name = e.target.getAttribute('data-reference-name');
+  var comment_creator_form = document.getElementById("comment-create-".concat(post_id)),
+      comment_input = comment_creator_form.querySelector('[name="content"]');
   comment_creator_form.setAttribute('data-references', JSON.stringify([reference_id]));
-  console.log(comment_input);
   comment_input.placeholder = "Reply to ".concat(reference_name);
   comment_creator_form.scrollIntoView();
   comment_input.focus();
 } //comment creator
 
 
-var comment_creator_btn = document.querySelector('.comment-create-btn');
-comment_creator_btn.addEventListener('click', function () {
-  comment_creator_form.setAttribute('data-references', null);
-  comment_input.placeholder = 'Type your comment here';
-  comment_input.focus();
+var comment_creator_btns = _toConsumableArray(document.getElementsByClassName('comment-create-btn'));
+
+comment_creator_btns.forEach(function (element) {
+  element.addEventListener('click', function (e) {
+    var post_id = e.target.getAttribute('data-post-id');
+    var comment_creator_form = document.getElementById("comment-create-".concat(post_id));
+    var comment_input = comment_creator_form.querySelector('[name="content"]');
+    comment_creator_form.setAttribute('data-references', null);
+    comment_input.placeholder = 'Type your comment here';
+    comment_input.focus();
+  });
 });
-comment_creator_form.addEventListener('submit', function (e) {
+comment_creator_forms.forEach(function (element) {
+  element.addEventListener('submit', createComment);
+});
+
+function createComment(e) {
   var _question;
 
   e.preventDefault();
-  var references = e.target.getAttribute('data-references');
+  var comment_input = e.target.querySelector('[name="content"');
+  var references = JSON.parse(e.target.getAttribute('data-references'));
+  var post_id = e.target.getAttribute('data-commentable-id');
+  var post_card = document.querySelector(".post-".concat(post_id));
+  var comments_box = post_card.querySelector(".comments");
   var form_data = {
     'commentable': (_question = question) === null || _question === void 0 ? void 0 : _question.id,
     'type': 'parent',
@@ -239,7 +326,7 @@ comment_creator_form.addEventListener('submit', function (e) {
   };
 
   if (references) {
-    form_data['references'] = JSON.parse(references);
+    form_data['references'] = references;
   }
 
   fetch('/comment/create', {
@@ -253,17 +340,19 @@ comment_creator_form.addEventListener('submit', function (e) {
   }).then(function (res) {
     return res.ok ? res.json() : Promise.reject(res.json());
   }).then(function (comment) {
-    return makeCommentHTML(comment, document.querySelector('.comments'));
+    return makeCommentHTML(comment, comments_box);
   })["catch"](function (err) {
     return console.log(err);
   });
-}); //load more comment
+} //load more comment
+
 
 var load_more_btn = _toConsumableArray(document.getElementsByClassName('load-more'));
 
 load_more_btn.forEach(function (element) {
   element.addEventListener('click', function (e) {
     var post_id = e.target.getAttribute('data-post-id');
+    var post_element = document.querySelector(".post-".concat(post_id));
     var offset = e.target.getAttribute('data-offset');
     fetch("/comments/index/".concat(post_id, "?offset=").concat(offset !== null && offset !== void 0 ? offset : 0), {
       method: 'get',
@@ -279,7 +368,7 @@ load_more_btn.forEach(function (element) {
       }
 
       data.comments.forEach(function (comment) {
-        makeCommentHTML(comment, document.querySelector('.comments'));
+        makeCommentHTML(comment, post_element.querySelector('.comments'));
       });
       e.target.setAttribute('data-offset', parseInt(offset) + 5);
     })["catch"](function (err) {
@@ -316,22 +405,115 @@ function hideCommentEditForm(e) {
   var comment_card = document.getElementById("comment-".concat(comment_id));
   edit_form.classList.add('hide');
   comment_card.querySelector('.content-wrapper').classList.remove('hide');
-} //templates 
+} //save comment editor form data to server
 
+
+var comment_editor_forms = _toConsumableArray(document.getElementsByClassName('comment-edit'));
+
+comment_editor_forms === null || comment_editor_forms === void 0 ? void 0 : comment_editor_forms.forEach(function (element) {
+  element.addEventListener('submit', updateComment);
+});
+
+function updateComment(e) {
+  e.preventDefault();
+  var edit_form = e.target;
+  var comment_id = e.target.getAttribute('data-comment-id');
+  var references = JSON.parse(e.target.getAttribute('data-references'));
+  var comment_input = edit_form.querySelector('[name="content"]');
+  var form_data = {
+    'content': comment_input.value
+  };
+
+  if (references) {
+    form_data['references'] = references;
+  }
+
+  fetch("/".concat(comment_id, "/comment/update"), {
+    method: 'PUT',
+    body: JSON.stringify(form_data),
+    headers: {
+      "Accept": 'application/json',
+      "Content-Type": 'application/json',
+      'X-CSRF-TOKEN': window.csrf
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res.json());
+  }).then(function (comment) {
+    //handel references
+    var _document$getElementB = document.getElementById("comment-".concat(comment_id)).querySelectorAll(".content-wrapper, .references, .content"),
+        _document$getElementB2 = _slicedToArray(_document$getElementB, 3),
+        content_wrapper = _document$getElementB2[0],
+        reference_box = _document$getElementB2[1],
+        content = _document$getElementB2[2];
+
+    var references_element = '';
+    var reference_ids = [];
+
+    if (comment !== null && comment !== void 0 && comment.reference_users) {
+      var _comment$reference_us;
+
+      (_comment$reference_us = comment.reference_users) === null || _comment$reference_us === void 0 ? void 0 : _comment$reference_us.forEach(function (user) {
+        reference_ids.push(user.id);
+        references_element = "<a href=\"".concat(user.id, "/profile\">@").concat(user.name, "</a>") + references_element;
+      });
+    }
+
+    console.log(reference_ids);
+    edit_form.setAttribute('data-references', reference_ids.length > 0 ? JSON.stringify(reference_ids) : null);
+    reference_box.innerHTML = references_element; //handel content
+
+    content.innerText = comment.content; //toggle form and content visibility
+
+    content_wrapper.classList.remove('hide');
+    edit_form.classList.add('hide');
+  })["catch"](function (err) {
+    return console.log(err);
+  });
+} //delete comment
+
+
+var comment_delete_modal = document.getElementById('delete-comment-confirmation'),
+    yes_button = comment_delete_modal.querySelector('.yes');
+comment_delete_modal.addEventListener('show.bs.modal', function (e) {
+  var comment_id = e.relatedTarget.getAttribute('data-comment-id');
+  yes_button.setAttribute('data-comment-id', comment_id);
+});
+yes_button.addEventListener('click', function (e) {
+  console.log('hello');
+  var comment_id = e.target.getAttribute('data-comment-id');
+  fetch("/".concat(comment_id, "/comment/delete"), {
+    method: 'DELETE',
+    headers: {
+      'X-CSRF-TOKEN': window.csrf,
+      'Accept': 'application/json'
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res);
+  }).then(function (data) {
+    var _document$getElementB3;
+
+    (_document$getElementB3 = document.getElementById("comment-".concat(comment_id))) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.remove();
+  })["catch"](function (err) {
+    return console.log(err);
+  });
+}); //templates 
 
 function makeCommentHTML(comment) {
-  var _comment$reference_us;
+  var _comment$reference_us2;
 
   var append_to = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   var references = '';
   var profile = '';
   var comment_editor = '';
   var comment_editor_btn = '';
-  var comment_deleter_btn = ''; //making refernce useres html
+  var comment_deleter_btn = '';
+  var references_ids = []; //making refernce useres html
 
-  (_comment$reference_us = comment.reference_users) === null || _comment$reference_us === void 0 ? void 0 : _comment$reference_us.forEach(function (user) {
+  (_comment$reference_us2 = comment.reference_users) === null || _comment$reference_us2 === void 0 ? void 0 : _comment$reference_us2.forEach(function (user) {
+    references_ids.push(user.id);
     references = "<a href=\"".concat(user.id, "/profile\">@").concat(user.name, "</a>") + references;
-  }); //add owner profile box
+  });
+  references_ids = references_ids.length < 1 ? null : references_ids; //add owner profile box
 
   if (comment.owner_details.profile_picture) {
     profile = "<img class=\"profile-image image\" src=\"".concat(comment.owner_details.profile_picture.file_link, " alt=\"avatar\">");
@@ -340,15 +522,15 @@ function makeCommentHTML(comment) {
   } //add comment editor and deleter
 
 
-  if (user.id !== comment.owner_details.id) {
+  if (user.id == comment.owner_details.id) {
     //editor
-    comment_editor = "<form class=\"comment-form comment-edit hide\"\n         id=\"comment-edit-".concat(comment.id, "\" data-comment-id=").concat(comment.id, "\n          action=\"/comment/create\" method=\"POST\">\n            <input type=\"text\" name=\"content\" placeholder=\"Type your comment here\"\n             value=\"").concat(comment.content, "\" minlength=\"5\" maxlength=\"2000\" required>\n            <button class=\"comment-submit\" type=\"submit\" title=\"save changes\"></button>\n            <i class=\"bi bi-x-lg comment-form-cancel\"></i>\n        </form>");
+    comment_editor = "<form class=\"comment-form comment-edit hide\"\n         id=\"comment-edit-".concat(comment.id, "\" data-comment-id=").concat(comment.id, " data-references=").concat(JSON.stringify(references_ids), "\n          action=\"/comment/create\" method=\"POST\">\n            <input type=\"text\" name=\"content\" placeholder=\"Type your comment here\"\n             value=\"").concat(comment.content, "\" minlength=\"5\" maxlength=\"2000\" required>\n            <button class=\"comment-submit\" type=\"submit\" title=\"save changes\"></button>\n            <i class=\"bi bi-x-lg comment-form-cancel\"></i>\n        </form>");
     comment_editor_btn = "<span class=\"comment-editor-show\" data-comment-id=".concat(comment.id, " style=\"cursor: pointer\"\">Edit</span>"); //deteler
 
     comment_deleter_btn = "<span class=\"comment-delete\" style=\"cursor: pointer\" data-comment-id=\"".concat(comment.id, "\">Delete</span>");
   }
 
-  var comment_card = "<div class=\"comment-card\" id=\"comment-".concat(comment.id, "\">\n            <div class=\"comment-content\">\n                <a class=\"owner-details\" href=\"/user/").concat(comment.owner_details.id, "/profile\">             \n                    ").concat(profile, "\n                </a>\n                <div class=\"content-wrapper\">\n                    <div class=\"references\">\n                        ").concat(references, "\n                    </div>\n                    <div class=\"content\">\n                        ").concat(comment.content, "\n                    </div>\n                </div>\n                ").concat(comment_editor, "\n            </div>\n            <div class=\"comment-control\">\n                    ").concat(comment_deleter_btn, "\n                    ").concat(comment_editor_btn, "\n                    <span class=\"reply-creator-show\" data-comment-id=\"").concat(comment.id, "\"\n                    data-reference-id=").concat(comment.owner, " data-reference-name=\"").concat(comment.owner_details.name, "\"\n                    style=\"cursor: pointer\">reply</span>\n                    <span class=\"created-at\">").concat(dayjs__WEBPACK_IMPORTED_MODULE_0___default()(comment.created_at).fromNow(), "</span>\n            </div>\n        </div>");
+  var comment_card = "<div class=\"comment-card\" id=\"comment-".concat(comment.id, "\">\n            <div class=\"comment-content\">\n                <a class=\"owner-details\" href=\"/user/").concat(comment.owner_details.id, "/profile\">             \n                    ").concat(profile, "\n                </a>\n                <div class=\"content-wrapper\">\n                    <div class=\"references\">\n                        ").concat(references, "\n                    </div>\n                    <div class=\"content\">\n                        ").concat(comment.content, "\n                    </div>\n                </div>\n                ").concat(comment_editor, "\n            </div>\n            <div class=\"comment-control\">\n                    ").concat(comment_deleter_btn, "\n                    ").concat(comment_editor_btn, "\n                    <span class=\"reply-creator-show\" data-comment-id=\"").concat(comment.id, "\" data-commentable-id=\"").concat(comment.commentable_id, "\"\n                    data-reference-id=").concat(comment.owner, " data-reference-name=\"").concat(comment.owner_details.name, "\"\n                    style=\"cursor: pointer\">reply</span>\n                    <span class=\"created-at\">").concat(dayjs__WEBPACK_IMPORTED_MODULE_0___default()(comment.created_at).fromNow(), "</span>\n            </div>\n        </div>");
 
   if (append_to) {
     append_to.insertAdjacentHTML('beforeend', comment_card); //adding the event listeners
@@ -357,12 +539,12 @@ function makeCommentHTML(comment) {
         comment_reply_shower = comment_dom_card.querySelector('.reply-creator-show'),
         commnet_editor_shower = comment_dom_card.querySelector('.comment-editor-show'),
         coment_deleter = comment_dom_card.querySelector('.coment-delete'),
-        comment_editor_form = comment_dom_card.querySelector('.comment-edit'),
-        comment_form_cancel = comment_dom_card.querySelector('.comment-form-cancel'),
-        comment_form_submit = comment_dom_card.querySelector('.comment-submit');
-    comment_reply_shower.addEventListener('click', scrollToCommentCreateForm); // console.log(comment_html)
-    // comment_html.
-
+        comment_editor_form = comment_dom_card.querySelector(".comment-edit"),
+        comment_form_cancel = comment_dom_card.querySelector('.comment-form-cancel');
+    comment_reply_shower === null || comment_reply_shower === void 0 ? void 0 : comment_reply_shower.addEventListener('click', scrollToCommentCreateForm);
+    commnet_editor_shower === null || commnet_editor_shower === void 0 ? void 0 : commnet_editor_shower.addEventListener('click', showCommentEditForm);
+    comment_form_cancel === null || comment_form_cancel === void 0 ? void 0 : comment_form_cancel.addEventListener('click', hideCommentEditForm);
+    comment_editor_form === null || comment_editor_form === void 0 ? void 0 : comment_editor_form.addEventListener('submit', updateComment);
     return true;
   }
 

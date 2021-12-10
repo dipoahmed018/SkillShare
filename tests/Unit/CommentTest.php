@@ -15,7 +15,7 @@ class CommentTest extends TestCase
      */
     public function test_create_comment_method()
     {
-        $user = User::find(3);
+        $user = User::findOrFail(3);
         $response = $this->actingAs($user)
             ->postJson('/comment/create', [
                 'content' => 'hello world',
@@ -24,5 +24,12 @@ class CommentTest extends TestCase
                 'references' => [1, 2, 3, 4],
             ]);
         $response->assertStatus(200);
+    }
+
+    public function test_reference_sync()
+    {
+        $comment = Comment::findOrFail(90);
+        $comment->referenceUsers()->sync([1]);
+        $this->assertTrue(true);
     }
 }

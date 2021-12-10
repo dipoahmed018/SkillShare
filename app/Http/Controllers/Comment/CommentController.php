@@ -64,13 +64,9 @@ class CommentController extends Controller
             'commentable_id' => $commentable->id,
             'comment_type' => $type,
         ]);
+        
+        if ($request->filled('references')) { $comment->referenceUsers()->sync($request->references); }
 
-        $references = null;
-        if ($request->filled('references')) {
-            $references = collect($request->references);
-            $references = $references->map(fn ($user) => new CommentReferences(['user_id' => $user]));
-            $comment->references()->saveMany($references);
-        }
         $comment->load([
             'ownerDetails.profilePicture',
             'referenceUsers',
@@ -80,22 +76,33 @@ class CommentController extends Controller
 
     public function updateComment(Request $request, Comment $comment)
     {
+        
         if ($request->user()->cannot('update', $comment)) {
             return response('you are not the owner of this comment', 403);
         }
         $request->validate([
             'content' => 'required|string|min:5',
+            'references' => 'array',
+            'references.*' => 'integer',
         ]);
+
+        if ($request->filled('references')) {
+            $comment->referenceUsers()->sync($request->references);
+        }
+
         $comment->content = $request->content;
         $comment->save();
-        return response()->json($comment, 204);
+        $comment->load(['ownerDetails', 'referenceUsers']);
+        return response()->json($comment, 200);
     }
     public function deleteComment(Request $request, Comment $comment)
     {
         if ($request->user()->cannot('update', $comment)) {
             abort(401, 'unautorized');
         }
-        return $comment->delete();
+        $comment->referenceUsers()->detach();
+        $comment->delete();
+        return response()->json($comment, 200);
     }
     public function updateVote(Request $request, Comment $comment)
     {

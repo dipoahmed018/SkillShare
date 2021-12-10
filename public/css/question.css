@@ -254,6 +254,14 @@
   flex-wrap: wrap;
   gap: 1em;
   margin: 5px;
+  font-size: 0.7em;
+}
+
+.comment-card .comment-control button,
+.reply-card .comment-control button {
+  background-color: transparent;
+  border: 0px;
+  color: gray;
 }
 
 .comment-card .more-replies,
