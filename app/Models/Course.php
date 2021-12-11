@@ -122,6 +122,10 @@ class Course extends Model
             ->havingRaw('sales >= ?', [$sales]);
     }
 
+    public function getThumbnailLinkAttribute()
+    {
+        return $this->thumbnail?->file_link ?? asset('/images/default_cover.jpg');
+    }
 
     public function is_student($user)
     {

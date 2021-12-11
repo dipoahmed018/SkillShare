@@ -124,17 +124,20 @@
                     </a>
                     <h4>${{ $course->price }}</h4>
                 </div>
+            @else
+                <button class="forum-link"><a href="/show/forum/{{$course->id}}">Go to forum</a></button>
             @endif
+            
         </div>
 
         {{-- thumbnail is for the introduction video or course thumbnail --}}
         <div class="thumbnail-video">
             @if ($course->introduction)
                 <video id="introduction-video" width="100%" src="{{ $course->introduction->file_link }}"
-                    poster={{ $course->thumbnail ? $course->thumbnail->file_link : '' }} controls>
+                    poster={{ $course->thumbnail_link }} controls>
                 </video>
-            @elseif($course->thumbnail)
-                <img src="{{ $course->thumbnail ? $course->thumbnail->file_link : '' }}" alt="thumbnail">
+            @else
+                <img src="{{ $course->thumbnail_link}}" alt="thumbnail">
             @endif
         </div>
     </div>

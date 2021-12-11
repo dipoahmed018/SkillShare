@@ -139,6 +139,17 @@ $pink_red : rgb(255, 71, 71);
                 color: $deep_green;
             }
         }
+        .forum-link {
+            border: none;
+            width: 8em;
+            background-color: $deep_green;
+            margin-left: auto;
+            border-radius: 5px;
+            a {
+                color: $shallow_green;
+                text-decoration: none;
+            }
+        }
     }
 
     @media screen and (min-width: 700px) {

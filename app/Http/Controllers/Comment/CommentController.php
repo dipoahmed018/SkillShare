@@ -45,6 +45,7 @@ class CommentController extends Controller
     }
     public function commentCreate(CreateCommentRequest $request)
     {
+        Log::channel('event')->info('comment',[$request->all()]);
         $type = $request->type;
         $content = $request->content;
         $user = $request->user();

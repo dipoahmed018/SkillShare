@@ -1,7 +1,6 @@
 import { Image_picker, Filter_length, Inject_images } from "../asset/CKEditorHelper"
+import { Modal } from "bootstrap";
 import Popup from '../asset/PopupHandler'
-require('../component/forum/questionCard')
-const { Modal } = require("bootstrap")
 const popup = new Popup();
 
 const forum_contents_showers = [
@@ -37,9 +36,7 @@ const question_textarea = document.getElementById('question-input');
 
 if (question_textarea) {
     ClassicEditor.create(question_textarea, {
-        toolbar: {
-            items: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
-        },
+        toolbar: ['undo', 'redo', '|', 'heading', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', '|', 'ImageUpload'],
         simpleUpload: {
             uploadUrl: `/save/image`,
             withCredentials: true,

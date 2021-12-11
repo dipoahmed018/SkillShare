@@ -76,8 +76,7 @@ $edit : rgb(194, 196, 76);
         margin-top: 1em;
 
         .vote {
-            align-items: flex-start;
-            margin: auto 1% auto 1%;
+            margin: 0px 1% auto 1%;
             align-items: center;
             text-align: center;
 
@@ -167,6 +166,28 @@ $edit : rgb(194, 196, 76);
 
     .answers-label {
         margin-top: 2em;
+    }
+}
+
+//answer and quesion edit form
+#edit-question, #edit-answer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    label {
+        align-self: flex-start;
+    }
+    input[name=title] {
+        width: 100%;
+        margin-bottom: 1em;
+    }
+    input[type=submit] {
+        max-width: 10em;
+        border: none;
+        border-radius: 5px;
+        background-color: $dark_blue;
+        color: white;
+        margin-top: 1em;
     }
 }
 

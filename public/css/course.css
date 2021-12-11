@@ -126,6 +126,19 @@
   color: #0FA958;
 }
 
+.course-introduction .course-details .forum-link {
+  border: none;
+  width: 8em;
+  background-color: #0FA958;
+  margin-left: auto;
+  border-radius: 5px;
+}
+
+.course-introduction .course-details .forum-link a {
+  color: #6ACC9A;
+  text-decoration: none;
+}
+
 @media screen and (min-width: 700px) {
   .course-introduction {
     flex-direction: row;

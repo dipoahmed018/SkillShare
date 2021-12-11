@@ -65,6 +65,7 @@
             <button id="questions" data-event-target="questions-wrapper">Questions</button>
             <button id="students" data-event-target="students-wrapper">Students</button>
             <button id="about" data-event-target="about">About</button>
+            <button><a href="/show/course/{{$forum->id}}">Go to course</a></button>
             @if ($forum->editable)
                 <button><a href="/edit/forum/{{$forum->id}}">Edit</a></button>
             @endif

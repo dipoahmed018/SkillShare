@@ -1,5 +1,3 @@
-
-
 let editor;
 const edit_box = document.querySelector('#description')
 if (edit_box) {
@@ -8,13 +6,5 @@ if (edit_box) {
 
     }).then(ckeditor => { editor = ckeditor; editor.setData(forum_details.description) })
         .catch(error => console.log(error))
-    // const forum_submit = document.getElementById('forum')
 }
-
-const form = document.getElementById('forum-edit')
-
-// form.addEventListener('submit', (e) => {
-//     const cover_photo = e.target.querySelector('[name="cover"]')
-//     cover_photo.files[0] ?? cover_photo.remove()
-// })
 

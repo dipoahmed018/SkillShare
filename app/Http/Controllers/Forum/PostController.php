@@ -136,8 +136,7 @@ class PostController extends Controller
                 'votes as decrements' => fn ($q) => $q->where('vote_type', 'decrement'),
                 'comments',
             ])
-            ->paginate('10', ['*'], 'answers');
-        
+            ->paginate('1', ['*'], 'answers');
             //load references
             
         return view('pages/forum/Question', ['question' => $question]);
@@ -219,6 +218,6 @@ class PostController extends Controller
         if ($request->header('accept') == 'application/json') {
             return response()->json($post, 200);
         }
-        return redirect()->back();
+        return redirect("/show/question/$post->postable_id");
     }
 }

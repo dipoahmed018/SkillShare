@@ -1,9 +1,10 @@
 import Dayjs from "dayjs"
+import {Image_picker, Inject_images, Filter_length} from '../asset/CKEditorHelper'
+import {Modal} from 'bootstrap'
 let reletiveTime = require('dayjs/plugin/relativeTime')
 Dayjs.extend(reletiveTime)
 
-
-//question and answer edit
+//question and answer edit box
 const answer_edit_box = document.getElementById('answer-edit-box')
 const question_edit_box = document.getElementById('question-edit-box')
 const answer_create_box = document.getElementById('answer-create-box')
@@ -56,17 +57,31 @@ if (answer_create_box) {
         .catch(error => console.log(error))
 }
 
+//edit answer
+const question_edit_form = document.getElementById('edit-question')
+question_edit_form.addEventListener('submit', (e) => setImagesToForm(e, question_editor))
+
+//create answer
 const answer_create_form = document.getElementById('create-answer')
-answer_create_form.addEventListener('submit', createAnswer)
+answer_create_form.addEventListener('submit', (e) => setImagesToForm(e, answer_create_editor))
 
-function createAnswer(e) {
+//edit answer 
+const answer_edit_modal = document.getElementById('answer-edit-modal')
+const answer_edit_form = document.getElementById('edit-answer')
+answer_edit_modal.addEventListener('show.bs.modal', e => {
+    const answer_id = e.relatedTarget.getAttribute('data-post-id');
+    const answer = answers.data.find(answer => answer.id == answer_id)
+    answer_edit_form.action = `/post/edit/${answer_id}`
+    answer_editor.setData(answer.cotnent)
+})
+answer_edit_form.addEventListener('submit', (e) => setImagesToForm(e, answer_editor))
 
-    const data = answer_editor.getData()
-    console.log(data)
+
+function setImagesToForm(e, editor) {
+    const data = editor.getData()
     const images = Image_picker(data, 4)
     const filter = Filter_length(data)
     const image_add = Inject_images(images, 'images', e.target);
-
     if (images instanceof Error) { e.preventDefault(); return popup.addPopup(images.message) }
     if (filter instanceof Error) { e.preventDefault(); return popup.addPopup(filter.message) }
     if (image_add instanceof Error) { e.preventDefault(); return popup.addPopup(image_add.message) }
@@ -181,12 +196,11 @@ function createComment(e) {
     const post_card = document.querySelector(`.post-${post_id}`)
     const comments_box = post_card.querySelector(`.comments`)
     let form_data = {
-        'commentable': question?.id,
+        'commentable': post_id,
         'type': 'parent',
         'content': comment_input.value,
     }
     if (references) { form_data['references'] = references }
-
     fetch('/comment/create', {
         method: 'post',
         body: JSON.stringify(form_data),

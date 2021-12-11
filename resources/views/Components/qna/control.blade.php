@@ -1,7 +1,7 @@
 @props(['id', 'modalTarget'])
 
 <div class="control">
-    <i class="bi bi-pencil-square update" data-bs-toggle="modal" data-bs-target="#{{$modalTarget}}"></i>
+    <i class="bi bi-pencil-square update" data-bs-toggle="modal" data-bs-target="#{{$modalTarget}}" data-post-id="{{$id}}"></i>
     <form action="{{ route('post.delete', ['post' => $id]) }}" method="post">
         @method('delete')
         @csrf

@@ -76,8 +76,7 @@
 
 .question .content-wrapper .vote,
 .answer .content-wrapper .vote {
-  align-items: flex-start;
-  margin: auto 1% auto 1%;
+  margin: 0px 1% auto 1%;
   align-items: center;
   text-align: center;
 }
@@ -177,6 +176,34 @@
 
 .answers-wrapper .answers-label {
   margin-top: 2em;
+}
+
+#edit-question,
+#edit-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#edit-question label,
+#edit-answer label {
+  align-self: flex-start;
+}
+
+#edit-question input[name=title],
+#edit-answer input[name=title] {
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+#edit-question input[type=submit],
+#edit-answer input[type=submit] {
+  max-width: 10em;
+  border: none;
+  border-radius: 5px;
+  background-color: #223b57;
+  color: white;
+  margin-top: 1em;
 }
 
 .comment-card,
