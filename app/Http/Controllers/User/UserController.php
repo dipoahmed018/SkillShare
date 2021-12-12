@@ -27,9 +27,15 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function getUser(Request $request, User $user)
+    public function showUser(Request $request, User $user)
     {
-        return view('pages/user/show');
+        $user->load([
+            'profilePicture',
+            'myCourses',
+            'courses',
+            'courseForum',
+        ]);
+        return view('pages/user/show', [$user]);
     }
     public function ShowRegisterForm()
     {

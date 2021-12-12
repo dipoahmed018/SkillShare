@@ -49,9 +49,10 @@ Route::middleware('guest')->group(function () {
 });
 
 //public
-Route::get('/courses', [CourseController::class, 'index'])->name('index.courses');
+Route::get('/profile/{user}', [UserController::class, 'showUser'])->name('show.user');
 
 //get course
+Route::get('/courses', [CourseController::class, 'index'])->name('index.courses');
 Route::get('/show/course/{course}', [CourseController::class, 'showDetails'])->name('show.course.details');
 
 //get review replies
@@ -59,7 +60,6 @@ Route::get('/review/{review}/replies', [ReviewController::class, 'getReplies'])-
 
 Route::middleware(['auth:web'])->group(function () {
     Route::prefix('user')->group(function () {
-        Route::get('/{user}/profile', [UserController::class, 'getUser'])->name('show.user');
         Route::get('/show/update', [UserController::class, 'ShowUserUpdateForm']);
         Route::put('/update', [UserController::class, 'Update'])->name('user.update');
         Route::put('/update/password', [UserController::class, 'changePassword'])->name('user.update.password');

@@ -11,10 +11,11 @@
     "/js/transaction.js": "/js/transaction.js",
     "/css/app.css": "/css/app.css",
     "/css/dashboard.css": "/css/dashboard.css",
-    "/css/auth.css": "/css/auth.css",
     "/css/course_edit.css": "/css/course_edit.css",
     "/css/course.css": "/css/course.css",
+    "/css/profile.css": "/css/profile.css",
     "/css/question.css": "/css/question.css",
     "/css/forum.css": "/css/forum.css",
-    "/css/payment.css": "/css/payment.css"
+    "/css/payment.css": "/css/payment.css",
+    "/css/auth.css": "/css/auth.css"
 }

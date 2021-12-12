@@ -1,0 +1,66 @@
+$primary: #0d6efd;
+$stars: #F2DD1F;
+$shallow_green : #6ACC9A;
+$deep_green : #0FA958;
+$glass_green : #B8E9D3;
+$shallow_blue : rgb(90, 109, 130);
+$dark_blue: rgb(34, 59, 87);
+$pink_red : rgb(255, 71, 71);
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+    gap: 2em;
+    padding: 1em;
+    background-color: $shallow_green;
+    .profile-picture-wrapper {
+        display: flex;
+        max-width: 20em;
+        height: 20em;
+        border-radius: 100%;
+        background-color: gray;
+        overflow: hidden;
+        cursor: pointer;
+        img {
+            margin: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        &:hover {
+            box-shadow: 1px 1px 15px rgb(0, 0, 0);
+
+        }
+    }
+    .details {
+        h3 {
+            color: $dark_blue;
+        }
+        p {
+            padding: 0px;
+            color: $shallow_blue;
+        }
+    }
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    gap: 0.8em;
+    padding: 1em;
+    background-color: $deep_green;
+    box-shadow: 0px 2px 10px black;
+    justify-content: center;
+    button {
+        border: 0px;
+        border-radius: 5px;
+        background-color: $dark_blue;
+        color: white;
+        padding: 0.5    em;
+        &:hover {
+            box-shadow: 1px 1px 5px black;
+        }
+    }
+}

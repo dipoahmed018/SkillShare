@@ -4,7 +4,7 @@
     <div class="review-content">
         <a class="owner-details" href="/user/{{ $reviewData->ownerDetails->id }}/profile">
             @if ($reviewData->ownerDetails->profilePicture)
-                <img class="profile-image image" src="{{ $reviewData->ownerDetails->profilePicture->file_link }}"
+                <img class="profile-image image" src="{{ $reviewData->ownerDetails->profile_picture }}"
                     alt="avatar">
             @else
                 <div class="profile-text"><span>{{ substr($reviewData->ownerDetails->name, 0, 1) }}</span></div>
@@ -18,7 +18,7 @@
                 @if ($isReview)
                     <x-course.rating />
                 @endif
-            </x-course.ewview.create>
+            </x-course.review.create>
         @endif
 
     </div>
