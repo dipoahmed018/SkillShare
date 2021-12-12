@@ -29,13 +29,15 @@ class UserController extends Controller
 {
     public function showUser(Request $request, User $user)
     {
+        // return $user;
         $user->load([
             'profilePicture',
-            'myCourses',
-            'courses',
             'courseForum',
         ]);
-        return view('pages/user/show', [$user]);
+        $user->courses = $user->courses()->paginate(10, ['*'], 'courses');
+        $user->myCourses = $user->myCourses()->paginate(10, ['*'], 'my_courses');
+
+        return view('pages/user/show', ['profileUser' => $user]);
     }
     public function ShowRegisterForm()
     {

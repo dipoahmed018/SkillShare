@@ -2,9 +2,9 @@
     <div class="thumbnail">
             <img src="{{$course->thumbnail_link}}" alt="no image">
     </div>
-    <div class="title">
-        <h4>{{ $course->title }}</h4>
-    </div>
+
+    <h6 class="title">{{ $course->title }}</h6>
+
     <div class="details">
         <span class="created_at">created at:
             {{ $course->created_at->diffForHumans() }}</span>

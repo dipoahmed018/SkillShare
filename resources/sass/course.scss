@@ -15,46 +15,6 @@ $pink_red : rgb(255, 71, 71);
     justify-content: center;
 }
 
-//course card
-.course-card {
-    margin: 0.5rem 0.5rem auto 0.5rem;
-    display: flex;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    background: $glass_green;
-    padding: 10px;
-    max-width: 90vw;
-    font-size: 12px;
-
-    .title {
-        color: $shallow_green;
-    }
-
-    .thumbnail {
-        width: 100%;
-        overflow: hidden;
-        display: flex;
-        margin: auto;
-        img {
-            margin: auto;
-            max-height: 100%;
-            max-width: 100%;
-        }
-    }
-
-    // .details  
-    .details {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1em;
-        color: $deep_green;
-
-        >* {
-            display: inline-block;
-        }
-    }
-}
-
 @media screen and (min-width: 700px) {
 
     //course card responsive sizing

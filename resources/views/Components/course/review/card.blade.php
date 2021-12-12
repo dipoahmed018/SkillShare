@@ -2,7 +2,7 @@
 
 <div class="{{ $attributes['class'] }}" id="review-{{ $reviewData->id }}">
     <div class="review-content">
-        <a class="owner-details" href="/user/{{ $reviewData->ownerDetails->id }}/profile">
+        <a class="owner-details" href="/profile/{{ $reviewData->ownerDetails->id }}">
             @if ($reviewData->ownerDetails->profilePicture)
                 <img class="profile-image image" src="{{ $reviewData->ownerDetails->profile_picture }}"
                     alt="avatar">

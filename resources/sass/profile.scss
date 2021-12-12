@@ -15,6 +15,7 @@ $pink_red : rgb(255, 71, 71);
     gap: 2em;
     padding: 1em;
     background-color: $shallow_green;
+
     .profile-picture-wrapper {
         display: flex;
         max-width: 20em;
@@ -23,20 +24,24 @@ $pink_red : rgb(255, 71, 71);
         background-color: gray;
         overflow: hidden;
         cursor: pointer;
+
         img {
             margin: auto;
             max-width: 100%;
             max-height: 100%;
         }
+
         &:hover {
             box-shadow: 1px 1px 15px rgb(0, 0, 0);
 
         }
     }
+
     .details {
         h3 {
             color: $dark_blue;
         }
+
         p {
             padding: 0px;
             color: $shallow_blue;
@@ -53,14 +58,62 @@ $pink_red : rgb(255, 71, 71);
     background-color: $deep_green;
     box-shadow: 0px 2px 10px black;
     justify-content: center;
+
     button {
         border: 0px;
         border-radius: 5px;
         background-color: $dark_blue;
         color: white;
-        padding: 0.5    em;
+        padding: 0.5em;
+
         &:hover {
             box-shadow: 1px 1px 5px black;
         }
     }
+}
+
+.resources {
+    margin-bottom: 1em;
+    margin-top: 1em;
+
+    .resource-box {
+        h5 {
+            text-align: center;
+        }
+    }
+
+    .bought-courses,
+    .my-courses {
+        display: flex;
+        flex-direction: column;
+
+        h5 {
+            text-align: center;
+        }
+
+        .courses {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+
+        @media screen and (min-width: 600px) {
+            .courses {
+                flex-direction: row;
+                column-gap: 1em;
+
+                .course-card {
+                    margin: 0px 0px auto 0px;
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .hide {
+        display: none;
+        pointer-events: none;
+    }
+
 }

@@ -211,6 +211,47 @@ $pink_red : rgb(255, 71, 71);
     width: 100%;
 }
 
+.course-card {
+    margin: 0.2em;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    background: $glass_green;
+    padding: 5px;
+    font-size: 12px;
+
+    .title {
+        color: $shallow_green;
+    }
+
+    .thumbnail {
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        margin: auto;
+        img {
+            margin: auto;
+            max-height: 100%;
+            width: 100%;
+        }
+    }
+
+    .title {
+        color: $deep_green;
+    }
+    // .details  
+    .details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        color: $deep_green;
+
+        >* {
+            display: inline-block;
+        }
+    }
+}
+
 .one-click-upload {
     width: 0.1px;
     height: 0.1px;
@@ -820,6 +861,7 @@ $pink_red : rgb(255, 71, 71);
                 .profile-links {
                     position: absolute;
                     display: none;
+                    border: 1px solid black;
                     border-radius: 8px;
                     min-width: 250px;
                     padding: 5px;

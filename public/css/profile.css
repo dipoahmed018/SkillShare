@@ -53,11 +53,58 @@
   border-radius: 5px;
   background-color: #223b57;
   color: white;
-  padding: 0.5 em;
+  padding: 0.5em;
 }
 
 .controls button:hover {
   box-shadow: 1px 1px 5px black;
+}
+
+.resources {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.resources .resource-box h5 {
+  text-align: center;
+}
+
+.resources .bought-courses,
+.resources .my-courses {
+  display: flex;
+  flex-direction: column;
+}
+
+.resources .bought-courses h5,
+.resources .my-courses h5 {
+  text-align: center;
+}
+
+.resources .bought-courses .courses,
+.resources .my-courses .courses {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (min-width: 600px) {
+  .resources .bought-courses .courses,
+  .resources .my-courses .courses {
+    flex-direction: row;
+    -moz-column-gap: 1em;
+         column-gap: 1em;
+  }
+
+  .resources .bought-courses .courses .course-card,
+  .resources .my-courses .courses .course-card {
+    margin: 0px 0px auto 0px;
+    display: block;
+  }
+}
+
+.resources .hide {
+  display: none;
+  pointer-events: none;
 }
 
 
