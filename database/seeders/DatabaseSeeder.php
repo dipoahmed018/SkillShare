@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        //commented out for posgre sql
+        // DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         DB::table('course_students')->truncate();
         DB::table('catagoryable')->truncate();
 
