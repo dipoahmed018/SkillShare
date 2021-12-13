@@ -20,8 +20,8 @@ class CreateCourseStudentsTable extends Migration
             $table->unsignedBigInteger('course_id');
             $table->timestamps();
 
-            $table->foreign('student_id')->references('id')->on('users');
-            $table->foreign('course_id')->references('id')->on('course');
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('CASCADE');
+            $table->foreign('course_id')->references('id')->on('course')->onDelete('CASCADE');
 
 
         });
@@ -34,8 +34,6 @@ class CreateCourseStudentsTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('course_students');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

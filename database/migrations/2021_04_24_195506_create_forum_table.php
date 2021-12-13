@@ -24,7 +24,7 @@ class CreateForumTable extends Migration
             $table->string('forumable_type');
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('users');
+            $table->foreign('owner')->references('id')->on('users')->onDelete('CASCADE');
         });
 
     }
@@ -35,8 +35,6 @@ class CreateForumTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('forum');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

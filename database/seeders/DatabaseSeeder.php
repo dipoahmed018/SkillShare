@@ -24,20 +24,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //commented out for posgre sql
-        // DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         DB::table('course_students')->truncate();
         DB::table('catagoryable')->truncate();
-
-        User::truncate();
-        Post::truncate();
-        Forum::truncate();
-        Comment::truncate();
-        Referrel::truncate();
-        Catagory::truncate();
-        Notification::truncate();
+        
         Review::truncate();
+        Referrel::truncate();
+        Comment::truncate();
+        Catagory::truncate();
+        Post::truncate();
+        Notification::truncate();
+        Forum::truncate();
         Course::truncate();
+        User::truncate();
 
         User::factory()->count(10)->create();
         Course::factory()->count(10)->create();

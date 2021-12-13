@@ -23,8 +23,7 @@ class CreateCourseTable extends Migration
             $table->unsignedBigInteger('forum_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('users');
-            $table->foreign('forum_id')->references('id')->on('forum');
+            $table->foreign('owner')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 
@@ -35,8 +34,6 @@ class CreateCourseTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('course');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

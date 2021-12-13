@@ -212,11 +212,10 @@ class CourseController extends Controller
 
     public function deleteCourse(DeleteCourse $request, Course $course)
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        $course->forum ? $course->forum->delete() : null;
-        $course->introduction ? $course->introduction->delete() : null;
-        $course->thumbnail ? $course->introduction->delete() : null;
-        $course->referrels ? $course->referrels()->delete() : null;
+        $course->forum()->delete();
+        $course->introduction()->delete();
+        $course->introduction->delete();
+        $course->referrels()->delete();
         //tutorials delete
         $tutorials = $course->tutorial_files;
         if ($tutorials) {

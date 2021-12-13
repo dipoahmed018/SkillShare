@@ -24,7 +24,7 @@ class CreatePostTable extends Migration
             $table->unsignedBigInteger('answer')->nullable();
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('users');
+            $table->foreign('owner')->references('id')->on('users')->onDelete('CASCADE');
             
         });
     }
@@ -36,8 +36,6 @@ class CreatePostTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('post');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
