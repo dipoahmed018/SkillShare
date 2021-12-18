@@ -21,7 +21,7 @@ class CreateCommentTable extends Migration
             $table->string('comment_type');
             $table->timestamps();
 
-            $table->foreign('owner')->references('id')->on('users');
+            $table->foreign('owner')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 

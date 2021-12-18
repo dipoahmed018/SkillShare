@@ -24,19 +24,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('course_students')->truncate();
-        DB::table('catagoryable')->truncate();
-        
-        Review::truncate();
-        Referrel::truncate();
-        Comment::truncate();
-        Catagory::truncate();
-        Post::truncate();
-        Notification::truncate();
-        Forum::truncate();
-        Course::truncate();
-        User::truncate();
-
         User::factory()->count(10)->create();
         Course::factory()->count(10)->create();
 
