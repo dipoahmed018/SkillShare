@@ -16,7 +16,7 @@ class CreateForumTable extends Migration
     public function up()
     {
         Schema::create('forum', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('name');
             $table->string('description');
             $table->unsignedBigInteger('owner');

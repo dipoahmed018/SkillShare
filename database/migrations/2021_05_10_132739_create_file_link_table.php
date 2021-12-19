@@ -14,7 +14,7 @@ class CreateFileLinkTable extends Migration
     public function up()
     {
         Schema::create('file_link', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->string('file_name');
             $table->string('file_link')->nullable();
             $table->string('file_type');

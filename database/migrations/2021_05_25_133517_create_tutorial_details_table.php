@@ -14,7 +14,7 @@ class CreateTutorialDetailsTable extends Migration
     public function up()
     {
         Schema::create('tutorial_details', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->unsignedBigInteger('tutorial_id');
             $table->integer('order');
             $table->string('title');

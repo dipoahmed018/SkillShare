@@ -14,7 +14,7 @@ class CreateVoteLimiterTable extends Migration
     public function up()
     {
         Schema::create('vote_limiter', function (Blueprint $table) {
-            $table->id();
+            $table->id()->primary();
             $table->unsignedBigInteger('voter_id');
             $table->unsignedBigInteger('voteable_id');
             $table->enum('vote_type', ['increment', 'decrement']);
