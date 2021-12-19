@@ -14,7 +14,7 @@ class CreateCommentReferencesTable extends Migration
     public function up()
     {
         Schema::create('comment_references', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->unsignedBigInteger('comment_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

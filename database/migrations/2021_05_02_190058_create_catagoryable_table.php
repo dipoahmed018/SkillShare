@@ -14,7 +14,7 @@ class CreateCatagoryableTable extends Migration
     public function up()
     {
         Schema::create('catagoryable', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->unsignedBigInteger('catagory_id');
             $table->unsignedBigInteger('catagoryable_id');
             $table->enum('catagoryable_type',['post','course','tuition']);
