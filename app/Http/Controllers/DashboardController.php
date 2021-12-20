@@ -13,18 +13,22 @@ class DashboardController extends Controller
     public function __invoke()
     {
 
+        // return User::all();
+
         $bestSellersCourses = Course::with([
             'ownerDetails' => fn ($q) => $q->select('users.*')->with('profilePicture'),
             'thumbnail' => fn ($q) => $q->select('file_link.*'),
         ])
-            ->MonthlySales()
+            ->withAvg('review as avg_rate', 'stars')
             ->AvarageRating()
-            ->orderBy('sales', 'asc')
+            ->MonthlySales()
             ->limit(10)
+            ->orderBy('avg_rate', 'desc')
             ->get();
 
         //recomended courses
         $recommendedCourse = null;
+        
         //add owned course catagory filter if logged in
         if ($user = Auth::user()) {
             $recommendedCourse = Course::with([
@@ -42,7 +46,7 @@ class DashboardController extends Controller
             $recommendedCourse = $catagories->count() < 1 ? null : $recommendedCourse->whereHas('catagory', fn ($q) => $q->whereIn('catagory.id', $catagories))->get();
         }
         $bestSellers = $bestSellersCourses->pluck('ownerDetails');
-        $bestSellers = $bestSellers->count() < 1 ? User::query()->whereHas('myCourses')->limit(10)->get() : $bestSellers;  
+        $bestSellers = $bestSellers->count() < 1 ? User::query()->whereHas('myCourses')->limit(10)->get() : $bestSellers;
 
         $recommendedCourse = $recommendedCourse ?? $bestSellersCourses;
         return view('pages.Dashboard', [

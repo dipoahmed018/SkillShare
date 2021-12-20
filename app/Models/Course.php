@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
 class Course extends Model
@@ -99,13 +98,25 @@ class Course extends Model
     }
 
 
-    public function scopeAvarageRating($query, $review = 1)
+    public function scopeAvarageRating($query, $review = 10)
     {
-        //each time wheile using this scope you have to add { AVG(review.stars) AS avg_rate } to you select statement
-        return $query->withAVG('review as avg_rate', 'stars')
-            ->havingRaw('avg_rate >= ?', [$review]);
+        return $query->where(function ($q) {
+            $q->selectRaw('avg(review.stars)')
+                ->from('review')
+                ->whereColumn('review.reviewable_id', 'course.id')
+                ->whereColumn('course.id', 'review.reviewable_id');
+        }, '<=', $review);
     }
 
+    public function scopeMonthlySales($query, $sales = 1)
+    {
+        return $query->where(function($q) {
+            $q->selectRaw('count(course_students.student_id)')
+                ->from('course_students')
+                ->whereColumn('course_students.course_id','course.id')
+                ->where('course_students.created_at', '>=', now()->subMonth());
+        }, '>=', $sales);
+    }
 
     public function scopeMyCourse($query, $user)
     {
@@ -114,13 +125,6 @@ class Course extends Model
     }
 
 
-    public function scopeMonthlySales($query, $sales = 0)
-    {
-        return $query->withCount([
-            'students as sales' => fn ($q) => $q->where('course_students.created_at', '>', now()->subMonth()),
-        ], 'id')
-            ->havingRaw('sales >= ?', [$sales]);
-    }
 
     public function getThumbnailLinkAttribute()
     {

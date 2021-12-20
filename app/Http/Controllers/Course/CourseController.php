@@ -36,18 +36,16 @@ class CourseController extends Controller
         $builder = Course::query()->with([
             'thumbnail',
             'ownerDetails',
-        ]);
-
-        $builder->Price($request->min_price ?? 5, $request->max_price ?? 10000);
-
+        ])
+        ->withAvg('review as avg_rate', 'stars')
+        ->price($request->min_price ?? 5, $request->max_price ?? 10000)
+        ->AvarageRating($request->review ?? 10);
         //catagory filter
         if ($request->catagory) {
             $builder->Catagory($request->catagory);
         }
-
-        $builder->AvarageRating($request->review ?? 1);
         //order and paginate
-        $builder->orderBy($request->order_by ?: 'price', 'asc');
+        $builder->orderBy($request->order_by ?: 'avg_rate', 'desc');
         $data = $builder->paginate($request->per_page ?: 5, ['*'], 'course_page');
 
         return view('pages.course.index', ['data' => $data]);
