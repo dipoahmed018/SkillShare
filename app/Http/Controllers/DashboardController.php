@@ -12,9 +12,6 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-
-        // return User::all();
-        return Course::all();
         $bestSellersCourses = Course::with([
             'ownerDetails' => fn ($q) => $q->select('users.*')->with('profilePicture'),
             'thumbnail' => fn ($q) => $q->select('file_link.*'),
