@@ -24,6 +24,6 @@ class Card extends Component
      */
     public function render()
     {
-        return view('components.course.card');
+        return view('Components.course.card');
     }
 }
