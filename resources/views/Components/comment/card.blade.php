@@ -5,9 +5,9 @@ $references = $comment->referenceUsers->pluck('id')->flatten();
 @props(['canModify' => false, 'replyForm' => true, 'comment'])
 <div class="comment-card" id="comment-{{ $comment->id }}">
     <div class="comment-content">
-        <a class="owner-details" href="/user/{{ $comment->ownerDetails->id }}/profile">
-            @if ($comment->ownerDetails->profilePicture)
-                <img class="profile-image image" src="{{ $comment->ownerDetails->profilePicture->file_link }}"
+        <a class="owner-details" href="/profile/{{ $comment->ownerDetails->id }}">
+            @if ($comment->ownerDetails->profilePhoto)
+                <img class="profile-image image" src="{{ $comment->ownerDetails->profilePhoto}}"
                     alt="avatar">
             @else
                 <div class="profile-text">{{ substr($comment->ownerDetails->name, 0, 1) }}</div>

@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
 
-                <x-progress-bar cancelable="true"/>
+                <x-progressBar cancelable="true"/>
 
                 <form action="" id="introduction-update-form">
                     <input accept=".mp4, .webm, .ogv" required type="file" name="introduction" id="introduction-upload"

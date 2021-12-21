@@ -9,7 +9,7 @@
 @section('body')
     <section class="user-profile">
         <div class="profile-picture-wrapper">
-            <img src="{{$user->profile_picture}}" alt="no picture">
+            <img src="{{$user->profilePhoto}}" alt="no picture">
         </div>
         <div class="details">
             <h3>{{$profileUser->name}}</h3>

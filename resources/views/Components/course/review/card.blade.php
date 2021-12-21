@@ -3,8 +3,8 @@
 <div class="{{ $attributes['class'] }}" id="review-{{ $reviewData->id }}">
     <div class="review-content">
         <a class="owner-details" href="/profile/{{ $reviewData->ownerDetails->id }}">
-            @if ($reviewData->ownerDetails->profilePicture)
-                <img class="profile-image image" src="{{ $reviewData->ownerDetails->profile_picture }}"
+            @if ($reviewData->ownerDetails->profilePhoto)
+                <img class="profile-image image" src="{{ $reviewData->ownerDetails->profilePhoto }}"
                     alt="avatar">
             @else
                 <div class="profile-text"><span>{{ substr($reviewData->ownerDetails->name, 0, 1) }}</span></div>
@@ -16,7 +16,7 @@
             <x-course.review.create class="review-edit" cancelable="true" data-reviewable-id="{{ $reviewData->id }}"
                 data-review-type="{{ $reviewData->reviewable_type }}">
                 @if ($isReview)
-                    <x-course.rating />
+                    <x-course.review.rater />
                 @endif
             </x-course.review.create>
         @endif
@@ -34,7 +34,7 @@
         @endif
         <span class="created-at">{{ $reviewData->created_at->diffForHumans() }}</span>
         @if (!$parent)
-            <x-rating :rating="$reviewData->stars"></x-rating>
+            <x-rating :rate="$reviewData->stars"></x-rating>
         @endif
     </div>
     {{-- add replies here form javascript --}}

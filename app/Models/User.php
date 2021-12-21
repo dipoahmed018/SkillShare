@@ -78,7 +78,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(FileLink::class, 'fileable','fileable_type','fileable_id')->where('file_type','=','profile_photo');
     }
 
-    public function getProfilePictureAttribute()
+    public function getProfilePhotoAttribute()
     {
         return $this->profilePicture?->file_link ?? asset('images/default_cover.jpg');
     }

@@ -19,7 +19,7 @@
             <input required min="10" max="10000" type="number" name="price" id="price" value="{{$course->price}}">
         </div>
         <div class="catagories-wrapper">
-            <x-check-box id="catagory-form" name="catagories" label="Select catagories" :options="$catagories" />
+            <x-checkbox id="catagory-form" name="catagories" label="Select catagories" :options="$catagories" />
         </div>
         <div class="description-wrapper">
             <label for="description">Description</label>

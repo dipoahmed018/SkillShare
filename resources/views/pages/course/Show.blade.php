@@ -19,7 +19,7 @@
             <p>
                 <x-course.review.create class="review-edit" data-reviewable-id="0" data-review-type="review_reply"
                     cancelable="true">
-                    <x-course.rating />
+                    <x-course.review.rater />
                 </x-course.review.create>
         </div>
         <div class="review-control">
@@ -27,7 +27,7 @@
             <span class="review-editor-btn" style="cursor: pointer">Edit</span>
             <span class="reply-creator-show" style="cursor: pointer">reply</span>
             <span class="created-at">required</span>
-            <x-rating :rating="0"></x-rating>
+            <x-rating :rate="0"></x-rating>
         </div>
 
         {{-- reply creator --}}
@@ -90,7 +90,7 @@
 
                 <span>Create at: {{ $course->created_at->diffForHumans() }}</span>
 
-                <x-rating :rating="$course->avg_rate"> </x-rating>
+                <x-rating :rate="$course->avg_rate" />
             </div>
             @can('update', $course)
                 <div class="details-update tools">
@@ -149,7 +149,7 @@
     <div class="tutorial-videos">
         @if ($course->owner == $user?->id)
             <form class="add-tutorial">
-                <x-progress-bar />
+                <x-progressBar />
                 <input type="file" accept=".mp4" name="tutorial" id="tutorial-upload">
                 <label for="tutorial-upload">
                     <span>Drop You file or click to select a file</span>
@@ -172,7 +172,7 @@
         @can('review', $course)
             <x-course.review.create class="review-create" display="flex" data-reviewable-id="{{ $course->id }}"
                 data-review-type="course">
-                <x-course.rating></x-course.rating>
+                <x-course.review.rater></x-course.review.rater>
             </x-course.review.create>
         @endcan
         <div class="reviews">
