@@ -23,7 +23,7 @@
         <div class="slider-lane">
             @foreach ($best_sellers as $seller)
                 <a class="seller slider-item" href="/profile/{{$seller->id}}">
-                    <img class="avatar" src="{{ $seller->profile_picture }}" alt="avatar">
+                    <img class="avatar" src="{{ $seller->profilePhoto }}" alt="avatar">
                     <h6>{{ $seller->name }}</h6>
                 </a>
             @endforeach
