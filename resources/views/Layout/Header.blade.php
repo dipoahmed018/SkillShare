@@ -15,7 +15,7 @@
 
                     <input type="hidden" name="review">
 
-                    {{-- <x-checkbox id="catagory" name="catagory" :options="$catagories" label="Select catagories" /> --}}
+                    <x-checkbox id="catagory" name="catagory" :options="$catagories" label="Select catagories" />
 
                     <div class="price-range">
                         <span>price:</span>
