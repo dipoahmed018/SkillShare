@@ -17,9 +17,6 @@
         <div id="popup_box" class="hide"></div>
         @include('Layout.Header')
         @yield('body')
-        
-        
-    
         @include('Layout.Footer')
     </div>
 
