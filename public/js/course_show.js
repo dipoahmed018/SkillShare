@@ -5753,7 +5753,7 @@ function add_review_element(parent, review) {
   review_tamplate.querySelector('.content').innerText = review.content;
   review_tamplate.querySelector('.created-at').innerText = dayjs__WEBPACK_IMPORTED_MODULE_0___default()(review.created_at).fromNow();
   review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name;
-  review_tamplate.querySelector('.owner-details').href = "/user/".concat(review.owner_details.id, "/profile");
+  review_tamplate.querySelector('.owner-details').href = "/user/".concat(review.owner_details.id, "/");
   input_cancel_btn.forEach(function (element) {
     return element.addEventListener('click', cancel_reply_form);
   });
