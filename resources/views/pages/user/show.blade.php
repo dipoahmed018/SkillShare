@@ -9,7 +9,7 @@
 @section('body')
     <section class="user-profile">
         <div class="profile-picture-wrapper">
-            <img src="{{$user->profilePhoto}}" alt="no picture">
+            <img src="{{$profileUser->profilePhoto}}" alt="no picture">
         </div>
         <div class="details">
             <h3>{{$profileUser->name}}</h3>
@@ -19,7 +19,7 @@
         </div>
     </section>
     <section class="controls">
-            <button class="control-buttons" data-toggle-target=".my-courses">{{$profileUser->id == Auth::user()?->id ? 'My' : 'Users'}} courses</button>
+            <button class="control-buttons" data-toggle-target=".my-courses">{{$user ? 'My' : 'Users'}} courses</button>
             <button class="control-buttons" data-toggle-target=".bought-courses">Bought courses</button>
             <button class="control-buttons" data-toggle-target=".activity-logs">Activity logs</button>
             <button class="control-buttons" data-toggle-target=".profile-update">Profile update</button>
