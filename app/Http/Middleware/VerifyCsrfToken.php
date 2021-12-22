@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'skillbata.herokuapp.com/*',
+        'skillbata.herokuapp.com',
     ];
 }
