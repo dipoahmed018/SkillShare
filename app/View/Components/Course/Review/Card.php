@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Course\Review;
+namespace App\View\components\Course\Review;
 
 use Illuminate\View\Component;
 
