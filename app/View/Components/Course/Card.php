@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Course;
+namespace App\View\components\Course;
 
 use Illuminate\View\Component;
 
@@ -24,6 +24,6 @@ class Card extends Component
      */
     public function render()
     {
-        return view('Components.course.card');
+        return view('components.course.card');
     }
 }
