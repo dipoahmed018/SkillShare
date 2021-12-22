@@ -198,7 +198,7 @@ export function add_review_element(parent, review) {
     review_tamplate.querySelector('.content').innerText = review.content
     review_tamplate.querySelector('.created-at').innerText = Dayjs(review.created_at).fromNow()
     review_tamplate.querySelector('.owner-name').innerText = review.owner_details.name
-    review_tamplate.querySelector('.owner-details').href = `/user/${review.owner_details.id}/`
+    review_tamplate.querySelector('.owner-details').href = `/profile/${review.owner_details.id}/`
     input_cancel_btn.forEach(element => element.addEventListener('click', cancel_reply_form))
     if (review.owner_details?.profile_picture) {
         profile_text.revome()
