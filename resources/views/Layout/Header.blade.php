@@ -14,7 +14,7 @@
                 <form id="filter-form" method="GET" action="/courses">
 
                     <input type="hidden" name="review">
-                    {{-- name changed to components --}}
+                    {{-- name changed to components hel--}}
                     <x-checkbox id="catagory" name="catagory" :options="$catagories" label="Select catagories" />
 
                     <div class="price-range">
