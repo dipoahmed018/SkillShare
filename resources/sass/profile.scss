@@ -119,19 +119,53 @@ $pink_red : rgb(255, 71, 71);
 }
 
 .profile-update {
-    display: grid;
-    grid-template-columns: 1fr;
-    #name-change {
-        grid-column: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    .profile-update-form {
         display: flex;
         flex-direction: column;
+        width: clamp(100px,  500px, 80%);
+        background-color: $shallow_green;
+        border: 1px solid $dark_blue;
+        box-sizing: border-box;
+        padding: 1em;
+        gap: 0.5em;
+        border: none;
+        border-radius: 5px;
+        flex-direction: column;
+        align-items: center;
+        color: $dark_blue;
+
+        input[type=submit] {
+            width: 30%;
+            color: $dark_blue;
+            background-color: $deep_green;
+            border: none;
+            border-radius: 5px;
+            &:hover {
+                border: 1px solid $dark_blue;
+            }
+        }
     }
+    #change-name {
+     
+        &:hover {
+            border: 1px solid $dark_blue;
+        }
 
-}
-
-@media screen and (min-width: 500px) {
-    .profile-update {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        padding: 10vw;
+        input[name=name] {
+            color: $dark_blue;
+            background-color: $deep_green;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            &:focus {
+                border: 1px solid $dark_blue;
+                outline: none;
+            }
+        }
     }
 }

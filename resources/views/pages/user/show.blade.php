@@ -52,7 +52,6 @@
         </div>
         @isset($user)
             <div class="profile-update resource-box hide">
-                <h5>Profile update</h5>
                 @include('pages.user.ProfileUpdateForm')
             </div>
         @endisset

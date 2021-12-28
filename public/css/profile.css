@@ -108,21 +108,55 @@
 }
 
 .profile-update {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-.profile-update #name-change {
-  grid-column: 1/3;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 1em;
 }
 
-@media screen and (min-width: 500px) {
-  .profile-update {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: 10vw;
-  }
+.profile-update .profile-update-form {
+  display: flex;
+  flex-direction: column;
+  width: clamp(100px, 500px, 80%);
+  background-color: #6ACC9A;
+  border: 1px solid #223b57;
+  box-sizing: border-box;
+  padding: 1em;
+  gap: 0.5em;
+  border: none;
+  border-radius: 5px;
+  flex-direction: column;
+  align-items: center;
+  color: #223b57;
+}
+
+.profile-update .profile-update-form input[type=submit] {
+  width: 30%;
+  color: #223b57;
+  background-color: #0FA958;
+  border: none;
+  border-radius: 5px;
+}
+
+.profile-update .profile-update-form input[type=submit]:hover {
+  border: 1px solid #223b57;
+}
+
+.profile-update #change-name:hover {
+  border: 1px solid #223b57;
+}
+
+.profile-update #change-name input[name=name] {
+  color: #223b57;
+  background-color: #0FA958;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+}
+
+.profile-update #change-name input[name=name]:focus {
+  border: 1px solid #223b57;
+  outline: none;
 }
 
 
