@@ -1,51 +1,11 @@
-@extends('../Layout/Layout')
 
-@section('title', 'Profile Update')
-@section('headers')
-<script src="https://js.stripe.com/v3/"></script>
-@endsection
-
-@section('body')
-
-    <div id="popup">
-        @if (session('sent'))
-            {{ session('sent') }}
-        @endif
-    </div>
-
-    <form id="user_update_form_image" action={{ route('user.update') }} method="POST" enctype="multipart/form-data">
+    <form id="name-change" action={{ route('user.update') }} method="post">
         <input type="hidden" name="_method" value="put">
         @csrf
-
-        <fieldset>
-
-            <legend>
-                profie picture
-            </legend>
-            <img width="150px" height="auto" src={{ $profile_picture ? $profile_picture->file_link }} alt="">
-            <input accept=".jpeg, .jpg, .png" type="file" name="profile_picture" id="profile_picture">
-            @error('profile_picture')
-                <p id="profile_picture_phperror">{{ $message }}</p>
-            @enderror
-
-            <p id="profile_picture_scripterror"></p>
-            <input type="submit" value="submit">
-        </fieldset>
-    </form>
-
-    <form id="user_update_form_name" action={{ route('user.update') }} method="post">
-        <input type="hidden" name="_method" value="put">
-        @csrf
-
-        <fieldset>
-            <legend>name</legend>
-            <h1>{{ $user->name }}</h1>
-            <input type="text" name="name" id="name" placeholder="type your name">
-            @error('name')
-                <p>{{ $message }}</p>
-            @enderror
+            <label for="name">Name: {{$user->name}}</label>
+            <input type="text" name="name" id="name" placeholder="type your name" maxlength="50" >
+            <div class="error-box"> </div>
             <input type="submit" value="change name">
-        </fieldset>
     </form>
 
     <form id="user_update_form_name" action={{ route('user.update') }} method="post">
@@ -112,13 +72,3 @@
                 <input type="submit" value="change email">
             </form>
     </fieldset>
-    {{-- <form action="{{ route('purchase.course', ['course' => 2]) }}" method="post">
-        @csrf
-        <input type="submit" value="set">
-    </form> --}}
-
-@endsection
-
-@section('scripts')
-    <script src={{ asset('js/profile_update.js') }}></script>
-@endsection

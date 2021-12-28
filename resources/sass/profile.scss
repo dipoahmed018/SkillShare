@@ -117,3 +117,21 @@ $pink_red : rgb(255, 71, 71);
     }
 
 }
+
+.profile-update {
+    display: grid;
+    grid-template-columns: 1fr;
+    #name-change {
+        grid-column: 1 / 3;
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+@media screen and (min-width: 500px) {
+    .profile-update {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        padding: 10vw;
+    }
+}

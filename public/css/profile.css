@@ -107,4 +107,22 @@
   pointer-events: none;
 }
 
+.profile-update {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.profile-update #name-change {
+  grid-column: 1/3;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 500px) {
+  .profile-update {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    padding: 10vw;
+  }
+}
+
 
