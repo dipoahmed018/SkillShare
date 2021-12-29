@@ -19,6 +19,7 @@
         </div>
     </section>
     <section class="controls">
+        <button><a href="/create/course" style="text-decoration: none; color:white;">Create course</a></button>
         <button class="control-buttons" data-toggle-target=".my-courses">{{ $user ? 'My' : 'Users' }} courses</button>
         <button class="control-buttons" data-toggle-target=".bought-courses">Bought courses</button>
         <button class="control-buttons" data-toggle-target=".activity-logs">Activity logs</button>
@@ -40,7 +41,6 @@
             </div>
         </div>
         <div class="my-courses resource-box hide">
-            <h5>My courses</h5>
             <div class="courses">
             </div>
         </div>

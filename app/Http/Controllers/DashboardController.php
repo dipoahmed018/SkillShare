@@ -13,16 +13,17 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $bestSellersCourses = Course::with([
-            'ownerDetails' => fn ($q) => $q->select('users.*')->with('profilePicture'),
-            'thumbnail' => fn ($q) => $q->select('file_link.*'),
+            'ownerDetails.profilePicture',
+            'thumbnail',
         ])
             ->withAvg('review as avg_rate', 'stars')
             ->AvarageRating()
-            ->MonthlySales()
+            // ->MonthlySales()
             ->limit(10)
             ->orderBy('avg_rate', 'desc')
             ->get();
 
+            
         //recomended courses
         $recommendedCourse = null;
         

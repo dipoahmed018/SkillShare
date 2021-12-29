@@ -25,7 +25,6 @@
         <div class="catagories-wrapper">
             <x-checkbox id="catagory-form" name="catagories" label="Select catagories" :options="$catagories" />
         </div>
-        <br>
         <input type="submit" value="Save changes">
     </form>
 @endsection
