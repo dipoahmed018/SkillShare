@@ -25,6 +25,7 @@
     <div class="demo-credentials">
         <p>Email: cdubuque@example.net</p>
         <p>Password: password</p>
+        <h6>Login credentials</h6>
     </div>
     @if (session('status'))
         {{session('status')}}
