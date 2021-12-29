@@ -22,7 +22,7 @@ class ForumPolicy
     }
     public function access(User $user, Forum $forum)
     {
-        $student = $forum->forumable()->students()->where('id','=',$user->id)->first();
+        $student = $forum->students()->where('users.id', $user->id)->first();
         return $student || $forum->owner == $user->id;
     }
     public function update(User $user, Forum $forum)

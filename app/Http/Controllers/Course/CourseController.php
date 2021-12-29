@@ -165,7 +165,7 @@ class CourseController extends Controller
         //permissions
         $course->isStudent =  $user?->courses()->wherePivot('course_id', $course->id)->first() ? true : false;
         $course->isPurchasable = !$course->isStudent && $course->owner !== $user?->id ? true : false;
-
+        
         return view('pages/course/Show', ['course' => $course]);
     }
 

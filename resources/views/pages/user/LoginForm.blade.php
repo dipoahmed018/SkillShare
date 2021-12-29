@@ -22,6 +22,10 @@
         @enderror
         <input type="submit" value="Login">
     </form>
+    <div class="demo-credentials">
+        <p>Email: cdubuque@example.net</p>
+        <p>Password: password</p>
+    </div>
     @if (session('status'))
         {{session('status')}}
     @endif

@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ asset('css/course.css') }}">
 @endsection
 @section('body')
-    {{-- @dump($data) --}}
+
     <div class="courses">
         @foreach ($data as $item)
             <x-course.card :course="$item" />
