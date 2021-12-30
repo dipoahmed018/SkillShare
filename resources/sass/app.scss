@@ -229,6 +229,7 @@ $pink_red : rgb(255, 71, 71);
         overflow: hidden;
         display: flex;
         margin: auto;
+
         img {
             margin: auto;
             max-height: 100%;
@@ -239,6 +240,7 @@ $pink_red : rgb(255, 71, 71);
     .title {
         color: $deep_green;
     }
+
     // .details  
     .details {
         display: flex;
@@ -589,6 +591,18 @@ $pink_red : rgb(255, 71, 71);
             }
         }
 
+        .notification-box {
+
+            .notifications {
+                display: none;
+            }
+
+            .hide {
+                display: none;
+                pointer-events: none;
+            }
+        }
+
         .authenticate {
             display: flex;
 
@@ -820,6 +834,7 @@ $pink_red : rgb(255, 71, 71);
 
         nav {
             display: flex;
+
             .link {
                 display: block;
                 align-self: center;

@@ -16,6 +16,7 @@ use Illuminate\Auth\Events\PasswordReset as EventsPasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -60,7 +61,11 @@ class UserController extends Controller
 
     public function ShowLoginForm()
     {
-        return Auth::check() ? redirect('/') : view('/pages/user/LoginForm');
+        $demoCredentials = null;
+        if (App::environment('local')) {
+            $demoCredentials = User::first();
+        }
+        return Auth::check() ? redirect('/') : view('/pages/user/LoginForm', ['demoCredentials' => $demoCredentials]);
     }
     public function Login(LoginRequest $request)
     {
@@ -97,7 +102,7 @@ class UserController extends Controller
         $birthdate = $request->birthdate;
 
         if ($profile_picture) {
-            $newfilename = str_replace(['.', ' ','/'], '', $user->name) . time(). '_profile.' . $profile_picture->getClientOriginalExtension();
+            $newfilename = str_replace(['.', ' ', '/'], '', $user->name) . time() . '_profile.' . $profile_picture->getClientOriginalExtension();
             $file_path = storage_path('/app/public/profile/profile_photo/' . $newfilename);
             $image = Image::make($profile_picture->getRealPath());
             if ($user->profilePicture) {
@@ -222,7 +227,7 @@ class UserController extends Controller
             event(new EventsPasswordReset($user));
         });
         return $status === Password::PASSWORD_RESET
-            ? redirect('/login')->with('status',__($status))
+            ? redirect('/login')->with('status', __($status))
             : back()->withErrors(['email' => __($status)]);
     }
 }

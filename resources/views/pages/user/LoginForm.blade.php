@@ -27,6 +27,13 @@
         <p>Password: password</p>
         <h6>Login credentials</h6>
     </div>
+    @if (App::environment('local'))
+    <div class="demo-credentials">
+        <p>Email: {{$demoCredentials->email}}</p>
+        <p>Password: password</p>
+        <h6>Login credentials</h6>
+    </div>
+    @endif
     @if (session('status'))
         {{session('status')}}
     @endif

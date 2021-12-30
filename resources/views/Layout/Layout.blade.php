@@ -21,7 +21,6 @@
     </div>
 
     {{-- menu stack is the script for header  --}}
-    @stack('menu')
     @stack('checkbox')
     <script src="{{ asset('js/app.js') }}"></script>
 

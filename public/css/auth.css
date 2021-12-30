@@ -94,7 +94,7 @@
 .demo-credentials {
   display: flex;
   flex-direction: column;
-  margin: auto;
+  margin: 1em auto 2em auto;
   background-color: #6ACC9A;
   padding: 1em;
   border-radius: 5px;

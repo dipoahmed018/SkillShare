@@ -13714,6 +13714,15 @@ fieldset:disabled .btn {
   display: none;
 }
 
+.header .sidebar .notification-box .notifications {
+  display: none;
+}
+
+.header .sidebar .notification-box .hide {
+  display: none;
+  pointer-events: none;
+}
+
 .header .sidebar .authenticate {
   display: flex;
 }

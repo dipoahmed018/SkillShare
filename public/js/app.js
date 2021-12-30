@@ -1842,6 +1842,8 @@ module.exports = {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./component/header/header */ "./resources/js/component/header/header.js");
+
 window.onload = function () {
   window.csrf = document.head.querySelector("meta[name='_token']").content;
 };
@@ -1860,6 +1862,136 @@ window.csrf = document.head.querySelector('meta[name="_token"]').content;
 window.stripe_publish_key = "pk_test_51HtPQPHlj47rZntYuLzKWaYHnSxQHhFIQEwGXtyUPWXqNUh5EpMxRXqMMO0BzlhW8xa0Bz3d6uYU7AA7E28Cp7gH00XcKcyRX3";
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] = document.head.querySelector("meta[name='_token']").content;
+
+/***/ }),
+
+/***/ "./resources/js/component/header/header.js":
+/*!*************************************************!*\
+  !*** ./resources/js/component/header/header.js ***!
+  \*************************************************/
+/***/ (() => {
+
+//serach box
+var search_input = document.getElementById('search');
+var suggestion_box = document.getElementById('suggestion-box');
+search_input.addEventListener('input', function (e) {
+  var input = e.target.value;
+
+  if (input.length >= 4) {
+    fetch("/courses?suggestion=true&search=".concat(input), {
+      method: 'get',
+      headers: {
+        'X-CSRF-TOKEN': window.csrf
+      }
+    }).then(function (res) {
+      return res.ok ? res.json() : Promise.reject(res);
+    }).then(function (res) {
+      var _res$data;
+
+      //slice the suggestions to 9
+      var data = (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.slice(1, 10); //clear suggestion box 
+
+      while (child = suggestion_box.firstChild) {
+        suggestion_box.removeChild(child);
+      }
+
+      data === null || data === void 0 ? void 0 : data.forEach(function (element) {
+        var wrapper = document.createElement('a');
+        wrapper.href = "/show/course/".concat(element.id);
+        wrapper.innerText = element.title.length > 30 ? element.title.slice(1, 30) + '...' : element.title;
+        wrapper.classList.add('searched-item');
+        suggestion_box.appendChild(wrapper);
+      });
+    })["catch"](function (err) {
+      console.log(err);
+    }); //suggestion box hider listener
+
+    var hideSuggestion = function hideSuggestion(e) {
+      if (!suggestion_box.contains(e.target)) {
+        document.removeEventListener('click', hideSuggestion);
+        suggestion_box.classList.add('hide');
+      }
+    }; //adding event listerner to document to hide the suggestion box onclick
+
+
+    suggestion_box.classList.contains('hide') ? document.addEventListener('click', hideSuggestion) : null;
+    suggestion_box.classList.remove('hide');
+    return true;
+  }
+
+  suggestion_box.classList.add('hide');
+}); //filter box
+
+var filter_box = document.querySelector('.filters');
+var filter_button = document.querySelector('.filter-button');
+var filter_form = document.getElementById('filter-form'); //toogle filter box
+
+filter_button.addEventListener('click', function () {
+  if (filter_box.classList.contains('filters-hidden')) {
+    filter_button.classList.add('close-filter');
+    filter_box.classList.remove('filters-hidden');
+    filter_box.classList.add('filters-show');
+  } else {
+    filter_button.classList.remove('close-filter');
+    filter_box.classList.remove('filters-show');
+    filter_box.classList.add('filters-hidden');
+  }
+}); //dual slicer price range
+
+var lowerSlider = document.querySelector('#lower');
+var upperSlider = document.querySelector('#upper');
+var min_price = document.getElementById('min_price');
+var max_price = document.getElementById('max_price');
+
+var range_input_listener = function range_input_listener(e) {
+  var lowerVal = parseInt(lowerSlider.value);
+  var upperVal = parseInt(upperSlider.value);
+
+  if (upperVal < lowerVal + 15) {
+    upperSlider.value = lowerVal + 15;
+  }
+
+  if (lowerVal > upperVal - 15) {
+    lowerSlider.value = upperVal - 15;
+  } //set max min price input 
+
+
+  min_price.value = lowerSlider.value * 100;
+  max_price.value = upperSlider.value * 100;
+};
+
+upperSlider.addEventListener('input', range_input_listener);
+lowerSlider.addEventListener('input', range_input_listener); //review input
+
+var review_inputs = document.querySelectorAll('.review-stars');
+review_inputs.forEach(function (elm) {
+  elm.addEventListener('click', function (e) {
+    var target = e.target.getAttribute('data-stars') ? e.target : e.target.parentElement;
+    Array.prototype.find.call(review_inputs, function (elm) {
+      return elm.classList.contains('selected');
+    }).classList.remove('selected');
+    target.classList.add('selected');
+    document.querySelector('[name="review"').value = target.getAttribute('data-stars');
+  });
+  document.querySelector('[name="review"').value = elm.classList.contains('selected') ? elm.getAttribute('data-stars') : 10;
+}); //mobile sider bar toogle
+
+var close_btn = document.querySelector('.sidebar-cls-icn');
+var open_btn = document.querySelector('.sidebar-opn-icn');
+var side_bar = document.querySelector('.sidebar');
+
+var toggleSideBar = function toggleSideBar(e) {
+  if (side_bar.classList.contains('sidebar-hidden')) {
+    side_bar.classList.remove('sidebar-hidden');
+    side_bar.classList.add('sidebar-show');
+  } else {
+    side_bar.classList.add('sidebar-hidden');
+    side_bar.classList.remove('sidebar-show');
+  }
+};
+
+open_btn.addEventListener('click', toggleSideBar);
+close_btn.addEventListener('click', toggleSideBar);
 
 /***/ }),
 
