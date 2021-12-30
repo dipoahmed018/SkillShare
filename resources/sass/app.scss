@@ -570,6 +570,18 @@ $pink_red : rgb(255, 71, 71);
             font-size: 20px;
             max-height: 20px;
         }
+        .notification-box {
+            width: 40px;
+            height: 40px;
+            .notifications {
+                display: none;
+            }
+
+            .hide {
+                display: none;
+                pointer-events: none;
+            }
+        }
 
         .profile {
             position: relative;
@@ -592,9 +604,60 @@ $pink_red : rgb(255, 71, 71);
         }
 
         .notification-box {
+            .notification-icon {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                text-align: center;
+                padding: 0px;
+                font-size: 1.8em;
+                color: $deep_green;
 
+                &:hover {
+                    outline: none;
+                }
+            }
             .notifications {
                 display: none;
+                position: fixed;
+                max-width: 20em;
+                min-width: 10em;
+                background-color: $shallow_green;
+                border: 1px solid $deep_green;
+                border-radius: 5px;
+                padding: 0.5em;
+                right: 50px;
+
+                .notification {
+                    display: flex;
+                    background-color: $deep_green;
+                    align-items: center;
+                    gap: 0.3em;
+                    padding: 0.2em;
+                    margin-bottom: 0.3em;
+                    color: 0.8em;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    .from-icon {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 100%;
+                        background-color: $glass_green;
+                        display: flex;
+                        color: $deep_green;
+                      span, img {
+                          margin: auto;
+                      }
+                    }
+                    .notification-card {
+                        display: block;
+                        width: 80%;
+                        margin: 0px;
+                        padding: 0px;
+                        font-size: 0.8em;
+                        color: white;
+                    }
+                }
             }
 
             .hide {
@@ -838,10 +901,10 @@ $pink_red : rgb(255, 71, 71);
             .link {
                 display: block;
                 align-self: center;
-                cursor: pointer;
                 color: $glass_green;
                 margin: 0px 10px;
                 font-size: 1.8rem;
+                cursor: pointer;
             }
 
             .sidebar-opn-icn {
@@ -864,13 +927,18 @@ $pink_red : rgb(255, 71, 71);
                 display: none;
             }
 
-            // for fixing the borken postion of profile and authentiaction links order
-            .user-info {
-                order: 3;
+            .notification-box {
+                order: 2;
+
+                &:hover {
+                    .notifications {
+                        display: block;
+                    }
+                }
             }
 
-
             .profile {
+                order: 3;
                 position: relative;
 
                 .profile-links {
@@ -898,18 +966,15 @@ $pink_red : rgb(255, 71, 71);
 
                 .profile-overlay {
                     display: none;
-                    background-color: transparent;
                     position: fixed;
-                    width: 60px;
-                    height: 30px;
-                    top: 50px;
+                    width: 100px;
+                    height: 80px;
+                    top: 30px;
                     right: 20px;
                     z-index: 1;
 
                     &:hover {
-                        .profile-links {
-                            display: block;
-                        }
+                        display: block;
                     }
                 }
 
@@ -931,18 +996,6 @@ $pink_red : rgb(255, 71, 71);
                     }
                 }
             }
-
-              .notification-box {
-
-            .notifications {
-                display: none;
-            }
-
-            .hide {
-                display: none;
-                pointer-events: none;
-            }
-        }
 
             //login button postion for desktop
             .authenticate {
