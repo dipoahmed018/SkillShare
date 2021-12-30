@@ -932,6 +932,18 @@ $pink_red : rgb(255, 71, 71);
                 }
             }
 
+              .notification-box {
+
+            .notifications {
+                display: none;
+            }
+
+            .hide {
+                display: none;
+                pointer-events: none;
+            }
+        }
+
             //login button postion for desktop
             .authenticate {
                 margin: auto 10px auto 0px;

@@ -88,26 +88,26 @@
         </form>
 
         @if ($user)
+        {{-- <div class="header-items notification-box">
+            <button class="notification-icon">
+                <i class="bi bi-bell"></i>
+                <i class="bi bi-x hide"></i>
+            </button>
+            <div class="notifications">
+                <div class="notification">
+                     <div class="from-icon">
+                         h
+                     </div>
+                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo natus, sapiente unde assumenda enim!</p>
+                </div>
+            </div>
+        </div> --}}
             <div class="header-items profile user-info">
                 <div class="profile-icon"></div>
                 <div class="profile-overlay"></div>
                 <div class="profile-links">
                     <a href="/profile/{{$user->id}}">My profile</a>
                     <a href="/user/logout">Logout</a>
-                </div>
-            </div>
-            <div class="header-items notification-box">
-                <button class="notification-icon">
-                    <i class="bi bi-bell"></i>
-                    <i class="bi bi-x hide"></i>
-                </button>
-                <div class="notifications">
-                    <div class="notification">
-                         <div class="from-icon">
-                             h
-                         </div>
-                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo natus, sapiente unde assumenda enim!</p>
-                    </div>
                 </div>
             </div>
         @else

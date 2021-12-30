@@ -14037,6 +14037,15 @@ fieldset:disabled .btn {
     background-color: #6ACC9A;
   }
 
+  .header .sidebar .notification-box .notifications {
+    display: none;
+  }
+
+  .header .sidebar .notification-box .hide {
+    display: none;
+    pointer-events: none;
+  }
+
   .header .sidebar .authenticate {
     margin: auto 10px auto 0px;
   }
