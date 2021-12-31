@@ -71,7 +71,7 @@
     <x-course.modal.thumbnail-updt :course="$course" />
     <x-course.modal.delete :course="$course" />
     <x-course.modal.introduction-updt :course="$course" />
-    <x-tutorial.tutorial-delete />
+    <x-tutorial.tutorialDelete />
     {{-- modals end --}}
 
     {{-- course-introduction is for the title created at and other deitals --}}

@@ -1,6 +1,6 @@
 <div class="tutorial-card" id="tutorial-{{ $tutorial->id }}" draggable="true"
     data-tutorial-id="{{ $tutorial->id }}">
-    <div class="thumbnail {{ $isStreamable }}" data-tutorial-id="{{ $tutorial->id }}">
+    <div class="thumbnail {{ $isStreamable() }}" data-tutorial-id="{{ $tutorial->id }}">
         @if ($isStreamable == '')
             <i class="bi bi-lock-fill"></i>
 

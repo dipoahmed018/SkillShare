@@ -28,7 +28,7 @@ class TutorialCard extends Component
      */
     public function render()
     {
-        return view('components.tutorial.tutorial-card');
+        return view('components.tutorial.tutorialCard');
     }
 
     public function canModify()
