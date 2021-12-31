@@ -13767,8 +13767,8 @@ fieldset:disabled .btn {
 }
 
 .header .sidebar .notification-box .notifications .notification .from-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 100%;
   background-color: #B8E9D3;
   display: flex;
