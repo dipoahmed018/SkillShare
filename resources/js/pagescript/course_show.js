@@ -225,6 +225,7 @@ const tutorial_progress_bar = tutorial_upload_form?.querySelector('.progress-bar
 const tutorial_progress_cancel = tutorial_upload_form?.querySelector('.cancel-upload')
 const tutorial_progress_value = tutorial_upload_form?.querySelector('.progress-value')
 
+console.log(tutorial_upload_control)
 //preventinf browser from opening the file
 document.addEventListener('dragover', (e) => {
   e.preventDefault()

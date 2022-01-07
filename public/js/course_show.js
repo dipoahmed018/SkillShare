@@ -12186,7 +12186,8 @@ var tutorial_input = document.getElementById('tutorial-upload');
 var tutorial_upload_control = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.upload-control');
 var tutorial_progress_bar = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-bar');
 var tutorial_progress_cancel = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.cancel-upload');
-var tutorial_progress_value = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-value'); //preventinf browser from opening the file
+var tutorial_progress_value = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-value');
+console.log(tutorial_upload_control); //preventinf browser from opening the file
 
 document.addEventListener('dragover', function (e) {
   e.preventDefault();

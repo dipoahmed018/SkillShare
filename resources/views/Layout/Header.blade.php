@@ -105,7 +105,9 @@
                 </div>
             </div>
             <div class="header-items profile user-info">
-                <div class="profile-icon">h</div>
+
+                <img class="profile-icon" src="{{ $user->profilePhoto }}">
+
                 <div class="profile-overlay"></div>
                 <div class="profile-links">
                     <a href="/profile/{{ $user->id }}">My profile</a>

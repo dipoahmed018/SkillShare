@@ -31,11 +31,11 @@ class TutorialController extends Controller
             $chunk = chunkUpload($directory, 'no data');
             return $chunk->status == 200 ?  $chunk->message : 'something went wrong';
         }
+
         if ($request->header('x-resumeable')) {
             $chunk = chunkUpload($directory, 'no data');
             return $chunk->status == 200 ? $chunk->file_name : abort($chunk->status, $chunk->message);
         }
-
 
         if ($request->header('x-last') == true) {
             //chunk upload
@@ -43,7 +43,6 @@ class TutorialController extends Controller
             if ($chunk->status == 422) {
                 return abort(422, $chunk->message);
             }
-
 
             $file = FileLink::create([
                 'file_name' => $chunk->file_name,
@@ -53,16 +52,17 @@ class TutorialController extends Controller
                 'fileable_type' => 'course',
                 'fileable_id' => $course->id,
             ]);
+
             $tutorial_details = TutorialDetails::create([
                 'tutorial_id' => $file->id,
                 'title' => $title,
                 'order' => $course_tutorials->count() + 1,
             ]);
+
             $tutorial_details->file_details = $file;
-            // Log::channel('event')->info('last chunk');
+            
             return response()->json(['data' => $tutorial_details, 'error' => false, 'success' => true]);
         }
-        // Log::channel('event')->info('pending chunk');
 
         $chunk = chunkUpload($directory, $data);
 
