@@ -108,13 +108,13 @@ class TutorialController extends Controller
             throw $th;
         }
     }
-    public function deleteTutorial(Request $request, TutorialDetails $tutorial, Course $course)
+    public function deleteTutorial(Request $request, Course $course,  TutorialDetails $tutorial)
     {
         try {
             if ($request->user()->id !== $course->owner) {
                 throw new AuthorizationException('You are not the owner of this course');
             }
-            Log::channel('event')->info('i was here');
+
             $file = $tutorial->tutorial_video;
             $course->tutorialDetails()->where('tutorial_details.order', '>', $tutorial->order)->decrement('order', 1);
             // TutorialDetails::query()->where('order','>', $tutorial->order)->decrement('order', 1);

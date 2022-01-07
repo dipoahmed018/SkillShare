@@ -164,7 +164,6 @@ introduction_input_lement?.addEventListener('change', (e) => {
   //show upload progress
   introduction_upload_control.style.display = 'flex'
   uploader.showProgress = progress => {
-    console.log(progress)
     progress = progress > 100 ? 100 : progress
     introduction_progress_value.innerText = `${progress}%`
     introduction_progress_bar.style.width = `${progress}%`
@@ -225,7 +224,6 @@ const tutorial_progress_bar = tutorial_upload_form?.querySelector('.progress-bar
 const tutorial_progress_cancel = tutorial_upload_form?.querySelector('.cancel-upload')
 const tutorial_progress_value = tutorial_upload_form?.querySelector('.progress-value')
 
-console.log(tutorial_upload_control)
 //preventinf browser from opening the file
 document.addEventListener('dragover', (e) => {
   e.preventDefault()
@@ -291,8 +289,8 @@ function upload_tutorial(file) {
 
   //handel response
   uploader.showResponse = (res, err) => {
-    if (res?.data) {
-      course.tutorials.push(res.data.data)
+    if (res?.data?.success) {
+      course.tutorial_details.push(res.data.data)
       add_tutorial_element(res.data.data)
       reset_tutorial_upload()
       popup.addPopup('tutorial upload complete')
@@ -302,7 +300,7 @@ function upload_tutorial(file) {
 
 function reset_tutorial_upload() {
   //progress box reset
-  console.log(tutorial_upload_control)
+  console.log(tutorial_upload_control);
   tutorial_upload_control.style.display = 'none'
   tutorial_progress_bar.style.width = `0`
   tutorial_progress_value.innerText = `0`
@@ -311,7 +309,6 @@ function reset_tutorial_upload() {
   tutorial_upload_form.reset()
 }
 function add_tutorial_element(tutorial_details) {
-  console.log(tutorial_details, ['data'])
   const tutorial_template =
     `
   <div draggable="true" class="tutorial-card row">

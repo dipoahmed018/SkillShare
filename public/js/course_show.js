@@ -12130,7 +12130,6 @@ introduction_input_lement === null || introduction_input_lement === void 0 ? voi
   introduction_upload_control.style.display = 'flex';
 
   uploader.showProgress = function (progress) {
-    console.log(progress);
     progress = progress > 100 ? 100 : progress;
     introduction_progress_value.innerText = "".concat(progress, "%");
     introduction_progress_bar.style.width = "".concat(progress, "%");
@@ -12186,8 +12185,7 @@ var tutorial_input = document.getElementById('tutorial-upload');
 var tutorial_upload_control = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.upload-control');
 var tutorial_progress_bar = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-bar');
 var tutorial_progress_cancel = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.cancel-upload');
-var tutorial_progress_value = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-value');
-console.log(tutorial_upload_control); //preventinf browser from opening the file
+var tutorial_progress_value = tutorial_upload_form === null || tutorial_upload_form === void 0 ? void 0 : tutorial_upload_form.querySelector('.progress-value'); //preventinf browser from opening the file
 
 document.addEventListener('dragover', function (e) {
   e.preventDefault();
@@ -12249,8 +12247,10 @@ function upload_tutorial(file) {
   }); //handel response
 
   uploader.showResponse = function (res, err) {
-    if (res !== null && res !== void 0 && res.data) {
-      course.tutorials.push(res.data.data);
+    var _res$data;
+
+    if (res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.success) {
+      course.tutorial_details.push(res.data.data);
       add_tutorial_element(res.data.data);
       reset_tutorial_upload();
       popup.addPopup('tutorial upload complete');
@@ -12269,7 +12269,6 @@ function reset_tutorial_upload() {
 }
 
 function add_tutorial_element(tutorial_details) {
-  console.log(tutorial_details, ['data']);
   var tutorial_template = "\n  <div draggable=\"true\" class=\"tutorial-card row\">\n    <div class=\"details col-sm-10\">\n        <h3 id=\"title\">".concat(tutorial_details.title, "</h3>\n        <span>created_at</span>\n    </div>\n\n    <div class=\"edit col\">\n        <a class=\"btn btn-warning\" href=\"/course/").concat(course.id, "/tutorial/").concat(tutorial_details.id, "\">Edit</a>\n        <div class=\"watch\">\n          <button tutorial=").concat(tutorial_details.id, " class=\"btn btn-primary watch-tutorial\" id='open-tutorial'>Watch</button>\n        </div>\n    </div>\n  </div> \n");
   document.querySelector('.tutorials').insertAdjacentHTML('beforebegin', tutorial_template);
 } //tutorial edit 
