@@ -34,8 +34,11 @@ class UserController extends Controller
         $user->load([
             'profilePicture',
             'courseForum',
+            'myCourses',
+            'myForums',
+            'myReviews',
         ]);
-        $user->courses = $user->courses()->paginate(10, ['*'], 'courses');
+        $user->boughtCourses = $user->courses()->paginate(10, ['*'], 'courses');
         $user->myCourses = $user->myCourses()->paginate(10, ['*'], 'my_courses');
 
         return view('pages/user/show', ['profileUser' => $user]);

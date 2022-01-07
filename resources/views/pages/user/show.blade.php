@@ -33,9 +33,9 @@
     </section>
     <section class="resources">
         <div class="bought-courses resource-box">
-            <h5>Bought-courses</h5>
+            <h5>Bought courses</h5>
             <div class="courses">
-                @foreach ($profileUser->myCourses as $course)
+                @foreach ($profileUser->boughtCourses as $course)
                     <div class="course-card">
                         <x-course.card :course="$course" />
                     </div>
@@ -43,7 +43,13 @@
             </div>
         </div>
         <div class="my-courses resource-box hide">
+            <h5>My courses</h5>
             <div class="courses">
+                @foreach ($profileUser->myCourses as $course)
+                <div class="course-card">
+                    <x-course.card :course="$course" />
+                </div>
+                @endforeach
             </div>
         </div>
         <div class="activity-logs resource-box hide">
