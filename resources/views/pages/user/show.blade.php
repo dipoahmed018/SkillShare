@@ -19,7 +19,9 @@
         </div>
     </section>
     <section class="controls">
-        <button><a href="/create/course" style="text-decoration: none; color:white;">Create course</a></button>
+        @if ($profileUser->id == $user?->id)
+            <button><a href="/create/course" style="text-decoration: none; color:white;">Create course</a></button>
+        @endif
         <button class="control-buttons" data-toggle-target=".my-courses">{{ $user ? 'My' : 'Users' }} courses</button>
         <button class="control-buttons" data-toggle-target=".bought-courses">Bought courses</button>
         <button class="control-buttons" data-toggle-target=".activity-logs">Activity logs</button>
