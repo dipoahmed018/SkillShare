@@ -6,7 +6,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class Postobserver
+class PostObserver
 {
     /**
      * Handle the Post "created" event.

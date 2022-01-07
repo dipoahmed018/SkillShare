@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\FileLink;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Observers\Commentobserver;
 use App\Observers\FileObserver;
+use App\Observers\NotificationObserver;
 use App\Observers\Postobserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
