@@ -2,14 +2,11 @@
 
 namespace App\Notifications;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
 class NewTutorialAdded extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -20,6 +17,7 @@ class NewTutorialAdded extends Notification implements ShouldQueue, ShouldBroadc
      *
      * @return void
      */
+
     public $tutorialDetails;
 
     public function __construct($tutorialDetails)
@@ -37,15 +35,31 @@ class NewTutorialAdded extends Notification implements ShouldQueue, ShouldBroadc
     {
         return ['broadcast', 'database'];
     }
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
+
+    public function viaQueues()
     {
-        Log::channel('event')->info('tutorial created',[$this->tutorialDetails]);
-        return $this->tutorialDetails;
+        return [
+            'broadcast' => 'broadcast_queue',
+            'database' => 'database_queue',
+        ];
+    }
+
+    // public function toDatabase($notifiable)
+    // {
+    //     return [
+    //         'message' => "A new tutorial has been added to "
+    //     ];
+    // }
+
+    public function toBroadcast($notifiable)
+    {
+        $course = $this->tutorialDetails->course;
+        return new BroadcastMessage([
+            'message' => "A new tutorial has been added to $course->title",
+            'link_to' => env('APP_URL') . "/show/course/$course->id",
+            'icon_text' => "T",
+            'icon_image' => null,
+            'created_at' => $this->tutorialDetails->created_at,
+        ]);
     }
 }

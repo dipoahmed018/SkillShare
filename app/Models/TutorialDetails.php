@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\NewTutorialAdded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 
 class TutorialDetails extends Model

@@ -16,7 +16,7 @@ class FileObserver
      */
     public function created(FileLink $fileLink)
     {
-        Log::channel('event')->info('observer file',['creating']);
+       //
     }
 
     /**
