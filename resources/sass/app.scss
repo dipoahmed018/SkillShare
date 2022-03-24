@@ -2,12 +2,11 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 $primary: #0d6efd;
 $stars: #F2DD1F;
-$shallow_green : #6ACC9A;
+$shallow_green : #292d3e;
 $deep_green : #0FA958;
-$glass_green : #B8E9D3;
+$glass_green : #333333;
 $text_red_gray : rgb(53, 43, 43);
 $pink_red : rgb(255, 71, 71);
-
 
 #check {
     color: aquamarine;
@@ -241,7 +240,7 @@ $pink_red : rgb(255, 71, 71);
         color: $deep_green;
     }
 
-    // .details  
+    // .details
     .details {
         display: flex;
         flex-wrap: wrap;
@@ -514,11 +513,9 @@ $pink_red : rgb(255, 71, 71);
 //heade style for mobile
 .header {
     width: 100%;
-    height: clamp(40px, 6vw, 100px);
     display: block;
     position: fixed;
     z-index: 10;
-    background-color: rgb(112, 112, 112);
 
     nav {
         display: flex;
@@ -690,14 +687,13 @@ $pink_red : rgb(255, 71, 71);
             z-index: 20;
 
             input {
-                background: url('./assets/search_background.png');
-                background-repeat: no-repeat;
+                background: no-repeat;
                 background-size: 250px;
                 min-width: 250px;
                 min-height: 30px;
-                padding-left: 15px;
-                padding-right: 40px;
-                border: none;
+                border: 2px solid $shallow_green;
+                border-radius: 1rem;
+                padding: 0.2rem 1rem;
                 outline: none;
             }
 
@@ -891,7 +887,6 @@ $pink_red : rgb(255, 71, 71);
 
     .header {
         display: flex;
-        background-color: rgb(112, 112, 112);
         width: 100%;
         z-index: 20;
 
@@ -903,7 +898,7 @@ $pink_red : rgb(255, 71, 71);
                 align-self: center;
                 color: $glass_green;
                 margin: 0px 10px;
-                font-size: 1.8rem;
+                font-size: 1.3rem;
                 cursor: pointer;
             }
 

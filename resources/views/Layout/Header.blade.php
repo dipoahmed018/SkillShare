@@ -1,6 +1,6 @@
-<header class="header">
+<header class="header h-16 bg-white text-gray-500">
     <nav>
-        <a class="header-items home link" href="/dashboard">Home </a>
+        <a class="header-items home link" href="/dashboard">Home</a>
         <a class="header-items link" href="/courses">Course</a>
         <i class="bi bi-list sidebar-opn-icn"></i>
     </nav>

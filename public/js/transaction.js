@@ -52,7 +52,7 @@ var registerWrapper = function registerWrapper(stripe, startTime) {
 
   stripe._registerWrapper({
     name: 'stripe-js',
-    version: "1.17.1",
+    version: "1.25.0",
     startTime: startTime
   });
 };
