@@ -5,9 +5,7 @@
     <link rel="stylesheet" href={{ asset('css/dashboard.css') }}>
     <link rel="stylesheet" href={{ asset('css/course.css') }}>
 
-    {{-- 
-        simple customization to page layout    
-    --}}
+    {{-- simple customization to page layout --}}
     <style>
         .header {
             background-color: rgba(0, 0, 0, 0.172);
