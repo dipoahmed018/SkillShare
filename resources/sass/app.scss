@@ -1,6 +1,6 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-icons/font/bootstrap-icons.css";
-$primary: #0d6efd;
+/*$primary: #0d6efd;
 $stars: #F2DD1F;
 $shallow_green : #292d3e;
 $deep_green : #0FA958;
@@ -792,7 +792,7 @@ $pink_red : rgb(255, 71, 71);
                                 background-color: #0FA958;
                                 position: relative;
                                 margin: 5px 0;
-                                /* Add some margin to ensure box shadow is shown */
+                                !* Add some margin to ensure box shadow is shown *!
                                 cursor: pointer;
                                 appearance: none;
                                 pointer-events: all;
@@ -1077,4 +1077,4 @@ $pink_red : rgb(255, 71, 71);
         color: $shallow_green;
         margin: 0px auto;
     }
-}
+}*/
