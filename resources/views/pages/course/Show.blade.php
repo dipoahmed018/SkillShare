@@ -71,7 +71,7 @@
     <x-course.modal.thumbnail-updt :course="$course" />
     <x-course.modal.delete :course="$course" />
     <x-course.modal.introduction-updt :course="$course" />
-    <x-tutorial.tutorialDelete />
+    <x-tutorial.delete />
     {{-- modals end --}}
 
     {{-- course-introduction is for the title created at and other deitals --}}
@@ -163,7 +163,7 @@
         @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)
-                <x-Tutorial.TutorialCard :tutorial="$tutorial" :course="$course" :user="$user" />
+                <x-tutorial.card :tutorial="$tutorial" :course="$course" :user="$user" />
             @endforeach
         </div>
     </div>

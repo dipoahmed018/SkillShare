@@ -4,7 +4,7 @@ namespace App\View\Components\Tutorial;
 
 use Illuminate\View\Component;
 
-class TutorialCard extends Component
+class Card extends Component
 {
     /**
      * Create a new component instance.
@@ -28,7 +28,7 @@ class TutorialCard extends Component
      */
     public function render()
     {
-        return view('components.tutorial.tutorialCard');
+        return view('components.tutorial.card');
     }
 
     public function canModify()
