@@ -106,13 +106,99 @@ review_inputs.forEach(elm => {
         'data-stars') : 10;
 })
 
-//notification observer
-console.log('hello')
-console.log(user)
+//notifications handel
 if (user) {
+    const notification_box = document.querySelector('.notifications')
+
+    //notification observer
     const pusher = new Pusher(window.pusher_app_key, {
-        cluster: window.pusher_app_cluster
+        cluster: window.pusher_app_cluster,
+        forceTLS: true,
+        authEndpoint: '/broadcasting/auth',
+        auth: {
+          headers: {
+              "X-CSRF-TOKEN": window.csrf,
+          }
+        }
     });
+
+    const notification_channel = pusher.subscribe(`private-User.Notification.${user.id}`)
+
+    notification_channel.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', (notification) => {
+        console.log(notification)
+        makeNotificationElement(notification, notification_box, 'afterbegin')
+    })
+
+    fetch(`/notifications/${user.id}`, {
+        method: 'get',
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+        .then(res => res.ok ? res.json() : Promise.reject(res.json))
+        .then(notifications => {
+            notifications.forEach(notification => {
+                notification.data.id = notification.id
+                makeNotificationElement(notification.data, notification_box, 'beforeend')
+            })
+        })
+
+
+    /**
+     * 
+     * @param {Object} notification "notification contents"
+     * @param {HTMLElement} parentElement "notification box "
+     * @param {String} insert "placement of the notification"
+     */
+
+    function makeNotificationElement(notification, parentElement, insert = "beforeend")
+    {
+        let message = notification.message
+        if(message.length > 70) {
+            //reduce the length of the string
+            let shortened_str = message.substr(0, message.lastIndexOf(' ', 70))
+
+            //if shorthened string length is less then 50 forget about shorened string just reduce it to 100
+            message = shortened_str.length < 30 ? message.substr(70) + "..." : shortened_str + "..."
+        }
+
+        let from;
+        from = !notification.icon_image || `<img src="${notification.icon_image}" />`
+        from = from ?? `<span>${notification.icon_text}</span>`;
+
+        let notification_card = `<div class="notification" id="${notification.id}">
+            <div class="from-icon">
+                    ${from}
+            </div>
+            <p class="notification-card">${message}</p>
+            <i class="bi bi-x-lg delete-btn" data-notification-id=${notification.id}></i>
+        </div>`
+        parentElement.insertAdjacentHTML(insert, notification_card)
+
+        const notification_element = document.getElementById(notification.id)
+        const notification_delete_btn = notification_element.querySelector('.delete-btn')
+
+        notification_element.addEventListener('click', e => {
+            location.href = notification.link_to
+        })
+        
+        notification_delete_btn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            
+            fetch(`/notification/delete/${notification.id}`, {
+                method: "delete",
+                headers: {
+                    "Accept": "application/json",
+                    'X-CSRF-TOKEN': window.csrf,
+                }
+            })
+                .then(res => res.ok ? res.json() : Promise.reject(res.json()))
+                .then(notification => {
+                    document.getElementById(notification.id).remove()
+                })
+        })
+
+    }
 }
 
 

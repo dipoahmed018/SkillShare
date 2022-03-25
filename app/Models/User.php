@@ -52,6 +52,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
     
+    //app behavior changin
+    public function receivesBroadcastNotificationsOn()
+    {
+        return "User.Notification.$this->id";
+    }
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'course_students', 'student_id', 'course_id');

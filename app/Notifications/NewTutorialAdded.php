@@ -44,21 +44,26 @@ class NewTutorialAdded extends Notification implements ShouldQueue, ShouldBroadc
         ];
     }
 
-    // public function toDatabase($notifiable)
-    // {
-    //     return [
-    //         'message' => "A new tutorial has been added to "
-    //     ];
-    // }
+    public function toDatabase($notifiable)
+    {
+        $course = $this->tutorialDetails->course;
+        return [
+            'message' => "A new tutorial has been added on $course->title",
+            'link_to' => env('APP_URL') . "/show/course/$course->id",
+            'icon_text' => "T",
+            'icon_image' => $course->ownerDetails->profilePhoto,
+            'created_at' => $this->tutorialDetails->created_at,
+        ];
+    }
 
     public function toBroadcast($notifiable)
     {
         $course = $this->tutorialDetails->course;
         return new BroadcastMessage([
-            'message' => "A new tutorial has been added to $course->title",
+            'message' => "A new tutorial has been added on $course->title",
             'link_to' => env('APP_URL') . "/show/course/$course->id",
             'icon_text' => "T",
-            'icon_image' => null,
+            'icon_image' => $course->ownerDetails->profilePhoto,
             'created_at' => $this->tutorialDetails->created_at,
         ]);
     }

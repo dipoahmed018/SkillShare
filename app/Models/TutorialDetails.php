@@ -26,7 +26,8 @@ class TutorialDetails extends Model
         {
             $tutorialDetails->tutorial_video;
             $tutorialDetails->course;
-            $students = $tutorialDetails->course->students;
+            $tutorialDetails->course->ownerDetails->profilePhoto;
+            $students = $tutorialDetails->course->students()->where('users.id', 1)->get();
             
             Notification::send($students, new NewTutorialAdded($tutorialDetails));
         });

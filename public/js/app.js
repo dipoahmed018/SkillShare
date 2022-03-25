@@ -1860,6 +1860,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.csrf = document.head.querySelector('meta[name="_token"]').content;
 window.stripe_publish_key = "pk_test_51HtPQPHlj47rZntYuLzKWaYHnSxQHhFIQEwGXtyUPWXqNUh5EpMxRXqMMO0BzlhW8xa0Bz3d6uYU7AA7E28Cp7gH00XcKcyRX3";
+console.log(window.stripe_publish_key);
 window.pusher_app_key = "5658efa15c987b220623";
 window.pusher_app_cluster = "ap2";
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -1981,14 +1982,83 @@ review_inputs.forEach(function (elm) {
     document.querySelector('[name="review"').value = target.getAttribute('data-stars');
   });
   document.querySelector('[name="review"').value = elm.classList.contains('selected') ? elm.getAttribute('data-stars') : 10;
-}); //notification observer
-
-console.log('hello');
-console.log(user);
+}); //notifications handel
 
 if (user) {
+  /**
+   * 
+   * @param {Object} notification "notification contents"
+   * @param {HTMLElement} parentElement "notification box "
+   * @param {String} insert "placement of the notification"
+   */
+  var makeNotificationElement = function makeNotificationElement(notification, parentElement) {
+    var _from;
+
+    var insert = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "beforeend";
+    var message = notification.message;
+
+    if (message.length > 70) {
+      //reduce the length of the string
+      var shortened_str = message.substr(0, message.lastIndexOf(' ', 70)); //if shorthened string length is less then 50 forget about shorened string just reduce it to 100
+
+      message = shortened_str.length < 30 ? message.substr(70) + "..." : shortened_str + "...";
+    }
+
+    var from;
+    from = !notification.icon_image || "<img src=\"".concat(notification.icon_image, "\" />");
+    from = (_from = from) !== null && _from !== void 0 ? _from : "<span>".concat(notification.icon_text, "</span>");
+    var notification_card = "<div class=\"notification\" id=\"".concat(notification.id, "\">\n            <div class=\"from-icon\">\n                    ").concat(from, "\n            </div>\n            <p class=\"notification-card\">").concat(message, "</p>\n            <i class=\"bi bi-x-lg delete-btn\" data-notification-id=").concat(notification.id, "></i>\n        </div>");
+    parentElement.insertAdjacentHTML(insert, notification_card);
+    var notification_element = document.getElementById(notification.id);
+    var notification_delete_btn = notification_element.querySelector('.delete-btn');
+    notification_element.addEventListener('click', function (e) {
+      location.href = notification.link_to;
+    });
+    notification_delete_btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      fetch("/notification/delete/".concat(notification.id), {
+        method: "delete",
+        headers: {
+          "Accept": "application/json",
+          'X-CSRF-TOKEN': window.csrf
+        }
+      }).then(function (res) {
+        return res.ok ? res.json() : Promise.reject(res.json());
+      }).then(function (notification) {
+        document.getElementById(notification.id).remove();
+      });
+    });
+  };
+
+  var notification_box = document.querySelector('.notifications'); //notification observer
+
   var pusher = new (pusher_js__WEBPACK_IMPORTED_MODULE_0___default())(window.pusher_app_key, {
-    cluster: window.pusher_app_cluster
+    cluster: window.pusher_app_cluster,
+    forceTLS: true,
+    authEndpoint: '/broadcasting/auth',
+    auth: {
+      headers: {
+        "X-CSRF-TOKEN": window.csrf
+      }
+    }
+  });
+  var notification_channel = pusher.subscribe("private-User.Notification.".concat(user.id));
+  notification_channel.bind('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', function (notification) {
+    console.log(notification);
+    makeNotificationElement(notification, notification_box, 'afterbegin');
+  });
+  fetch("/notifications/".concat(user.id), {
+    method: 'get',
+    headers: {
+      "Accept": "application/json"
+    }
+  }).then(function (res) {
+    return res.ok ? res.json() : Promise.reject(res.json);
+  }).then(function (notifications) {
+    notifications.forEach(function (notification) {
+      notification.data.id = notification.id;
+      makeNotificationElement(notification.data, notification_box, 'beforeend');
+    });
   });
 } //mobile sider bar toogle
 
