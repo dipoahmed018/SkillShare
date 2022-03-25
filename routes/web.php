@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppNotificationsController;
 use App\Models\Course;
 use App\Models\Catagory;
 use Illuminate\Support\Facades\Route;
@@ -140,4 +141,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::post('/save/image', fn (Request $request) => saveImage($request->file('upload'), env('APP_URL') . "/get/image"))->name('save.image');
         Route::get('/get/image', fn (Request $request) => getImage($request->name))->name('get.image');
     });
+
+    Route::get('/notifications/{user}', [AppNotificationsController::class, 'index']);
+    Route::delete('/notification/delete/{id}', [AppNotificationsController::class, 'delete']);
 });

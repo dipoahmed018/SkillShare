@@ -22,6 +22,9 @@
 
     {{-- menu stack is the script for header  --}}
     @stack('checkbox')
+    <script>
+        const user = @json($user);
+    </script>
     <script src="{{ asset('js/app.js') }}"></script>
 
     @yield('scripts')

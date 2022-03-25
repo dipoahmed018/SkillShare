@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         Post::factory()->count(80)->create();
         Comment::factory()->count(20)->parent()->create();
         Comment::factory()->count(50)->reply()->create();
-        Notification::factory()->count(50)->create();
+        // Notification::factory()->count(50)->create();
         Review::factory()->count(30)->course()->create();
         Review::factory()->count(30)->reply()->create();
         Catagory::factory()->count(20)->create();

@@ -190,7 +190,6 @@
     {{-- php data assign to javascript variable --}}
     <script>
         let csrf = document.head.querySelector("meta[name='_token']").content;
-        let user = @json($user);
         let course = @json($course);
     </script>
 

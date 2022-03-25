@@ -66,7 +66,6 @@
     <script>
         const question = @json($question);
         const answers = @json($question->answers);
-        const user = @json($user);
     </script>
     <script src="{{ asset('./js/ckeditor5/build/ckeditor.js') }}"></script>
     <script src="{{ asset('js/question_show.js') }}"></script>

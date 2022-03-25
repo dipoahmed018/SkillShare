@@ -18,10 +18,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var control_btns = _toConsumableArray(document.getElementsByClassName('control-buttons'));
 
 control_btns.forEach(function (element) {
-  console.log(element);
   element.addEventListener('click', function (e) {
     var target_class = e.target.getAttribute('data-toggle-target');
-    console.log(document.querySelector(target_class));
     document.querySelector('.resources .resource-box:not(.hide)').classList.add('hide');
     document.querySelector("".concat(target_class)).classList.remove('hide');
   });

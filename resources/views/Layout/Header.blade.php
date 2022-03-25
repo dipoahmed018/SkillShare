@@ -1,6 +1,6 @@
 <header class="header">
     <nav>
-        <a class="header-items home link" href="/dashboard">Home </a>
+        <a class="header-items home link" href="/dashboard">Home</a>
         <a class="header-items link" href="/courses">Course</a>
         <i class="bi bi-list sidebar-opn-icn"></i>
     </nav>
@@ -94,18 +94,12 @@
                     <i class="bi bi-x hide"></i>
                 </button>
                 <div class="notifications">
-                    <div class="notification">
-                        <div class="from-icon">
-                            <span>
-                                h
-                            </span>
-                        </div>
-                        <p class="notification-card">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                    </div>
                 </div>
             </div>
             <div class="header-items profile user-info">
-                <div class="profile-icon">h</div>
+
+                <img class="profile-icon" src="{{ $user->profilePhoto }}">
+
                 <div class="profile-overlay"></div>
                 <div class="profile-links">
                     <a href="/profile/{{ $user->id }}">My profile</a>

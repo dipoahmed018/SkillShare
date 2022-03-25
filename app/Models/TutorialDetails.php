@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Notifications\NewTutorialAdded;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class TutorialDetails extends Model
 {
     use HasFactory;
+
     protected $table = 'tutorial_details';
     protected $fillable = [
         'tutorial_id',
@@ -15,10 +19,26 @@ class TutorialDetails extends Model
         'title',
     ];
 
+    //event observers
+    protected static function booted()
+    {
+        static::created(function($tutorialDetails)
+        {
+            $tutorialDetails->tutorial_video;
+            $tutorialDetails->course;
+            $tutorialDetails->course->ownerDetails->profilePhoto;
+            $students = $tutorialDetails->course->students()->where('users.id', 1)->get();
+            
+            Notification::send($students, new NewTutorialAdded($tutorialDetails));
+        });
+    }
+
+    //relations
     public function course()
     {
         return $this->hasOneThrough(Course::class, FileLink::class,'id', 'id', 'tutorial_id', 'fileable_id');
     }
+
     public function tutorial_video()
     {
         return $this->belongsTo(FileLink::class, 'tutorial_id');

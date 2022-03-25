@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable,UserRelationships;
+    use HasFactory, Notifiable, UserRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -51,9 +51,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function myCourses()
+    
+    //app behavior changin
+    public function receivesBroadcastNotificationsOn()
     {
-        return $this->hasMany(Course::class, 'owner');
+        return "User.Notification.$this->id";
     }
     public function courses()
     {

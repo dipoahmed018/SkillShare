@@ -593,9 +593,12 @@ $pink_red : rgb(255, 71, 71);
                 height: 40px;
                 border-radius: 50%;
                 background-color: $glass_green;
-                text-align: center;
-                font-size: 1.5rem;
+                overflow: hidden;
                 cursor: pointer;
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
             .profile-links {
@@ -622,6 +625,8 @@ $pink_red : rgb(255, 71, 71);
                 position: fixed;
                 max-width: 20em;
                 min-width: 10em;
+                max-height: 50vh;
+                overflow: auto;
                 background-color: $shallow_green;
                 border: 1px solid $deep_green;
                 border-radius: 5px;
@@ -630,6 +635,7 @@ $pink_red : rgb(255, 71, 71);
 
                 .notification {
                     display: flex;
+                    text-decoration: none;
                     background-color: $deep_green;
                     align-items: center;
                     gap: 0.3em;
@@ -645,8 +651,13 @@ $pink_red : rgb(255, 71, 71);
                         background-color: $glass_green;
                         display: flex;
                         color: $deep_green;
-                      span, img {
-                          margin: auto;
+                      span {
+                          margin: auto;                        
+                      }
+                      img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 100%;
                       }
                     }
                     .notification-card {
@@ -656,6 +667,10 @@ $pink_red : rgb(255, 71, 71);
                         padding: 0px;
                         font-size: 0.8em;
                         color: white;
+                    }
+
+                    .delete-btn {
+                        color: rgb(213, 31, 31);
                     }
                 }
             }

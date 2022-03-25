@@ -19,7 +19,9 @@
         </div>
     </section>
     <section class="controls">
-        <button><a href="/create/course" style="text-decoration: none; color:white;">Create course</a></button>
+        @if ($profileUser->id == $user?->id)
+            <button><a href="/create/course" style="text-decoration: none; color:white;">Create course</a></button>
+        @endif
         <button class="control-buttons" data-toggle-target=".my-courses">{{ $user ? 'My' : 'Users' }} courses</button>
         <button class="control-buttons" data-toggle-target=".bought-courses">Bought courses</button>
         <button class="control-buttons" data-toggle-target=".activity-logs">Activity logs</button>
@@ -31,9 +33,9 @@
     </section>
     <section class="resources">
         <div class="bought-courses resource-box">
-            <h5>Bought-courses</h5>
+            <h5>Bought courses</h5>
             <div class="courses">
-                @foreach ($profileUser->myCourses as $course)
+                @foreach ($profileUser->boughtCourses as $course)
                     <div class="course-card">
                         <x-course.card :course="$course" />
                     </div>
@@ -41,7 +43,13 @@
             </div>
         </div>
         <div class="my-courses resource-box hide">
+            <h5>My courses</h5>
             <div class="courses">
+                @foreach ($profileUser->myCourses as $course)
+                <div class="course-card">
+                    <x-course.card :course="$course" />
+                </div>
+                @endforeach
             </div>
         </div>
         <div class="activity-logs resource-box hide">
