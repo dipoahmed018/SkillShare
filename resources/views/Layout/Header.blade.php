@@ -1,8 +1,8 @@
-<header class="header h-16 bg-white text-gray-500">
-    <nav>
-        <a class="header-items home link" href="/dashboard">Home</a>
-        <a class="header-items link" href="/courses">Course</a>
-        <i class="bi bi-list sidebar-opn-icn"></i>
+<header class="bg-green-500 h-16 header text-white">
+    <nav class="align-items-center flex h-100">
+        <a class="header-items home link px-8" href="/dashboard">Home</a>
+        <a class="header-items link px-8" href="/courses">Course</a>
+        <i class="bi bi-list sidebar-opn-icn px-8"></i>
     </nav>
     <div class="sidebar sidebar-hidden">
         <i class="bi bi-x-lg sidebar-cls-icn"></i>
