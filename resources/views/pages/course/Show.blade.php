@@ -163,7 +163,7 @@
         @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)
-                <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user" />
+                <x-Tutorial.TutorialCard :tutorial="$tutorial" :course="$course" :user="$user" />
             @endforeach
         </div>
     </div>
