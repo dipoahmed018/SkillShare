@@ -5,7 +5,7 @@
     <link rel="stylesheet" href={{ asset('css/course.css') }}>
 @endsection
 
-@section('tamplates')
+@section('templates')
     {{-- componetent data --}}
 
     <template id="review-template">
@@ -127,7 +127,7 @@
             @else
                 <button class="forum-link"><a href="/show/forum/{{$course->id}}">Go to forum</a></button>
             @endif
-            
+
         </div>
 
         {{-- thumbnail is for the introduction video or course thumbnail --}}
