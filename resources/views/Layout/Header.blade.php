@@ -1,16 +1,8 @@
-<header class="header">
-    <nav>
-        <a class="header-items home link" href="/dashboard">Home</a>
-        <a class="header-items link" href="/courses">Course</a>
-        <i class="bi bi-list sidebar-opn-icn"></i>
-    </nav>
-    <div class="sidebar sidebar-hidden">
         <i class="bi bi-x-lg sidebar-cls-icn"></i>
         <div class="header-items filter">
 
             <button class="filter-button"></button>
 
-            <div class="filters filters-hidden">
                 <form id="filter-form" method="GET" action="/courses">
 
                     <input type="hidden" name="review">

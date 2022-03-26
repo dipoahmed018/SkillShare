@@ -5,7 +5,7 @@
 @section('headers')
     <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
 @endsection
-{{-- @section('tamplates')
+{{-- @section('templates')
     @include('Layout.Tamplate.comment-tamplate')
 @endsection --}}
 
