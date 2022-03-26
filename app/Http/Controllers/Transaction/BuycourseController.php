@@ -59,7 +59,7 @@ class BuycourseController extends Controller
                 DB::commit();
                 return response('success',200);
             } else {
-                abort(422,'you did not paid for the course yet');
+                abort(422,'you did not paid for the course yest');
             }
 
         } catch (\Throwable $th) {

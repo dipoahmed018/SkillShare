@@ -1,84 +1,75 @@
-/*
-$primary: #0d6efd;
-$stars: #F2DD1F;
-$shallow_green : #6ACC9A;
-$deep_green : #0FA958;
-$text_red_gray : rgb(53, 43, 43);
-$glass_green : #B8E9D3;
-$pink_red : rgb(255, 71, 71);
-
 .course-edit-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0.2em;
+}
 
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    padding: 0.2em;
+.course-edit-form .title-wrapper,
+.course-edit-form .price-wrapper,
+.course-edit-form .description-wrapper,
+.course-edit-form .description-wrapper,
+.course-edit-form .catagories-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid #B8E9D3;
+  align-items: center;
+  padding: 0.2em;
+  margin-bottom: 1em;
+}
 
-    .title-wrapper,
-    .price-wrapper,
-    .description-wrapper,
-    .description-wrapper,
-    .catagories-wrapper {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        border: 1px solid $glass_green;
-        align-items: center;
-        padding: 0.2em;
-        margin-bottom: 1em;
+.course-edit-form .title-wrapper label,
+.course-edit-form .price-wrapper label,
+.course-edit-form .description-wrapper label,
+.course-edit-form .description-wrapper label,
+.course-edit-form .catagories-wrapper label {
+  color: #0FA958;
+}
 
-        label {
-            color: $deep_green;
-        }
+.course-edit-form .title-wrapper input,
+.course-edit-form .price-wrapper input,
+.course-edit-form .description-wrapper input,
+.course-edit-form .description-wrapper input,
+.course-edit-form .catagories-wrapper input {
+  color: #352b2b;
+  width: 100%;
+  background-color: #6ACC9A;
+  outline: none;
+  border: none;
+}
 
-        input {
-            color: $text_red_gray;
-            width: 100%;
-            background-color: $shallow_green;
-            outline: none;
-            border: none;
-        }
-    }
-
-    // .price-wrapper {
-    //     width: 30%;
-    //     margin: 0px auto 1em auto;
-    // }
-    // .catagories-wrapper {
-    //     width: 60%;
-    //     margin: 0px auto 1em auto;
-    // }
-    input[type=submit] {
-        background-color: $shallow_green;
-        border: none;
-        outline: none;
-        font-size: 0.9em;
-        padding: 0.5em;
-        height: 2.5em;
-        color: $text_red_gray;
-        margin: auto;
-        border-radius: 5px;
-    }
+.course-edit-form input[type=submit] {
+  background-color: #6ACC9A;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+  padding: 0.5em;
+  height: 2.5em;
+  color: #352b2b;
+  margin: auto;
+  border-radius: 5px;
 }
 
 @media screen and (min-width: 600px) {
-    .course-edit-form {
-        padding: 5em;
-        flex-direction: row;
-        flex-wrap: wrap;
-        .price-wrapper {
-            width: 30%;
-            max-height: 4em;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .catagories-wrapper {
-            width: 70%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    }
+  .course-edit-form {
+    padding: 5em;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .course-edit-form .price-wrapper {
+    width: 30%;
+    max-height: 4em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .course-edit-form .catagories-wrapper {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
-*/
 
 

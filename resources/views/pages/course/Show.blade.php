@@ -5,7 +5,7 @@
     <link rel="stylesheet" href={{ asset('css/course.css') }}>
 @endsection
 
-@section('templates')
+@section('tamplates')
     {{-- componetent data --}}
 
     <template id="review-template">
@@ -71,7 +71,7 @@
     <x-course.modal.thumbnail-updt :course="$course" />
     <x-course.modal.delete :course="$course" />
     <x-course.modal.introduction-updt :course="$course" />
-    <x-tutorial.delete />
+    <x-tutorial.tutorialDelete />
     {{-- modals end --}}
 
     {{-- course-introduction is for the title created at and other deitals --}}
@@ -127,7 +127,7 @@
             @else
                 <button class="forum-link"><a href="/show/forum/{{$course->id}}">Go to forum</a></button>
             @endif
-
+            
         </div>
 
         {{-- thumbnail is for the introduction video or course thumbnail --}}
@@ -163,7 +163,7 @@
         @endif
         <div class="tutorials">
             @foreach ($course->tutorialDetails as $tutorial)
-                <x-tutorial.card :tutorial="$tutorial" :course="$course" :user="$user" />
+                <x-tutorial.tutorial-card :tutorial="$tutorial" :course="$course" :user="$user" />
             @endforeach
         </div>
     </div>

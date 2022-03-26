@@ -24,6 +24,9 @@ mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/pagescript/post_edit.js', 'public/js')
     .js('resources/js/pagescript/transaction.js', 'public/js')
 
+    .postCss('resources/css/app.css', 'public/css', [
+        //
+    ])
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/profile.scss', 'public/css')
     .sass('resources/sass/course.scss', 'public/css')
@@ -33,8 +36,4 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/payment.scss', 'public/css')
     .sass('resources/sass/forum.scss', 'public/css')
     .sass('resources/sass/question.scss', 'public/css')
-
-    .postCss('resources/css/app.css', 'public/css', [
-        require("tailwindcss"),
-    ])
 
