@@ -1,5 +1,4 @@
 import Splide from "@splidejs/splide";
-// const { default: axios } = require("axios");
 const course_slider_el = document.getElementById('course-slider')
 console.log(course_slider_el)
 

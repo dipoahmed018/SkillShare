@@ -284,7 +284,7 @@ axios.isAxiosError = __webpack_require__(/*! ./helpers/isAxiosError */ "./node_m
 module.exports = axios;
 
 // Allow use of default import syntax in TypeScript
-module.exports.default = axios;
+module.exports["default"] = axios;
 
 
 /***/ }),
@@ -1007,7 +1007,7 @@ module.exports = function transformData(data, headers, fns) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/* provided dependency */ var process = __webpack_require__(/*! process/browser */ "./node_modules/process/browser.js");
+/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
@@ -2080,9 +2080,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 
 
@@ -2106,7 +2106,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -2507,7 +2507,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -2643,8 +2643,8 @@ var PopupHandler = /*#__PURE__*/function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "create_reply": () => (/* binding */ create_reply),
-/* harmony export */   "add_review_element": () => (/* binding */ add_review_element)
+/* harmony export */   "add_review_element": () => (/* binding */ add_review_element),
+/* harmony export */   "create_reply": () => (/* binding */ create_reply)
 /* harmony export */ });
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
@@ -3007,16 +3007,6 @@ var review_editor_form = _toConsumableArray(document.getElementsByClassName('rev
 review_editor_form === null || review_editor_form === void 0 ? void 0 : review_editor_form.forEach(function (element) {
   element.addEventListener('submit', edit_review);
 });
-
-/***/ }),
-
-/***/ "./node_modules/bootstrap/dist/js/bootstrap.esm.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/bootstrap/dist/js/bootstrap.esm.js ***!
-  \*********************************************************/
-/***/ (() => {
-
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'G:\\Projects\\Larave\\SkillShare\\node_modules\\bootstrap\\dist\\js\\bootstrap.esm.js'");
 
 /***/ }),
 
@@ -4089,7 +4079,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/ChunkUpload */ "./resources/js/asset/ChunkUpload.js");
 /* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4114,18 +4103,17 @@ __webpack_require__(/*! ../component/course/review */ "./resources/js/component/
 
 
 
-
 var one_mb = 1024 * 1028;
-var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__.default(); //trigger bootstrap tooltip element
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__["default"](); //trigger bootstrap tooltip element
 
 document.querySelectorAll('[data-bs-hover="tooltip"]').forEach(function (el) {
-  new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Tooltip(el);
+  new Tooltip(el);
 }); //tutorial streaming
 
 var tutorial_links = _toConsumableArray(document.getElementsByClassName('watch-tutorial'));
 
 var tutorial_modal_element = document.getElementById('tutorial-video-modal');
-var tutorial_watcher_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal(tutorial_modal_element, {
+var tutorial_watcher_modal = new Modal(tutorial_modal_element, {
   backdrop: 'static',
   keyboard: false
 });
@@ -4149,7 +4137,7 @@ function showTutorial(e) {
 
 
 var course_deleter_btn = document.getElementById('course-deleter-btn');
-var course_deleter_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal('#course-delete-modal');
+var course_deleter_modal = new Modal('#course-delete-modal');
 course_deleter_btn === null || course_deleter_btn === void 0 ? void 0 : course_deleter_btn.addEventListener('click', function (e) {
   course_deleter_modal.show();
 }); //thumbnail update
@@ -4158,7 +4146,7 @@ var thumbnail_update_btn = document.getElementById('thumbnail-updater-btn');
 var thumbnail_update_form = document.getElementById('thumbnail-update-form');
 var thumbnail_input = thumbnail_update_form.querySelector('[name="thumbnail"]');
 var thumbnail_error = thumbnail_update_form.querySelector('.error-box');
-var thumbnail_update_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal('#thumbnail-update-modal');
+var thumbnail_update_modal = new Modal('#thumbnail-update-modal');
 thumbnail_update_btn === null || thumbnail_update_btn === void 0 ? void 0 : thumbnail_update_btn.addEventListener('click', function () {
   thumbnail_update_modal.show();
 });
@@ -4259,7 +4247,7 @@ function add_thumbnail(file_link) {
 
 var introduction_update_btn = document.getElementById('introduction-updater-btn');
 var introduction_update_box = document.getElementById('introduction-update-modal');
-var introduction_update_modal = new bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal(introduction_update_box);
+var introduction_update_modal = new Modal(introduction_update_box);
 introduction_update_btn === null || introduction_update_btn === void 0 ? void 0 : introduction_update_btn.addEventListener('click', function () {
   introduction_update_modal.show();
 }); //introduction upload
@@ -4286,7 +4274,7 @@ introduction_input_lement === null || introduction_input_lement === void 0 ? voi
     introduction_type: file.type
   }; //create a instace of chunk uploader with given file
 
-  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file); // start uploading
+  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__["default"](file); // start uploading
 
   uploader.startUpload(url, form_data, window.csrf); //show upload progress
 
@@ -4388,7 +4376,7 @@ function upload_tutorial(file) {
     tutorial_type: type
   }; //create a instace of chunk uploader with given file
 
-  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__.default(file); // start uploading
+  var uploader = new _asset_ChunkUpload__WEBPACK_IMPORTED_MODULE_1__["default"](file); // start uploading
 
   uploader.startUpload(url, form_data, window.csrf); //show upload progress
 
@@ -4588,7 +4576,7 @@ var tutorial_delete = /*#__PURE__*/function () {
 
             if (res.status == 200) {
               document.getElementById("tutorial-".concat(tutorial_id)).remove();
-              bootstrap__WEBPACK_IMPORTED_MODULE_3__.Modal.getInstance(tutorial_deleter_modal).hide();
+              Modal.getInstance(tutorial_deleter_modal).hide();
             }
 
           case 4:

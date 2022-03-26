@@ -4,7 +4,6 @@ require('../component/course/review')
 // neccessery modules 
 import Chunker from "../asset/ChunkUpload";
 import PopupHandler from "../asset/PopupHandler";
-import { Modal, Tooltip } from 'bootstrap';
 
 const one_mb = 1024 * 1028
 const popup = new PopupHandler();

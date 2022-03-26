@@ -1,6 +1,5 @@
 import Dayjs from "dayjs"
 import {Image_picker, Inject_images, Filter_length} from '../asset/CKEditorHelper'
-import {Modal} from 'bootstrap'
 let reletiveTime = require('dayjs/plugin/relativeTime')
 Dayjs.extend(reletiveTime)
 

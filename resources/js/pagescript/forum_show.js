@@ -1,5 +1,4 @@
 import { Image_picker, Filter_length, Inject_images } from "../asset/CKEditorHelper"
-import { Modal } from "bootstrap";
 import Popup from '../asset/PopupHandler'
 const popup = new Popup();
 

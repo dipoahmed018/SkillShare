@@ -1,4 +1,5 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./resources/js/asset/CKEditorHelper.js":
@@ -7,11 +8,10 @@
   \**********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Image_picker": () => (/* binding */ Image_picker),
 /* harmony export */   "Filter_length": () => (/* binding */ Filter_length),
+/* harmony export */   "Image_picker": () => (/* binding */ Image_picker),
 /* harmony export */   "Inject_images": () => (/* binding */ Inject_images)
 /* harmony export */ });
 function Image_picker(content) {
@@ -73,7 +73,6 @@ function Inject_images(images) {
   \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ PopupHandler)
@@ -82,7 +81,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -207,16 +206,6 @@ var PopupHandler = /*#__PURE__*/function () {
 
 
 
-/***/ }),
-
-/***/ "./node_modules/bootstrap/dist/js/bootstrap.esm.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/bootstrap/dist/js/bootstrap.esm.js ***!
-  \*********************************************************/
-/***/ (() => {
-
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'G:\\Projects\\Larave\\SkillShare\\node_modules\\bootstrap\\dist\\js\\bootstrap.esm.js'");
-
 /***/ })
 
 /******/ 	});
@@ -276,20 +265,17 @@ throw new Error("Module build failed: Error: ENOENT: no such file or directory, 
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 /*!***********************************************!*\
   !*** ./resources/js/pagescript/forum_show.js ***!
   \***********************************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _asset_CKEditorHelper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../asset/CKEditorHelper */ "./resources/js/asset/CKEditorHelper.js");
-/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
-/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
+/* harmony import */ var _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../asset/PopupHandler */ "./resources/js/asset/PopupHandler.js");
 
 
-
-var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_2__.default();
+var popup = new _asset_PopupHandler__WEBPACK_IMPORTED_MODULE_1__["default"]();
 var forum_contents_showers = [document.getElementById('questions'), document.getElementById('students'), document.getElementById('about')];
 var forum_contents = [document.querySelector('.questions-wrapper'), document.querySelector('.students-wrapper'), document.querySelector('.about')];
 forum_contents_showers === null || forum_contents_showers === void 0 ? void 0 : forum_contents_showers.forEach(function (element) {
