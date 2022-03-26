@@ -469,40 +469,6 @@ $pink_red : rgb(255, 71, 71);
     }
 }
 
-
-//rating style
-.rate {
-    overflow: hidden;
-    display: inline;
-    flex-wrap: nowrap;
-    overflow: hidden;
-    align-items: center;
-
-    // max-width: ;
-    span {
-        display: inline-block;
-    }
-
-    .rate-overlay {
-        display: inline-block;
-        position: relative;
-        background: no-repeat top left url('assets/transparent_stars.png');
-        background-size: 6em 1em;
-        width: 6em;
-        height: 1em;
-        margin: auto;
-
-        .rate-image {
-            background: no-repeat top left url('assets/colored_stars.png');
-            background-size: 6em 1em;
-            height: 100%;
-            position: absolute;
-            top: 0%;
-            left: 0%;
-        }
-    }
-}
-
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -750,140 +716,6 @@ $pink_red : rgb(255, 71, 71);
 
             z-index: 2;
         }
-
-        .filter {
-            order: 2;
-            position: relative;
-            margin-top: 10px;
-
-            .filters {
-                background-color: $glass_green;
-                border-radius: 10px;
-                display: flex;
-                padding: 10px;
-                padding-left: 10px;
-                min-width: 250px;
-                right: 100%;
-
-                //dual slider range
-                .price-range {
-                    color: $deep_green;
-                    margin: 10px 0px;
-
-                    .multi-range {
-                        display: inline-block;
-                        position: relative;
-                        height: 20px;
-                        min-width: 80%;
-                        max-width: 100%;
-
-
-                        input[type=range] {
-                            //slider style
-                            appearance: none;
-                            box-sizing: border-box;
-                            background: linear-gradient(#6ACC9A, #6ACC9A) no-repeat center;
-                            background-size: 100% 5px;
-                            border: 0;
-                            width: 100%;
-                            margin: 0;
-                            overflow: hidden;
-                            outline: none;
-                            padding: 0 2px;
-                            pointer-events: none;
-                            position: absolute;
-
-                            &:active,
-                            &:focus {
-                                outline: none;
-                            }
-
-                            //slider thumb styles
-                            &::-webkit-slider-thumb {
-                                height: 20px;
-                                width: 20px;
-                                border-radius: 20px;
-                                background-color: #0FA958;
-                                position: relative;
-                                margin: 5px 0;
-                                !* Add some margin to ensure box shadow is shown *!
-                                cursor: pointer;
-                                appearance: none;
-                                pointer-events: all;
-                                box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
-
-                            }
-
-                            &:nth-child(2) {
-                                background: none;
-                            }
-                        }
-                    }
-                }
-
-                .price-input {
-                    width: 100%;
-
-                    label {
-                        font-size: 14px;
-                        color: $deep_green;
-                    }
-
-                    input {
-                        background-color: $shallow_green;
-                        border: none;
-                        color: white;
-                        font-size: 14px;
-                        outline: none;
-                        width: 5rem;
-                    }
-                }
-
-                .review {
-                    p {
-                        margin-bottom: 0px;
-                        margin-top: 10px;
-                        color: $deep_green;
-                    }
-
-                    .review-stars {
-                        cursor: pointer;
-                        color: $stars;
-                        font-size: 1.5rem;
-                        padding-left: 10px;
-                    }
-
-                    .selected {
-                        border: 2px solid $deep_green;
-                        border-radius: 5px;
-                    }
-                }
-
-                .submit-filter {
-                    margin: 10px 0px;
-                    background-color: $shallow_green;
-                    border: none;
-                    border-radius: 2px;
-                    color: $deep_green;
-                    width: 100%;
-                    height: 2rem;
-                    font-size: 1.2em;
-                }
-            }
-
-            .filter-button {
-                display: none;
-                background: url('./assets/filter_icon.png') no-repeat right top/ 25px 25px;
-                border: none;
-                min-width: 25px;
-                min-height: 25px;
-            }
-
-            .close-filter {
-                display: none;
-                background: url('./assets/close_filter_icon.png') no-repeat right top/25px 25px;
-            }
-        }
     }
 
     .sidebar-opn-icn {
@@ -1092,3 +924,171 @@ $pink_red : rgb(255, 71, 71);
         margin: 0px auto;
     }
 }*/
+
+
+// //rating style
+// .rate {
+//     overflow: hidden;
+//     display: inline;
+//     flex-wrap: nowrap;
+//     overflow: hidden;
+//     align-items: center;
+
+//     // max-width: ;
+//     span {
+//         display: inline-block;
+//     }
+
+//     .rate-overlay {
+//         display: inline-block;
+//         position: relative;
+//         background: no-repeat top left url('assets/transparent_stars.png');
+//         background-size: 6em 1em;
+//         width: 6em;
+//         height: 1em;
+//         margin: auto;
+
+//         .rate-image {
+//             background: no-repeat top left url('assets/colored_stars.png');
+//             background-size: 6em 1em;
+//             height: 100%;
+//             position: absolute;
+//             top: 0%;
+//             left: 0%;
+//         }
+//     }
+// }
+
+// //fitler courses
+// .filter {
+//     order: 2;
+//     position: relative;
+//     margin-top: 10px;
+
+//     .filters {
+//         background-color: $glass_green;
+//         border-radius: 10px;
+//         display: flex;
+//         padding: 10px;
+//         padding-left: 10px;
+//         min-width: 250px;
+//         right: 100%;
+
+//         //dual slider range
+//         .price-range {
+//             color: $deep_green;
+//             margin: 10px 0px;
+
+//             .multi-range {
+//                 display: inline-block;
+//                 position: relative;
+//                 height: 20px;
+//                 min-width: 80%;
+//                 max-width: 100%;
+
+
+//                 input[type=range] {
+//                     //slider style
+//                     appearance: none;
+//                     box-sizing: border-box;
+//                     background: linear-gradient(#6ACC9A, #6ACC9A) no-repeat center;
+//                     background-size: 100% 5px;
+//                     border: 0;
+//                     width: 100%;
+//                     margin: 0;
+//                     overflow: hidden;
+//                     outline: none;
+//                     padding: 0 2px;
+//                     pointer-events: none;
+//                     position: absolute;
+
+//                     &:active,
+//                     &:focus {
+//                         outline: none;
+//                     }
+
+//                     //slider thumb styles
+//                     &::-webkit-slider-thumb {
+//                         height: 20px;
+//                         width: 20px;
+//                         border-radius: 20px;
+//                         background-color: #0FA958;
+//                         position: relative;
+//                         //  !* Add some margin to ensure box shadow is shown * ! cursor: pointer;
+//                         margin: 5px 0;
+//                         appearance: none;
+//                         pointer-events: all;
+//                         box-shadow: 0 1px 4px 0.5px rgba(0, 0, 0, 0.25);
+
+//                     }
+
+//                     &:nth-child(2) {
+//                         background: none;
+//                     }
+//                 }
+//             }
+//         }
+
+//         .price-input {
+//             width: 100%;
+
+//             label {
+//                 font-size: 14px;
+//                 color: $deep_green;
+//             }
+
+//             input {
+//                 background-color: $shallow_green;
+//                 border: none;
+//                 color: white;
+//                 font-size: 14px;
+//                 outline: none;
+//                 width: 5rem;
+//             }
+//         }
+
+//         .review {
+//             p {
+//                 margin-bottom: 0px;
+//                 margin-top: 10px;
+//                 color: $deep_green;
+//             }
+
+//             .review-stars {
+//                 cursor: pointer;
+//                 color: $stars;
+//                 font-size: 1.5rem;
+//                 padding-left: 10px;
+//             }
+
+//             .selected {
+//                 border: 2px solid $deep_green;
+//                 border-radius: 5px;
+//             }
+//         }
+
+//         .submit-filter {
+//             margin: 10px 0px;
+//             background-color: $shallow_green;
+//             border: none;
+//             border-radius: 2px;
+//             color: $deep_green;
+//             width: 100%;
+//             height: 2rem;
+//             font-size: 1.2em;
+//         }
+//     }
+
+//     .filter-button {
+//         display: none;
+//         background: url('./assets/filter_icon.png') no-repeat right top/ 25px 25px;
+//         border: none;
+//         min-width: 25px;
+//         min-height: 25px;
+//     }
+
+//     .close-filter {
+//         display: none;
+//         background: url('./assets/close_filter_icon.png') no-repeat right top/25px 25px;
+//     }
+// }

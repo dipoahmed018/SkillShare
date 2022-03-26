@@ -95,15 +95,16 @@ $pink_red : rgb(255, 71, 71);
         .courses {
             display: flex;
             flex-direction: column;
-            align-items: center;
-
+            row-gap: 1em;
+            column-gap: 1em;
+            align-content: center;
         }
 
         @media screen and (min-width: 600px) {
             .courses {
+                justify-content: center;
                 flex-direction: row;
-                column-gap: 1em;
-
+                flex-wrap: wrap;
                 .course-card {
                     margin: 0px 0px auto 0px;
                     display: block;
@@ -170,5 +171,3 @@ $pink_red : rgb(255, 71, 71);
         }
     }
 }*/
-
-
